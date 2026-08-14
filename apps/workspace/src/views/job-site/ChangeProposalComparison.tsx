@@ -66,20 +66,17 @@ export function getChangeProposalPresentation(payload: unknown): ChangeProposalP
   return { comparisons: money.comparisons, details, summary: parsed.data.changeSummary };
 }
 
-export function ChangeProposalComparison({ payload, proposalId }: { payload: unknown; proposalId: string }) {
+export function ChangeProposalComparison({ payload }: { payload: unknown }) {
   const presentation = getChangeProposalPresentation(payload);
   if (!presentation) return <p className="mt-3 text-sm text-muted-foreground">I dettagli di questa proposta non sono disponibili.</p>;
-  const summaryId = `proposal-${proposalId}-summary`;
-  const comparisonId = `proposal-${proposalId}-comparison`;
-  const detailsId = `proposal-${proposalId}-details`;
 
   return <div className="mt-3 space-y-4 text-sm">
-    <section aria-labelledby={summaryId}>
-      <h3 className="font-medium" id={summaryId}>Modifica proposta</h3>
+    <section>
+      <h3 className="font-medium">Modifica proposta</h3>
       <p className="mt-1 text-muted-foreground">{presentation.summary}</p>
     </section>
-    {presentation.comparisons.length ? <section aria-labelledby={comparisonId}>
-      <h3 className="font-medium" id={comparisonId}>Cosa cambia rispetto a prima</h3>
+    {presentation.comparisons.length ? <section>
+      <h3 className="font-medium">Cosa cambia rispetto a prima</h3>
       <dl className="mt-2 grid gap-3">
         {presentation.comparisons.map((comparison) => <div className="rounded-md border p-3" key={comparison.label}>
           <dt className="font-medium">{comparison.label}</dt>
@@ -91,8 +88,8 @@ export function ChangeProposalComparison({ payload, proposalId }: { payload: unk
         </div>)}
       </dl>
     </section> : null}
-    <section aria-labelledby={detailsId}>
-      <h3 className="font-medium" id={detailsId}>Dettagli della proposta</h3>
+    <section>
+      <h3 className="font-medium">Dettagli della proposta</h3>
       <dl className="mt-2 grid gap-3 sm:grid-cols-2">
         {presentation.details.map((detail) => <div key={detail.label}><dt className="font-medium">{detail.label}</dt><dd className="mt-1 text-muted-foreground">{detail.value}</dd></div>)}
       </dl>

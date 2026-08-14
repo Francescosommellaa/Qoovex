@@ -97,7 +97,7 @@ export function getClosureBlockers(readiness: ClosureReadiness): ReviewEntry[] {
     entries.push({ detail: `${formatEuroFromMinorUnits(payment.amountMinor)} · ${presentPaymentRequestStatus(payment.status).label}`, href: "#pagamenti", label: payment.reason, state: "attention" });
   }
   for (const dispute of readiness.openDisputes) {
-    entries.push({ detail: presentDisputeStatus(dispute.status).label, href: "#impostazioni", label: dispute.title, state: "attention" });
+    entries.push({ detail: presentDisputeStatus(dispute.status).label, href: "#disaccordi", label: dispute.title, state: "attention" });
   }
   for (const process of readiness.openProcesses) {
     const isPayment = process.definitionKey === "PAYMENT_REQUEST@1";
@@ -111,7 +111,7 @@ export function JobSiteClosureReadinessReview({ readiness }: { readiness: Closur
   const summary = [
     { label: "Step", value: readiness.steps.length ? `${readiness.steps.length - readiness.openSteps.length} conclusi o annullati su ${readiness.steps.length}` : "Nessuno step previsto" },
     { label: "Richieste", value: blockers.filter((item) => item.href === "#richieste").length ? "Ci sono richieste aperte" : "Nessuna richiesta aperta" },
-    { label: "Disaccordi", value: blockers.filter((item) => item.href === "#impostazioni").length ? "Ci sono disaccordi aperti" : "Nessun disaccordo aperto" },
+    { label: "Disaccordi", value: blockers.filter((item) => item.href === "#disaccordi").length ? "Ci sono disaccordi aperti" : "Nessun disaccordo aperto" },
     { label: "Pagamenti documentati", value: blockers.filter((item) => item.href === "#pagamenti").length ? "Ci sono pagamenti da gestire" : "Nessun pagamento da gestire" },
   ];
 

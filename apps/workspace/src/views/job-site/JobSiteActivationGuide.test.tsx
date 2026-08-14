@@ -39,4 +39,12 @@ describe("guida di attivazione del cantiere", () => {
     expect(html).toContain('href="#client-invitation-form"');
     expect(renderToStaticMarkup(<JobSiteActivationGuide agreementStatus="CONFIRMED" status="ACTIVE" />)).toBe("");
   });
+
+  it("può integrarsi nella Panoramica senza ripetere lo stato", () => {
+    const html = renderToStaticMarkup(<JobSiteActivationGuide agreementStatus={null} showStatus={false} status="DRAFT" />);
+
+    expect(html).toContain("Attivazione del cantiere");
+    expect(html).not.toContain("Bozza");
+    expect(html).toContain("Invita il cliente");
+  });
 });

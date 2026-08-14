@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-14T23:43:21.181Z",
+  "title": "Design System: Sirio",
+  "extensions": {
+    "colorMeta": {
+      "calce": { "role": "primary", "displayName": "Calce", "canonical": "oklch(0.99 0 0)", "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.51 0 0)", "oklch(0.63 0 0)", "oklch(0.75 0 0)", "oklch(0.87 0 0)", "oklch(0.99 0 0)"] },
+      "inchiostro": { "role": "primary", "displayName": "Inchiostro", "canonical": "oklch(0 0 0)", "tonalRamp": ["oklch(0 0 0)", "oklch(0.14 0 0)", "oklch(0.28 0 0)", "oklch(0.42 0 0)", "oklch(0.56 0 0)", "oklch(0.70 0 0)", "oklch(0.84 0 0)", "oklch(0.96 0 0)"] },
+      "nebbia": { "role": "neutral", "displayName": "Nebbia", "canonical": "oklch(0.97 0 0)", "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.51 0 0)", "oklch(0.63 0 0)", "oklch(0.75 0 0)", "oklch(0.87 0 0)", "oklch(0.97 0 0)"] },
+      "grafite": { "role": "neutral", "displayName": "Grafite", "canonical": "oklch(0.44 0 0)", "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.25 0 0)", "oklch(0.35 0 0)", "oklch(0.44 0 0)", "oklch(0.56 0 0)", "oklch(0.68 0 0)", "oklch(0.80 0 0)", "oklch(0.92 0 0)"] },
+      "segnale-rosso": { "role": "tertiary", "displayName": "Segnale Rosso", "canonical": "oklch(0.54 0.19 23.03)", "tonalRamp": ["oklch(0.15 0.10 23.03)", "oklch(0.27 0.14 23.03)", "oklch(0.39 0.17 23.03)", "oklch(0.51 0.19 23.03)", "oklch(0.63 0.17 23.03)", "oklch(0.75 0.13 23.03)", "oklch(0.87 0.08 23.03)", "oklch(0.95 0.03 23.03)"] },
+      "informazione-blu": { "role": "tertiary", "displayName": "Informazione Blu", "canonical": "oklch(0.53 0.22 264.53)", "tonalRamp": ["oklch(0.15 0.11 264.53)", "oklch(0.27 0.16 264.53)", "oklch(0.39 0.20 264.53)", "oklch(0.53 0.22 264.53)", "oklch(0.65 0.18 264.53)", "oklch(0.77 0.13 264.53)", "oklch(0.88 0.07 264.53)", "oklch(0.95 0.03 264.53)"] },
+      "conferma-verde": { "role": "tertiary", "displayName": "Conferma Verde", "canonical": "oklch(0.51 0.15 145)", "tonalRamp": ["oklch(0.15 0.08 145)", "oklch(0.27 0.11 145)", "oklch(0.39 0.14 145)", "oklch(0.51 0.15 145)", "oklch(0.63 0.13 145)", "oklch(0.75 0.10 145)", "oklch(0.87 0.06 145)", "oklch(0.95 0.02 145)"] },
+      "attenzione-ambra": { "role": "tertiary", "displayName": "Attenzione Ambra", "canonical": "oklch(0.81 0.17 75.35)", "tonalRamp": ["oklch(0.15 0.08 75.35)", "oklch(0.27 0.11 75.35)", "oklch(0.39 0.14 75.35)", "oklch(0.51 0.17 75.35)", "oklch(0.63 0.17 75.35)", "oklch(0.75 0.17 75.35)", "oklch(0.87 0.11 75.35)", "oklch(0.95 0.04 75.35)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Copertine e specimen tipografici di massimo impatto." },
+      "headline": { "displayName": "Headline", "purpose": "Titolo principale della pagina catalogo." },
+      "title": { "displayName": "Title", "purpose": "Gruppi di token e sezioni di componenti." },
+      "body": { "displayName": "Body", "purpose": "Spiegazioni e campioni leggibili." },
+      "label": { "displayName": "Array Label", "purpose": "Nomi tecnici, codici e metadati brevi." }
+    },
+    "shadows": [
+      { "name": "specimen", "value": "0 1px 2px 0 hsl(0 0% 0% / 0.09)", "purpose": "Swatch, card e controlli a riposo." },
+      { "name": "floating-control", "value": "0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 2px 4px -1px hsl(0 0% 0% / 0.18)", "purpose": "Menu, tooltip e select." },
+      { "name": "modal", "value": "0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 8px 10px -1px hsl(0 0% 0% / 0.18)", "purpose": "Dialog e pannelli temporanei sopra la shell." }
+    ],
+    "motion": [
+      { "name": "state-fast", "value": "150ms cubic-bezier(0.2, 0, 0, 1)", "purpose": "Colori e focus dei controlli." },
+      { "name": "indicator", "value": "260ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Indicatore scorrevole di tabs, sidebar e menu." },
+      { "name": "overlay", "value": "300ms cubic-bezier(0.34, 1.56, 0.64, 1)", "purpose": "Dialog e sheet con risposta elastica contenuta." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Catalog Primary Button",
+      "kind": "button",
+      "refersTo": "catalog-button",
+      "description": "Azione primaria compatta mostrata negli specimen.",
+      "html": "<button class=\"ds-btn-primary\">Salva modifiche</button>",
+      "css": ".ds-btn-primary { height: 2rem; padding: 0 .75rem; border: 1px solid transparent; border-radius: .5rem; background: var(--primary, #000); color: var(--primary-foreground, #fff); font: 500 .875rem/1 var(--ff-sans, sans-serif); box-shadow: var(--shadow-2xs, 0 1px 2px rgba(0,0,0,.09)); transition: background-color 200ms var(--ease-standard, ease), transform 200ms var(--ease-standard, ease); } .ds-btn-primary:hover { background: color-mix(in oklch, var(--primary) 90%, transparent); transform: scale(1.015); } .ds-btn-primary:active { transform: scale(.97); } .ds-btn-primary:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Catalog Outline Button",
+      "kind": "button",
+      "refersTo": "catalog-button",
+      "description": "Controllo secondario per confrontare gerarchie e stati.",
+      "html": "<button class=\"ds-btn-outline\">Annulla</button>",
+      "css": ".ds-btn-outline { height: 2rem; padding: 0 .75rem; border: 1px solid var(--border, #e5e5e5); border-radius: .5rem; background: var(--background, #fff); color: var(--foreground, #000); font: 500 .875rem/1 var(--ff-sans, sans-serif); box-shadow: var(--shadow-2xs, 0 1px 2px rgba(0,0,0,.09)); transition: background-color 200ms var(--ease-standard, ease), transform 200ms var(--ease-standard, ease); } .ds-btn-outline:hover { background: color-mix(in oklch, var(--accent) 60%, transparent); transform: scale(1.015); } .ds-btn-outline:active { transform: scale(.97); } .ds-btn-outline:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Catalog Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Campo Base UI con label, placeholder e focus verificabile.",
+      "html": "<label class=\"ds-field\"><span>Nome componente</span><input placeholder=\"Button\"></label>",
+      "css": ".ds-field { display: grid; gap: .5rem; font: 500 .875rem/1.25 var(--ff-sans, sans-serif); color: var(--foreground, #000); } .ds-field input { height: 2.25rem; padding: .375rem .75rem; border: 1px solid var(--input, #e5e5e5); border-radius: .5rem; background: transparent; color: inherit; font: 400 1rem/1.4 var(--ff-sans, sans-serif); } .ds-field input::placeholder { color: var(--muted-foreground, #666); } .ds-field input:focus-visible { border-color: var(--ring, #000); outline: 2px solid color-mix(in oklch, var(--ring) 30%, transparent); outline-offset: 1px; }"
+    },
+    {
+      "name": "Catalog Sidebar Item",
+      "kind": "nav",
+      "refersTo": "catalog-navigation",
+      "description": "Destinazione compatta della sidebar adattiva.",
+      "html": "<nav class=\"ds-sidebar-nav\"><a class=\"ds-sidebar-item ds-active\" href=\"#\">Colori</a><a class=\"ds-sidebar-item\" href=\"#\">Tipografia</a><a class=\"ds-sidebar-item\" href=\"#\">Spaziatura</a></nav>",
+      "css": ".ds-sidebar-nav { display: grid; gap: .25rem; padding: .5rem; border: 1px solid var(--sidebar-border, #eee); border-radius: .75rem; background: var(--sidebar, #fff); font-family: var(--ff-sans, sans-serif); } .ds-sidebar-item { min-height: 2rem; padding: .375rem .5rem; border-radius: .5rem; color: var(--sidebar-foreground, #000); text-decoration: none; font-size: .875rem; transition: background-color 150ms var(--ease-standard, ease), transform 150ms var(--ease-standard, ease); } .ds-sidebar-item:hover, .ds-sidebar-item.ds-active { background: var(--sidebar-accent, #eee); color: var(--sidebar-accent-foreground, #000); } .ds-sidebar-item:active { transform: scale(.97); } .ds-sidebar-item:focus-visible { outline: 2px solid var(--sidebar-ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Catalog Topbar",
+      "kind": "nav",
+      "refersTo": "catalog-navigation",
+      "description": "Fascia persistente con breadcrumb, ricerca e tema.",
+      "html": "<header class=\"ds-topbar\"><nav aria-label=\"Breadcrumb\"><a href=\"#\">Sirio</a><span>/</span><strong>Colori</strong></nav><button>Cerca… <kbd>⌘K</kbd></button></header>",
+      "css": ".ds-topbar { display: flex; align-items: center; gap: .5rem; height: 3.5rem; padding: 0 1rem; border-bottom: 1px solid color-mix(in oklch, var(--border, #e5e5e5) 80%, transparent); background: color-mix(in oklch, var(--background, #fff) 90%, transparent); color: var(--foreground, #000); backdrop-filter: blur(20px); font-family: var(--ff-sans, sans-serif); } .ds-topbar nav { display: flex; gap: .5rem; align-items: center; min-width: 0; font-size: .875rem; } .ds-topbar nav a { color: var(--muted-foreground, #666); } .ds-topbar button { margin-left: auto; height: 1.75rem; padding: 0 .625rem; border: 1px solid var(--border, #e5e5e5); border-radius: .375rem; background: var(--background, #fff); color: inherit; } .ds-topbar kbd { color: var(--muted-foreground, #666); } .ds-topbar a:focus-visible, .ds-topbar button:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Token Swatch",
+      "kind": "custom",
+      "refersTo": "specimen-card",
+      "description": "Valore visuale, nome e variabile riuniti in un singolo campione.",
+      "html": "<figure class=\"ds-token-swatch\"><div></div><figcaption><strong>Background</strong><code>--background</code></figcaption></figure>",
+      "css": ".ds-token-swatch { display: grid; gap: .5rem; margin: 0; color: var(--foreground, #000); font-family: var(--ff-sans, sans-serif); } .ds-token-swatch > div { height: 5rem; border: 1px solid var(--border, #e5e5e5); border-radius: .375rem; background: var(--background, #fff); box-shadow: var(--shadow-xs, 0 1px 2px rgba(0,0,0,.09)); } .ds-token-swatch figcaption { display: grid; gap: .125rem; } .ds-token-swatch strong { font-size: .875rem; font-weight: 500; } .ds-token-swatch code { color: var(--muted-foreground, #666); font-size: .75rem; }"
+    },
+    {
+      "name": "Specimen Card",
+      "kind": "card",
+      "refersTo": "specimen-card",
+      "description": "Contenitore di prova che mantiene esempi e metadati leggibili.",
+      "html": "<section class=\"ds-specimen\"><header><h3>Button</h3><code>@qoovex/ui/components/button</code></header><div><button>Default</button></div></section>",
+      "css": ".ds-specimen { overflow: hidden; border: 1px solid var(--border, #e5e5e5); border-radius: .5rem; background: var(--card, #fff); color: var(--card-foreground, #000); font-family: var(--ff-sans, sans-serif); box-shadow: var(--shadow-2xs, 0 1px 2px rgba(0,0,0,.09)); } .ds-specimen header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border, #e5e5e5); } .ds-specimen h3 { margin: 0; font-size: 1.25rem; } .ds-specimen code { color: var(--muted-foreground, #666); font-size: .75rem; } .ds-specimen > div { padding: 1.5rem; background: var(--background, #fff); } .ds-specimen button { height: 2rem; padding: 0 .75rem; border: 0; border-radius: .5rem; background: var(--primary, #000); color: var(--primary-foreground, #fff); } .ds-specimen button:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Semantic Status Badge",
+      "kind": "chip",
+      "refersTo": "token-label",
+      "description": "Campione compatto per verificare colore e contrasto semantico.",
+      "html": "<span class=\"ds-badge-warning\">In attesa</span>",
+      "css": ".ds-badge-warning { display: inline-flex; align-items: center; min-height: 1.375rem; padding: 0 .625rem; border: 1px solid color-mix(in oklch, var(--warning) 25%, transparent); border-radius: 9999px; background: color-mix(in oklch, var(--warning) 15%, transparent); color: var(--warning-emphasis, #8a5a00); font: 500 .75rem/1 var(--ff-accent, sans-serif); letter-spacing: .04em; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Il Banco di Prova",
+    "overview": "Sirio espone il sistema Qoovex come un banco di lavoro ordinato: ogni token, componente e stato viene isolato abbastanza da poter essere osservato, confrontato e verificato. La densità è maggiore rispetto al sito pubblico, ma la gerarchia rimane calma grazie alla stessa foundation monocromatica, alla tipografia controllata e a superfici contenute.\n\nL'identità è dimostrativa e sistematica, non promozionale. Sidebar, topbar, breadcrumb, campioni e specimen rendono visibili struttura, comportamento e accessibilità senza inventare una seconda estetica o confondere una prova tecnica con una capability di prodotto.",
+    "keyCharacteristics": [
+      "Shell operativa con sidebar adattiva, topbar persistente e area di prova scorrevole.",
+      "Densità informativa controllata da griglie, gruppi e separatori coerenti.",
+      "Token mostrati con nome, variabile e risultato visivo nello stesso contesto.",
+      "Componenti provati in stati realistici, inclusi focus, disabled, errori e responsive.",
+      "Una sola foundation condivisa; Sirio compone e verifica, non duplica."
+    ],
+    "rules": [
+      { "name": "The Token Is the Evidence Rule", "body": "Sirio mostra il token effettivamente consumato; non sostituisce valori con approssimazioni locali.", "section": "colors" },
+      { "name": "The Semantic Color Rule", "body": "Ogni colore di feedback viene provato con testo, superficie e contrasto, non come campione isolato senza contesto.", "section": "colors" },
+      { "name": "The Ninety Ten Rule", "body": "General Sans porta circa il novanta per cento dell'interfaccia; Array resta un accento raro e riconoscibile.", "section": "typography" },
+      { "name": "The Example Must Read Rule", "body": "Un campione tipografico dimostra scala e carattere senza sacrificare leggibilità o contesto d'uso.", "section": "typography" },
+      { "name": "The Compare Without Crowding Rule", "body": "La densità può aumentare per facilitare il confronto, ma ogni specimen mantiene etichetta, valore e area visiva distinguibili.", "section": "layout" },
+      { "name": "The Workbench Stays Flat Rule", "body": "Il piano di catalogo non galleggia; soltanto gli elementi temporaneamente sovrapposti ricevono profondità evidente.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do dimostrare componenti e token reali importati da `@qoovex/ui`.",
+      "Do mostrare stati limite, focus, responsive e tema scuro insieme allo stato ideale.",
+      "Do mantenere label tecniche vicine al risultato visuale che descrivono.",
+      "Do usare densità per facilitare il confronto, non per comprimere indiscriminatamente."
+    ],
+    "donts": [
+      "Don't creare varianti locali concorrenti soltanto per rendere il catalogo più ricco.",
+      "Don't presentare dati dimostrativi o composizioni rappresentative come capability operative.",
+      "Don't usare Array come corpo principale o trasformare Sirio in un terminale estetico.",
+      "Don't nascondere errori di contrasto, overflow o interazione con campioni troppo perfetti.",
+      "Don't aggiungere decorazione che non aiuti a osservare, confrontare o verificare."
+    ]
+  }
+}

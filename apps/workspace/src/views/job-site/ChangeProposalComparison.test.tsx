@@ -24,7 +24,7 @@ describe("confronto delle proposte di modifica", () => {
   });
 
   it("mostra l'impatto sui tempi come dato proposto senza inventare una baseline", () => {
-    const html = renderToStaticMarkup(<ChangeProposalComparison payload={{ ...basePayload, priceMode: "NO_PRICE_CHANGE", previousPriceMinor: null, economicDeltaMinor: null, rangeMinimumMinor: null, rangeMaximumMinor: null, estimatedCompletionAt: "2026-10-15T09:30:00.000Z", scheduleImpact: "Conclusione prevista una settimana più tardi." }} proposalId="proposal-times" />);
+    const html = renderToStaticMarkup(<ChangeProposalComparison payload={{ ...basePayload, priceMode: "NO_PRICE_CHANGE", previousPriceMinor: null, economicDeltaMinor: null, rangeMinimumMinor: null, rangeMaximumMinor: null, estimatedCompletionAt: "2026-10-15T09:30:00.000Z", scheduleImpact: "Conclusione prevista una settimana più tardi." }} />);
 
     expect(html).toContain("Nuova conclusione prevista");
     expect(html).toContain("Conclusione prevista una settimana più tardi.");

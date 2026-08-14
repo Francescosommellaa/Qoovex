@@ -85,9 +85,11 @@ export function getJobSiteActivationGuide(
 
 export function JobSiteActivationGuide({
   agreementStatus,
+  showStatus = true,
   status,
 }: {
   agreementStatus: InitialAgreementStatus | null;
+  showStatus?: boolean;
   status: JobSiteStatus;
 }) {
   const guide = getJobSiteActivationGuide(status, agreementStatus);
@@ -95,7 +97,7 @@ export function JobSiteActivationGuide({
 
   return <WorkspacePanel title="Attivazione del cantiere" description={guide.description}>
     <div className="space-y-4">
-      <WorkspaceState state={presentJobSiteStatus(status)} />
+      {showStatus ? <WorkspaceState state={presentJobSiteStatus(status)} /> : null}
       <ol className="grid gap-3 md:grid-cols-3">
         {guide.steps.map((step, index) => {
           const presentation = stepPresentation[step.state];
@@ -106,7 +108,7 @@ export function JobSiteActivationGuide({
           </li>;
         })}
       </ol>
-      {guide.action ? <Link className={buttonVariants({ variant: "outline" })} href={guide.action.href}>{guide.action.label}<IconArrowRight aria-hidden="true" /></Link> : null}
+      {guide.action ? <Link className={buttonVariants()} href={guide.action.href}>{guide.action.label}<IconArrowRight aria-hidden="true" /></Link> : null}
     </div>
   </WorkspacePanel>;
 }

@@ -10,6 +10,7 @@ type RequestAction = { label: string; value: "RESPOND" | "RESOLVE" | "WITHDRAW" 
 type RequestInteraction = { action: "RESPOND" | "RESOLVE" | "WITHDRAW"; actor: RequestParticipant; createdAt: Date; message: string };
 
 export type JobSiteRequestConversationData = {
+  assignedSide: "CLIENT" | "ORGANIZATION_MEMBER";
   availableActions: readonly RequestAction[];
   blocking: boolean;
   body: string;
@@ -35,14 +36,27 @@ function presentInteraction(action: RequestInteraction["action"]) {
 }
 
 export function presentRequestNextAction({ availableActions, status }: Pick<JobSiteRequestConversationData, "availableActions" | "status">) {
-  if (availableActions.length === 1) return `Prossimo passo: ${availableActions[0].label.toLocaleLowerCase("it-IT")}.`;
-  if (availableActions.length > 1) return "Prossimo passo: puoi chiudere o ritirare questa richiesta.";
   switch (status) {
-    case "OPEN": return "Prossimo passo: attendi una risposta dall'altra parte.";
-    case "RESPONDED": return "Risposta ricevuta: l'autore della richiesta può ora chiuderla o ritirarla.";
+    case "OPEN": return availableActions.some((action) => action.value === "RESPOND")
+      ? "Prossimo passo: invia una risposta."
+      : "Prossimo passo: attendi una risposta dall'altra parte.";
+    case "RESPONDED": return availableActions.some((action) => action.value === "RESOLVE" || action.value === "WITHDRAW")
+      ? "Prossimo passo: puoi chiudere o ritirare questa richiesta."
+      : "Risposta ricevuta: l'autore della richiesta può ora chiuderla o ritirarla.";
     case "RESOLVED": return "Nessuna azione richiesta: la richiesta è stata risolta.";
     case "WITHDRAWN": return "Nessuna azione richiesta: la richiesta è stata ritirata.";
   }
+}
+
+export function presentRequestDecisionActor({ availableActions, assignedSide, status }: Pick<JobSiteRequestConversationData, "availableActions" | "assignedSide" | "status">) {
+  if (status === "RESOLVED" || status === "WITHDRAWN") return "Nessuno";
+  if (status === "OPEN") {
+    if (availableActions.some((action) => action.value === "RESPOND")) return "Tu";
+    return assignedSide === "CLIENT" ? "Cliente" : "Azienda";
+  }
+  if (availableActions.some((action) => action.value === "RESOLVE" || action.value === "WITHDRAW")) return "Tu";
+  if (status === "RESPONDED") return "Chi ha aperto la richiesta";
+  return assignedSide === "CLIENT" ? "Cliente" : "Azienda";
 }
 
 export function JobSiteRequestConversation({ actionsEndpoint, conversation, revision }: { actionsEndpoint: string; conversation: JobSiteRequestConversationData; revision: number }) {
@@ -58,6 +72,7 @@ export function JobSiteRequestConversation({ actionsEndpoint, conversation, revi
     </div>
     <p className="mt-3 text-sm">{conversation.body}</p>
     {conversation.blocking ? <p className="mt-3 text-sm text-muted-foreground"><strong>{isStillBlocking ? "La chiusura del cantiere resta sospesa." : "Questa richiesta non blocca più la chiusura."}</strong>{isStillBlocking ? " Rimarrà sospesa finché l'autore non la risolve o la ritira." : null}</p> : null}
+    <p className="mt-3 text-sm"><strong>Deve intervenire:</strong> {presentRequestDecisionActor(conversation)}.</p>
     <p className="mt-3 text-sm text-muted-foreground">{presentRequestNextAction(conversation)}</p>
     <section aria-label={`Cronologia della richiesta: ${conversation.title}`} className="mt-4 space-y-3 border-l pl-4">
       <div className="text-sm"><p className="font-medium">Richiesta aperta</p><p className="text-muted-foreground">{presentParticipant(conversation.openedByParticipant)} · {formatDateTime(conversation.createdAt)}</p></div>
@@ -100,6 +115,11 @@ function presentDisagreementNextAction({ availableActions, status }: Pick<JobSit
   }
 }
 
+export function presentDisagreementDecisionActor({ availableActions, status }: Pick<JobSiteDisagreementConversationData, "availableActions" | "status">) {
+  if (!["OPEN", "IN_DISCUSSION"].includes(status)) return "Nessuno";
+  return availableActions.length ? "Tu o l'altra parte" : "Le parti";
+}
+
 export function JobSiteDisagreementConversation({ actionsEndpoint, conversation, revision }: { actionsEndpoint: string; conversation: JobSiteDisagreementConversationData; revision: number }) {
   return <article className="py-4 first:pt-0">
     <div className="flex flex-wrap items-start justify-between gap-3">
@@ -110,6 +130,7 @@ export function JobSiteDisagreementConversation({ actionsEndpoint, conversation,
       <WorkspaceState state={presentDisputeStatus(conversation.status)} />
     </div>
     <p className="mt-3 text-sm">{conversation.description}</p>
+    <p className="mt-3 text-sm"><strong>Deve intervenire:</strong> {presentDisagreementDecisionActor(conversation)}.</p>
     <p className="mt-3 text-sm text-muted-foreground">{presentDisagreementNextAction(conversation)}</p>
     <section aria-label={`Cronologia del disaccordo: ${conversation.title}`} className="mt-4 space-y-3 border-l pl-4">
       <div className="text-sm"><p className="font-medium">Disaccordo aperto</p><p className="text-muted-foreground">{presentParticipant(conversation.openedByParticipant)} · {formatDateTime(conversation.openedAt)}</p></div>

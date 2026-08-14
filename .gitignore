@@ -88,3 +88,8 @@ next-env.d.ts
 .playwright-cli/
 node_modules/
 **/node_modules/
+
+
+.github/agents/
+.github/skills/
+.github/hooks/

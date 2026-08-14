@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
-import { JobSiteDisagreementConversation, JobSiteRequestConversation, presentRequestNextAction, type JobSiteRequestConversationData } from "./JobSiteRequestConversation";
+import { JobSiteDisagreementConversation, JobSiteRequestConversation, presentRequestDecisionActor, presentRequestNextAction, type JobSiteRequestConversationData } from "./JobSiteRequestConversation";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ refresh: vi.fn() }),
@@ -8,6 +8,7 @@ vi.mock("next/navigation", () => ({
 
 const participant = { publicRoleLabel: "Responsabile del cantiere", user: { firstName: "Luca", lastName: "Bianchi" } };
 const conversation: JobSiteRequestConversationData = {
+  assignedSide: "CLIENT",
   availableActions: [{ label: "Segna come risolta", value: "RESOLVE" }, { label: "Ritira la richiesta", value: "WITHDRAW" }],
   blocking: true,
   body: "Serve confermare il materiale previsto per il lavoro.",
@@ -34,6 +35,7 @@ describe("JobSiteRequestConversation", () => {
     expect(html).toContain("Confermo il materiale indicato.");
     expect(html).toContain("La chiusura del cantiere resta sospesa.");
     expect(html).toContain("Segna come risolta");
+    expect(html).toContain("Deve intervenire:</strong> Tu");
     expect(html).toContain("puoi chiudere o ritirare questa richiesta");
     expect(html).not.toContain("request-internal-id");
     expect(html).not.toContain("RESPONDED");
@@ -54,6 +56,8 @@ describe("JobSiteRequestConversation", () => {
   it("esplicita il prossimo passo in base alle sole azioni disponibili", () => {
     expect(presentRequestNextAction({ availableActions: [{ label: "Invia una risposta", value: "RESPOND" }], status: "OPEN" })).toBe("Prossimo passo: invia una risposta.");
     expect(presentRequestNextAction({ availableActions: [], status: "OPEN" })).toContain("attendi una risposta");
+    expect(presentRequestNextAction({ availableActions: [{ label: "Ritira la richiesta", value: "WITHDRAW" }], status: "OPEN" })).toContain("attendi una risposta");
+    expect(presentRequestDecisionActor({ assignedSide: "CLIENT", availableActions: [{ label: "Ritira la richiesta", value: "WITHDRAW" }], status: "OPEN" })).toBe("Cliente");
   });
 
   it("distingue il disaccordo dalla richiesta operativa senza attribuire a Qoovex un ruolo di arbitro", () => {
@@ -72,6 +76,7 @@ describe("JobSiteRequestConversation", () => {
     expect(html).toContain("Le parti non condividono la data indicata per la consegna.");
     expect(html).toContain("Posizione aggiunta");
     expect(html).toContain("Aggiungi la tua posizione");
+    expect(html).toContain("Deve intervenire:</strong> Tu o l&#x27;altra parte");
     expect(html).toContain("richiede le conferme previste da entrambe le parti");
     expect(html).not.toContain("disagreement-internal-id");
     expect(html).not.toMatch(/Qoovex.*(?:decide|arbitr)/i);
