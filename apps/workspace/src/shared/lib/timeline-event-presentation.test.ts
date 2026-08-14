@@ -161,6 +161,7 @@ describe("timeline event presentation", () => {
       actor: "Autore non disponibile",
       occurredAtLabel: "12 ago 2026, 10:30",
       kind: "system",
+      sectionId: "timeline",
       tone: "neutral",
       details: [],
     });

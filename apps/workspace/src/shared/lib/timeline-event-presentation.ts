@@ -11,6 +11,7 @@ import {
 } from "./product-state-presentation";
 
 export type TimelineEventKind = "work" | "message" | "file" | "step" | "change" | "payment" | "issue" | "lifecycle" | "system";
+export type TimelineEventSectionId = "archivio" | "chiusura" | "disaccordi" | "file" | "modifiche" | "pagamenti" | "richieste" | "riepilogo" | "step" | "timeline";
 
 export interface TimelineEventPresentationInput {
   type: string;
@@ -34,6 +35,7 @@ export interface TimelineEventPresentation {
   actor: string;
   occurredAtLabel: string;
   kind: TimelineEventKind;
+  sectionId: TimelineEventSectionId;
   tone: ProductStateTone;
   details: TimelineEventDetail[];
 }
@@ -77,6 +79,39 @@ const definitions = {
 } satisfies Record<TimelineEventType, TimelineEventDefinition>;
 
 export const timelineEventTypes = Object.keys(definitions) as TimelineEventType[];
+
+const sectionByEventType = {
+  JOB_SITE_CREATED: "riepilogo",
+  WORK_UPDATE: "timeline",
+  COMMENT: "timeline",
+  EVIDENCE: "file",
+  SHARED_EXPENSE: "pagamenti",
+  SHARED_DOCUMENT: "file",
+  STEP_CREATED: "step",
+  STEP_UPDATED: "step",
+  STEP_READY_FOR_REVIEW: "step",
+  STEP_CONFIRMED: "step",
+  STEP_REOPENED: "step",
+  CHANGE_PROPOSED: "modifiche",
+  CHANGE_COUNTERED: "modifiche",
+  CHANGE_ACCEPTED: "modifiche",
+  CHANGE_REJECTED: "modifiche",
+  CHANGE_WITHDRAWN: "modifiche",
+  CLARIFICATION_REQUESTED: "richieste",
+  CLARIFICATION_RESPONDED: "richieste",
+  ISSUE_REPORTED: "disaccordi",
+  PAYMENT_REQUESTED: "pagamenti",
+  PAYMENT_TRANSFER_DECLARED: "pagamenti",
+  PAYMENT_CONFIRMED: "pagamenti",
+  PAYMENT_DISPUTED: "pagamenti",
+  CLOSURE_PROPOSED: "chiusura",
+  CLOSURE_CONFIRMED: "chiusura",
+  POST_CLOSURE_REQUESTED: "archivio",
+  JOB_SITE_REOPENED: "riepilogo",
+  JOB_SITE_ARCHIVED: "archivio",
+  EXPORT_CREATED: "archivio",
+  SYSTEM_BACKFILL: "timeline",
+} satisfies Record<TimelineEventType, TimelineEventSectionId>;
 
 const manualEventTypes = new Set<TimelineEventType>([
   "WORK_UPDATE",
@@ -153,6 +188,7 @@ export function presentTimelineEvent(event: TimelineEventPresentationInput): Tim
       actor: text(event.actorName) ?? actorLabels[event.actorKind] ?? "Autore non disponibile",
       occurredAtLabel: formatTimelineDate(event.occurredAt ?? event.createdAt),
       kind: "system",
+      sectionId: "timeline",
       tone: "neutral",
       details: [],
     };
@@ -268,6 +304,7 @@ export function presentTimelineEvent(event: TimelineEventPresentationInput): Tim
     actor: text(event.actorName) ?? actorLabels[event.actorKind] ?? "Autore non disponibile",
     occurredAtLabel: formatTimelineDate(event.occurredAt ?? event.createdAt),
     kind: definition.kind,
+    sectionId: sectionByEventType[knownType],
     tone: typePresentation.tone,
     details,
   };

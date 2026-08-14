@@ -52,6 +52,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   "Profilo pagamento": IconCreditCard,
   /* Client */
   "I tuoi lavori": IconBriefcase,
+  "Account e dati": IconUserCircle,
   /* Account footer */
   "Console supporto": IconShieldLock,
   "Console Qoovex": IconTerminal2,
@@ -92,6 +93,7 @@ export function WorkspaceNavigation({ account, authenticated, navigation, platfo
   const searchParams = useSearchParams();
   const platformOnly = (platformRole === "SUPPORT_AGENT" || platformRole === "PLATFORM_ADMIN") && !support;
   const hasOrganizationContext = Boolean(account.organizationName) && !pathname.startsWith("/client");
+  const accountItems = pathname.startsWith("/client") ? [{ label: "Account e dati", href: "/account/security" }] : navigation.account;
   const contextItems = hasOrganizationContext ? [
     { label: "Panoramica Azienda", href: "/" },
     { label: "Cantieri", href: "/job-sites" },
@@ -142,11 +144,11 @@ export function WorkspaceNavigation({ account, authenticated, navigation, platfo
       </SidebarContent>
 
       <SidebarFooter>
-        {!platformOnly && navigation.account.length ? (
+        {!platformOnly && accountItems.length ? (
           <>
             <SidebarSeparator />
             <SidebarMenu>
-              {navigation.account.map((item) => {
+              {accountItems.map((item) => {
                 const Icon = resolveIcon(item);
                 return (
                   <SidebarMenuItem key={item.href}>
