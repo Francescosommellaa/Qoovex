@@ -25,7 +25,10 @@ export interface GeometryRule {
   type: "overflow" | "scalar" | "pair" | "rhythm" | "layout-shift";
   axis?: "horizontal" | "vertical";
   target: string;
+  selector?: string;
+  scope?: "surface" | "page";
   comparisonTarget?: string;
+  comparisonSelector?: string;
   metric?: string;
   expected?: number;
   tolerance: number;

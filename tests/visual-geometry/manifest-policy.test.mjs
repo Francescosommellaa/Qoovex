@@ -78,3 +78,26 @@ test("the live manifest is valid and every page route is classified", () => {
   assert.doesNotThrow(() => validateRouteCoverage(discovered, ROUTE_CLASSIFICATIONS, VISUAL_SURFACES));
   assert.equal(new Set(ROUTE_CLASSIFICATIONS.map(({ app, route }) => `${app}:${route}`)).size, ROUTE_CLASSIFICATIONS.length);
 });
+
+test("the live manifest exercises semantic geometry beyond overflow", () => {
+  const rules = VISUAL_SURFACES.flatMap((surface) => surface.geometry);
+  const ruleTypes = new Set(rules.map((rule) => rule.type));
+  const computedMetrics = new Set(rules.map((rule) => rule.metric).filter(Boolean));
+
+  assert.deepEqual(ruleTypes, new Set(["overflow", "scalar", "pair", "rhythm"]));
+  assert(computedMetrics.has("paddingLeft"));
+  assert(computedMetrics.has("borderRadius"));
+  assert(computedMetrics.has("gap"));
+
+  for (const id of [
+    "sirio-button-default",
+    "sirio-controls-checked",
+    "sirio-field-default",
+    "sirio-dialog-open",
+    "sirio-card-default",
+  ]) {
+    const surface = VISUAL_SURFACES.find((candidate) => candidate.id === id);
+    assert(surface, `missing core surface: ${id}`);
+    assert(surface.geometry.length > 1, `${id} must have live semantic geometry contracts`);
+  }
+});

@@ -19,6 +19,43 @@ const exactOverflow = (target) => ({
   tolerance: GEOMETRY_TOLERANCES.exact,
 });
 
+const exactScalar = (target, selector, metric, expected, scope = "surface") => ({
+  type: "scalar",
+  target,
+  selector,
+  scope,
+  metric,
+  expected,
+  tolerance: GEOMETRY_TOLERANCES.exact,
+});
+
+const exactPair = (
+  target,
+  selector,
+  comparisonTarget,
+  comparisonSelector,
+  metric,
+  scope = "surface",
+) => ({
+  type: "pair",
+  target,
+  selector,
+  comparisonTarget,
+  comparisonSelector,
+  scope,
+  metric,
+  tolerance: GEOMETRY_TOLERANCES.exact,
+});
+
+const exactRhythm = (target, selector, expected, scope = "surface") => ({
+  type: "rhythm",
+  target,
+  selector,
+  scope,
+  expected,
+  tolerance: GEOMETRY_TOLERANCES.exact,
+});
+
 const surface = (id, app, route, target, options = {}) =>
   Object.freeze({
     id,
@@ -41,23 +78,64 @@ const surface = (id, app, route, target, options = {}) =>
   });
 
 export const VISUAL_SURFACES = Object.freeze([
-  surface("sirio-foundation-spacing-light", "sirio", "/foundations/spacing-and-radius", "spacing-scale"),
-  surface("sirio-foundation-spacing-dark", "sirio", "/foundations/spacing-and-radius", "spacing-scale", { theme: "dark" }),
-  surface("sirio-button-default", "sirio", "/components/button", "button-default"),
-  surface("sirio-button-disabled", "sirio", "/components/button", "button-disabled"),
-  surface("sirio-button-focus", "sirio", "/components/button", "button-focus", { setupId: "focus-visible" }),
-  surface("sirio-controls-checked", "sirio", "/components/controls", "controls-checked"),
-  surface("sirio-controls-error", "sirio", "/components/controls", "controls-error"),
-  surface("sirio-field-default", "sirio", "/components/field", "field-default"),
-  surface("sirio-field-error", "sirio", "/components/field", "field-error"),
-  surface("sirio-select-open", "sirio", "/components/select", "select-open", { setupId: "select-open" }),
-  surface("sirio-tabs-selected", "sirio", "/components/tabs", "tabs-selected", { setupId: "tabs-selected" }),
-  surface("sirio-dialog-open", "sirio", "/components/dialog", "dialog-open", { setupId: "dialog-open" }),
-  surface("sirio-dropdown-open", "sirio", "/components/dropdown-menu", "dropdown-open", { setupId: "dropdown-open" }),
-  surface("sirio-tooltip-open", "sirio", "/components/tooltip", "tooltip-open", { setupId: "tooltip-open" }),
-  surface("sirio-card-default", "sirio", "/components/card", "card-default"),
-  surface("sirio-alert-error", "sirio", "/components/alert", "alert-error"),
-  surface("sirio-empty", "sirio", "/components/empty", "empty-default"),
+  surface("sirio-foundation-spacing-light", "sirio", "/foundations/spacing-and-radius", "spacing-scale", {
+    geometry: [exactOverflow("spacing-scale"), exactScalar("spacing-scale", undefined, "paddingLeft", 24), exactScalar("spacing-scale", undefined, "gap", 24), exactScalar("spacing-scale", undefined, "borderRadius", 8)],
+  }),
+  surface("sirio-foundation-spacing-dark", "sirio", "/foundations/spacing-and-radius", "spacing-scale", {
+    theme: "dark",
+    geometry: [exactOverflow("spacing-scale"), exactScalar("spacing-scale", undefined, "paddingLeft", 24), exactScalar("spacing-scale", undefined, "gap", 24), exactScalar("spacing-scale", undefined, "borderRadius", 8)],
+  }),
+  surface("sirio-button-default", "sirio", "/components/button", "button-default", {
+    geometry: [exactOverflow("button-default"), exactScalar("button", '[data-slot="button"]', "height", 32), exactScalar("button", '[data-slot="button"]', "paddingLeft", 12), exactScalar("button", '[data-slot="button"]', "paddingRight", 12), exactScalar("button", '[data-slot="button"]', "borderRadius", 8)],
+  }),
+  surface("sirio-button-disabled", "sirio", "/components/button", "button-disabled", {
+    geometry: [exactOverflow("button-disabled"), exactScalar("disabled button", '[data-slot="button"]', "height", 32), exactScalar("disabled button", '[data-slot="button"]', "paddingLeft", 12), exactScalar("disabled button", '[data-slot="button"]', "borderRadius", 8)],
+  }),
+  surface("sirio-button-focus", "sirio", "/components/button", "button-focus", {
+    setupId: "focus-visible",
+    geometry: [exactOverflow("button-focus"), exactScalar("focused button", '[data-slot="button"]', "height", 32), exactScalar("focused button", '[data-slot="button"]', "paddingLeft", 12), exactScalar("focused button", '[data-slot="button"]', "borderRadius", 8)],
+  }),
+  surface("sirio-controls-checked", "sirio", "/components/controls", "controls-checked", {
+    geometry: [exactOverflow("controls-checked"), exactScalar("checkbox", '[data-slot="checkbox"]', "width", 16), exactScalar("checkbox", '[data-slot="checkbox"]', "height", 16), exactScalar("switch", '[data-slot="switch"]', "width", 32)],
+  }),
+  surface("sirio-controls-error", "sirio", "/components/controls", "controls-error", {
+    geometry: [exactOverflow("controls-error"), exactScalar("invalid input", '[data-slot="input"]', "height", 36), exactScalar("invalid input", '[data-slot="input"]', "paddingLeft", 12), exactPair("enabled button", '[data-slot="button"]:not(:disabled)', "disabled button", '[data-slot="button"]:disabled', "height")],
+  }),
+  surface("sirio-field-default", "sirio", "/components/field", "field-default", {
+    geometry: [exactOverflow("field-default"), exactScalar("input", '[data-slot="input"]', "height", 36), exactScalar("input", '[data-slot="input"]', "paddingLeft", 12), exactScalar("input", '[data-slot="input"]', "borderRadius", 8)],
+  }),
+  surface("sirio-field-error", "sirio", "/components/field", "field-error", {
+    geometry: [exactOverflow("field-error"), exactScalar("invalid input", '[data-slot="input"]', "height", 36), exactScalar("invalid input", '[data-slot="input"]', "paddingLeft", 12), exactScalar("invalid input", '[data-slot="input"]', "borderRadius", 8)],
+  }),
+  surface("sirio-select-open", "sirio", "/components/select", "select-open", {
+    setupId: "select-open",
+    geometry: [exactOverflow("select-open"), exactScalar("select trigger", '[data-slot="select-trigger"]', "height", 32), exactScalar("select popup", '[data-slot="select-content"]', "paddingLeft", 4, "page"), exactScalar("select popup", '[data-slot="select-content"]', "borderRadius", 8, "page"), exactRhythm("select items", '[data-slot="select-item"]', 28, "page")],
+  }),
+  surface("sirio-tabs-selected", "sirio", "/components/tabs", "tabs-selected", {
+    setupId: "tabs-selected",
+    geometry: [exactOverflow("tabs-selected"), exactScalar("tabs list", '[data-slot="tabs-list"]', "gap", 4), exactPair("selected tab", '[data-slot="tabs-trigger"][aria-selected="true"]', "peer tab", '[data-slot="tabs-trigger"]:nth-of-type(3)', "height")],
+  }),
+  surface("sirio-dialog-open", "sirio", "/components/dialog", "dialog-open", {
+    setupId: "dialog-open",
+    geometry: [exactOverflow("dialog-open"), exactScalar("dialog content", '[data-slot="dialog-content"]', "width", 512, "page"), exactScalar("dialog content", '[data-slot="dialog-content"]', "paddingLeft", 24, "page"), exactScalar("dialog content", '[data-slot="dialog-content"]', "gap", 20, "page"), exactScalar("dialog content", '[data-slot="dialog-content"]', "borderRadius", 12, "page")],
+  }),
+  surface("sirio-dropdown-open", "sirio", "/components/dropdown-menu", "dropdown-open", {
+    setupId: "dropdown-open",
+    geometry: [exactOverflow("dropdown-open"), exactScalar("dropdown popup", '[data-slot="dropdown-menu-content"]', "paddingLeft", 6, "page"), exactScalar("dropdown popup", '[data-slot="dropdown-menu-content"]', "borderRadius", 12, "page")],
+  }),
+  surface("sirio-tooltip-open", "sirio", "/components/tooltip", "tooltip-open", {
+    setupId: "tooltip-open",
+    geometry: [exactOverflow("tooltip-open"), exactScalar("tooltip popup", '[data-slot="tooltip-content"]', "paddingLeft", 12, "page"), exactScalar("tooltip popup", '[data-slot="tooltip-content"]', "paddingTop", 6, "page"), exactScalar("tooltip popup", '[data-slot="tooltip-content"]', "borderRadius", 8, "page")],
+  }),
+  surface("sirio-card-default", "sirio", "/components/card", "card-default", {
+    geometry: [exactOverflow("card-default"), exactScalar("card", '[data-slot="card"]', "paddingLeft", 24), exactScalar("card", '[data-slot="card"]', "gap", 16), exactScalar("card", '[data-slot="card"]', "borderRadius", 12), exactScalar("card", '[data-slot="card"]', "borderTopWidth", 1)],
+  }),
+  surface("sirio-alert-error", "sirio", "/components/alert", "alert-error", {
+    geometry: [exactOverflow("alert-error"), exactScalar("alert", '[data-slot="alert"]', "paddingLeft", 16), exactScalar("alert", '[data-slot="alert"]', "gap", 12), exactScalar("alert", '[data-slot="alert"]', "borderRadius", 8)],
+  }),
+  surface("sirio-empty", "sirio", "/components/empty", "empty-default", {
+    geometry: [exactOverflow("empty-default"), exactScalar("empty state", '[data-slot="empty"]', "paddingLeft", 48), exactScalar("empty state", '[data-slot="empty"]', "borderRadius", 16), exactScalar("empty media", '[data-slot="empty-media"]', "width", 64), exactScalar("empty media", '[data-slot="empty-media"]', "height", 64)],
+  }),
   surface("web-home-light", "web", "/", "web-home"),
   surface("web-home-dark", "web", "/", "web-home", { theme: "dark" }),
   surface("workspace-sign-in-light", "workspace", "/sign-in", "workspace-sign-in"),
