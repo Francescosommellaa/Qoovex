@@ -19,6 +19,7 @@ test("visual geometry CI is a read-only required-check candidate", async () => {
   assert.match(workflow, /^permissions:\n\s{2}contents: read$/m);
   assert.match(workflow, /mcr\.microsoft\.com\/playwright:v1\.62\.0-noble/);
   assert.match(workflow, /actions\/checkout@[0-9a-f]{40}/);
+  assert.match(workflow, /actions\/checkout@[0-9a-f]{40}[\s\S]*?with:\n\s+fetch-depth: 0\n\s+lfs: true/);
   assert.match(workflow, /pnpm\/action-setup@[0-9a-f]{40}/);
   assert.match(workflow, /actions\/setup-node@[0-9a-f]{40}/);
   assert.match(workflow, /actions\/upload-artifact@[0-9a-f]{40}/);
