@@ -1,0 +1,17 @@
+[
+  {"name":"backend-service","classification":{"ui":false,"backend":true},"required":[],"forbidden":["impeccable","qoovex-ux-motion","qoovex-component-creator","ui-skills-root"]},
+  {"name":"documentation","classification":{"ui":false,"documentation":true},"required":[],"forbidden":["impeccable","qoovex-ux-motion","qoovex-component-creator","ui-skills-root"]},
+  {"name":"auth-server","classification":{"ui":false,"backend":true,"auth":true},"required":[],"forbidden":["impeccable","qoovex-ux-motion","qoovex-component-creator","ui-skills-root"]},
+  {"name":"simple-ui","classification":{"ui":true},"required":["impeccable"],"forbidden":["qoovex-ux-motion","qoovex-component-creator","ui-skills-root"]},
+  {"name":"single-component","classification":{"ui":true,"singleComponent":true},"required":["impeccable","qoovex-component-creator"],"forbidden":["qoovex-ux-motion","ui-skills-root"]},
+  {"name":"interactive-component","classification":{"ui":true,"singleComponent":true,"interaction":true},"required":["impeccable","qoovex-component-creator","qoovex-ux-motion"],"forbidden":["ui-skills-root"]},
+  {"name":"motion","classification":{"ui":true,"motion":true},"required":["impeccable","qoovex-ux-motion"],"forbidden":["qoovex-component-creator","ui-skills-root"]},
+  {"name":"responsive","classification":{"ui":true,"responsive":true},"required":["impeccable"],"forbidden":["qoovex-ux-motion","qoovex-component-creator","ui-skills-root"]},
+  {"name":"accessibility","classification":{"ui":true,"accessibility":true},"required":["impeccable"],"forbidden":["qoovex-ux-motion","qoovex-component-creator","ui-skills-root"]},
+  {"name":"design-system-component","classification":{"ui":true,"singleComponent":true,"designSystem":true},"required":["impeccable","qoovex-component-creator"],"forbidden":["qoovex-ux-motion","ui-skills-root"]},
+  {"name":"marketing-ui","classification":{"ui":true,"marketing":true},"required":["impeccable"],"forbidden":["qoovex-ux-motion","qoovex-component-creator","ui-skills-root"]},
+  {"name":"sirio-ui","classification":{"ui":true,"sirio":true},"required":["impeccable"],"forbidden":["qoovex-ux-motion","qoovex-component-creator","ui-skills-root"]},
+  {"name":"mixed-ui-backend","classification":{"ui":true,"backend":true},"required":["impeccable"],"forbidden":["qoovex-ux-motion","qoovex-component-creator","ui-skills-root"]},
+  {"name":"specialist-escalation","classification":{"ui":true,"specialistEscalation":true},"required":["impeccable"],"optional":["ui-skills-root"],"forbidden":["qoovex-ux-motion","qoovex-component-creator"]},
+  {"name":"motion-specialist-escalation","classification":{"ui":true,"motion":true,"specialistEscalation":true},"required":["impeccable","qoovex-ux-motion"],"optional":["ui-skills-root"],"forbidden":["qoovex-component-creator"]}
+]
