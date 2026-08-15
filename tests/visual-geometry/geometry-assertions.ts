@@ -105,4 +105,3 @@ async function assertRule(page: Page, surface: VisualSurface, rule: GeometryRule
 export async function assertGeometry(page: Page, surface: VisualSurface): Promise<void> {
   for (const rule of surface.geometry) await assertRule(page, surface, rule);
 }
-

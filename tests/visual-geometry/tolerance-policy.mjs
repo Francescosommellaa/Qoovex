@@ -6,4 +6,3 @@ export const GEOMETRY_TOLERANCES = Object.freeze({
   exact: 0,
   optical: 1,
 });
-

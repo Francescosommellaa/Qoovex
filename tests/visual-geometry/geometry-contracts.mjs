@@ -112,4 +112,3 @@ export function compareRepeatedRhythm({ positions, relation, ...input }) {
     }),
   );
 }
-

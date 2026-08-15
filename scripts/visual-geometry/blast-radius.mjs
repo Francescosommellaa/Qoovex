@@ -35,4 +35,3 @@ export function selectVisualScope(changedFiles = []) {
 
   return { tier, apps: [...ALL_APPS], selfTest };
 }
-

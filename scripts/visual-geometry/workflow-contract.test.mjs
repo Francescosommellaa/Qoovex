@@ -18,6 +18,10 @@ test("visual geometry CI is a read-only required-check candidate", async () => {
   assert.match(workflow, /^\s{4}name: visual-geometry$/m);
   assert.match(workflow, /^permissions:\n\s{2}contents: read$/m);
   assert.match(workflow, /mcr\.microsoft\.com\/playwright:v1\.62\.0-noble/);
+  assert.match(
+    workflow,
+    /steps:\n\s+- name: Install Git LFS\n\s+run: \|\n\s+apt-get update\n\s+apt-get install --yes --no-install-recommends git-lfs\n\s+git lfs version\n\s+- uses: actions\/checkout@/,
+  );
   assert.match(workflow, /actions\/checkout@[0-9a-f]{40}/);
   assert.match(workflow, /actions\/checkout@[0-9a-f]{40}[\s\S]*?with:\n\s+fetch-depth: 0\n\s+lfs: true/);
   assert.match(workflow, /pnpm\/action-setup@[0-9a-f]{40}/);

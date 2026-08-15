@@ -19,4 +19,3 @@ or promote a diff automatically.
 Font availability and font identity are intentionally outside this gate. The
 browser blocks external requests, so platform fallback rendering is accepted
 and reviewed as part of each platform baseline.
-

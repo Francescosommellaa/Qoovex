@@ -20,4 +20,3 @@ const summary = {
 
 console.log(`[visual-geometry:report] ${JSON.stringify(summary)}`);
 if (summary.unexpected > 0) process.exitCode = 1;
-

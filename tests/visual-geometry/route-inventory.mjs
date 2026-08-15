@@ -26,4 +26,3 @@ export function discoverPageRoutes(appRoot, app) {
     .map((file) => ({ app, route: pageFileToRoute(appRoot, file) }))
     .sort((left, right) => `${left.app}:${left.route}`.localeCompare(`${right.app}:${right.route}`));
 }
-

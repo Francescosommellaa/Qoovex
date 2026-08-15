@@ -121,4 +121,3 @@ export function findDesignDrift({ files = [], exemptions = [] }) {
 
   return findings.filter((finding) => !isExempt(exemptions, finding));
 }
-
