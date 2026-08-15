@@ -9,4 +9,3 @@ Repository-owned integration for the pinned Impeccable Codex provider.
 - `hook-dispatcher.test.mjs` contains the routing and touched-context regression suite.
 
 The upstream distribution remains under the ignored `.agents/skills/impeccable` path. Remove the dispatcher only after a pinned upstream version passes the same root-session PostToolUse and Stop routing regressions natively.
-
