@@ -29,6 +29,7 @@
       "source": "repository",
       "version": "1",
       "localPath": ".agents/skills/qoovex-ux-motion/SKILL.md",
+      "gitBlobSha": "4714fd9da8897356040b668b5157cde99925c410",
       "role": "interaction-motion-specialist",
       "triggers": ["motion", "interaction"],
       "primaryResponsibilities": ["interaction-motion"],
@@ -42,7 +43,7 @@
       "maxInstances": 1,
       "runtimeRequired": true,
       "updatePolicy": "repository",
-      "verification": "digest-and-routing"
+      "verification": "git-blob-and-routing"
     },
     {
       "id": "qoovex-component-creator",
@@ -50,6 +51,7 @@
       "source": "repository",
       "version": "1",
       "localPath": ".agents/skills/qoovex-component-creator/SKILL.md",
+      "gitBlobSha": "5780d52dedfd928d5d3fb97a497fd9ef5a475281",
       "role": "component-api-specialist",
       "triggers": ["single-component"],
       "primaryResponsibilities": ["component-api"],
@@ -63,7 +65,7 @@
       "maxInstances": 1,
       "runtimeRequired": true,
       "updatePolicy": "repository",
-      "verification": "digest-and-routing"
+      "verification": "git-blob-and-routing"
     },
     {
       "id": "ui-skills-root",
@@ -71,6 +73,7 @@
       "source": "ibelick/ui-skills",
       "version": "0.2.4",
       "localPath": ".agents/skills/ui-skills-root/SKILL.md",
+      "gitBlobSha": "a1d144375c2f7be3e390cb396c95afcff0fcb2df",
       "role": "external-specialist-router",
       "triggers": ["specialist-escalation"],
       "primaryResponsibilities": ["external-specialist-routing"],
@@ -84,7 +87,7 @@
       "maxInstances": 1,
       "runtimeRequired": false,
       "updatePolicy": "auto-pr-fail-closed",
-      "verification": "pinned-cli-and-router"
+      "verification": "git-blob-pinned-cli-and-router"
     }
   ]
 }
