@@ -151,11 +151,11 @@ export default function ButtonPage() {
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Varianti & Distinzione Ghost vs Link</h2>
           <SpecimenGrid cols={3}>
-            <Specimen title="Default (Primario)">
+            <Specimen title="Default (Primario)" visualId="button-default">
               <Button>Pulsante primario</Button>
             </Specimen>
 
-            <Specimen title="Secondary">
+            <Specimen title="Secondary" visualId="button-focus">
               <Button variant="secondary">Pulsante secondario</Button>
             </Specimen>
 
@@ -173,6 +173,10 @@ export default function ButtonPage() {
 
             <Specimen title="Destructive">
               <Button variant="destructive">Pulsante distruttivo</Button>
+            </Specimen>
+
+            <Specimen title="Disabled" visualId="button-disabled">
+              <Button disabled>Operazione non disponibile</Button>
             </Specimen>
           </SpecimenGrid>
         </section>

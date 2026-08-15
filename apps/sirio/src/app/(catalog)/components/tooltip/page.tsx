@@ -29,7 +29,7 @@ export default function TooltipCatalogPage() {
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Posizionamenti (Placements)</h2>
           <SpecimenGrid cols={2}>
-            <Specimen title="Superiore & Inferiore (Top / Bottom)">
+            <Specimen title="Superiore & Inferiore (Top / Bottom)" visualId="tooltip-open">
               <div className="flex flex-wrap items-center gap-4">
                 <Tooltip>
                   <TooltipTrigger render={<Button variant="outline" size="sm" />}>

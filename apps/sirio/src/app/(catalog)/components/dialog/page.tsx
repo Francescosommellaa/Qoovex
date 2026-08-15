@@ -45,7 +45,7 @@ export default function DialogPage() {
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Varianti Semantiche e Funzionali</h2>
           <SpecimenGrid cols={2}>
-            <Specimen title="Form Modale (Default)">
+            <Specimen title="Form Modale (Default)" visualId="dialog-open">
               <Dialog>
                 <DialogTrigger render={<Button className="w-full" />}>
                   <IconPlus />

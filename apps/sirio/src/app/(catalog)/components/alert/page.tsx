@@ -66,7 +66,7 @@ export default function AlertCatalogPage() {
               </Alert>
             </Specimen>
 
-            <Specimen title="Destructive / Blocco Operativo">
+            <Specimen title="Destructive / Blocco Operativo" visualId="alert-error">
               <Alert variant="destructive" className="w-full">
                 <IconAlertOctagon />
                 <div>

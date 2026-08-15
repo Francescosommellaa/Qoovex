@@ -8,7 +8,10 @@ export default function CatalogLayout({ children }: { children: React.ReactNode 
       <SirioSidebar />
       <SidebarInset className="h-dvh min-h-0 min-w-0 overflow-hidden">
         <SirioTopbar />
-        <div className="min-h-0 min-w-0 flex-1 overflow-y-auto p-4 sm:p-8">
+        <div
+          className="min-h-0 min-w-0 flex-1 overflow-y-auto p-4 sm:p-8"
+          data-visual-surface="sirio-catalog"
+        >
           {children}
         </div>
       </SidebarInset>

@@ -59,6 +59,16 @@ La matrice canonica usa 320, 390, 768, 1024 e 1440 px. `pnpm mobile:test` avvia 
 
 Il job indipendente `mobile-responsive` esegue install frozen, doctor, report del blast radius, migration deploy su database CI effimero, installazione Chromium e suite Playwright con un worker. Gli artifact di failure sono `mobile-playwright-report`; non esiste dipendenza da SaaS, device cloud o screenshot baseline. Per renderlo required, un maintainer deve selezionare `mobile-responsive` nei required status checks della branch protection.
 
+## Visual Geometry & Polish CI
+
+`implemented_decision`: il workflow `.github/workflows/visual-geometry.yml` pubblica il check stabile `visual-geometry` su pull request, push a `master` e invocazione manuale. Usa Playwright `1.62.0` nell'immagine pin-nata `mcr.microsoft.com/playwright:v1.62.0-noble`, installazione frozen, permessi `contents: read`, self-test fail-closed e artifact diagnostici conservati per 7 giorni soltanto quando il job fallisce.
+
+Il manifest `tests/visual-geometry/surface-manifest.mjs` governa gli stati rappresentativi di Sirio, Web e delle sole superfici Workspace DB-free. Il contratto desktop canonico è viewport 1440×1000, DPR 1, locale `it-IT`, timezone `Europe/Rome`, rete browser limitata agli origin loopback e geometria esatta con tolleranza 0px; soltanto relazioni ottiche documentate possono usare al massimo 1px. Le baseline sono versionate e separate per piattaforma e progetto. La route inventory deve classificare ogni pagina oppure motivarne esplicitamente l'esclusione.
+
+I comandi governati sono `pnpm visual:geometry`, `pnpm visual:geometry:self-test`, `pnpm visual:geometry:report` e, solo in locale, `pnpm visual:geometry:update`. L'update richiede l'attestazione esatta `QOOVEX_VISUAL_BASELINE_UPDATE=I_ACKNOWLEDGE_INTENTIONAL_VISUAL_CHANGE`; in CI è sempre vietato e il gate non scrive nel repository. Una baseline nuova o modificata deve essere generata e revisionata sulla stessa piattaforma prima del commit; un artifact CI mancante non è approvazione automatica.
+
+Per decisione esplicita, questo gate non controlla caricamento, identità o integrità dei font, asset Fontshare, `document.fonts` o `font-family`: con richieste esterne bloccate sono accettati i font di fallback. Questa esclusione non riduce i controlli geometrici e visuali. L'impatto database resta zero: Workspace usa una destinazione PostgreSQL loopback inerte e non avvia né interroga database.
+
 ## Impeccable UI quality gate
 
 `implemented_decision`: Impeccable è pin-nato a `skill-v4.1.1`, commit `5a149f3fdb1b5793f10567233b1dcab98fc305fd`. `pnpm setup:impeccable` ricostruisce la distribuzione Codex ufficiale ignorata; `pnpm verify:impeccable` è il gate esplicito, offline e read-only per distribuzione, context, doctor, hook, routing, governance e Git hygiene. Non è parte di `check:fast` e non introduce download nei gate backend ordinari.

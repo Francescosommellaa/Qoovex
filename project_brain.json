@@ -62,6 +62,19 @@
         "contexts": ["apps/workspace", "apps/web", "apps/sirio", "packages/ui"],
         "hook": "repository-owned temporary monorepo dispatcher with machine-local session state and local Codex approval"
       },
+      "visual_geometry_quality_layer": {
+        "status": "implemented_decision",
+        "required_check": "visual-geometry",
+        "workflow": ".github/workflows/visual-geometry.yml",
+        "commands": ["pnpm visual:geometry", "pnpm visual:geometry:self-test", "pnpm visual:geometry:report", "pnpm visual:geometry:update"],
+        "runtime": "Playwright 1.62.0 in pinned Noble image with Chromium, 1440x1000 viewport, DPR 1, it-IT locale and Europe/Rome timezone",
+        "coverage": "manifest-governed Sirio, Web and DB-free Workspace states with fail-closed route classification and PR blast radius",
+        "geometry": "0px exact by default; at most 1px only for documented optical relations",
+        "baselines": "versioned and isolated by platform and Playwright project; update is local-only with exact attestation and forbidden in CI",
+        "network": "browser requests are loopback-only",
+        "fonts": "intentionally excluded from CI assertions; external font loading, identity, integrity, Fontshare assets, document.fonts and font-family are not gated",
+        "database_impact": "zero; Workspace uses an inert loopback PostgreSQL target and no database is started or queried"
+      },
       "ui_skills_specialist_layer": {
         "status": "implemented_decision",
         "authority": "optional external specialist discovery after Qoovex and Impeccable routing; never a source of truth or release gate",

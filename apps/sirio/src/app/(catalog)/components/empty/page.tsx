@@ -35,7 +35,7 @@ export default function EmptyCatalogPage() {
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Superfici e Casi d'Uso</h2>
           <SpecimenGrid cols={2}>
-            <Specimen title="Superficie Tratteggiata (Creazione Cantiere)">
+            <Specimen title="Superficie Tratteggiata (Creazione Cantiere)" visualId="empty-default">
               <Empty variant="dashed">
                 <EmptyMedia variant="badge">
                   <IconBuildingStore />

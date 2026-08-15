@@ -12,7 +12,7 @@ export default function SpacingAndRadiusPage() {
       <div className="flex flex-col gap-12">
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Spaziatura Semantica</h2>
-          <div className="flex flex-col gap-6 rounded-lg border p-6">
+          <div className="flex flex-col gap-6 rounded-lg border p-6" data-visual-specimen="spacing-scale">
             <SpacingSpecimen name="Space 1" variable="--space-1" size="0.25rem (4px)" />
             <SpacingSpecimen name="Space 2" variable="--space-2" size="0.5rem (8px)" />
             <SpacingSpecimen name="Space 3" variable="--space-3" size="0.75rem (12px)" />

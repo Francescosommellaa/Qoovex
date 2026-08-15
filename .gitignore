@@ -8,6 +8,7 @@
 
 # testing
 /coverage
+/output/
 
 # next.js
 /.next/
@@ -73,6 +74,8 @@ yarn-error.log*
 !/tests/e2e/sirio-design-system.spec.ts-snapshots/*.png
 !/tests/mobile/
 !/tests/mobile/**/*.ts
+!/tests/visual-geometry/
+!/tests/visual-geometry/**
 /.agents/skills/impeccable/
 /.agents/skills/.impeccable-install.json
 skills-lock.json
