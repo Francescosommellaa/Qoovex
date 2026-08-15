@@ -15,8 +15,8 @@ const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url))
 
 test("duplicate surface IDs fail", () => {
   const duplicate = [
-    { id: "sirio-button", app: "sirio", route: "/components/button", theme: "light", target: "button" },
-    { id: "sirio-button", app: "sirio", route: "/components/card", theme: "light", target: "card" },
+    { id: "sirio-button", app: "sirio", route: "/components/button", theme: "light", target: "button", snapshot: { name: "button.png" } },
+    { id: "sirio-button", app: "sirio", route: "/components/card", theme: "light", target: "card", snapshot: { name: "card.png" } },
   ];
   assert.throws(() => validateManifest(duplicate, []), /duplicate surface id: sirio-button/);
 });
@@ -33,6 +33,7 @@ test("unknown setup IDs fail", () => {
             theme: "light",
             target: "button",
             setupId: "invented-state",
+            snapshot: { name: "button.png" },
           },
         ],
         ["button-focus"],

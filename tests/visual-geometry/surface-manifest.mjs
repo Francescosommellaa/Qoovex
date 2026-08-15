@@ -1,16 +1,20 @@
 import { GEOMETRY_TOLERANCES } from "./tolerance-policy.mjs";
 
 export const VISUAL_INTERACTION_SETUP_IDS = Object.freeze([
-  "focus-target",
-  "open-dialog",
-  "open-dropdown",
-  "open-select",
-  "open-tooltip",
-  "select-tab",
+  "checked-controls",
+  "collapsible-expanded",
+  "dialog-open",
+  "dropdown-open",
+  "focus-visible",
+  "none",
+  "select-open",
+  "tabs-selected",
+  "tooltip-open",
 ]);
 
 const exactOverflow = (target) => ({
   type: "overflow",
+  axis: "horizontal",
   target,
   tolerance: GEOMETRY_TOLERANCES.exact,
 });
@@ -22,7 +26,17 @@ const surface = (id, app, route, target, options = {}) =>
     route,
     target,
     theme: "light",
+    tier: "critical",
     geometry: [exactOverflow(target)],
+    snapshot: {
+      name: `${id}.png`,
+      options: {
+        animations: "disabled",
+        caret: "hide",
+        maxDiffPixels: 0,
+        scale: "css",
+      },
+    },
     ...options,
   });
 
@@ -31,16 +45,16 @@ export const VISUAL_SURFACES = Object.freeze([
   surface("sirio-foundation-spacing-dark", "sirio", "/foundations/spacing-and-radius", "spacing-scale", { theme: "dark" }),
   surface("sirio-button-default", "sirio", "/components/button", "button-default"),
   surface("sirio-button-disabled", "sirio", "/components/button", "button-disabled"),
-  surface("sirio-button-focus", "sirio", "/components/button", "button-focus", { setupId: "focus-target" }),
+  surface("sirio-button-focus", "sirio", "/components/button", "button-focus", { setupId: "focus-visible" }),
   surface("sirio-controls-checked", "sirio", "/components/controls", "controls-checked"),
   surface("sirio-controls-error", "sirio", "/components/controls", "controls-error"),
   surface("sirio-field-default", "sirio", "/components/field", "field-default"),
   surface("sirio-field-error", "sirio", "/components/field", "field-error"),
-  surface("sirio-select-open", "sirio", "/components/select", "select-open", { setupId: "open-select" }),
-  surface("sirio-tabs-selected", "sirio", "/components/tabs", "tabs-selected", { setupId: "select-tab" }),
-  surface("sirio-dialog-open", "sirio", "/components/dialog", "dialog-open", { setupId: "open-dialog" }),
-  surface("sirio-dropdown-open", "sirio", "/components/dropdown-menu", "dropdown-open", { setupId: "open-dropdown" }),
-  surface("sirio-tooltip-open", "sirio", "/components/tooltip", "tooltip-open", { setupId: "open-tooltip" }),
+  surface("sirio-select-open", "sirio", "/components/select", "select-open", { setupId: "select-open" }),
+  surface("sirio-tabs-selected", "sirio", "/components/tabs", "tabs-selected", { setupId: "tabs-selected" }),
+  surface("sirio-dialog-open", "sirio", "/components/dialog", "dialog-open", { setupId: "dialog-open" }),
+  surface("sirio-dropdown-open", "sirio", "/components/dropdown-menu", "dropdown-open", { setupId: "dropdown-open" }),
+  surface("sirio-tooltip-open", "sirio", "/components/tooltip", "tooltip-open", { setupId: "tooltip-open" }),
   surface("sirio-card-default", "sirio", "/components/card", "card-default"),
   surface("sirio-alert-error", "sirio", "/components/alert", "alert-error"),
   surface("sirio-empty", "sirio", "/components/empty", "empty-default"),

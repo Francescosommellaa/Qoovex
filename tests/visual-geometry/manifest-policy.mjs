@@ -8,6 +8,7 @@ function routeKey({ app, route }) {
 
 export function validateManifest(surfaces, knownSetupIds) {
   const ids = new Set();
+  const snapshotNames = new Set();
   const setups = new Set(knownSetupIds);
 
   for (const surface of surfaces) {
@@ -19,6 +20,9 @@ export function validateManifest(surfaces, knownSetupIds) {
     if (!surface.route?.startsWith("/")) throw new Error(`invalid route for ${surface.id}`);
     if (!THEMES.has(surface.theme)) throw new Error(`invalid theme for ${surface.id}: ${surface.theme}`);
     if (!surface.target?.trim()) throw new Error(`target is required for ${surface.id}`);
+    if (!surface.snapshot?.name?.endsWith(".png")) throw new Error(`PNG snapshot name is required for ${surface.id}`);
+    if (snapshotNames.has(surface.snapshot.name)) throw new Error(`duplicate snapshot name: ${surface.snapshot.name}`);
+    snapshotNames.add(surface.snapshot.name);
     if (surface.setupId && !setups.has(surface.setupId)) {
       throw new Error(`unknown setup id: ${surface.setupId}`);
     }
@@ -75,4 +79,3 @@ export function summarizeCoverage(classifications) {
     { total: 0, covered: 0, represented: 0, excluded: 0 },
   );
 }
-
