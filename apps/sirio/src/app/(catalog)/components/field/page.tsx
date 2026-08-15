@@ -54,11 +54,19 @@ export default function FieldPage() {
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">1. Testo, Email, Password & Username</h2>
           <SpecimenGrid cols={2}>
-            <Specimen title="1. Text — Testo Generico">
+            <Specimen title="1. Text — Testo Generico" visualId="field-default">
               <Field className="w-full">
                 <FieldLabel htmlFor="field-text">Nome Cantiere</FieldLabel>
                 <Input id="field-text" placeholder="es. Ristrutturazione Impianti" />
                 <FieldDescription>Nome identificativo del progetto.</FieldDescription>
+              </Field>
+            </Specimen>
+
+            <Specimen title="Stato di errore" visualId="field-error">
+              <Field className="w-full">
+                <FieldLabel htmlFor="field-error">Codice cantiere</FieldLabel>
+                <Input id="field-error" aria-invalid="true" defaultValue="QX-13" />
+                <FieldError>Il codice cantiere non è valido.</FieldError>
               </Field>
             </Specimen>
 

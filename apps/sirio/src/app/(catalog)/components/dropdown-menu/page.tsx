@@ -54,7 +54,7 @@ export default function DropdownMenuPage() {
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Menu Azioni & Sottomenu Nidificato</h2>
           <SpecimenGrid cols={2}>
-            <Specimen title="Menu Azioni Cantiere con Scorciatoie">
+            <Specimen title="Menu Azioni Cantiere con Scorciatoie" visualId="dropdown-open">
               <DropdownMenu>
                 <DropdownMenuTrigger render={<Button variant="outline" />}>
                   <IconBuildingStore />

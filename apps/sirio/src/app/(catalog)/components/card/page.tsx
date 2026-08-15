@@ -115,7 +115,7 @@ export default function CardCatalogPage() {
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Varianti di Superficie (Default, Outline, Ghost, Interactive)</h2>
           <SpecimenGrid cols={2}>
-            <Specimen title="Default (Sfondo Card + Ombra Sottile)">
+            <Specimen title="Default (Sfondo Card + Ombra Sottile)" visualId="card-default">
               <Card variant="default" className="w-full">
                 <CardHeader>
                   <CardTitle>Superficie Default</CardTitle>

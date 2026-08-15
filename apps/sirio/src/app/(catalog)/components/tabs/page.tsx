@@ -31,7 +31,7 @@ export default function TabsCatalogPage() {
             1. Tabs con Pannelli di Contenuto
           </h2>
           <SpecimenGrid cols={1}>
-            <Specimen title="Navigazione Cantiere">
+            <Specimen title="Navigazione Cantiere" visualId="tabs-selected">
               <Tabs defaultValue="overview" className="w-full">
                 <TabsList>
                   <TabsTrigger value="overview">

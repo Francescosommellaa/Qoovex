@@ -11,6 +11,7 @@ import { RadioGroup, Radio, RadioCard } from "@qoovex/ui/components/radio-group"
 import { Slider } from "@qoovex/ui/components/slider";
 import { Toggle, ToggleGroup } from "@qoovex/ui/components/toggle";
 import { Button } from "@qoovex/ui/components/button";
+import { Input } from "@qoovex/ui/components/input";
 import {
   IconBold,
   IconItalic,
@@ -45,6 +46,42 @@ export default function ControlsCatalogPage() {
       />
 
       <div className="flex flex-col gap-12">
+        <section aria-labelledby="visual-state-contracts-title">
+          <h2 id="visual-state-contracts-title" className="mb-4 text-2xl font-semibold tracking-tight">
+            Stati fondamentali
+          </h2>
+          <SpecimenGrid cols={2}>
+            <Specimen title="Controlli selezionati" visualId="controls-checked">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-2">
+                  <Checkbox id="visual-checkbox-checked" defaultChecked />
+                  <label htmlFor="visual-checkbox-checked" className="cursor-pointer text-sm font-medium leading-none">Checkbox selezionata</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Switch id="visual-switch-checked" defaultChecked />
+                  <label htmlFor="visual-switch-checked" className="cursor-pointer text-sm font-medium leading-none">Switch attivo</label>
+                </div>
+                <RadioGroup defaultValue="selected">
+                  <div className="flex items-center gap-2">
+                    <Radio id="visual-radio-checked" value="selected" />
+                    <label htmlFor="visual-radio-checked" className="cursor-pointer text-sm font-medium">Radio selezionata</label>
+                  </div>
+                </RadioGroup>
+              </div>
+            </Specimen>
+
+            <Specimen title="Errore e stato disabilitato" visualId="controls-error">
+              <div className="flex w-full max-w-sm flex-col gap-4">
+                <Input aria-invalid="true" aria-label="Codice non valido" defaultValue="QX-13" />
+                <Button variant="outline" data-visual-focus-target>
+                  Target focus visibile
+                </Button>
+                <Button disabled>Operazione non disponibile</Button>
+              </div>
+            </Specimen>
+          </SpecimenGrid>
+        </section>
+
         {/* ── Checkbox ──────────────────────────────────────────────── */}
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">

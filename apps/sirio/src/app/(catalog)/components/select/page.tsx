@@ -25,7 +25,7 @@ export default function SelectCatalogPage() {
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Esempi di Selezione</h2>
           <SpecimenGrid cols={2}>
-            <Specimen title="Stato Cantiere">
+            <Specimen title="Stato Cantiere" visualId="select-open">
               <Select defaultValue="ACTIVE">
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Seleziona stato" />
