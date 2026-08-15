@@ -31,16 +31,36 @@ for (const command of ["ui-skills:start", "ui-skills:categories", "ui-skills:lis
 }
 if (!failures.some((message) => message.startsWith("ui-skills:"))) pass(`UI Skills CLI pin ${uiSkills.version}`);
 
+const impeccable = registry.skills.find((skill) => skill.id === "impeccable");
+const impeccableConfig = fs.readFileSync(path.join(repositoryRoot, "scripts", "impeccable", "config.mjs"), "utf8");
+const configVersion = impeccableConfig.match(/version: "([^"]+)"/)?.[1];
+const configTag = impeccableConfig.match(/tag: "([^"]+)"/)?.[1];
+if (configVersion !== impeccable.version) fail(`Impeccable registry/config drift: ${impeccable.version} != ${configVersion ?? "missing"}`);
+if (configTag !== `skill-v${impeccable.version}`) fail(`Impeccable tag drift: expected skill-v${impeccable.version}, found ${configTag ?? "missing"}`);
+else pass(`Impeccable repository pin ${configTag}`);
+
 const agents = fs.readFileSync(path.join(repositoryRoot, "AGENTS.md"), "utf8");
+if (!agents.includes("Skill Governance System")) fail("AGENTS.md lost Skill Governance System contract");
+if (!agents.includes("config/skills/registry.json")) fail("AGENTS.md lost canonical skill registry reference");
 if (!agents.includes("Impeccable obbligatorio per UI/UX")) fail("AGENTS.md lost mandatory Impeccable routing");
 if (!agents.includes("qoovex-ux-motion")) fail("AGENTS.md lost motion specialist routing");
 if (!agents.includes("UI Skills specialist routing")) fail("AGENTS.md lost UI Skills specialist routing");
 if (!agents.includes("In caso di conflitto prevale Qoovex")) fail("AGENTS.md lost Qoovex precedence");
-if (!failures.some((message) => message.startsWith("AGENTS.md"))) pass("AGENTS routing contract");
+if (!failures.some((message) => message.startsWith("AGENTS.md"))) pass("AGENTS routing and governance contract");
+
+const qualityDoc = fs.readFileSync(path.join(repositoryRoot, "docs", "07_QUALITY_AND_RELEASE.md"), "utf8");
+for (const required of ["Skill governance gate", "Automatic skill updates", `skill-v${impeccable.version}`, `ui-skills@${uiSkills.version}`]) {
+  if (!qualityDoc.includes(required)) fail(`quality/release governance drift: missing ${required}`);
+}
+if (!failures.some((message) => message.startsWith("quality/release"))) pass("quality/release skill governance contract");
+
+const quarantine = JSON.parse(fs.readFileSync(path.join(repositoryRoot, "config", "skills", "quarantine.json"), "utf8"));
+if (quarantine.schemaVersion !== 1 || !Array.isArray(quarantine.candidates)) fail("quarantine registry invalid");
+else pass(`quarantine registry: ${quarantine.candidates.length} blocked candidates`);
 
 if (!ci) {
   const result = spawnSync("pnpm", ["verify:impeccable"], { cwd: repositoryRoot, encoding: "utf8", shell: process.platform === "win32" });
-  if (result.status !== 0) fail(`Impeccable local verification failed; run pnpm setup:impeccable first`);
+  if (result.status !== 0) fail("Impeccable local verification failed; run pnpm setup:impeccable first");
   else pass("Impeccable local verification");
 } else {
   warn("CI verifies the repository Impeccable contract only; machine-local ignored distribution is verified by pnpm verify:impeccable at runtime");
