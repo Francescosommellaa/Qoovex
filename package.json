@@ -36,7 +36,7 @@
     "mobile:contract": "node scripts/mobile/contract.mjs",
     "mobile:doctor": "node scripts/mobile/doctor.mjs",
     "mobile:impact": "node scripts/mobile/impact.mjs",
-    "mobile:test": "playwright test --config=playwright.mobile.config.ts",
+    "mobile:test": "node scripts/mobile/run-playwright.mjs",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install --with-deps chromium",
     "test:unit": "turbo run test",

@@ -13,7 +13,7 @@ import { auditSourceFiles, loadAuditedFiles } from "./source-audit.mjs";
 const requiredScripts = {
   "mobile:contract": "node scripts/mobile/contract.mjs",
   "mobile:doctor": "node scripts/mobile/doctor.mjs",
-  "mobile:test": "playwright test --config=playwright.mobile.config.ts",
+  "mobile:test": "node scripts/mobile/run-playwright.mjs",
 };
 
 export function validateGateIntegration(packageJson, workflowSource) {

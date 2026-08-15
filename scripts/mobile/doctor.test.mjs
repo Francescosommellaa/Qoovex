@@ -7,7 +7,7 @@ const packageJson = {
   scripts: {
     "mobile:contract": "node scripts/mobile/contract.mjs",
     "mobile:doctor": "node scripts/mobile/doctor.mjs",
-    "mobile:test": "playwright test --config=playwright.mobile.config.ts",
+    "mobile:test": "node scripts/mobile/run-playwright.mjs",
   },
 };
 
@@ -57,4 +57,3 @@ test("rejects a CI job that starts Playwright before the deterministic doctor", 
 function findingRule(rule) {
   return rule;
 }
-

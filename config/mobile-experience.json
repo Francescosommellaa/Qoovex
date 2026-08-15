@@ -100,11 +100,11 @@
     },
     {
       "id": "fixed-without-safe-area",
-      "files": ["packages/ui/src/components/dialog.tsx", "packages/ui/src/components/floating-navigation.tsx", "packages/ui/src/components/sidebar.tsx", "packages/ui/src/components/cookie-banner.tsx"]
+      "files": ["packages/ui/src/components/dialog.tsx", "packages/ui/src/components/floating-navigation.tsx", "packages/ui/src/components/sidebar.tsx", "apps/web/src/app/CookieBanner.tsx"]
     },
     {
       "id": "shared-touch-target-contract",
-      "files": ["packages/ui/src/components/button.tsx", "packages/ui/src/components/input.tsx", "packages/ui/src/components/select.tsx", "packages/ui/src/components/sidebar.tsx"]
+      "files": ["packages/ui/styles/base.css"]
     }
   ],
   "impact": {
