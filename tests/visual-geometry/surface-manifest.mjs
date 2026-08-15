@@ -102,10 +102,10 @@ export const VISUAL_SURFACES = Object.freeze([
     geometry: [exactOverflow("controls-error"), exactScalar("invalid input", '[data-slot="input"]', "height", 36), exactScalar("invalid input", '[data-slot="input"]', "paddingLeft", 12), exactPair("enabled button", '[data-slot="button"]:not(:disabled)', "disabled button", '[data-slot="button"]:disabled', "height")],
   }),
   surface("sirio-field-default", "sirio", "/components/field", "field-default", {
-    geometry: [exactOverflow("field-default"), exactScalar("input", '[data-slot="input"]', "height", 36), exactScalar("input", '[data-slot="input"]', "paddingLeft", 12), exactScalar("input", '[data-slot="input"]', "borderRadius", 8)],
+    geometry: [exactOverflow("field-default"), exactScalar("input", '[data-slot="input"]', "height", 36), exactScalar("input", '[data-slot="input"]', "paddingLeft", 12), exactScalar("input", '[data-slot="input"]', "borderRadius", 8), exactPair("field label", '[data-slot="field-label"]', "field input", '[data-slot="input"]', "left")],
   }),
   surface("sirio-field-error", "sirio", "/components/field", "field-error", {
-    geometry: [exactOverflow("field-error"), exactScalar("invalid input", '[data-slot="input"]', "height", 36), exactScalar("invalid input", '[data-slot="input"]', "paddingLeft", 12), exactScalar("invalid input", '[data-slot="input"]', "borderRadius", 8)],
+    geometry: [exactOverflow("field-error"), exactScalar("invalid input", '[data-slot="input"]', "height", 36), exactScalar("invalid input", '[data-slot="input"]', "paddingLeft", 12), exactScalar("invalid input", '[data-slot="input"]', "borderRadius", 8), exactPair("field label", '[data-slot="field-label"]', "field input", '[data-slot="input"]', "left")],
   }),
   surface("sirio-select-open", "sirio", "/components/select", "select-open", {
     setupId: "select-open",
