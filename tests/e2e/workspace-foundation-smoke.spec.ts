@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const authenticatedPages = ["/", "/client", "/account/notifications"] as const;
-const authenticatedApis = ["/api/account/notification-preferences", "/api/client/job-sites", "/api/org/org-1/job-sites"] as const;
+const authenticatedApis = ["/api/account/notification-preferences", "/api/client/job-sites", "/api/job-sites"] as const;
 
 test("authentication surface remains available", async ({ page }) => {
   await page.goto("/sign-in");
