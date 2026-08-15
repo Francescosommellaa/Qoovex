@@ -38,9 +38,12 @@ jobs:
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
-      - name: Validate candidate locally
+      - name: Validate candidate providers and governance
         if: steps.candidate.outputs.changed == 'true'
         run: |
+          pnpm setup:impeccable
+          pnpm verify:impeccable
+          pnpm ui-skills:categories > /dev/null
           pnpm skills:test
           pnpm skills:doctor -- --ci
           pnpm skills:canary
@@ -59,7 +62,7 @@ jobs:
           git add config/skills/registry.json package.json scripts/impeccable/config.mjs
           git commit -m "chore(skills): update governed providers"
           git push origin "$branch"
-          pr_url="$(gh pr create --base master --head "$branch" --title "chore(skills): automatic governed provider update" --body "Automated fail-closed skill update. Candidate provenance was resolved before editing pins. This PR is merged only after explicit Skill Governance and full CI workflow_dispatch runs pass.")"
+          pr_url="$(gh pr create --base master --head "$branch" --title "chore(skills): automatic governed provider update" --body "Automated fail-closed skill update. Candidate provenance was resolved before editing pins. The staged Impeccable payload and pinned UI Skills CLI were exercised before this PR was created. This PR is merged only after explicit Skill Governance and full CI workflow_dispatch runs pass.")"
           pr_number="$(gh pr view "$pr_url" --json number --jq '.number')"
           echo "branch=$branch" >> "$GITHUB_OUTPUT"
           echo "number=$pr_number" >> "$GITHUB_OUTPUT"
@@ -89,7 +92,7 @@ jobs:
           CANDIDATE_PR: ${{ steps.pr.outputs.number }}
         run: |
           set -euo pipefail
-          git fetch origin master "$CANDIDATE_BRANCH"
+          git fetch origin master "refs/heads/$CANDIDATE_BRANCH:refs/remotes/origin/$CANDIDATE_BRANCH"
           quarantine_branch="automation/skill-quarantine-${GITHUB_RUN_ID}"
           git checkout -B "$quarantine_branch" origin/master
           node scripts/skills/quarantine-diff.mjs origin/master "origin/$CANDIDATE_BRANCH" "candidate-verification-failure"
