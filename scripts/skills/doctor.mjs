@@ -11,6 +11,7 @@ const passes = [];
 const pass = (message) => passes.push(message);
 const fail = (message) => failures.push(message);
 const warn = (message) => warnings.push(message);
+const run = (command, args) => spawnSync(command, args, { cwd: repositoryRoot, encoding: "utf8", shell: process.platform === "win32" });
 
 const registry = loadRegistry();
 const validation = validateRegistry(registry);
@@ -19,9 +20,25 @@ for (const warning of validation.warnings) warn(warning);
 if (validation.errors.length === 0) pass("registry schema, ownership and dependency graph");
 
 for (const entry of existingLocalSkillPaths(registry)) {
-  if (!fs.existsSync(entry.path)) fail(`${entry.id}: missing ${path.relative(repositoryRoot, entry.path)}`);
-  else pass(`${entry.id}: repository skill present`);
+  if (!fs.existsSync(entry.path)) {
+    fail(`${entry.id}: missing ${path.relative(repositoryRoot, entry.path)}`);
+    continue;
+  }
+  const skill = registry.skills.find((candidate) => candidate.id === entry.id);
+  if (skill.gitBlobSha) {
+    const digest = run("git", ["hash-object", entry.path]);
+    if (digest.status !== 0 || digest.stdout.trim() !== skill.gitBlobSha) fail(`${entry.id}: SKILL.md integrity drift`);
+    else pass(`${entry.id}: repository skill present and pinned`);
+  } else pass(`${entry.id}: repository skill present`);
 }
+
+const skillsRoot = path.join(repositoryRoot, ".agents", "skills");
+const registeredDirectories = new Set(registry.skills.filter((skill) => skill.kind !== "pinned-external").map((skill) => path.basename(path.dirname(skill.localPath))));
+for (const entry of fs.readdirSync(skillsRoot, { withFileTypes: true })) {
+  if (!entry.isDirectory() || entry.name === "impeccable") continue;
+  if (fs.existsSync(path.join(skillsRoot, entry.name, "SKILL.md")) && !registeredDirectories.has(entry.name)) fail(`unregistered repository skill: ${entry.name}`);
+}
+if (!failures.some((message) => message.startsWith("unregistered repository skill"))) pass("all repository skills are registered");
 
 const packageJson = JSON.parse(fs.readFileSync(path.join(repositoryRoot, "package.json"), "utf8"));
 const uiSkills = registry.skills.find((skill) => skill.id === "ui-skills-root");
@@ -59,7 +76,7 @@ if (quarantine.schemaVersion !== 1 || !Array.isArray(quarantine.candidates)) fai
 else pass(`quarantine registry: ${quarantine.candidates.length} blocked candidates`);
 
 if (!ci) {
-  const result = spawnSync("pnpm", ["verify:impeccable"], { cwd: repositoryRoot, encoding: "utf8", shell: process.platform === "win32" });
+  const result = run("pnpm", ["verify:impeccable"]);
   if (result.status !== 0) fail("Impeccable local verification failed; run pnpm setup:impeccable first");
   else pass("Impeccable local verification");
 } else {
