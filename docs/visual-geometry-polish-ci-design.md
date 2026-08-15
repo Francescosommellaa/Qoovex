@@ -282,15 +282,17 @@ Una allowlist richiede file, valore, proprietà e rationale. Non viene eseguita 
 
 ### 12. Snapshot e baseline policy
 
-Le baseline PNG vivono in `tests/visual-geometry/__snapshots__` e sono versionate.
+Le baseline PNG vivono in `tests/visual-geometry/__snapshots__` e sono versionate. Il path include il token Playwright `{platform}`: la workstation Windows verifica `win32`, mentre il required check Noble verifica `linux`. Questo evita di nascondere differenze raster tra sistemi operativi dietro tolerance globali.
 
 `pnpm visual:geometry:update`:
 
-- funziona soltanto nel container Playwright pin-nato;
+- aggiorna soltanto la baseline della piattaforma corrente;
 - richiede un’attestazione locale esplicita;
 - esegue la suite broad;
 - aggiorna le snapshot tramite il flag Playwright intenzionale;
 - non committa, non pusha e non apre PR automaticamente.
+
+La baseline Linux viene generata su una workstation Linux/container compatibile oppure promossa manualmente dagli artifact `actual.png` prodotti da un run CI fallito. La promozione richiede review del diff e un commit esplicito; il workflow non copia mai artifact nelle baseline e non usa update mode.
 
 In CI, `--update-snapshots` e qualunque env di update fanno fallire il gate prima dell’avvio. La PR deve contenere insieme codice visuale e nuove baseline reviewable.
 
@@ -425,4 +427,3 @@ Strategia invalidazione: invariata
 Impatto tenant isolation: nessuno
 Database e Blob interrogati: no
 ```
-
