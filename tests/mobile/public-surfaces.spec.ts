@@ -46,10 +46,16 @@ test("Web mobile navigation remains touch-sized, closable, keyboard operable, an
   );
   const trigger = page.getByRole("button", { name: "Apri navigazione" });
   await expectTouchTarget(trigger, "Web navigation trigger");
-  await trigger.click();
+  await trigger.tap();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
-  await expectTouchTarget(page.getByRole("button", { name: "Chiudi navigazione" }), "Web navigation close");
+  const close = page.getByRole("button", { name: "Chiudi navigazione" });
+  await expectTouchTarget(close, "Web navigation close");
+  await close.tap();
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await trigger.tap();
+  await expect(dialog).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();

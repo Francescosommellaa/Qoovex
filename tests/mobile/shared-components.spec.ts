@@ -43,11 +43,11 @@ test("mobile dialog respects dynamic height, synthetic safe areas, and interrupt
     content: `:root { --safe-area-top: 24px !important; --safe-area-right: 12px !important; --safe-area-bottom: 28px !important; --safe-area-left: 12px !important; }`,
   });
   const trigger = page.getByRole("button", { name: "Nuovo Cantiere" });
-  await trigger.click();
+  await trigger.tap();
   const dialog = page.getByRole("dialog", { name: "Crea Nuovo Cantiere" });
   await expectWithinVisualViewport(dialog, "Sirio mobile dialog");
   await expectNoDocumentOverflow(page, "Sirio dialog with safe area");
-  await page.getByRole("button", { name: "Chiudi finestra" }).click();
+  await page.getByRole("button", { name: "Chiudi finestra" }).tap();
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
   assertNoRuntimeErrors();

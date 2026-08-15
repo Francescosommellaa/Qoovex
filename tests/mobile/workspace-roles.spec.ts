@@ -14,7 +14,7 @@ test("BUSINESS view exposes a usable mobile workspace drawer", async ({ browser 
   await page.goto(`${mobileUrls.workspace}/`);
   if (page.url().includes("/account/organization")) {
     await page.getByRole("textbox", { name: "Nome azienda" }).fill("Qoovex Mobile CI");
-    await page.getByRole("button", { name: "Crea la tua azienda" }).click();
+    await page.getByRole("button", { name: "Crea la tua azienda" }).tap();
     await page.waitForURL(`${mobileUrls.workspace}/`);
   }
   await assertWorkspaceDrawer(page, "BUSINESS", ["Panoramica Azienda", "Cantieri"]);
@@ -54,7 +54,7 @@ async function assertWorkspaceDrawer(page: Page, role: string, expectedLinks: st
   await expectNoDocumentOverflow(page, `${role} workspace`);
   const trigger = page.getByRole("button", { name: "Apri navigazione" }).first();
   await expectTouchTarget(trigger, `${role} drawer trigger`);
-  await trigger.click();
+  await trigger.tap();
   const navigation = page.getByRole("navigation", { name: "Navigazione workspace" });
   await expect(navigation).toBeVisible();
   for (const label of expectedLinks) {
