@@ -17,9 +17,35 @@ Usa questa gerarchia:
 2. stato reale del codice e confini architetturali;
 3. documentazione canonica, Brain, `project_brain.json` e README;
 4. Impeccable come detector, critique e disciplina generale di qualità UI;
-5. questa skill come guida specialistica per interaction e motion Qoovex.
+5. questa skill come guida specialistica per interaction e motion Qoovex;
+6. eventuale UI Skills specialist selezionato on-demand per un sotto-problema circoscritto.
 
-In caso di conflitto, questa skill è subordinata alle fonti superiori. Impeccable e `qoovex-ux-motion` sono complementari: Impeccable rileva problemi e valuta la qualità generale; questa skill decide se, perché e come un comportamento animato è appropriato per Qoovex.
+In caso di conflitto, questa skill è subordinata alle fonti superiori. Impeccable e `qoovex-ux-motion` sono complementari: Impeccable rileva problemi e valuta la qualità generale; questa skill decide se, perché e come un comportamento animato è appropriato per Qoovex. UI Skills non sostituisce nessuno dei due: può soltanto approfondire un problema specialistico già identificato.
+
+## UI Skills specialist escalation
+
+Usa `.agents/skills/ui-skills-root/SKILL.md` soltanto quando, dopo aver applicato il contratto Qoovex, resta una domanda specialistica che può migliorare concretamente la soluzione. Esempi appropriati includono performance di animazioni, accessibilità motion-specifica, presence/exit complessi, scelta tra spring ed easing o review mirata di una sequenza.
+
+Regole:
+
+- usa esclusivamente i comandi `pnpm ui-skills:*` definiti dal repository;
+- preferisci uno specialista esterno e mantieni il suo scope stretto;
+- non caricare la copia UI Skills di Impeccable;
+- non lasciare che una skill esterna introduca token, timing, spring, dependency, provider o primitive non autorizzati;
+- non usare una skill esterna come giustificazione sufficiente per adottare Motion runtime;
+- dopo l'implementazione resta obbligatoria la review Impeccable appropriata.
+
+Ordine operativo:
+
+```text
+Qoovex protocol
+-> Impeccable context/detector
+-> qoovex-ux-motion decision
+-> optional UI Skills specialist
+-> minimum sufficient implementation technology
+-> Impeccable review
+-> Qoovex gates
+```
 
 ## Baseline da verificare
 
