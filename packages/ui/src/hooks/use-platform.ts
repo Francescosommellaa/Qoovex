@@ -10,20 +10,22 @@ export function usePlatform(): PlatformType {
   React.useEffect(() => {
     if (typeof window === "undefined") return
 
-    const ua = navigator.userAgent || ""
-    const isTouchOrSmall =
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ||
-      window.innerWidth < 768
-
-    if (isTouchOrSmall) {
-      setPlatform("mobile")
-      return
+    const touchPrimary = window.matchMedia("(hover: none) and (pointer: coarse)")
+    const updatePlatform = () => {
+      if (touchPrimary.matches) {
+        setPlatform("mobile")
+        return
+      }
+      const platformString =
+        (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform ||
+        navigator.platform ||
+        ""
+      setPlatform(/Mac|iPod|iPhone|iPad/i.test(platformString) ? "mac" : "windows")
     }
 
-    const platformString = (navigator as unknown as { userAgentData?: { platform?: string } }).userAgentData?.platform || navigator.platform || ua
-    const isMac = /Mac|iPod|iPhone|iPad/i.test(platformString)
-
-    setPlatform(isMac ? "mac" : "windows")
+    touchPrimary.addEventListener("change", updatePlatform)
+    updatePlatform()
+    return () => touchPrimary.removeEventListener("change", updatePlatform)
   }, [])
 
   return platform

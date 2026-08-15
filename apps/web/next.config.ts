@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -17,6 +18,7 @@ function contentSecurityPolicy() {
 }
 
 const nextConfig: NextConfig = {
+  turbopack: { root: path.resolve(import.meta.dirname, "../..") },
   transpilePackages: ["@qoovex/brand-resources", "@qoovex/ui"],
   async headers() {
     return [

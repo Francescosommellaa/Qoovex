@@ -25,6 +25,12 @@ Il testo editoriale resta copiabile con un highlight neutro tokenizzato. Immagin
 
 `ScrollbarController` rende attiva per un tempo breve la scrollbar nativa durante lo scroll e vicino ai bordi della viewport. Il CSS condiviso gestisce anche contenitori annidati, tabelle, menu e sidebar con thumb sottile tokenizzato; touch, pointer coarse e forced colors mantengono il comportamento nativo.
 
+## Contratto adattivo
+
+I controlli condivisi usano `--touch-target-min` e, quando l'input e coarse o non supporta hover, espongono un target effettivo minimo di 44 px senza alterare i link inline. `useIsMobile` deriva la modalita touch da `matchMedia` e reagisce ai cambi di capability; non usa larghezza viewport o user-agent come proxy. Gli overlay e le navigazioni fixed usano `dvh` e i token `--safe-area-*`, definiti con `env(safe-area-inset-*)`; i layout root delle app dichiarano `viewport-fit=cover`.
+
+Il contratto completo e in `config/mobile-experience.json`. Verifica locale: `pnpm mobile:doctor` per audit deterministico e `pnpm mobile:test` per geometria, input, tastiera, orientation, zoom-equivalent e reduced motion nel browser reale.
+
 ## API pubblica
 
 Il barrel root `@qoovex/ui` non esiste. I consumer importano esclusivamente subpath espliciti:

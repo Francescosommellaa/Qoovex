@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { Viewport } from "next";
 import { FontshareFonts } from "@qoovex/ui/components/fontshare-fonts";
 import { ThemeProvider } from "@qoovex/ui/components/theme-provider";
 import { ScrollbarController } from "@qoovex/ui/components/scrollbar-controller";
@@ -10,6 +11,8 @@ export const metadata = {
   title: "Qoovex",
   description: "Spazio condiviso tra impresa e cliente per documentare lavori, modifiche, prove e pagamenti.",
 };
+
+export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

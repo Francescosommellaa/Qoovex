@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "viewports": [
+    { "id": "compact", "width": 320, "height": 720 },
+    { "id": "phone", "width": 390, "height": 844 },
+    { "id": "tablet", "width": 768, "height": 1024 },
+    { "id": "laptop", "width": 1024, "height": 768 },
+    { "id": "desktop", "width": 1440, "height": 900 }
+  ],
+  "scenarios": {
+    "pointer": ["coarse-touch", "fine-hover"],
+    "orientation": ["portrait", "landscape"],
+    "accessibility": ["zoom-200", "reduced-motion"],
+    "viewport": ["safe-area", "software-keyboard"]
+  },
+  "surfaces": [
+    {
+      "id": "web-public",
+      "app": "web",
+      "owner": "apps/web",
+      "routePatterns": ["/**"],
+      "runtimeRoutes": ["/", "/come-funziona", "/contattaci", "/privacy"],
+      "requiredScenarios": ["coarse-touch", "fine-hover", "portrait", "landscape", "zoom-200", "reduced-motion", "safe-area", "software-keyboard"]
+    },
+    {
+      "id": "workspace-public",
+      "app": "workspace",
+      "owner": "apps/workspace",
+      "routePatterns": ["/sign-in", "/sign-up", "/reset-password", "/invite", "/exports/**", "/client/invitations/**"],
+      "runtimeRoutes": ["/sign-in", "/sign-up", "/reset-password"],
+      "requiredScenarios": ["coarse-touch", "portrait", "landscape", "zoom-200", "safe-area", "software-keyboard"]
+    },
+    {
+      "id": "workspace-business",
+      "app": "workspace",
+      "owner": "apps/workspace",
+      "allowOverlap": true,
+      "routePatterns": ["/", "/account/**", "/audit-log", "/data-control", "/job-sites/**", "/notifications", "/payment-profile", "/people/**", "/settings/**", "/workers/**"],
+      "runtimeRoutes": ["/", "/job-sites", "/people", "/payment-profile"],
+      "requiredScenarios": ["coarse-touch", "fine-hover", "portrait", "landscape", "zoom-200", "reduced-motion", "safe-area", "software-keyboard"]
+    },
+    {
+      "id": "workspace-professional",
+      "app": "workspace",
+      "owner": "apps/workspace",
+      "allowOverlap": true,
+      "routePatterns": ["/", "/job-sites/**", "/notifications"],
+      "runtimeRoutes": ["/", "/job-sites"],
+      "requiredScenarios": ["coarse-touch", "portrait", "landscape", "zoom-200", "reduced-motion"]
+    },
+    {
+      "id": "workspace-client",
+      "app": "workspace",
+      "owner": "apps/workspace",
+      "routePatterns": ["/client", "/client/job-sites/**"],
+      "runtimeRoutes": ["/client"],
+      "requiredScenarios": ["coarse-touch", "portrait", "landscape", "zoom-200", "reduced-motion"]
+    },
+    {
+      "id": "workspace-platform-admin",
+      "app": "workspace",
+      "owner": "apps/workspace",
+      "routePatterns": ["/qoovex-admin/**"],
+      "runtimeRoutes": ["/qoovex-admin"],
+      "requiredScenarios": ["coarse-touch", "portrait", "zoom-200"]
+    },
+    {
+      "id": "sirio-shared-components",
+      "app": "sirio",
+      "owner": "packages/ui",
+      "routePatterns": ["/components/**", "/foundations/**"],
+      "runtimeRoutes": ["/components/button", "/components/dialog", "/components/sidebar", "/components/table", "/components/floating-navigation"],
+      "requiredScenarios": ["coarse-touch", "fine-hover", "portrait", "landscape", "zoom-200", "reduced-motion", "safe-area", "software-keyboard"]
+    }
+  ],
+  "exclusions": [
+    {
+      "app": "sirio",
+      "pattern": "/",
+      "owner": "apps/sirio",
+      "reason": "The root is a server redirect to the canonical foundations entry and has no independent UI."
+    }
+  ],
+  "sourceAudit": [
+    {
+      "id": "capability-from-ua-or-width",
+      "files": ["packages/ui/src/hooks/use-platform.ts"]
+    },
+    {
+      "id": "raw-viewport-height",
+      "files": ["packages/ui/src/components/dialog.tsx", "packages/ui/src/components/floating-navigation.tsx"]
+    },
+    {
+      "id": "hover-only-interaction",
+      "files": ["packages/ui/src/**/*.tsx", "apps/*/src/**/*.tsx"]
+    },
+    {
+      "id": "responsive-component-fork",
+      "files": ["packages/ui/src/**/*.tsx", "apps/*/src/**/*.tsx"]
+    },
+    {
+      "id": "fixed-without-safe-area",
+      "files": ["packages/ui/src/components/dialog.tsx", "packages/ui/src/components/floating-navigation.tsx", "packages/ui/src/components/sidebar.tsx", "apps/web/src/app/CookieBanner.tsx"]
+    },
+    {
+      "id": "shared-touch-target-contract",
+      "files": ["packages/ui/styles/base.css"]
+    }
+  ],
+  "impact": {
+    "fullSuitePaths": [
+      "config/mobile-experience.json",
+      "packages/ui/**",
+      "playwright.mobile.config.ts",
+      "scripts/mobile/**",
+      "tests/mobile/**",
+      "apps/*/src/app/globals.css",
+      "apps/*/src/app/layout.tsx"
+    ],
+    "groups": {
+      "web": ["apps/web/**"],
+      "workspace": ["apps/workspace/**"],
+      "sirio": ["apps/sirio/**"]
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { FontshareFonts } from "@qoovex/ui/components/fontshare-fonts";
 import { ThemeProvider } from "@qoovex/ui/components/theme-provider";
 import { MarketingCursor } from "@qoovex/ui/components/marketing-cursor";
@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   title: { default: "Sirio - Qoovex", template: "%s - Sirio" },
   description: "Catalogo integrato del design system canonico Qoovex.",
 };
+
+export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

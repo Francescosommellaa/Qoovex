@@ -6,7 +6,7 @@ function Topbar({ className, ...props }: React.ComponentProps<"header">) {
     <header
       data-slot="topbar"
       className={cn(
-        "sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border/80 bg-background/90 px-3 backdrop-blur-xl sm:px-4",
+        "sticky top-[var(--safe-area-top)] z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border/80 bg-background/90 px-3 backdrop-blur-xl sm:px-4",
         className
       )}
       {...props}

@@ -27,7 +27,7 @@ export function CookieBanner() {
   };
 
   return (
-    <aside aria-label="Informativa cookie" className="fixed inset-x-4 bottom-4 z-40 mx-auto max-w-3xl">
+    <aside aria-label="Informativa cookie" className="fixed left-[max(1rem,var(--safe-area-left))] right-[max(1rem,var(--safe-area-right))] bottom-[max(1rem,var(--safe-area-bottom))] z-40 mx-auto max-w-3xl">
       <Card className="shadow-xl">
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><IconCookie /> Cookie e tecnologie necessarie</CardTitle>

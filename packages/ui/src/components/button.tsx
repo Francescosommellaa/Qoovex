@@ -5,7 +5,7 @@ import { IconLoader2 } from "@tabler/icons-react"
 import { cn } from "#lib/utils"
 
 const buttonVariants = cva(
-  "group/button inline-flex cursor-pointer shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg]:transition-transform [&_svg]:duration-200 group-hover/button:[&_svg:last-child:not(:first-child):not(.animate-spin)]:translate-x-0.5",
+  "qv-touch-target group/button inline-flex cursor-pointer shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg]:transition-transform [&_svg]:duration-200 group-hover/button:[&_svg:last-child:not(:first-child):not(.animate-spin)]:translate-x-0.5",
   {
     variants: {
       variant: {
@@ -20,7 +20,7 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive border-destructive/20 hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 transition-all duration-200 hover:scale-[1.015] active:scale-[0.97]",
         link:
-          "relative text-primary p-0 h-auto font-normal bg-transparent hover:bg-transparent shadow-none border-transparent rounded-none transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-bottom-left after:scale-x-0 after:bg-current after:transition-transform after:duration-250 after:ease-out hover:after:scale-x-100 focus-visible:after:scale-x-100",
+          "qv-touch-target-inline relative text-primary p-0 h-auto font-normal bg-transparent hover:bg-transparent shadow-none border-transparent rounded-none transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-bottom-left after:scale-x-0 after:bg-current after:transition-transform after:duration-250 after:ease-out hover:after:scale-x-100 focus-visible:after:scale-x-100",
       },
       size: {
         default:

@@ -24,3 +24,5 @@ Qoovex è lo spazio condiviso in cui un'impresa gestisce un lavoro edile con il 
 ## Operazioni
 
 Leggere [HowToUse](docs/HowToUse.md), [OperationalProtocol](docs/OperationalProtocol.md) e i documenti canonici [00–08](docs/README.md). La head repository è `20260813010000_direct_workspace_routes`; Preview e Production restano verificate alla precedente `20260809020000_single_active_organization_membership` finché il nuovo rilascio non passa dal workflow manuale guardato dopo CI verde e smoke staged.
+
+La quality infrastructure Mobile and Responsive Experience usa `config/mobile-experience.json` come contratto verificabile. I comandi locali sono `pnpm mobile:doctor` per contratto, route coverage e audit statico, `pnpm mobile:impact` per il blast radius e `pnpm mobile:test` per la matrice Playwright touch/responsive. La CI pubblica il check indipendente `mobile-responsive`.

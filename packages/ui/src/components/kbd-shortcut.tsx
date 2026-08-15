@@ -10,11 +10,6 @@ export interface KbdShortcutProps extends React.ComponentProps<"kbd"> {
 
 function KbdShortcut({ className, children, value, ...props }: KbdShortcutProps) {
   const platform = usePlatform()
-
-  if (platform === "mobile") {
-    return null
-  }
-
   const rawText = value ?? (typeof children === "string" ? children : "")
 
   const formattedText = React.useMemo(() => {
@@ -28,6 +23,10 @@ function KbdShortcut({ className, children, value, ...props }: KbdShortcutProps)
     }
     return rawText
   }, [rawText, children, platform])
+
+  if (platform === "mobile") {
+    return null
+  }
 
   return (
     <kbd
