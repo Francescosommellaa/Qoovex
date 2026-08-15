@@ -1,0 +1,151 @@
+name: Skill Auto Update
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: skill-auto-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: skill-auto-update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: master
+          fetch-depth: 0
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: package.json
+          cache: pnpm
+      - run: pnpm ci:install
+      - name: Discover and stage verified candidates
+        id: candidate
+        run: |
+          pnpm skills:update:check -- --apply
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Validate candidate locally
+        if: steps.candidate.outputs.changed == 'true'
+        run: |
+          pnpm skills:test
+          pnpm skills:doctor -- --ci
+          pnpm skills:canary
+          git diff --check
+      - name: Create candidate branch and PR
+        if: steps.candidate.outputs.changed == 'true'
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          branch="automation/skill-update-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add config/skills/registry.json package.json scripts/impeccable/config.mjs
+          git commit -m "chore(skills): update governed providers"
+          git push origin "$branch"
+          pr_url="$(gh pr create --base master --head "$branch" --title "chore(skills): automatic governed provider update" --body "Automated fail-closed skill update. Candidate provenance was resolved before editing pins. This PR is merged only after explicit Skill Governance and full CI workflow_dispatch runs pass.")"
+          pr_number="$(gh pr view "$pr_url" --json number --jq '.number')"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "number=$pr_number" >> "$GITHUB_OUTPUT"
+      - name: Dispatch candidate verification
+        if: steps.candidate.outputs.changed == 'true'
+        id: verify
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.pr.outputs.branch }}
+        run: |
+          set -euo pipefail
+          gh workflow run skill-governance.yml --ref "$BRANCH"
+          gh workflow run ci.yml --ref "$BRANCH"
+          sleep 8
+          governance_run="$(gh run list --workflow skill-governance.yml --branch "$BRANCH" --event workflow_dispatch --limit 1 --json databaseId --jq '.[0].databaseId')"
+          ci_run="$(gh run list --workflow ci.yml --branch "$BRANCH" --event workflow_dispatch --limit 1 --json databaseId --jq '.[0].databaseId')"
+          test -n "$governance_run"
+          test -n "$ci_run"
+          gh run watch "$governance_run" --exit-status
+          gh run watch "$ci_run" --exit-status
+      - name: Quarantine rejected candidate
+        if: steps.candidate.outputs.changed == 'true' && steps.verify.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CANDIDATE_BRANCH: ${{ steps.pr.outputs.branch }}
+          CANDIDATE_PR: ${{ steps.pr.outputs.number }}
+        run: |
+          set -euo pipefail
+          git fetch origin master "$CANDIDATE_BRANCH"
+          quarantine_branch="automation/skill-quarantine-${GITHUB_RUN_ID}"
+          git checkout -B "$quarantine_branch" origin/master
+          node scripts/skills/quarantine-diff.mjs origin/master "origin/$CANDIDATE_BRANCH" "candidate-verification-failure"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add config/skills/quarantine.json
+          git commit -m "chore(skills): quarantine rejected provider update"
+          git push origin "$quarantine_branch"
+          gh pr close "$CANDIDATE_PR" --comment "Automatic candidate verification failed. The candidate was not merged and a separate quarantine PR has been opened."
+          gh pr create --base master --head "$quarantine_branch" --title "chore(skills): quarantine rejected automatic update" --body "A governed provider candidate failed Skill Governance or the full Qoovex CI before merge. This PR records the rejected provider/version so the scheduled updater does not retry it silently."
+          exit 1
+      - name: Merge verified update
+        if: steps.candidate.outputs.changed == 'true' && steps.verify.outcome == 'success'
+        id: merge
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+        run: |
+          set -euo pipefail
+          gh pr merge "$PR_NUMBER" --squash --delete-branch
+          merge_sha="$(gh pr view "$PR_NUMBER" --json mergeCommit --jq '.mergeCommit.oid')"
+          test -n "$merge_sha"
+          echo "sha=$merge_sha" >> "$GITHUB_OUTPUT"
+      - name: Dispatch post-merge verification
+        if: steps.candidate.outputs.changed == 'true' && steps.verify.outcome == 'success'
+        id: post
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run skill-governance.yml --ref master
+          gh workflow run ci.yml --ref master
+          sleep 8
+          governance_run="$(gh run list --workflow skill-governance.yml --branch master --event workflow_dispatch --limit 1 --json databaseId --jq '.[0].databaseId')"
+          ci_run="$(gh run list --workflow ci.yml --branch master --event workflow_dispatch --limit 1 --json databaseId --jq '.[0].databaseId')"
+          test -n "$governance_run"
+          test -n "$ci_run"
+          gh run watch "$governance_run" --exit-status
+          gh run watch "$ci_run" --exit-status
+      - name: Open rollback and quarantine PR after post-merge failure
+        if: steps.candidate.outputs.changed == 'true' && steps.verify.outcome == 'success' && steps.post.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MERGE_SHA: ${{ steps.merge.outputs.sha }}
+        run: |
+          set -euo pipefail
+          git fetch origin master
+          rollback="automation/skill-rollback-${GITHUB_RUN_ID}"
+          git checkout -B "$rollback" origin/master
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git revert --no-edit "$MERGE_SHA"
+          node scripts/skills/quarantine-diff.mjs "${MERGE_SHA}^" "$MERGE_SHA" "post-merge-verification-failure"
+          git add config/skills/quarantine.json
+          git commit --amend --no-edit
+          git push origin "$rollback"
+          gh pr create --base master --head "$rollback" --title "revert(skills): quarantine failed automatic update" --body "Post-merge verification failed after an automatic skill provider update. This PR reverts that exact merge and records the candidate versions in quarantine. It does not modify master directly."
+          exit 1

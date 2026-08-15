@@ -13,6 +13,25 @@ L'ordine di autorità è: richiesta corrente; regole business/legal approvate; s
 
 Al termine, dopo i gate richiesti, appendi tramite MCP un breve riepilogo con data, task completata e file modificati in `00_System/session-log.md`.
 
+## Skill Governance System
+
+`config/skills/registry.json` è il contratto machine-readable per disponibilità, ownership, dipendenze, ordine e update policy delle skill governate. Non è una fonte prodotto e non può scavalcare la gerarchia sopra.
+
+Regole:
+
+- una responsabilità primaria ha un solo owner;
+- non creare skill concorrenti che possiedono la stessa responsabilità primaria;
+- `pnpm skills:doctor` verifica offline registry, skill repository-local, pin e routing contract;
+- `pnpm skills:test` verifica routing positivo e negativo; una skill deve essere assente quando non serve;
+- `pnpm skills:canary` verifica gli invarianti minimi dell'orchestratore;
+- lo stato runtime di governance è locale sotto `.codex-runtime/skill-governance` e non deve contenere contenuti prodotto o segreti;
+- le skill Qoovex repository-owned sono canoniche nel repository; copie globali sono installazioni derivate e possono essere sincronizzate solo tramite `pnpm skills:sync -- <destinazione-esplicita>`;
+- il catalogo UI Skills resta on-demand: il normale gate non usa rete;
+- soltanto `Skill Auto Update` può interrogare upstream, e ogni update usa candidate branch/PR, provenance, test, canary e CI prima del merge;
+- candidate incompatibili vengono messe in quarantena; un failure post-merge genera una PR di rollback/quarantena, mai una correzione diretta silenziosa di `master`.
+
+La CI non può osservare magicamente una skill che l'agent runtime non espone come evento. Per questo il sistema distingue contratto/routing verificabile da evidence runtime: non dichiarare “skill eseguita” senza evidence disponibile.
+
 ## Impeccable obbligatorio per UI/UX
 
 Impeccable è parte obbligatoria del workflow quando una task crea, modifica, corregge, revisiona o rifattorizza:
