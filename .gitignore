@@ -58,6 +58,7 @@ yarn-error.log*
 
 # codex
 /.codex-runtime
+/.worktrees/
 /.codex/*
 !/.codex/hooks.json
 /tests/*
