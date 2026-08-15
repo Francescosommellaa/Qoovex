@@ -11,6 +11,7 @@ import {
 } from "./product-state-presentation";
 
 export type TimelineEventKind = "work" | "message" | "file" | "step" | "change" | "payment" | "issue" | "lifecycle" | "system";
+export type TimelineEventSectionId = "archivio" | "chiusura" | "disaccordi" | "file" | "modifiche" | "pagamenti" | "richieste" | "riepilogo" | "step" | "timeline";
 
 export interface TimelineEventPresentationInput {
   type: string;
@@ -34,6 +35,7 @@ export interface TimelineEventPresentation {
   actor: string;
   occurredAtLabel: string;
   kind: TimelineEventKind;
+  sectionId: TimelineEventSectionId;
   tone: ProductStateTone;
   details: TimelineEventDetail[];
 }
@@ -62,7 +64,7 @@ const definitions = {
   CHANGE_WITHDRAWN: { description: "La proposta di modifica è stata ritirata da chi l'aveva presentata.", kind: "change" },
   CLARIFICATION_REQUESTED: { description: "È stato richiesto un chiarimento sul cantiere.", kind: "message" },
   CLARIFICATION_RESPONDED: { description: "È stata inviata una risposta alla richiesta di chiarimento.", kind: "message" },
-  ISSUE_REPORTED: { description: "È stata registrata una segnalazione sul cantiere.", kind: "issue" },
+  ISSUE_REPORTED: { description: "È stato registrato un disaccordo da gestire tra le parti.", kind: "issue" },
   PAYMENT_REQUESTED: { description: "È stata inviata una richiesta di pagamento documentata.", kind: "payment" },
   PAYMENT_TRANSFER_DECLARED: { description: "Il cliente ha dichiarato di aver disposto il trasferimento.", kind: "payment" },
   PAYMENT_CONFIRMED: { description: "L'Azienda ha confermato la ricezione del pagamento dichiarato.", kind: "payment" },
@@ -77,6 +79,39 @@ const definitions = {
 } satisfies Record<TimelineEventType, TimelineEventDefinition>;
 
 export const timelineEventTypes = Object.keys(definitions) as TimelineEventType[];
+
+const sectionByEventType = {
+  JOB_SITE_CREATED: "riepilogo",
+  WORK_UPDATE: "timeline",
+  COMMENT: "timeline",
+  EVIDENCE: "file",
+  SHARED_EXPENSE: "pagamenti",
+  SHARED_DOCUMENT: "file",
+  STEP_CREATED: "step",
+  STEP_UPDATED: "step",
+  STEP_READY_FOR_REVIEW: "step",
+  STEP_CONFIRMED: "step",
+  STEP_REOPENED: "step",
+  CHANGE_PROPOSED: "modifiche",
+  CHANGE_COUNTERED: "modifiche",
+  CHANGE_ACCEPTED: "modifiche",
+  CHANGE_REJECTED: "modifiche",
+  CHANGE_WITHDRAWN: "modifiche",
+  CLARIFICATION_REQUESTED: "richieste",
+  CLARIFICATION_RESPONDED: "richieste",
+  ISSUE_REPORTED: "disaccordi",
+  PAYMENT_REQUESTED: "pagamenti",
+  PAYMENT_TRANSFER_DECLARED: "pagamenti",
+  PAYMENT_CONFIRMED: "pagamenti",
+  PAYMENT_DISPUTED: "pagamenti",
+  CLOSURE_PROPOSED: "chiusura",
+  CLOSURE_CONFIRMED: "chiusura",
+  POST_CLOSURE_REQUESTED: "archivio",
+  JOB_SITE_REOPENED: "riepilogo",
+  JOB_SITE_ARCHIVED: "archivio",
+  EXPORT_CREATED: "archivio",
+  SYSTEM_BACKFILL: "timeline",
+} satisfies Record<TimelineEventType, TimelineEventSectionId>;
 
 const manualEventTypes = new Set<TimelineEventType>([
   "WORK_UPDATE",
@@ -153,6 +188,7 @@ export function presentTimelineEvent(event: TimelineEventPresentationInput): Tim
       actor: text(event.actorName) ?? actorLabels[event.actorKind] ?? "Autore non disponibile",
       occurredAtLabel: formatTimelineDate(event.occurredAt ?? event.createdAt),
       kind: "system",
+      sectionId: "timeline",
       tone: "neutral",
       details: [],
     };
@@ -195,8 +231,8 @@ export function presentTimelineEvent(event: TimelineEventPresentationInput): Tim
     description = "La richiesta è stata ritirata da chi l'aveva aperta.";
     addDetail(details, "Messaggio", text(payload.message));
   } else if (knownType === "WORK_UPDATE" && (payload.status === "RESOLVED_BY_AGREEMENT" || payload.status === "CLOSED_WITHOUT_AGREEMENT")) {
-    title = payload.status === "RESOLVED_BY_AGREEMENT" ? "Segnalazione risolta con accordo" : "Segnalazione chiusa senza accordo";
-    description = payload.status === "RESOLVED_BY_AGREEMENT" ? "Le parti hanno registrato un accordo sulla segnalazione." : "La segnalazione è stata chiusa senza registrare un accordo.";
+    title = payload.status === "RESOLVED_BY_AGREEMENT" ? "Accordo registrato sul disaccordo" : "Disaccordo chiuso senza accordo";
+    description = payload.status === "RESOLVED_BY_AGREEMENT" ? "Le parti hanno registrato un accordo sul disaccordo." : "Le parti hanno chiuso il disaccordo senza registrare un accordo.";
     addDetail(details, "Messaggio", text(payload.message));
     addDetail(details, "Stato", presentDisputeState(payload.status));
   }
@@ -211,7 +247,20 @@ export function presentTimelineEvent(event: TimelineEventPresentationInput): Tim
   if (knownType === "CLARIFICATION_RESPONDED") addDetail(details, "Risposta", text(payload.message));
 
   if (knownType === "ISSUE_REPORTED") {
-    addDetail(details, "Segnalazione", text(payload.title));
+    if (payload.action === "RESPOND") {
+      title = "Posizione aggiunta al disaccordo";
+      description = "Una parte ha aggiunto il proprio messaggio al disaccordo.";
+    } else if (payload.action === "AGREE") {
+      title = "Accordo registrato sul disaccordo";
+      description = "L'accordo si completa con le conferme previste da entrambe le parti.";
+    } else if (payload.action === "CLOSE_WITHOUT_AGREEMENT") {
+      title = "Mancato accordo registrato";
+      description = "La chiusura senza accordo si completa con le conferme previste da entrambe le parti.";
+    } else if (payload.action === "WITHDRAW") {
+      title = "Disaccordo ritirato";
+      description = "Il disaccordo è stato ritirato da chi l'aveva aperto.";
+    }
+    addDetail(details, "Disaccordo", text(payload.title));
     addDetail(details, "Messaggio", text(payload.message));
     addDetail(details, "Stato", presentDisputeState(payload.status));
   }
@@ -255,6 +304,7 @@ export function presentTimelineEvent(event: TimelineEventPresentationInput): Tim
     actor: text(event.actorName) ?? actorLabels[event.actorKind] ?? "Autore non disponibile",
     occurredAtLabel: formatTimelineDate(event.occurredAt ?? event.createdAt),
     kind: definition.kind,
+    sectionId: sectionByEventType[knownType],
     tone: typePresentation.tone,
     details,
   };

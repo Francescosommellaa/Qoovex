@@ -57,7 +57,7 @@ describe("transactional email layout", () => {
         severity: "WARNING",
         createdAt: new Date("2026-07-20T10:00:00.000Z"),
       }],
-      notificationsUrl: "https://app.qoovex.com/org/demo/notifications",
+      notificationsUrl: "https://app.qoovex.com/notifications",
     });
     const rendered = renderTransactionalEmailLayout(content.layout);
 
@@ -65,6 +65,6 @@ describe("transactional email layout", () => {
     expect(rendered.html).toContain("Nuovo documento");
     expect(rendered.html).toContain("Priorita alta");
     expect(rendered.html).toContain("Apri le notifiche nel workspace");
-    expect(rendered.text).toContain("Notifiche: https://app.qoovex.com/org/demo/notifications");
+    expect(rendered.text).toContain("Notifiche: https://app.qoovex.com/notifications");
   });
 });

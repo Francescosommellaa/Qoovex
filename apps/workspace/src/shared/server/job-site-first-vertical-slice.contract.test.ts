@@ -21,15 +21,15 @@ const actionService = source("src/shared/server/job-site-action-service.ts");
 const collaboration = source("src/shared/server/job-site-collaboration-service.ts");
 const idempotency = source("src/shared/server/job-site-idempotency-service.ts");
 const schema = source("../../packages/db/prisma/schema.prisma");
-const createRoute = source("src/app/api/org/[organizationId]/job-sites/route.ts");
-const invitationRoute = source("src/app/api/org/[organizationId]/job-sites/[jobSiteId]/client-invitations/route.ts");
+const createRoute = source("src/app/api/job-sites/route.ts");
+const invitationRoute = source("src/app/api/job-sites/[jobSiteId]/client-invitations/route.ts");
 const clientActionRoute = source("src/app/api/client/job-sites/[jobSiteId]/actions/route.ts");
 const clientTimelineRoute = source("src/app/api/client/job-sites/[jobSiteId]/timeline/route.ts");
 
 describe("first vertical slice - verified green guardrails", () => {
   it("derives organization, actor and permission server-side for creation and invitation", () => {
     const create = between(jobSiteService, "export async function createJobSite", "export async function getOrganizationJobSiteDetail");
-    expect(createRoute).toContain("createJobSite((await params).organizationId");
+    expect(createRoute).toContain("createJobSite(await requireCurrentOrganizationId()");
     expect(create).toContain("const context = await requireOrganizationContext(organizationId)");
     expect(create).toContain('requireContextPermission(context, "jobSites:create")');
     expect(create).toContain("userId: context.userId");
@@ -46,6 +46,16 @@ describe("first vertical slice - verified green guardrails", () => {
     expect(actionService).toContain('status: "ACTIVE", accessVersion: { increment: 1 }');
     expect(actionService).toContain('activeKey: `${actor.jobSiteId}:${actor.userId}:CLIENT`');
     expect(actionService).toContain('data: { status: "ACTIVE" }');
+  });
+
+  it("derives the client invitation page state from the real invitation and participation", () => {
+    const preview = between(jobSiteService, "export async function getClientInvitationPageState", "export async function invitePrimaryClientIdempotent");
+    expect(preview).toContain('acceptedByParticipant: { select: { userId: true, jobSiteId: true, status: true } }');
+    expect(preview).toContain('invitation.status === "REVOKED"');
+    expect(preview).toContain('invitation.status === "ACCEPTED"');
+    expect(preview).toContain('invitation.expiresAt <= new Date()');
+    expect(preview).toContain('identity.email.toLowerCase() !== invitation.emailNormalized');
+    expect(preview).toContain('identity.accountRole !== "CLIENT"');
   });
 
   it("binds client access to the authenticated user and exact JobSite", () => {

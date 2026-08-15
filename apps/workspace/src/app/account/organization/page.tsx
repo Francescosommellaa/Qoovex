@@ -9,7 +9,7 @@ export default async function AccountOrganizationPage() {
     getWorkspaceAccessContext(),
     requireAccountRole("BUSINESS"),
   ]);
-  if (context.company) redirect(`/org/${context.company.organization.id}`);
+  if (context.company) redirect("/");
 
   return (
     <AuthPageShell

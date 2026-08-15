@@ -168,8 +168,8 @@ export default function TablePage() {
                           {site.date}
                         </TableCell>
                         <TableCell className="text-center">
-                          <Button variant="ghost" size="icon-xs">
-                            <IconDotsVertical className="size-3.5" />
+                          <Button aria-label={`Azioni per ${site.name}`} variant="ghost" size="icon-xs">
+                            <IconDotsVertical aria-hidden="true" className="size-3.5" />
                           </Button>
                         </TableCell>
                       </TableRow>

@@ -14,23 +14,37 @@ const turbo = await readJson("turbo.json");
 const vercel = await readJson("apps/workspace/vercel.json");
 const workspacePackage = await readJson("apps/workspace/package.json");
 
-if (manifest.database.migrationHead !== ledger.protectedProductionHead) {
-  throw new Error("Release manifest and migration ledger head differ.");
+const repositoryHead = ledger.migrations.at(-1)?.name;
+if (manifest.database.migrationHead !== repositoryHead) {
+  throw new Error("Release manifest must target the final repository migration.");
 }
 if (manifest.database.migrationCount !== ledger.migrations.length) {
   throw new Error("Release manifest migration count is stale.");
 }
 const currentMigration = ledger.migrations.find((entry) => entry.name === manifest.database.migrationHead);
-if (
-  !currentMigration ||
+const productionHead = ledger.migrations.find((entry) => entry.name === ledger.protectedProductionHead);
+if (!currentMigration || !productionHead || productionHead.productionApplied !== true) {
+  throw new Error("Repository and protected Production migration heads must be declared in the ledger.");
+}
+if (manifest.database.productionMutationRequiredForAlignment === true) {
+  if (
+    currentMigration.name === ledger.protectedProductionHead ||
+    currentMigration.productionApplied !== false ||
+    currentMigration.executionPolicy !== "PENDING_GUARDED_CLOUD_BUILD" ||
+    currentMigration.productionEvidence ||
+    currentMigration.productionVerifiedAt
+  ) {
+    throw new Error("Pending migration target must remain unapplied and evidence-free until the guarded cloud build succeeds.");
+  }
+} else if (
+  currentMigration.name !== ledger.protectedProductionHead ||
   currentMigration.productionApplied !== true ||
   currentMigration.destructiveApproved !== true ||
   currentMigration.executionPolicy !== "APPLIED_VIA_GUARDED_CLOUD_BUILD" ||
   !currentMigration.productionEvidence ||
-  !currentMigration.productionVerifiedAt ||
-  manifest.database.productionMutationRequiredForAlignment !== false
+  !currentMigration.productionVerifiedAt
 ) {
-  throw new Error("Production migration head must be recorded as applied with guarded cloud-build evidence.");
+  throw new Error("Aligned Production migration head must include guarded cloud-build evidence.");
 }
 
 const expectedJobs = new Map([

@@ -137,7 +137,7 @@ export default function CollapsibleCatalogPage() {
                               : "border-border/60 bg-muted/40 text-muted-foreground group-hover:text-foreground"
                           }`}
                         >
-                          <ItemIcon className="size-4" />
+                          <ItemIcon aria-hidden="true" className="size-4" />
                         </div>
                         <div className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-3">
                           <span className="text-sm font-semibold font-accent tracking-tight text-foreground">
@@ -154,7 +154,7 @@ export default function CollapsibleCatalogPage() {
                           isOpen ? "rotate-180 text-foreground bg-accent" : "group-hover:text-foreground"
                         }`}
                       >
-                        <IconChevronDown className="size-4" />
+                        <IconChevronDown aria-hidden="true" className="size-4" />
                       </div>
                     </CollapsibleTrigger>
 
@@ -277,8 +277,9 @@ export default function CollapsibleCatalogPage() {
                     </div>
                     <CollapsibleTrigger
                       render={
-                        <Button variant="ghost" size="icon-sm" className="size-6">
+                        <Button aria-label={openNestedDocs ? "Riduci certificazioni di sicurezza" : "Espandi certificazioni di sicurezza"} variant="ghost" size="icon-sm" className="size-6">
                           <IconChevronDown
+                            aria-hidden="true"
                             className={`size-3.5 transition-transform duration-200 ${
                               openNestedDocs ? "rotate-180" : ""
                             }`}

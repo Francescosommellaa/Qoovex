@@ -53,12 +53,12 @@ export default function ButtonPage() {
                         size="icon"
                         variant={copied ? "outline" : "secondary"}
                         onClick={handleCopy}
-                        aria-label="Copia codice"
+                        aria-label={copied ? "Codice copiato" : "Copia codice"}
                         className={copied ? "border-success text-success" : ""}
                       />
                     }
                   >
-                    {copied ? <IconCheck className="size-4 animate-in zoom-in-50" /> : <IconCopy className="size-4" />}
+                    {copied ? <IconCheck aria-hidden="true" className="size-4 animate-in zoom-in-50" /> : <IconCopy aria-hidden="true" className="size-4" />}
                   </TooltipTrigger>
                   <TooltipContent>
                     {copied ? "Copiato negli appunti!" : "Copia codice cantiere"}
@@ -74,13 +74,14 @@ export default function ButtonPage() {
                   size="icon"
                   variant="outline"
                   onClick={() => setStarred(!starred)}
-                  aria-label="Aggiungi ai preferiti"
+                  aria-label={starred ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
+                  aria-pressed={starred}
                   className={starred ? "text-warning-emphasis border-warning/40 bg-warning/10" : ""}
                 >
                   {starred ? (
-                    <IconStarFilled className="size-4 animate-in zoom-in-75 text-warning-emphasis" />
+                    <IconStarFilled aria-hidden="true" className="size-4 animate-in zoom-in-75 text-warning-emphasis" />
                   ) : (
-                    <IconStar className="size-4" />
+                    <IconStar aria-hidden="true" className="size-4" />
                   )}
                 </Button>
                 <span className="text-xs text-muted-foreground">
@@ -95,9 +96,11 @@ export default function ButtonPage() {
                   size="icon"
                   variant="ghost"
                   onClick={() => setExpanded(!expanded)}
-                  aria-label="Espandi dettagli"
+                  aria-expanded={expanded}
+                  aria-label={expanded ? "Riduci dettagli" : "Espandi dettagli"}
                 >
                   <IconChevronDown
+                    aria-hidden="true"
                     className={`size-4 transition-transform duration-200 ${expanded ? "rotate-180 text-primary" : ""}`}
                   />
                 </Button>
@@ -110,10 +113,10 @@ export default function ButtonPage() {
             <Specimen title="Notifiche con Badge Sovrapposto">
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <Button size="icon" variant="outline" aria-label="Notifiche cantiere">
-                    <IconBell className="size-4" />
+                  <Button size="icon" variant="outline" aria-label="Apri notifiche cantiere, 3 non lette">
+                    <IconBell aria-hidden="true" className="size-4" />
                   </Button>
-                  <span className="absolute top-1 right-1 size-2 rounded-full bg-destructive ring-2 ring-background" />
+                  <span aria-hidden="true" className="absolute top-1 right-1 size-2 rounded-full bg-destructive ring-2 ring-background" />
                 </div>
                 <span className="text-xs text-muted-foreground">3 nuove notifiche</span>
               </div>

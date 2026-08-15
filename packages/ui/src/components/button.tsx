@@ -66,7 +66,7 @@ function Button({
       nativeButton={nativeButton ?? (props.render ? false : undefined)}
       {...props}
     >
-      {loading && <IconLoader2 className="animate-spin" />}
+      {loading && <IconLoader2 aria-hidden="true" className="animate-spin" />}
       {children}
     </ButtonPrimitive>
   )

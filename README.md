@@ -17,10 +17,10 @@ Qoovex è lo spazio condiviso in cui un'impresa gestisce un lavoro edile con il 
 - `apps/workspace`: prodotto autenticato con accesso diretto alla propria Azienda o alla superficie cliente; Support e Platform Admin usano console separate.
 - `apps/web`: sito pubblico orientato al prodotto corrente, senza costituire prova di disponibilità end-to-end, pricing o promesse legali.
 - `apps/sirio`: catalogo della foundation General Sans + ARRAY e delle primitive condivise.
-- `packages/db`: Prisma, otto migration canoniche e client generato.
+- `packages/db`: Prisma, nove migration canoniche e client generato.
 - `packages/types`: contratti platform-neutral; importi serializzati come stringhe minor-unit.
 - `packages/ui`: primitive visuali generiche con icone Tabler.
 
 ## Operazioni
 
-Leggere [HowToUse](docs/HowToUse.md), [OperationalProtocol](docs/OperationalProtocol.md) e i documenti canonici [00–08](docs/README.md). La head attuale è `20260809020000_single_active_organization_membership`. Local, Preview e database Production sono stati verificati alla stessa head; il dominio pubblico viene aggiornato soltanto dal workflow Production manuale dopo CI verde e smoke del deployment staged.
+Leggere [HowToUse](docs/HowToUse.md), [OperationalProtocol](docs/OperationalProtocol.md) e i documenti canonici [00–08](docs/README.md). La head repository è `20260813010000_direct_workspace_routes`; Preview e Production restano verificate alla precedente `20260809020000_single_active_organization_membership` finché il nuovo rilascio non passa dal workflow manuale guardato dopo CI verde e smoke staged.

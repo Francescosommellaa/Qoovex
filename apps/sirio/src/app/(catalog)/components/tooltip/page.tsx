@@ -83,7 +83,7 @@ export default function TooltipCatalogPage() {
               <div className="flex items-center gap-3">
                 <Tooltip>
                   <TooltipTrigger render={<Button variant="outline" size="icon-sm" aria-label="Informazioni" />}>
-                    <IconInfoCircle className="size-4" />
+                    <IconInfoCircle aria-hidden="true" className="size-4" />
                   </TooltipTrigger>
                   <TooltipContent>
                     Dettagli del cantiere selezionato
@@ -92,7 +92,7 @@ export default function TooltipCatalogPage() {
 
                 <Tooltip>
                   <TooltipTrigger render={<Button variant="outline" size="icon-sm" aria-label="Download" />}>
-                    <IconDownload className="size-4" />
+                    <IconDownload aria-hidden="true" className="size-4" />
                   </TooltipTrigger>
                   <TooltipContent>
                     Scarica allegato in formato PDF
@@ -101,7 +101,7 @@ export default function TooltipCatalogPage() {
 
                 <Tooltip>
                   <TooltipTrigger render={<Button variant="outline" size="icon-sm" aria-label="Condividi" />}>
-                    <IconShare className="size-4" />
+                    <IconShare aria-hidden="true" className="size-4" />
                   </TooltipTrigger>
                   <TooltipContent>
                     Genera link esplicito di condivisione
@@ -110,7 +110,7 @@ export default function TooltipCatalogPage() {
 
                 <Tooltip>
                   <TooltipTrigger render={<Button variant="destructive" size="icon-sm" aria-label="Elimina" />}>
-                    <IconTrash className="size-4" />
+                    <IconTrash aria-hidden="true" className="size-4" />
                   </TooltipTrigger>
                   <TooltipContent>
                     Elimina definitvamente il cantiere

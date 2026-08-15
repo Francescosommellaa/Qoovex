@@ -67,7 +67,7 @@ function jsonInit(method: "POST" | "DELETE", body?: Record<string, unknown>): Re
   };
 }
 
-export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: MfaStatus; mode: "gate" | "management" }) {
+export function AccountSecurityFlow({ initialStatus, mode, showDataExport = false }: { initialStatus: MfaStatus; mode: "gate" | "management"; showDataExport?: boolean }) {
   const [status, setStatus] = useState(initialStatus);
   const [setup, setSetup] = useState<Setup | null>(null);
   const [recovery, setRecovery] = useState<Recovery | null>(null);
@@ -378,6 +378,16 @@ export function AccountSecurityFlow({ initialStatus, mode }: { initialStatus: Mf
                 ))}
               </div>
             )}
+          </div>
+        </SecuritySection>
+      ) : null}
+
+      {showDataExport ? (
+        <SecuritySection tone="info">
+          <div className={styles.section}>
+            <h2>I tuoi dati</h2>
+            <p className="text-muted-foreground">Scarica un file JSON con le informazioni del tuo profilo, i tuoi immobili e le partecipazioni ai lavori.</p>
+            <a className={buttonVariants({ variant: "outline" })} href="/api/client/data-export">Scarica i tuoi dati</a>
           </div>
         </SecuritySection>
       ) : null}

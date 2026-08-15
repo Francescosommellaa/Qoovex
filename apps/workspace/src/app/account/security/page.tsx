@@ -9,7 +9,7 @@ export default async function AccountSecurityPage() {
     const identity = await requireIdentity();
     const status = await getMfaStatusByUserId(identity.id);
     if (!status) redirect("/sign-in");
-    return <AccountSecurityFlow initialStatus={{ ...status, satisfied: true }} mode="management" />;
+    return <AccountSecurityFlow initialStatus={{ ...status, satisfied: true }} mode="management" showDataExport={identity.accountRole === "CLIENT"} />;
   } catch (error) {
     if (error instanceof AccessError && error.status === 401) redirect("/sign-in?callbackUrl=%2Faccount%2Fsecurity");
     if (error instanceof AccessError && error.code === "MFA_REQUIRED") return null;

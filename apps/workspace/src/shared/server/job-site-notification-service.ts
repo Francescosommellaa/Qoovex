@@ -8,7 +8,7 @@ import type { JobSiteActor } from "./job-site-authorization-service";
 
 function classify(action: string): { type: NotificationType; sourceType: NotificationSourceType; title: string } {
   if (action.includes("PAYMENT")) return { type: "PAYMENT_ACTIVITY", sourceType: "PAYMENT_REQUEST", title: "Attività pagamento" };
-  if (action.includes("DISPUTE")) return { type: "DISPUTE_ACTIVITY", sourceType: "DISPUTE", title: "Segnalazione aggiornata" };
+  if (action.includes("DISPUTE")) return { type: "DISPUTE_ACTIVITY", sourceType: "DISPUTE", title: "Disaccordo aggiornato" };
   if (action.includes("EXPORT")) return { type: "EXPORT_READY", sourceType: "EXPORT", title: "Export aggiornato" };
   if (action.includes("PROPOSAL") || action.includes("CHANGE")) return { type: "JOB_SITE_ACTION_REQUIRED", sourceType: "CHANGE_PROPOSAL", title: "Modifica da controllare" };
   return { type: "JOB_SITE_ACTIVITY", sourceType: "JOB_SITE", title: "Cantiere aggiornato" };
@@ -50,7 +50,7 @@ export async function queueJobSiteNotifications(tx: Prisma.TransactionClient, in
   const category = classify(input.action);
   const preferences = await tx.notificationPreference.findMany({ where: { organizationId: input.actor.organizationId, userId: { in: recipients.map((value) => value.userId) }, type: category.type }, select: { userId: true, channel: true, frequency: true } });
   for (const recipient of recipients) {
-    const actionHref = recipient.kind === "CLIENT" ? `/client/job-sites/${input.actor.jobSiteId}` : `/org/${input.actor.organizationId}/job-sites/${input.actor.jobSiteId}`;
+    const actionHref = recipient.kind === "CLIENT" ? `/client/job-sites/${input.actor.jobSiteId}` : `/job-sites/${input.actor.jobSiteId}`;
     const inAppFrequency = preferences.find((value) => value.userId === recipient.userId && value.channel === "IN_APP")?.frequency ?? "IMMEDIATE";
     const emailFrequency = preferences.find((value) => value.userId === recipient.userId && value.channel === "EMAIL")?.frequency ?? "IMMEDIATE";
     const day = new Date().toISOString().slice(0, 10);

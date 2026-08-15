@@ -2,13 +2,13 @@
 
 ## Migration
 
-La history contiene otto migration. Le prime cinque costituiscono il baseline storico immutabile; le tre migration forward successive introducono il dominio corrente, `AccountRole`, gli allegati contestuali e il vincolo di una sola membership Azienda attiva. La history non viene riscritta e i target remoti non usano `db push`, `migrate reset`, `migrate resolve` o SQL manuale.
+La history contiene nove migration. Le prime cinque costituiscono il baseline storico immutabile; le migration forward successive introducono il dominio corrente, `AccountRole`, gli allegati contestuali, il vincolo di una sola membership Azienda attiva e la migrazione dei link Workspace persistiti. La history non viene riscritta e i target remoti non usano `db push`, `migrate reset`, `migrate resolve` o SQL manuale.
 
 ## Stato verificato
 
-- Local: otto migration applicate, head attuale e drift nullo.
+- Local: nove migration applicate, zero drift; fresh e upgrade alla head sono verificati.
 - Preview: rehearsal manuale completato con database isolato, cloud migration, deploy e smoke verdi.
-- Production database: otto migration applicate, zero pendenti e zero drift verificati dal cloud build Production.
+- Production database: otto migration applicate alla precedente head, zero drift nell'ultima verifica; la nona resta pendente fino al prossimo cloud build Production guardato.
 - Production pubblico: la promozione del deployment staged è un passaggio manuale separato, eseguito soltanto dopo CI verde e smoke.
 
 I workflow usano gli environment GitHub `Preview – qoovex-workspace` e `Production – qoovex-workspace`. `VERCEL_ORG_ID`, `VERCEL_WORKSPACE_PROJECT_ID` e `VERCEL_SCOPE` sono variabili di environment; `VERCEL_TOKEN` è un secret dedicato. `VERCEL_AUTOMATION_BYPASS_SECRET` è opzionale e serve soltanto quando la protezione deployment lo richiede.

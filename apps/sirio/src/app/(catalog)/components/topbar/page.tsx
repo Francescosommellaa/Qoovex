@@ -34,8 +34,8 @@ export default function TopbarCatalogPage() {
               <div className="w-full rounded-xl border border-border/80 bg-card overflow-hidden shadow-2xs">
                 <Topbar className="static">
                   <TopbarStart>
-                    <Button variant="ghost" size="icon-sm" aria-label="Toggle sidebar">
-                      <IconLayoutSidebarLeftCollapse className="size-4" />
+                    <Button variant="ghost" size="icon-sm" aria-label="Riduci navigazione laterale">
+                      <IconLayoutSidebarLeftCollapse aria-hidden="true" className="size-4" />
                     </Button>
                     <Separator orientation="vertical" className="h-4" />
                   </TopbarStart>
@@ -45,9 +45,9 @@ export default function TopbarCatalogPage() {
                   </TopbarCenter>
 
                   <TopbarEnd>
-                    <Button variant="ghost" size="icon-sm" className="relative">
-                      <IconBell className="size-4" />
-                      <span className="absolute top-1 right-1 size-2 rounded-full bg-destructive ring-2 ring-background" />
+                    <Button variant="ghost" size="icon-sm" className="relative" aria-label="Apri notifiche, 3 non lette">
+                      <IconBell aria-hidden="true" className="size-4" />
+                      <span aria-hidden="true" className="absolute top-1 right-1 size-2 rounded-full bg-destructive ring-2 ring-background" />
                     </Button>
                     <Badge variant="outline" size="sm" className="gap-1 font-mono">
                       <IconShieldLock className="size-3 text-primary" />
@@ -67,8 +67,8 @@ export default function TopbarCatalogPage() {
               <div className="w-full rounded-xl border border-border/80 bg-card overflow-hidden shadow-2xs">
                 <Topbar className="static">
                   <TopbarStart>
-                    <Button variant="ghost" size="icon-sm" aria-label="Toggle sidebar">
-                      <IconLayoutSidebarLeftCollapse className="size-4" />
+                    <Button variant="ghost" size="icon-sm" aria-label="Riduci navigazione laterale">
+                      <IconLayoutSidebarLeftCollapse aria-hidden="true" className="size-4" />
                     </Button>
                     <Separator orientation="vertical" className="h-4" />
                   </TopbarStart>
@@ -78,8 +78,8 @@ export default function TopbarCatalogPage() {
                   </TopbarCenter>
 
                   <TopbarEnd>
-                    <Button variant="ghost" size="icon-sm" className="relative">
-                      <IconBell className="size-4" />
+                    <Button variant="ghost" size="icon-sm" className="relative" aria-label="Apri notifiche">
+                      <IconBell aria-hidden="true" className="size-4" />
                     </Button>
                     <Button variant="outline" size="sm" className="h-7 text-xs gap-1.5">
                       <IconSearch className="size-3.5" />

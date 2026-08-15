@@ -205,19 +205,19 @@ export default function ControlsCatalogPage() {
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2">
                   <Toggle aria-label="Bold" variant="default">
-                    <IconBold />
+                    <IconBold aria-hidden="true" />
                   </Toggle>
                   <span className="text-xs text-muted-foreground">default</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Toggle aria-label="Bold" variant="outline">
-                    <IconBold />
+                    <IconBold aria-hidden="true" />
                   </Toggle>
                   <span className="text-xs text-muted-foreground">outline</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Toggle aria-label="Bold" variant="solid">
-                    <IconBold />
+                    <IconBold aria-hidden="true" />
                   </Toggle>
                   <span className="text-xs text-muted-foreground">solid</span>
                 </div>
@@ -232,16 +232,16 @@ export default function ControlsCatalogPage() {
                   </span>
                   <ToggleGroup multiple variant="outline" size="icon-sm">
                     <Toggle aria-label="Bold" value="bold">
-                      <IconBold />
+                      <IconBold aria-hidden="true" />
                     </Toggle>
                     <Toggle aria-label="Italic" value="italic">
-                      <IconItalic />
+                      <IconItalic aria-hidden="true" />
                     </Toggle>
                     <Toggle aria-label="Underline" value="underline">
-                      <IconUnderline />
+                      <IconUnderline aria-hidden="true" />
                     </Toggle>
                     <Toggle aria-label="Strikethrough" value="strikethrough">
-                      <IconStrikethrough />
+                      <IconStrikethrough aria-hidden="true" />
                     </Toggle>
                   </ToggleGroup>
                 </div>
@@ -251,13 +251,13 @@ export default function ControlsCatalogPage() {
                   </span>
                   <ToggleGroup variant="outline" size="icon-sm">
                     <Toggle aria-label="Align left" value="left">
-                      <IconAlignLeft />
+                      <IconAlignLeft aria-hidden="true" />
                     </Toggle>
                     <Toggle aria-label="Align center" value="center">
-                      <IconAlignCenter />
+                      <IconAlignCenter aria-hidden="true" />
                     </Toggle>
                     <Toggle aria-label="Align right" value="right">
-                      <IconAlignRight />
+                      <IconAlignRight aria-hidden="true" />
                     </Toggle>
                   </ToggleGroup>
                 </div>

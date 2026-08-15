@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-14T23:43:21.181Z",
+  "title": "Design System: Qoovex UI",
+  "extensions": {
+    "colorMeta": {
+      "calce": { "role": "primary", "displayName": "Calce", "canonical": "oklch(0.99 0 0)", "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.51 0 0)", "oklch(0.63 0 0)", "oklch(0.75 0 0)", "oklch(0.87 0 0)", "oklch(0.99 0 0)"] },
+      "inchiostro": { "role": "primary", "displayName": "Inchiostro", "canonical": "oklch(0 0 0)", "tonalRamp": ["oklch(0 0 0)", "oklch(0.14 0 0)", "oklch(0.28 0 0)", "oklch(0.42 0 0)", "oklch(0.56 0 0)", "oklch(0.70 0 0)", "oklch(0.84 0 0)", "oklch(0.96 0 0)"] },
+      "nebbia": { "role": "neutral", "displayName": "Nebbia", "canonical": "oklch(0.97 0 0)", "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.51 0 0)", "oklch(0.63 0 0)", "oklch(0.75 0 0)", "oklch(0.87 0 0)", "oklch(0.97 0 0)"] },
+      "grafite": { "role": "neutral", "displayName": "Grafite", "canonical": "oklch(0.44 0 0)", "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.25 0 0)", "oklch(0.35 0 0)", "oklch(0.44 0 0)", "oklch(0.56 0 0)", "oklch(0.68 0 0)", "oklch(0.80 0 0)", "oklch(0.92 0 0)"] },
+      "segnale-rosso": { "role": "tertiary", "displayName": "Segnale Rosso", "canonical": "oklch(0.54 0.19 23.03)", "tonalRamp": ["oklch(0.15 0.10 23.03)", "oklch(0.27 0.14 23.03)", "oklch(0.39 0.17 23.03)", "oklch(0.51 0.19 23.03)", "oklch(0.63 0.17 23.03)", "oklch(0.75 0.13 23.03)", "oklch(0.87 0.08 23.03)", "oklch(0.95 0.03 23.03)"] },
+      "informazione-blu": { "role": "tertiary", "displayName": "Informazione Blu", "canonical": "oklch(0.53 0.22 264.53)", "tonalRamp": ["oklch(0.15 0.11 264.53)", "oklch(0.27 0.16 264.53)", "oklch(0.39 0.20 264.53)", "oklch(0.53 0.22 264.53)", "oklch(0.65 0.18 264.53)", "oklch(0.77 0.13 264.53)", "oklch(0.88 0.07 264.53)", "oklch(0.95 0.03 264.53)"] },
+      "conferma-verde": { "role": "tertiary", "displayName": "Conferma Verde", "canonical": "oklch(0.51 0.15 145)", "tonalRamp": ["oklch(0.15 0.08 145)", "oklch(0.27 0.11 145)", "oklch(0.39 0.14 145)", "oklch(0.51 0.15 145)", "oklch(0.63 0.13 145)", "oklch(0.75 0.10 145)", "oklch(0.87 0.06 145)", "oklch(0.95 0.02 145)"] },
+      "attenzione-ambra": { "role": "tertiary", "displayName": "Attenzione Ambra", "canonical": "oklch(0.81 0.17 75.35)", "tonalRamp": ["oklch(0.15 0.08 75.35)", "oklch(0.27 0.11 75.35)", "oklch(0.39 0.14 75.35)", "oklch(0.51 0.17 75.35)", "oklch(0.63 0.17 75.35)", "oklch(0.75 0.17 75.35)", "oklch(0.87 0.11 75.35)", "oklch(0.95 0.04 75.35)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Grandi titoli e valori focali nelle composizioni consumer." },
+      "headline": { "displayName": "Headline", "purpose": "Titoli principali di pagina." },
+      "title": { "displayName": "Title", "purpose": "Card e sezioni operative." },
+      "body": { "displayName": "Body", "purpose": "Testo principale e controlli leggibili." },
+      "label": { "displayName": "Array Label", "purpose": "Metadati corti e status." }
+    },
+    "shadows": [
+      { "name": "2xs-xs", "value": "0 1px 2px 0 hsl(0 0% 0% / 0.09)", "purpose": "Button, badge, card e swatch a riposo." },
+      { "name": "sm-default", "value": "0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 1px 2px -1px hsl(0 0% 0% / 0.18)", "purpose": "Stato interattivo leggermente sollevato." },
+      { "name": "md", "value": "0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 2px 4px -1px hsl(0 0% 0% / 0.18)", "purpose": "Menu, select, tooltip e navigazione." },
+      { "name": "xl-2xl", "value": "0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 8px 10px -1px hsl(0 0% 0% / 0.18)", "purpose": "Dialog e overlay ad alta separazione." }
+    ],
+    "motion": [
+      { "name": "state-fast", "value": "150ms cubic-bezier(0.2, 0, 0, 1)", "purpose": "Hover, focus e feedback immediato." },
+      { "name": "control", "value": "200ms cubic-bezier(0.2, 0, 0, 1)", "purpose": "Scala, colore e icone dei controlli." },
+      { "name": "indicator", "value": "260ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Indicatori scorrevoli e menu." },
+      { "name": "overlay", "value": "300ms cubic-bezier(0.34, 1.56, 0.64, 1)", "purpose": "Dialog e sheet con risposta elastica contenuta." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Azione dominante compatta, tattile e prevedibile.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Conferma</button>",
+      "css": ".ds-btn { height: 2rem; padding: 0 .75rem; border: 1px solid transparent; border-radius: .5rem; font: 500 .875rem/1 var(--ff-sans, sans-serif); cursor: pointer; transition: background-color 200ms var(--ease-standard, ease), transform 200ms var(--ease-standard, ease); } .ds-btn-primary { background: var(--primary, #000); color: var(--primary-foreground, #fff); box-shadow: var(--shadow-2xs, 0 1px 2px rgba(0,0,0,.09)); } .ds-btn-primary:hover { background: color-mix(in oklch, var(--primary) 90%, transparent); transform: scale(1.015); } .ds-btn:active { transform: scale(.97); } .ds-btn:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Azione secondaria con bordo e superficie neutra.",
+      "html": "<button class=\"ds-btn ds-btn-outline\">Annulla</button>",
+      "css": ".ds-btn { height: 2rem; padding: 0 .75rem; border-radius: .5rem; font: 500 .875rem/1 var(--ff-sans, sans-serif); cursor: pointer; transition: background-color 200ms var(--ease-standard, ease), transform 200ms var(--ease-standard, ease); } .ds-btn-outline { border: 1px solid var(--border, #e5e5e5); background: var(--background, #fff); color: var(--foreground, #000); box-shadow: var(--shadow-2xs, 0 1px 2px rgba(0,0,0,.09)); } .ds-btn-outline:hover { background: color-mix(in oklch, var(--accent) 60%, transparent); transform: scale(1.015); } .ds-btn:active { transform: scale(.97); } .ds-btn:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Azione alternativa su superficie Nebbia compatta.",
+      "html": "<button class=\"ds-btn ds-btn-secondary\">Salva bozza</button>",
+      "css": ".ds-btn { height: 2rem; padding: 0 .75rem; border: 1px solid transparent; border-radius: .5rem; font: 500 .875rem/1 var(--ff-sans, sans-serif); cursor: pointer; transition: background-color 200ms var(--ease-standard, ease), transform 200ms var(--ease-standard, ease); } .ds-btn-secondary { background: var(--secondary, #eee); color: var(--secondary-foreground, #000); } .ds-btn-secondary:hover { background: color-mix(in oklch, var(--secondary) 80%, transparent); transform: scale(1.015); } .ds-btn:active { transform: scale(.97); } .ds-btn:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Utility quieta che appare attraverso l'interazione.",
+      "html": "<button class=\"ds-btn ds-btn-ghost\">Dettagli</button>",
+      "css": ".ds-btn { height: 2rem; padding: 0 .75rem; border: 1px solid transparent; border-radius: .5rem; font: 500 .875rem/1 var(--ff-sans, sans-serif); cursor: pointer; transition: background-color 150ms var(--ease-standard, ease); } .ds-btn-ghost { background: transparent; color: var(--foreground, #000); } .ds-btn-ghost:hover, .ds-btn-ghost:active { background: var(--accent, #eee); color: var(--accent-foreground, #000); } .ds-btn:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Destructive Button",
+      "kind": "button",
+      "refersTo": "button-destructive",
+      "description": "Azione rischiosa su superficie rossa attenuata.",
+      "html": "<button class=\"ds-btn ds-btn-destructive\">Rimuovi</button>",
+      "css": ".ds-btn { height: 2rem; padding: 0 .75rem; border-radius: .5rem; font: 500 .875rem/1 var(--ff-sans, sans-serif); cursor: pointer; transition: background-color 200ms var(--ease-standard, ease), transform 200ms var(--ease-standard, ease); } .ds-btn-destructive { border: 1px solid color-mix(in oklch, var(--destructive) 20%, transparent); background: color-mix(in oklch, var(--destructive) 10%, transparent); color: var(--destructive); } .ds-btn-destructive:hover { background: color-mix(in oklch, var(--destructive) 20%, transparent); transform: scale(1.015); } .ds-btn:active { transform: scale(.97); } .ds-btn:focus-visible { outline: 2px solid color-mix(in oklch, var(--destructive) 40%, transparent); outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Campo Base UI con focus, invalid e disabled nel contratto.",
+      "html": "<label class=\"ds-field\"><span>Nome cantiere</span><input placeholder=\"Ristrutturazione Via Roma\"><small>Usa un nome riconoscibile.</small></label>",
+      "css": ".ds-field { display: grid; gap: .375rem; color: var(--foreground, #000); font: 500 .875rem/1.25 var(--ff-sans, sans-serif); } .ds-field input { height: 2.25rem; padding: .375rem .75rem; border: 1px solid var(--input, #e5e5e5); border-radius: .5rem; background: transparent; color: inherit; font: 400 1rem/1.4 var(--ff-sans, sans-serif); transition: border-color 150ms var(--ease-standard, ease), box-shadow 150ms var(--ease-standard, ease); } .ds-field input::placeholder, .ds-field small { color: var(--muted-foreground, #666); } .ds-field input:focus-visible { border-color: var(--ring, #000); outline: 2px solid color-mix(in oklch, var(--ring) 30%, transparent); outline-offset: 1px; } .ds-field input[aria-invalid=true] { border-color: var(--destructive); outline-color: color-mix(in oklch, var(--destructive) 30%, transparent); } .ds-field input:disabled { background: color-mix(in oklch, var(--input) 50%, transparent); opacity: .5; }"
+    },
+    {
+      "name": "Semantic Badge",
+      "kind": "chip",
+      "refersTo": "badge-status",
+      "description": "Pill Array che comunica uno stato reale.",
+      "html": "<span class=\"ds-badge-success\">Confermato</span>",
+      "css": ".ds-badge-success { display: inline-flex; align-items: center; min-height: 1.375rem; padding: 0 .625rem; border: 1px solid color-mix(in oklch, var(--success) 20%, transparent); border-radius: 9999px; background: color-mix(in oklch, var(--success) 10%, transparent); color: var(--success); font: 500 .75rem/1 var(--ff-accent, sans-serif); letter-spacing: .04em; transition: background-color 200ms var(--ease-standard, ease), transform 200ms var(--ease-standard, ease); } .ds-badge-success:hover { background: color-mix(in oklch, var(--success) 20%, transparent); } .ds-badge-success:focus-visible { outline: 2px solid color-mix(in oklch, var(--success) 40%, transparent); outline-offset: 2px; }"
+    },
+    {
+      "name": "Interactive Card",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "Contenitore condiviso che si solleva soltanto quando è interattivo.",
+      "html": "<article class=\"ds-card-interactive\" tabindex=\"0\"><h3>Ristrutturazione Via Roma</h3><p>Ultimo aggiornamento 10 minuti fa</p></article>",
+      "css": ".ds-card-interactive { padding: 1.5rem; border: 1px solid var(--border, #e5e5e5); border-radius: .75rem; background: var(--card, #fff); color: var(--card-foreground, #000); box-shadow: var(--shadow-2xs, 0 1px 2px rgba(0,0,0,.09)); font-family: var(--ff-sans, sans-serif); cursor: pointer; transition: border-color 300ms var(--ease-standard, ease), box-shadow 300ms var(--ease-standard, ease), transform 300ms cubic-bezier(.175,.885,.32,1.275); } .ds-card-interactive h3 { margin: 0; font-size: 1rem; line-height: 1.4; letter-spacing: -.02em; } .ds-card-interactive p { margin: .375rem 0 0; color: var(--muted-foreground, #666); font-size: .875rem; } .ds-card-interactive:hover { border-color: color-mix(in oklch, var(--foreground) 25%, transparent); box-shadow: var(--shadow-xs); transform: translateY(-.125rem) scale(1.005); } .ds-card-interactive:active { transform: none; } .ds-card-interactive:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Tabs Navigation",
+      "kind": "nav",
+      "refersTo": "tabs-navigation",
+      "description": "Navigazione a pill con stato attivo e indicatore tattile.",
+      "html": "<nav class=\"ds-tabs\" aria-label=\"Sezioni\"><a class=\"ds-tab ds-active\" href=\"#\">Panoramica</a><a class=\"ds-tab\" href=\"#\">Documenti</a><a class=\"ds-tab\" href=\"#\">Cronologia</a></nav>",
+      "css": ".ds-tabs { display: flex; align-items: center; gap: .25rem; font-family: var(--ff-sans, sans-serif); } .ds-tab { padding: .375rem .75rem; border-radius: 9999px; color: var(--muted-foreground, #666); text-decoration: none; font-size: .75rem; font-weight: 500; transition: background-color 150ms var(--ease-standard, ease), color 150ms var(--ease-standard, ease); } .ds-tab:hover { background: var(--accent, #eee); color: var(--foreground, #000); } .ds-tab.ds-active { background: var(--foreground, #000); color: var(--background, #fff); } .ds-tab:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Responsive Dialog",
+      "kind": "custom",
+      "refersTo": "dialog-default",
+      "description": "Dialog centrato su desktop e sheet dal basso su mobile.",
+      "html": "<section class=\"ds-dialog\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"ds-dialog-title\"><h2 id=\"ds-dialog-title\">Conferma modifica</h2><p>Controlla i dati prima di continuare.</p><footer><button>Annulla</button><button class=\"ds-confirm\">Conferma</button></footer></section>",
+      "css": ".ds-dialog { width: min(32rem, calc(100vw - 2rem)); padding: 1.5rem; border: 1px solid var(--border, #e5e5e5); border-radius: .75rem; background: var(--background, #fff); color: var(--foreground, #000); box-shadow: var(--shadow-xl, 0 8px 16px rgba(0,0,0,.18)); font-family: var(--ff-sans, sans-serif); } .ds-dialog h2 { margin: 0; font-size: 1.125rem; line-height: 1; letter-spacing: -.02em; } .ds-dialog p { color: var(--muted-foreground, #666); line-height: 1.6; } .ds-dialog footer { display: flex; justify-content: flex-end; gap: .625rem; padding-top: 1rem; border-top: 1px solid color-mix(in oklch, var(--border) 50%, transparent); } .ds-dialog button { height: 2rem; padding: 0 .75rem; border: 1px solid var(--border, #e5e5e5); border-radius: .5rem; background: var(--background, #fff); color: inherit; } .ds-dialog .ds-confirm { border-color: transparent; background: var(--primary, #000); color: var(--primary-foreground, #fff); } .ds-dialog button:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; } @media (max-width: 639px) { .ds-dialog { width: 100%; border-radius: 1rem 1rem 0 0; } .ds-dialog footer { flex-direction: column-reverse; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Gli Attrezzi di Precisione",
+    "overview": "Qoovex UI è una cassetta di strumenti calibrati: ogni primitiva ha uno scopo chiaro, una forma prevedibile e stati completi, così le applicazioni possono comporre esperienze diverse senza ricostruire la foundation. Calce, Inchiostro, Nebbia e Grafite mantengono il sistema neutro; i colori semantici comunicano conseguenze e stato.\n\nLa qualità è tattile con discrezione. Raggi morbidi, bordi sottili, ombre basse e micro-movimenti rendono i controlli leggibili e fisici senza trasformarli in giocattoli. Il package rimane neutro, riutilizzabile e privo di dominio; Web, Sirio e Workspace ne decidono composizione e ritmo.",
+    "keyCharacteristics": [
+      "Primitive accessibili costruite su Base UI e stili open-code.",
+      "Monocromia strutturale con quattro famiglie semantiche esplicite.",
+      "Scala da quattro pixel, controlli compatti e raggi morbidi gerarchici.",
+      "Feedback tattile breve, focus visibile e comportamento reduced-motion.",
+      "Tabler come grammatica iconografica e Array come accento controllato."
+    ],
+    "rules": [
+      { "name": "The Semantic Contract Rule", "body": "Il nome del token descrive il significato; un consumer non sceglie un colore semantico soltanto per il suo aspetto.", "section": "colors" },
+      { "name": "The Theme Parity Rule", "body": "Tema chiaro e scuro possono cambiare luminanza, ma mantengono gerarchia, leggibilità e significato.", "section": "colors" },
+      { "name": "The General Sans Default Rule", "body": "Se non esiste una ragione esplicita per usare Array, la scelta corretta è General Sans.", "section": "typography" },
+      { "name": "The Accent Must Be Short Rule", "body": "Array non porta paragrafi, titoli lunghi o istruzioni critiche.", "section": "typography" },
+      { "name": "The Primitive Not Page Rule", "body": "@qoovex/ui definisce comportamento e ritmo interno dei componenti, non la composizione di una pagina di prodotto.", "section": "layout" },
+      { "name": "The Flat at Rest Rule", "body": "Una primitiva è leggibile tramite forma, bordo e tono prima di ricevere un'ombra.", "section": "elevation" },
+      { "name": "The Overlay Earns Depth Rule", "body": "Ombra forte e blur sono ammessi quando un elemento occupa davvero un piano superiore.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do importare primitive tramite i subpath pubblici e comporle nelle applicazioni.",
+      "Do mantenere semantica, tastiera, focus, forced colors e reduced motion nel contratto del componente.",
+      "Do provare nuove primitive e varianti in Sirio prima di promuoverle.",
+      "Do usare Tabler e General Sans come default; Array soltanto per accenti brevi.",
+      "Do mantenere micro-interazioni brevi, interrompibili e coerenti con lo stato."
+    ],
+    "donts": [
+      "Don't introdurre logica di dominio, Prisma, autenticazione o import da applicazioni nel package.",
+      "Don't creare una variante quando una composizione del componente esistente risolve il problema.",
+      "Don't usare colore semantico senza una corrispondente semantica di stato.",
+      "Don't affidare focus, errore o selezione soltanto al colore.",
+      "Don't rendere i componenti freddi, rigidi o giocosi: devono essere morbidi, chiari e prevedibili."
+    ]
+  }
+}

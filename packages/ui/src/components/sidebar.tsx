@@ -39,6 +39,7 @@ const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 type SidebarContextProps = {
   state: "expanded" | "collapsed"
+  sidebarId: string
   open: boolean
   setOpen: (open: boolean) => void
   openMobile: boolean
@@ -73,6 +74,7 @@ function SidebarProvider({
   inline?: boolean
 }) {
   const isMobile = useIsMobile()
+  const sidebarId = React.useId()
   const [openMobile, setOpenMobile] = React.useState(false)
 
   // This is the internal state of the sidebar.
@@ -122,6 +124,7 @@ function SidebarProvider({
   const contextValue = React.useMemo<SidebarContextProps>(
     () => ({
       state,
+      sidebarId,
       open,
       setOpen,
       isMobile,
@@ -129,7 +132,7 @@ function SidebarProvider({
       setOpenMobile,
       toggleSidebar,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+    [state, sidebarId, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
   )
 
   return (
@@ -171,7 +174,7 @@ function Sidebar({
   collapsible?: "offcanvas" | "icon" | "none"
   inline?: boolean
 }) {
-  const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+  const { isMobile, sidebarId, state, openMobile, setOpenMobile } = useSidebar()
 
   if (collapsible === "none") {
     return (
@@ -205,7 +208,7 @@ function Sidebar({
               } as React.CSSProperties
             }
           >
-            <div className="flex h-full w-full flex-col">{children}</div>
+            <div className="flex h-full w-full flex-col" id={sidebarId}>{children}</div>
           </DialogPrimitive.Popup>
         </DialogPrimitive.Portal>
       </DialogPrimitive.Root>
@@ -252,6 +255,7 @@ function Sidebar({
         {...props}
       >
         <div
+          id={sidebarId}
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
           className="flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:ring-1 group-data-[variant=floating]:ring-sidebar-border"
@@ -268,12 +272,18 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar()
+  const { isMobile, open, openMobile, sidebarId, toggleSidebar } = useSidebar()
+  const expanded = isMobile ? openMobile : open
+  const label = expanded ? "Chiudi navigazione" : "Apri navigazione"
 
   return (
     <Button
+      {...props}
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
+      aria-controls={sidebarId}
+      aria-expanded={expanded}
+      aria-label={label}
       variant="ghost"
       size="icon-sm"
       className={cn(className)}
@@ -281,10 +291,8 @@ function SidebarTrigger({
         onClick?.(event)
         toggleSidebar()
       }}
-      {...props}
     >
-      <IconLayoutSidebar />
-      <span className="sr-only">Toggle Sidebar</span>
+      <IconLayoutSidebar aria-hidden="true" />
     </Button>
   )
 }
@@ -640,7 +648,7 @@ function SidebarCollapseButton({
 }: Omit<React.ComponentProps<typeof SidebarMenuButton>, "tooltip"> & {
   iconOnly?: boolean
 }) {
-  const { state, toggleSidebar } = useSidebar()
+  const { sidebarId, state, toggleSidebar } = useSidebar()
   const expanded = state === "expanded"
   const label = expanded ? "Riduci menu" : "Espandi menu"
   const Icon = expanded
@@ -649,6 +657,8 @@ function SidebarCollapseButton({
 
   return (
     <SidebarMenuButton
+      {...props}
+      aria-controls={sidebarId}
       aria-expanded={expanded}
       aria-label={label}
       className={cn(iconOnly && "size-8! w-8! shrink-0 p-2!", className)}
@@ -659,9 +669,8 @@ function SidebarCollapseButton({
         if (!event.defaultPrevented) toggleSidebar()
       }}
       tooltip={label}
-      {...props}
     >
-      <Icon />
+      <Icon aria-hidden="true" />
       {!iconOnly ? <span>{label}</span> : null}
     </SidebarMenuButton>
   )

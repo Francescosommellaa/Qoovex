@@ -74,7 +74,7 @@ describe("timeline event presentation", () => {
     }));
 
     expect(presentation.details).toEqual([
-      { label: "Proposta", value: "Proposta aggiornata · 3ª versione" },
+      { label: "Proposta", value: "Proposta aggiornata" },
     ]);
     expect(JSON.stringify(presentation)).not.toContain("internal-proposal-id");
   });
@@ -121,6 +121,22 @@ describe("timeline event presentation", () => {
     ]);
   });
 
+  it("presenta gli aggiornamenti sul disaccordo senza attribuire una decisione a Qoovex", () => {
+    const presentation = presentTimelineEvent(event({
+      type: "ISSUE_REPORTED",
+      title: "Evento Qoovex",
+      body: null,
+      payload: { schemaVersion: 1, disputeId: "internal-disagreement-id", action: "AGREE", message: "Confermiamo la nuova data.", status: "IN_DISCUSSION" },
+    }));
+
+    expect(presentation).toMatchObject({
+      title: "Accordo registrato sul disaccordo",
+      description: "L'accordo si completa con le conferme previste da entrambe le parti.",
+    });
+    expect(JSON.stringify(presentation)).not.toContain("internal-disagreement-id");
+    expect(JSON.stringify(presentation)).not.toMatch(/Qoovex.*(?:decide|arbitr)/i);
+  });
+
   it("formats occurrence date and identifies the actor without showing technical values", () => {
     expect(presentTimelineEvent(event({ actorKind: "CLIENT" }))).toMatchObject({
       actor: "Cliente",
@@ -145,6 +161,7 @@ describe("timeline event presentation", () => {
       actor: "Autore non disponibile",
       occurredAtLabel: "12 ago 2026, 10:30",
       kind: "system",
+      sectionId: "timeline",
       tone: "neutral",
       details: [],
     });

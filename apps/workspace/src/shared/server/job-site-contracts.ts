@@ -36,6 +36,8 @@ export const initialAgreementPayloadSchema = z.object({
   sharedCommercialNotes: z.string().max(4000).nullable(),
 }).strict();
 
+export type InitialAgreementPayload = z.infer<typeof initialAgreementPayloadSchema>;
+
 export const timelinePayloadSchema = z.object({
   schemaVersion: z.literal(JOB_SITE_SCHEMA_VERSION),
   title: z.string().trim().min(1).max(200),
@@ -66,6 +68,8 @@ export const proposalPayloadSchema = z.object({
     else if (BigInt(value.rangeMinimumMinor) > BigInt(value.rangeMaximumMinor)) context.addIssue({ code: "custom", path: ["rangeMaximumMinor"], message: "Il massimo deve essere maggiore o uguale al minimo." });
   }
 });
+
+export type ChangeProposalPayload = z.infer<typeof proposalPayloadSchema>;
 
 export const closureSnapshotSchema = z.object({
   schemaVersion: z.literal(JOB_SITE_SCHEMA_VERSION),

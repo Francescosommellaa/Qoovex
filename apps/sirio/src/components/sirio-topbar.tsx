@@ -41,7 +41,7 @@ export function SirioTopbar() {
       <Topbar>
         <TopbarStart>
           <SidebarTrigger aria-label="Apri navigazione mobile" className="md:hidden" />
-          <SidebarCollapseButton aria-label="Espandi/Contrai sidebar" className="hidden md:flex" iconOnly />
+          <SidebarCollapseButton className="hidden md:flex" iconOnly />
           <Separator className="hidden h-4 md:block" orientation="vertical" />
         </TopbarStart>
 

@@ -5,6 +5,7 @@ import type {
   JobSiteProcessStatus,
   JobSiteProcessStepStatus,
   JobSiteRequestStatus,
+  JobSiteRequestType,
   LegalHoldStatus,
   NotificationChannel,
   NotificationFrequency,
@@ -77,7 +78,7 @@ const attachmentCategories = {
   PAYMENT_RECEIPT: { label: "Ricevuta di pagamento", tone: "neutral" },
   PROPOSAL: { label: "File della proposta", tone: "neutral" },
   REQUEST: { label: "File della richiesta", tone: "neutral" },
-  DISPUTE: { label: "File della segnalazione", tone: "neutral" },
+  DISPUTE: { label: "File del disaccordo", tone: "neutral" },
   CLOSURE: { label: "File di chiusura", tone: "neutral" },
   OTHER: { label: "Altro file", tone: "neutral" },
 } satisfies Record<AttachmentCategory, ProductStatePresentation>;
@@ -99,6 +100,20 @@ const requestStatuses = {
   WITHDRAWN: { label: "Richiesta ritirata", tone: "neutral" },
 } satisfies Record<JobSiteRequestStatus, ProductStatePresentation>;
 
+const requestTypes = {
+  CLARIFICATION: { label: "Chiarimento", tone: "info" },
+  INFORMATION: { label: "Informazione", tone: "info" },
+  WORK_UPDATE: { label: "Aggiornamento sul lavoro", tone: "info" },
+  DOCUMENT: { label: "Documento", tone: "neutral" },
+  ISSUE: { label: "Problema operativo", tone: "warning" },
+  OTHER: { label: "Altra richiesta", tone: "neutral" },
+} satisfies Record<JobSiteRequestType, ProductStatePresentation>;
+
+export const jobSiteRequestTypeOptions = Object.entries(requestTypes).map(([value, presentation]) => ({
+  label: presentation.label,
+  value,
+})) as Array<{ label: string; value: JobSiteRequestType }>;
+
 const changeProposalStatuses = {
   DRAFT: { label: "Bozza di proposta", tone: "neutral" },
   PROPOSED: { label: "Proposta inviata", tone: "info" },
@@ -113,18 +128,18 @@ const changeProposalStatuses = {
 const paymentRequestStatuses = {
   DRAFT: { label: "Bozza di richiesta", tone: "neutral" },
   REQUESTED: { label: "Pagamento richiesto", tone: "info" },
-  TRANSFER_DECLARED: { label: "Trasferimento dichiarato", tone: "info" },
-  UNDER_REVIEW: { label: "Dichiarazione in verifica", tone: "warning" },
-  CONFIRMED: { label: "Ricezione confermata", tone: "good" },
-  DISPUTED: { label: "Dichiarazione contestata", tone: "danger" },
+  TRANSFER_DECLARED: { label: "Invio dichiarato dal cliente", tone: "info" },
+  UNDER_REVIEW: { label: "Dichiarazione in revisione", tone: "warning" },
+  CONFIRMED: { label: "Ricezione registrata dall'Azienda", tone: "good" },
+  DISPUTED: { label: "Dichiarazione da chiarire", tone: "danger" },
   CANCELLED: { label: "Richiesta annullata", tone: "neutral" },
 } satisfies Record<PaymentRequestStatus, ProductStatePresentation>;
 
 const disputeStatuses = {
-  OPEN: { label: "Disputa aperta", tone: "danger" },
+  OPEN: { label: "Disaccordo aperto", tone: "danger" },
   IN_DISCUSSION: { label: "Confronto in corso", tone: "warning" },
-  RESOLVED_BY_AGREEMENT: { label: "Risolta con accordo", tone: "good" },
-  WITHDRAWN: { label: "Disputa ritirata", tone: "neutral" },
+  RESOLVED_BY_AGREEMENT: { label: "Accordo registrato", tone: "good" },
+  WITHDRAWN: { label: "Disaccordo ritirato", tone: "neutral" },
   CLOSED_WITHOUT_AGREEMENT: { label: "Chiusa senza accordo", tone: "neutral" },
 } satisfies Record<DisputeStatus, ProductStatePresentation>;
 
@@ -193,7 +208,7 @@ const timelineEventTypes = {
   CHANGE_WITHDRAWN: { label: "Modifica ritirata", tone: "neutral" },
   CLARIFICATION_REQUESTED: { label: "Chiarimento richiesto", tone: "warning" },
   CLARIFICATION_RESPONDED: { label: "Chiarimento ricevuto", tone: "info" },
-  ISSUE_REPORTED: { label: "Problema segnalato", tone: "danger" },
+  ISSUE_REPORTED: { label: "Disaccordo segnalato", tone: "danger" },
   PAYMENT_REQUESTED: { label: "Pagamento richiesto", tone: "info" },
   PAYMENT_TRANSFER_DECLARED: { label: "Trasferimento dichiarato", tone: "info" },
   PAYMENT_CONFIRMED: { label: "Ricezione confermata", tone: "good" },
@@ -274,7 +289,7 @@ const notificationTypes = {
   JOB_SITE_ACTION_REQUIRED: { label: "Azioni richieste", tone: "warning" },
   JOB_SITE_ACTIVITY: { label: "Attività del cantiere", tone: "info" },
   PAYMENT_ACTIVITY: { label: "Pagamenti documentati", tone: "info" },
-  DISPUTE_ACTIVITY: { label: "Dispute", tone: "warning" },
+  DISPUTE_ACTIVITY: { label: "Disaccordi", tone: "warning" },
   EXPORT_READY: { label: "Export pronti", tone: "good" },
 } satisfies Record<NotificationType, ProductStatePresentation>;
 
@@ -355,7 +370,7 @@ const auditEntityTypes = {
   JOB_SITE_TIMELINE_EVENT: { label: "Evento della timeline", tone: "neutral" },
   JOB_SITE_CHANGE_PROPOSAL: { label: "Proposta di modifica", tone: "neutral" },
   JOB_SITE_PAYMENT_REQUEST: { label: "Richiesta di pagamento", tone: "neutral" },
-  JOB_SITE_DISPUTE: { label: "Disputa", tone: "neutral" },
+  JOB_SITE_DISPUTE: { label: "Disaccordo", tone: "neutral" },
   JOB_SITE_CLOSURE: { label: "Chiusura del cantiere", tone: "neutral" },
   JOB_SITE_EXPORT: { label: "Archivio del cantiere", tone: "neutral" },
   LEGAL_HOLD: { label: "Blocco di conservazione", tone: "neutral" },
@@ -473,6 +488,7 @@ export const presentJobSiteStatus = createPresenter(jobSiteStatuses);
 export const presentAttachmentCategory = createPresenter(attachmentCategories);
 export const presentJobSiteStepStatus = createPresenter(stepStatuses);
 export const presentJobSiteRequestStatus = createPresenter(requestStatuses);
+export const presentJobSiteRequestType = createPresenter(requestTypes);
 export const presentChangeProposalStatus = createPresenter(changeProposalStatuses);
 export const presentPaymentRequestStatus = createPresenter(paymentRequestStatuses);
 export const presentDisputeStatus = createPresenter(disputeStatuses);

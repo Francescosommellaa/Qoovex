@@ -116,7 +116,7 @@ export async function getOrganizationProfile() {
 export async function updateOrganizationProfile(input: Record<string, unknown>) {
   const { context, organizationId, actorRole } = await requireOrganizationDomainAccess("organizationProfile:update");
   const data = {
-    legalName: trimOptionalText(input.legalName, "Ragione sociale", 160),
+    legalName: input.legalName === undefined ? undefined : trimRequiredText(input.legalName, "Ragione sociale", 2, 160),
     taxCode: trimOptionalText(input.taxCode, "Codice fiscale", 32),
     vatNumber: trimOptionalText(input.vatNumber, "Partita IVA", 32),
     registeredOfficeAddress: trimOptionalText(input.registeredOfficeAddress, "Sede legale", 500),
@@ -125,11 +125,17 @@ export async function updateOrganizationProfile(input: Record<string, unknown>) 
   };
   const defined = Object.fromEntries(Object.entries(data).filter(([, value]) => value !== undefined));
   if (!Object.keys(defined).length) throw new AccessError("Nessun dato azienda da aggiornare.", 409);
-  const profile = await db.organizationProfile.upsert({
-    where: { organizationId },
-    create: { organizationId, ...defined },
-    update: defined,
-    select: profileSelect,
+  const profile = await db.$transaction(async (tx) => {
+    const updatedProfile = await tx.organizationProfile.upsert({
+      where: { organizationId },
+      create: { organizationId, ...defined },
+      update: defined,
+      select: profileSelect,
+    });
+    if (data.legalName !== undefined) {
+      await tx.organization.update({ where: { id: organizationId }, data: { name: data.legalName } });
+    }
+    return updatedProfile;
   });
   await recordProductAuditEventBestEffort({
     organizationId,

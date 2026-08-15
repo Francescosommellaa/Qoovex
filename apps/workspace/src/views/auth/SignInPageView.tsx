@@ -17,10 +17,12 @@ import styles from "./AuthPages.module.css";
 
 export function SignInPageView({
   callbackUrl,
+  clientInvitation,
   showDevAuth,
   statusMessage,
 }: {
   callbackUrl: string;
+  clientInvitation: boolean;
   showDevAuth: boolean;
   statusMessage: string | null;
 }) {
@@ -70,14 +72,16 @@ export function SignInPageView({
 
   return (
     <AuthPageShell
-      description={<p>Rientra nel workspace per gestire i cantieri e collaborare nel contesto autorizzato.</p>}
+      description={clientInvitation
+        ? <p>Accedi con l'email che ha ricevuto l'invito. Se non hai ancora un account, crealo con lo stesso indirizzo.</p>
+        : <p>Rientra nel workspace per gestire i cantieri e collaborare nel contesto autorizzato.</p>}
       footer={(
         <div className="grid gap-2">
           <p>Non hai un account? <Link data-link="inline" href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link></p>
           <p>Verifica email non completata? <Link data-link="quiet" href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Riprendi la registrazione</Link></p>
         </div>
       )}
-      title="Bentornato"
+      title={clientInvitation ? "Accedi per continuare con l'invito" : "Bentornato"}
       titleId="sign-in-title"
     >
       <AuthStage>

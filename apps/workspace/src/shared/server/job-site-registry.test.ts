@@ -20,7 +20,7 @@ describe("current product capability registry", () => {
 
   it("accounts for every current product API route", () => {
     const apiRoot = resolve(process.cwd(), "src/app/api");
-    const routeFiles = ["org", "client", "exports", "internal/job-sites"].flatMap((root) => readdirSync(resolve(apiRoot, root), { recursive: true, withFileTypes: true })
+    const routeFiles = ["job-sites", "people", "payment-profile", "client", "exports", "internal/job-sites"].flatMap((root) => readdirSync(resolve(apiRoot, root), { recursive: true, withFileTypes: true })
       .filter((entry) => entry.isFile() && entry.name === "route.ts")
       .map((entry) => `/${["api", root, entry.parentPath.slice(resolve(apiRoot, root).length).replace(/\\/g, "/").replace(/^\//, "")].filter(Boolean).join("/")}`))
       .concat("/api/account/notification-preferences");
@@ -50,7 +50,7 @@ describe("current product capability registry", () => {
   it("registers receipts for critical economic authority mutations", () => {
     expect(JOB_SITE_ACTION_DEFINITIONS).toContain("AUTHORITY_GRANT@1");
     expect(JOB_SITE_ACTION_DEFINITIONS).toContain("AUTHORITY_REVOKE@1");
-    const route = readFileSync(resolve(process.cwd(), "src/app/api/org/[organizationId]/job-sites/[jobSiteId]/authority/route.ts"), "utf8");
+    const route = readFileSync(resolve(process.cwd(), "src/app/api/job-sites/[jobSiteId]/authority/route.ts"), "utf8");
     expect(route).toContain("requireIdempotencyKey");
     expect(route).toContain("resolveOrganizationJobSiteActor");
   });

@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-14T23:43:21.181Z",
+  "title": "Design System: Qoovex Web",
+  "extensions": {
+    "colorMeta": {
+      "calce": {
+        "role": "primary",
+        "displayName": "Calce",
+        "canonical": "oklch(0.99 0 0)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.51 0 0)", "oklch(0.63 0 0)", "oklch(0.75 0 0)", "oklch(0.87 0 0)", "oklch(0.99 0 0)"]
+      },
+      "inchiostro": {
+        "role": "primary",
+        "displayName": "Inchiostro",
+        "canonical": "oklch(0 0 0)",
+        "tonalRamp": ["oklch(0 0 0)", "oklch(0.14 0 0)", "oklch(0.28 0 0)", "oklch(0.42 0 0)", "oklch(0.56 0 0)", "oklch(0.70 0 0)", "oklch(0.84 0 0)", "oklch(0.96 0 0)"]
+      },
+      "nebbia": {
+        "role": "neutral",
+        "displayName": "Nebbia",
+        "canonical": "oklch(0.97 0 0)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.51 0 0)", "oklch(0.63 0 0)", "oklch(0.75 0 0)", "oklch(0.87 0 0)", "oklch(0.97 0 0)"]
+      },
+      "grafite": {
+        "role": "neutral",
+        "displayName": "Grafite",
+        "canonical": "oklch(0.44 0 0)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.25 0 0)", "oklch(0.35 0 0)", "oklch(0.44 0 0)", "oklch(0.56 0 0)", "oklch(0.68 0 0)", "oklch(0.80 0 0)", "oklch(0.92 0 0)"]
+      },
+      "segnale-rosso": {
+        "role": "tertiary",
+        "displayName": "Segnale Rosso",
+        "canonical": "oklch(0.54 0.19 23.03)",
+        "tonalRamp": ["oklch(0.15 0.10 23.03)", "oklch(0.27 0.14 23.03)", "oklch(0.39 0.17 23.03)", "oklch(0.51 0.19 23.03)", "oklch(0.63 0.17 23.03)", "oklch(0.75 0.13 23.03)", "oklch(0.87 0.08 23.03)", "oklch(0.95 0.03 23.03)"]
+      },
+      "informazione-blu": {
+        "role": "tertiary",
+        "displayName": "Informazione Blu",
+        "canonical": "oklch(0.53 0.22 264.53)",
+        "tonalRamp": ["oklch(0.15 0.11 264.53)", "oklch(0.27 0.16 264.53)", "oklch(0.39 0.20 264.53)", "oklch(0.53 0.22 264.53)", "oklch(0.65 0.18 264.53)", "oklch(0.77 0.13 264.53)", "oklch(0.88 0.07 264.53)", "oklch(0.95 0.03 264.53)"]
+      },
+      "conferma-verde": {
+        "role": "tertiary",
+        "displayName": "Conferma Verde",
+        "canonical": "oklch(0.51 0.15 145)",
+        "tonalRamp": ["oklch(0.15 0.08 145)", "oklch(0.27 0.11 145)", "oklch(0.39 0.14 145)", "oklch(0.51 0.15 145)", "oklch(0.63 0.13 145)", "oklch(0.75 0.10 145)", "oklch(0.87 0.06 145)", "oklch(0.95 0.02 145)"]
+      },
+      "attenzione-ambra": {
+        "role": "tertiary",
+        "displayName": "Attenzione Ambra",
+        "canonical": "oklch(0.81 0.17 75.35)",
+        "tonalRamp": ["oklch(0.15 0.08 75.35)", "oklch(0.27 0.11 75.35)", "oklch(0.39 0.14 75.35)", "oklch(0.51 0.17 75.35)", "oklch(0.63 0.17 75.35)", "oklch(0.75 0.17 75.35)", "oklch(0.87 0.11 75.35)", "oklch(0.95 0.04 75.35)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero e messaggio principale, con righe brevi e bilanciate." },
+      "headline": { "displayName": "Headline", "purpose": "Titoli di sezione e CTA band." },
+      "title": { "displayName": "Title", "purpose": "Card narrative e prove di prodotto." },
+      "body": { "displayName": "Body", "purpose": "Spiegazioni e contenuto editoriale leggibile." },
+      "label": { "displayName": "Array Label", "purpose": "Step, stati e micro-metadati brevi." }
+    },
+    "shadows": [
+      { "name": "hairline", "value": "0 1px 2px 0 hsl(0 0% 0% / 0.09)", "purpose": "Controlli, badge e card ferme." },
+      { "name": "interactive", "value": "0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 2px 4px -1px hsl(0 0% 0% / 0.18)", "purpose": "Hover e navigazione compatta." },
+      { "name": "product-frame", "value": "0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 4px 6px -1px hsl(0 0% 0% / 0.18)", "purpose": "Dimostrazioni e finestre applicative." }
+    ],
+    "motion": [
+      { "name": "state-fast", "value": "150ms cubic-bezier(0.2, 0, 0, 1)", "purpose": "Hover, focus e feedback immediato." },
+      { "name": "control", "value": "200ms cubic-bezier(0.2, 0, 0, 1)", "purpose": "Scala, colore e icone dei controlli." },
+      { "name": "reveal", "value": "700ms cubic-bezier(0.2, 0, 0, 1)", "purpose": "Ingresso sobrio delle sezioni marketing, disabilitato con reduced motion." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary CTA",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Azione dominante per entrare nel percorso Qoovex.",
+      "html": "<button class=\"ds-btn-primary\">Scopri come funziona</button>",
+      "css": ".ds-btn-primary { height: 2.375rem; padding: 0 1rem; border: 1px solid transparent; border-radius: var(--radius, 0.5rem); background: var(--primary, #000); color: var(--primary-foreground, #fff); font: 500 1rem/1 var(--ff-sans, sans-serif); box-shadow: var(--shadow-2xs, 0 1px 2px rgba(0,0,0,.09)); transition: background-color 200ms var(--ease-standard, ease), transform 200ms var(--ease-standard, ease); } .ds-btn-primary:hover { background: color-mix(in oklch, var(--primary) 90%, transparent); transform: scale(1.015); } .ds-btn-primary:active { transform: scale(.97); } .ds-btn-primary:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Outline CTA",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Azione secondaria leggibile ma subordinata alla CTA primaria.",
+      "html": "<button class=\"ds-btn-outline\">Accedi</button>",
+      "css": ".ds-btn-outline { height: 2.375rem; padding: 0 1rem; border: 1px solid var(--border, #e5e5e5); border-radius: var(--radius, 0.5rem); background: var(--background, #fff); color: var(--foreground, #000); font: 500 1rem/1 var(--ff-sans, sans-serif); box-shadow: var(--shadow-2xs, 0 1px 2px rgba(0,0,0,.09)); transition: background-color 200ms var(--ease-standard, ease), transform 200ms var(--ease-standard, ease); } .ds-btn-outline:hover { background: color-mix(in oklch, var(--accent) 60%, transparent); transform: scale(1.015); } .ds-btn-outline:active { transform: scale(.97); } .ds-btn-outline:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Floating Navigation",
+      "kind": "nav",
+      "refersTo": "navigation-floating",
+      "description": "Shell pubblica traslucida che resta leggibile sopra il racconto.",
+      "html": "<nav class=\"ds-floating-nav\" aria-label=\"Navigazione principale\"><strong>Qoovex</strong><a href=\"#\">Come funziona</a><a href=\"#\">Imprese</a><button>Accedi</button></nav>",
+      "css": ".ds-floating-nav { display: flex; align-items: center; gap: .5rem; min-height: 3.5rem; padding: 0 1rem; border: 1px solid var(--border, #e5e5e5); border-radius: 1rem; background: color-mix(in oklch, var(--background, #fff) 80%, transparent); color: var(--foreground, #000); box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,.18)); backdrop-filter: blur(20px); font-family: var(--ff-sans, sans-serif); } .ds-floating-nav strong { margin-right: auto; } .ds-floating-nav a { padding: .375rem .75rem; border-radius: 9999px; color: var(--muted-foreground, #666); text-decoration: none; font-size: .75rem; font-weight: 500; } .ds-floating-nav a:hover { background: var(--accent, #eee); color: var(--foreground, #000); } .ds-floating-nav a:focus-visible, .ds-floating-nav button:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; } .ds-floating-nav button { height: 2rem; padding: 0 .75rem; border: 0; border-radius: .5rem; background: transparent; color: inherit; }"
+    },
+    {
+      "name": "Marketing Bento Card",
+      "kind": "card",
+      "refersTo": "marketing-card",
+      "description": "Blocco narrativo ampio con bordo, tono e contenuto operativo.",
+      "html": "<article class=\"ds-bento-card\"><span class=\"ds-bento-label\">IL PROBLEMA</span><h3>Informazioni in troppi posti</h3><p>Foto, messaggi e documenti perdono il contesto del lavoro.</p></article>",
+      "css": ".ds-bento-card { padding: 1.5rem; border: 1px solid color-mix(in oklch, var(--border, #e5e5e5) 80%, transparent); border-radius: 1rem; background: color-mix(in oklch, var(--card, #fff) 96%, var(--foreground, #000) 4%); color: var(--card-foreground, #000); font-family: var(--ff-sans, sans-serif); } .ds-bento-label { font: 600 .75rem/1 var(--ff-accent, sans-serif); letter-spacing: .08em; color: var(--muted-foreground, #666); } .ds-bento-card h3 { margin: .75rem 0 .5rem; font-size: 1.25rem; line-height: 1.4; letter-spacing: -.02em; } .ds-bento-card p { margin: 0; max-width: 60ch; color: var(--muted-foreground, #666); line-height: 1.7; }"
+    },
+    {
+      "name": "Product Frame",
+      "kind": "custom",
+      "refersTo": "marketing-card",
+      "description": "Cornice neutra per esempi credibili dell'interfaccia Qoovex.",
+      "html": "<section class=\"ds-product-frame\"><header><span></span><span></span><span></span><strong>Richieste</strong></header><div><p>La modifica richiede una risposta</p><small>Ristrutturazione appartamento</small></div></section>",
+      "css": ".ds-product-frame { overflow: hidden; border: 1px solid var(--border, #e5e5e5); border-radius: 1rem; background: var(--card, #fff); color: var(--card-foreground, #000); box-shadow: var(--shadow-lg, 0 4px 8px rgba(0,0,0,.16)); font-family: var(--ff-sans, sans-serif); } .ds-product-frame header { display: flex; align-items: center; gap: .375rem; padding: .75rem 1rem; border-bottom: 1px solid var(--border, #e5e5e5); background: color-mix(in oklch, var(--muted, #f2f2f2) 40%, transparent); } .ds-product-frame header span { width: .625rem; height: .625rem; border-radius: 9999px; background: color-mix(in oklch, var(--foreground, #000) 15%, transparent); } .ds-product-frame header strong { margin-left: .375rem; font-size: .75rem; } .ds-product-frame > div { padding: 1rem; } .ds-product-frame p { margin: 0; font-size: .875rem; font-weight: 500; } .ds-product-frame small { color: var(--muted-foreground, #666); }"
+    },
+    {
+      "name": "Confirmation Badge",
+      "kind": "chip",
+      "refersTo": "badge-status",
+      "description": "Stato positivo breve, semantico e non decorativo.",
+      "html": "<span class=\"ds-badge-success\">Condiviso</span>",
+      "css": ".ds-badge-success { display: inline-flex; align-items: center; min-height: 1.375rem; padding: 0 .625rem; border: 1px solid color-mix(in oklch, var(--success) 20%, transparent); border-radius: 9999px; background: color-mix(in oklch, var(--success) 10%, transparent); color: var(--success); font: 500 .75rem/1 var(--ff-accent, sans-serif); letter-spacing: .04em; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Campo neutro per contatti e composizioni pubbliche.",
+      "html": "<label class=\"ds-field\"><span>Email</span><input type=\"email\" placeholder=\"nome@azienda.it\"></label>",
+      "css": ".ds-field { display: grid; gap: .5rem; color: var(--foreground, #000); font: 500 .875rem/1.25 var(--ff-sans, sans-serif); } .ds-field input { height: 2.25rem; padding: .375rem .75rem; border: 1px solid var(--input, #e5e5e5); border-radius: .5rem; background: transparent; color: inherit; font: 400 1rem/1.4 var(--ff-sans, sans-serif); transition: border-color 150ms var(--ease-standard, ease), box-shadow 150ms var(--ease-standard, ease); } .ds-field input::placeholder { color: var(--muted-foreground, #666); } .ds-field input:focus-visible { border-color: var(--ring, #000); outline: 2px solid color-mix(in oklch, var(--ring, #000) 30%, transparent); outline-offset: 1px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Il Cantiere in Chiaro",
+    "overview": "Qoovex Web tratta la trasparenza come una condizione spaziale: contenuti ariosi, gerarchie nette e prove di prodotto incorniciate con precisione permettono di vedere il lavoro senza rumore. La monocromia Calce/Inchiostro mantiene il racconto calmo e credibile; Nebbia e Grafite costruiscono il ritmo, mentre il colore semantico appare soltanto quando aggiunge significato.\n\nLa superficie pubblica è più aperta, narrativa e persuasiva delle altre superfici Qoovex, ma resta umana e operativa. Griglie sottili, bento asimmetrici, cornici di prodotto e movimento misurato mostrano il sistema in azione senza trasformarlo in spettacolo o promettere ciò che non è verificato.",
+    "keyCharacteristics": [
+      "Monocromia dominante con colore semantico raro e motivato.",
+      "Contenitori ampi, ritmo verticale generoso e composizioni asimmetriche leggibili.",
+      "Interfacce e prove incorniciate come parte del racconto, non come decorazione.",
+      "Movimento sobrio, progressivo e sempre compatibile con reduced motion.",
+      "Un tono rassicurante e concreto, mai freddo da software enterprise e mai giocoso."
+    ],
+    "rules": [
+      { "name": "The Monochrome First Rule", "body": "Una sezione deve funzionare in Calce, Inchiostro, Nebbia e Grafite prima di ricevere un colore semantico.", "section": "colors" },
+      { "name": "The Meaning Before Color Rule", "body": "Rosso, blu, verde e ambra descrivono stato o conseguenza; non sono accenti decorativi di marketing.", "section": "colors" },
+      { "name": "The Array Is a Signature Rule", "body": "Array firma dettagli brevi; General Sans continua a portare quasi tutta la voce del prodotto.", "section": "typography" },
+      { "name": "The Short Display Rule", "body": "I titoli principali usano scala e spazio, non peso eccessivo o blocchi di testo troppo lunghi.", "section": "typography" },
+      { "name": "The One Reading Path Rule", "body": "Anche nelle composizioni asimmetriche, titolo, prova e prossimo passo devono mantenere un ordine di lettura evidente.", "section": "layout" },
+      { "name": "The Layer Before Shadow Rule", "body": "Prima si separano i piani con tono e bordo; l'ombra entra soltanto quando deve chiarire gerarchia o interazione.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do costruire prima una gerarchia monocromatica e aggiungere colore soltanto a uno stato reale.",
+      "Do usare spazio, titoli brevi e prove incorniciate per rendere comprensibile il prodotto.",
+      "Do mantenere una CTA primaria riconoscibile e azioni secondarie visivamente più quiete.",
+      "Do rispettare tema scuro, forced colors, focus visibile e reduced motion in ogni composizione."
+    ],
+    "donts": [
+      "Don't usare colori semantici come decorazione o creare gradienti cromatici estranei alla palette neutra.",
+      "Don't trasformare ogni blocco in una card sollevata; bordo e tono sono la base della profondità.",
+      "Don't usare Array per paragrafi, titoli lunghi o navigazione primaria estesa.",
+      "Don't rendere il sito freddo da enterprise, giocoso o spettacolare a scapito di fiducia e chiarezza.",
+      "Don't inventare prove, testimonianze o capability per riempire una composizione."
+    ]
+  }
+}

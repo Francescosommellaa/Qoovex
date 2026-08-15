@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-14T23:43:21.181Z",
+  "title": "Design System: Qoovex Workspace",
+  "extensions": {
+    "colorMeta": {
+      "calce": {
+        "role": "neutral",
+        "displayName": "Calce",
+        "canonical": "var(--background)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "inchiostro": {
+        "role": "neutral",
+        "displayName": "Inchiostro",
+        "canonical": "var(--foreground)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "superficie": {
+        "role": "neutral",
+        "displayName": "Superficie Calce",
+        "canonical": "var(--card)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "superficie-popover": {
+        "role": "neutral",
+        "displayName": "Superficie Popover",
+        "canonical": "var(--popover)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "azione-principale": {
+        "role": "primary",
+        "displayName": "Azione Inchiostro",
+        "canonical": "var(--primary)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "azione-principale-foreground": {
+        "role": "neutral",
+        "displayName": "Contrasto Azione",
+        "canonical": "var(--primary-foreground)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "secondario": {
+        "role": "neutral",
+        "displayName": "Secondario Nebbia",
+        "canonical": "var(--secondary)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "nebbia": {
+        "role": "neutral",
+        "displayName": "Nebbia",
+        "canonical": "var(--muted)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "grafite": {
+        "role": "neutral",
+        "displayName": "Grafite",
+        "canonical": "var(--muted-foreground)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "accento": {
+        "role": "neutral",
+        "displayName": "Accento Nebbia",
+        "canonical": "var(--accent)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "bordo": {
+        "role": "neutral",
+        "displayName": "Bordo Grafite",
+        "canonical": "var(--border)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "campo": {
+        "role": "neutral",
+        "displayName": "Campo Grafite",
+        "canonical": "var(--input)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "anello-focus": {
+        "role": "neutral",
+        "displayName": "Focus Inchiostro",
+        "canonical": "var(--ring)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.27 0 0)", "oklch(0.39 0 0)", "oklch(0.52 0 0)", "oklch(0.65 0 0)", "oklch(0.77 0 0)", "oklch(0.89 0 0)", "oklch(0.97 0 0)"]
+      },
+      "segnale-rosso": {
+        "role": "semantic",
+        "displayName": "Segnale Rosso",
+        "canonical": "var(--destructive)",
+        "tonalRamp": ["oklch(0.15 0.08 23)", "oklch(0.27 0.12 23)", "oklch(0.39 0.16 23)", "oklch(0.52 0.19 23)", "oklch(0.64 0.17 23)", "oklch(0.75 0.13 23)", "oklch(0.86 0.08 23)", "oklch(0.95 0.03 23)"]
+      },
+      "informazione-blu": {
+        "role": "semantic",
+        "displayName": "Informazione Blu",
+        "canonical": "var(--info)",
+        "tonalRamp": ["oklch(0.15 0.08 264)", "oklch(0.27 0.13 264)", "oklch(0.39 0.18 264)", "oklch(0.52 0.22 264)", "oklch(0.64 0.18 264)", "oklch(0.75 0.14 264)", "oklch(0.86 0.08 264)", "oklch(0.95 0.03 264)"]
+      },
+      "conferma-verde": {
+        "role": "semantic",
+        "displayName": "Conferma Verde",
+        "canonical": "var(--success)",
+        "tonalRamp": ["oklch(0.15 0.06 145)", "oklch(0.27 0.09 145)", "oklch(0.39 0.13 145)", "oklch(0.51 0.15 145)", "oklch(0.64 0.14 145)", "oklch(0.75 0.11 145)", "oklch(0.86 0.07 145)", "oklch(0.95 0.03 145)"]
+      },
+      "attenzione-ambra": {
+        "role": "semantic",
+        "displayName": "Attenzione Ambra",
+        "canonical": "var(--warning)",
+        "tonalRamp": ["oklch(0.15 0.05 75)", "oklch(0.27 0.08 75)", "oklch(0.39 0.11 75)", "oklch(0.52 0.14 75)", "oklch(0.65 0.16 75)", "oklch(0.78 0.17 75)", "oklch(0.88 0.11 75)", "oklch(0.95 0.04 75)"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Orientamento",
+        "purpose": "Titoli di pagina e momenti principali di orientamento."
+      },
+      "title": {
+        "displayName": "Titolo Operativo",
+        "purpose": "Titoli di card, pannelli e gruppi funzionali."
+      },
+      "body": {
+        "displayName": "Voce Principale",
+        "purpose": "Copy operativo, descrizioni e contenuto dei controlli."
+      },
+      "label": {
+        "displayName": "Accento Informativo",
+        "purpose": "Badge, intestazioni tabellari, valori e metadati compatti."
+      }
+    },
+    "shadows": [
+      {
+        "name": "contact-minimal",
+        "value": "0 1px 2px 0 hsl(0 0% 0% / 0.09)",
+        "purpose": "Contatto minimo per pulsanti, card e superfici a riposo."
+      },
+      {
+        "name": "operational-lift",
+        "value": "0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 2px 4px -1px hsl(0 0% 0% / 0.18)",
+        "purpose": "Sollevamento contenuto per hover e pannelli temporanei."
+      },
+      {
+        "name": "overlay",
+        "value": "0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 8px 10px -1px hsl(0 0% 0% / 0.18)",
+        "purpose": "Separazione di dialog, sheet e superfici di autenticazione."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.2, 0, 0, 1)",
+        "purpose": "Transizioni ordinarie di stato e colore."
+      },
+      {
+        "name": "indicator-slide",
+        "value": "260ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Indicatori scorrevoli in tab, menu e navigazione."
+      },
+      {
+        "name": "dialog-spring",
+        "value": "300ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "purpose": "Entrata e uscita morbida di dialog e sheet."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0.01ms",
+        "purpose": "Durata sostitutiva applicata quando l'utente richiede movimento ridotto."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Azione primaria compatta, ad alto contrasto e con tattilità discreta.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">Continua</button>",
+      "css": ".ds-btn-primary { height: 32px; display: inline-flex; align-items: center; justify-content: center; padding: 0 12px; border: 1px solid transparent; border-radius: 8px; background: var(--primary, #000); color: var(--primary-foreground, #fff); font-family: var(--ff-sans, sans-serif); font-size: 14px; font-weight: 500; box-shadow: var(--shadow-2xs, 0 1px 2px rgb(0 0 0 / 9%)); transition: background-color 200ms, transform 200ms; cursor: pointer; } .ds-btn-primary:hover { background: color-mix(in oklch, var(--primary, #000) 90%, transparent); transform: scale(1.015); } .ds-btn-primary:active { transform: scale(0.97); } .ds-btn-primary:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Azione secondaria leggibile che rimane sul piano della superficie.",
+      "html": "<button class=\"ds-btn-outline\" type=\"button\">Torna indietro</button>",
+      "css": ".ds-btn-outline { height: 32px; display: inline-flex; align-items: center; justify-content: center; padding: 0 12px; border: 1px solid var(--border, #e5e5e5); border-radius: 8px; background: var(--background, #fff); color: var(--foreground, #000); font-family: var(--ff-sans, sans-serif); font-size: 14px; font-weight: 500; box-shadow: var(--shadow-2xs, 0 1px 2px rgb(0 0 0 / 9%)); transition: background-color 200ms, transform 200ms; cursor: pointer; } .ds-btn-outline:hover { background: color-mix(in oklch, var(--accent, #efefef) 60%, transparent); transform: scale(1.015); } .ds-btn-outline:active { transform: scale(0.97); } .ds-btn-outline:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "description": "Azione quieta per utility e comandi iconici senza creare una nuova superficie.",
+      "html": "<button class=\"ds-btn-ghost\" type=\"button\">Altre azioni</button>",
+      "css": ".ds-btn-ghost { height: 32px; display: inline-flex; align-items: center; justify-content: center; padding: 0 12px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--foreground, #000); font-family: var(--ff-sans, sans-serif); font-size: 14px; font-weight: 500; transition: background-color 150ms; cursor: pointer; } .ds-btn-ghost:hover, .ds-btn-ghost:active { background: color-mix(in oklch, var(--accent, #efefef) 80%, transparent); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Operational Card",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "Contenitore operativo stratificato tramite superficie, bordo e ombra minima.",
+      "html": "<article class=\"ds-card\"><h3>Riepilogo cantiere</h3><p>Stato, attività e prossime azioni rimangono nello stesso contesto.</p></article>",
+      "css": ".ds-card { display: grid; gap: 8px; padding: 24px; border: 1px solid var(--border, #e5e5e5); border-radius: 12px; background: var(--card, #fff); color: var(--card-foreground, #000); font-family: var(--ff-sans, sans-serif); box-shadow: var(--shadow-2xs, 0 1px 2px rgb(0 0 0 / 9%)); } .ds-card h3 { margin: 0; font-size: 16px; line-height: 1.375; font-weight: 600; letter-spacing: -0.015em; } .ds-card p { margin: 0; max-width: 65ch; color: var(--muted-foreground, #666); font-size: 14px; line-height: 1.5; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Campo compatto con bordo leggibile e focus contenuto.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Nome del cantiere\" aria-label=\"Nome del cantiere\">",
+      "css": ".ds-input { width: 100%; height: 36px; padding: 6px 12px; border: 1px solid var(--input, #e5e5e5); border-radius: 8px; background: transparent; color: var(--foreground, #000); font-family: var(--ff-sans, sans-serif); font-size: 14px; line-height: 20px; transition: border-color 150ms, box-shadow 150ms; } .ds-input::placeholder { color: var(--muted-foreground, #666); } .ds-input:hover { border-color: color-mix(in oklch, var(--foreground, #000) 24%, var(--input, #e5e5e5)); } .ds-input:focus-visible { border-color: var(--ring, #000); outline: none; box-shadow: 0 0 0 1px color-mix(in oklch, var(--ring, #000) 30%, transparent); }"
+    },
+    {
+      "name": "Warning Status Badge",
+      "kind": "chip",
+      "refersTo": "badge-status",
+      "description": "Stato semantico a pillola con Array e segnale ambra diluito.",
+      "html": "<span class=\"ds-badge-warning\">Attende conferma</span>",
+      "css": ".ds-badge-warning { height: 22px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; border: 1px solid color-mix(in oklch, var(--warning, #d69a00) 25%, transparent); border-radius: 999px; background: color-mix(in oklch, var(--warning, #d69a00) 15%, transparent); color: var(--warning-emphasis, #7a5600); font-family: var(--ff-accent, var(--ff-sans, sans-serif)); font-size: 12px; font-weight: 500; letter-spacing: 0.025em; } .ds-badge-warning:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Workspace Navigation Item",
+      "kind": "nav",
+      "description": "Voce di navigazione con icona Tabler, stato tonale e feedback morbido.",
+      "html": "<a class=\"ds-nav-item\" href=\"#\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M4 4h6v8H4zM4 16h6v4H4zM14 4h6v4h-6zM14 12h6v8h-6z\"></path></svg><span>Panoramica</span></a>",
+      "css": ".ds-nav-item { height: 32px; display: flex; align-items: center; gap: 8px; padding: 0 8px; border-radius: 8px; color: var(--sidebar-foreground, var(--foreground, #000)); background: transparent; font-family: var(--ff-sans, sans-serif); font-size: 14px; font-weight: 500; text-decoration: none; transition: background-color 150ms, transform 200ms; } .ds-nav-item svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; } .ds-nav-item:hover { background: var(--sidebar-accent, var(--accent, #efefef)); } .ds-nav-item:active { transform: scale(0.97); } .ds-nav-item:focus-visible { outline: 2px solid var(--sidebar-ring, var(--ring, currentColor)); outline-offset: 2px; }"
+    },
+    {
+      "name": "Information Alert",
+      "kind": "custom",
+      "description": "Messaggio operativo che combina segnale blu, titolo e spiegazione leggibile.",
+      "html": "<div class=\"ds-alert-info\" role=\"status\"><span class=\"ds-alert-info__mark\" aria-hidden=\"true\">i</span><div><strong>Informazione disponibile</strong><p>Controlla i dettagli prima di continuare.</p></div></div>",
+      "css": ".ds-alert-info { display: flex; gap: 12px; padding: 16px; border: 1px solid color-mix(in oklch, var(--info, #2563eb) 30%, transparent); border-radius: 8px; background: color-mix(in oklch, var(--info, #2563eb) 10%, transparent); color: var(--foreground, #000); font-family: var(--ff-sans, sans-serif); font-size: 14px; } .ds-alert-info__mark { width: 18px; height: 18px; display: grid; place-items: center; flex: 0 0 auto; border: 1px solid currentColor; border-radius: 999px; color: var(--info, #2563eb); font-family: var(--ff-accent, sans-serif); font-size: 11px; font-weight: 600; } .ds-alert-info strong { display: block; margin-bottom: 4px; font-weight: 600; } .ds-alert-info p { margin: 0; color: var(--muted-foreground, #666); line-height: 1.5; } .ds-alert-info:focus-within { outline: 2px solid var(--ring, currentColor); outline-offset: 2px; }"
+    },
+    {
+      "name": "Operational Table",
+      "kind": "custom",
+      "description": "Tabella compatta con intestazione Array, superficie stratificata e righe leggibili.",
+      "html": "<div class=\"ds-table-wrap\"><table class=\"ds-table\"><thead><tr><th>Cantiere</th><th>Stato</th></tr></thead><tbody><tr><td>Villa Rossi</td><td>In corso</td></tr><tr><td>Casa Bianchi</td><td>Attende conferma</td></tr></tbody></table></div>",
+      "css": ".ds-table-wrap { overflow: hidden; border: 1px solid var(--border, #e5e5e5); border-radius: 12px; background: var(--card, #fff); box-shadow: var(--shadow-2xs, 0 1px 2px rgb(0 0 0 / 9%)); } .ds-table { width: 100%; border-collapse: collapse; color: var(--foreground, #000); font-family: var(--ff-sans, sans-serif); font-size: 14px; } .ds-table th { padding: 12px 16px; background: color-mix(in oklch, var(--muted, #f5f5f5) 50%, transparent); color: var(--muted-foreground, #666); font-family: var(--ff-accent, sans-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-align: left; text-transform: uppercase; } .ds-table td { padding: 12px 16px; border-top: 1px solid var(--border, #e5e5e5); } .ds-table tbody tr { transition: background-color 150ms; } .ds-table tbody tr:hover { background: color-mix(in oklch, var(--muted, #f5f5f5) 40%, transparent); } .ds-table tbody tr:focus-within { outline: 2px solid var(--ring, currentColor); outline-offset: -2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Il Cantiere Trasparente",
+    "overview": "Qoovex Workspace deve sembrare un luogo di lavoro dove ogni elemento è visibile, ordinato e comprensibile. La struttura monocromatica riduce il rumore, mentre gerarchia, spaziatura e stati semantici aiutano persone diverse a capire cosa sta accadendo e quale azione viene dopo.\n\nIl carattere è rassicurante, calmo, accessibile, umano, tracciabile e operativo. L'interfaccia evita sia la freddezza impersonale del software enterprise sia il tono giocoso che indebolirebbe la fiducia in documenti, richieste e conferme. La precisione resta al servizio della semplicità, mai dell'esibizione tecnica.",
+    "keyCharacteristics": [
+      "Monocromia strutturale con colore riservato ai segnali che hanno un significato.",
+      "Gerarchie leggibili, contenuti compatti senza risultare compressi e prossimo passo sempre riconoscibile.",
+      "Superfici stratificate e contenute, definite prima da tono e bordo e solo dopo dall'ombra.",
+      "Interazioni tattili con discrezione, morbide, chiare e prevedibili.",
+      "Parità reale tra tema chiaro, tema scuro, tastiera, movimento ridotto e colori forzati."
+    ],
+    "rules": [
+      {
+        "name": "The Semantic Signal Rule",
+        "body": "Rosso, blu, verde e ambra compaiono soltanto quando il loro significato è reale; non colorano sezioni per varietà estetica.",
+        "section": "colors"
+      },
+      {
+        "name": "The Theme Parity Rule",
+        "body": "Tema chiaro e scuro mantengono la stessa gerarchia, gli stessi significati e la stessa leggibilità; nessuno dei due è una variante di seconda classe.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Voice Rule",
+        "body": "General Sans governa titoli, sottotitoli e testo; Array è un accento funzionale e non sostituisce mai la voce principale.",
+        "section": "typography"
+      },
+      {
+        "name": "The Next Step Rule",
+        "body": "Ogni composizione deve rendere evidente il prossimo passo senza affidarsi a memoria, hover o conoscenza del sistema.",
+        "section": "layout"
+      },
+      {
+        "name": "The Layered, Not Floating Rule",
+        "body": "Prima tono e bordo, poi ombra; l'elevazione deve spiegare una relazione spaziale o uno stato interattivo.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Soft Utility Rule",
+        "body": "Gli angoli accompagnano l'interazione senza trasformare card e controlli in bolle decorative.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Quiet Tactility Rule",
+        "body": "Hover, focus e press confermano l'interazione con piccoli cambi di tono, posizione o scala; non introducono movimento spettacolare.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do usare Calce, Inchiostro, Nebbia e Grafite per costruire la maggior parte della gerarchia.",
+      "Do riservare Segnale Rosso, Informazione Blu, Conferma Verde e Attenzione Ambra a stati verificabili.",
+      "Do rendere il prossimo passo visibile attraverso ordine, copy chiaro e priorità delle azioni.",
+      "Do usare General Sans per la voce principale e Array soltanto per accenti informativi circoscritti.",
+      "Do preservare tema chiaro/scuro, focus da tastiera, movimento ridotto e forced colors in ogni componente."
+    ],
+    "donts": [
+      "Don't rendere Workspace freddo, impersonale o denso come un software enterprise tradizionale.",
+      "Don't usare colori, forme gonfie, illustrazioni o motion con tono giocoso.",
+      "Don't aggiungere ombre se tono e bordo spiegano già la separazione.",
+      "Don't usare il colore come unico vettore di stato o autorizzazione.",
+      "Don't introdurre font, icone o primitive alternative alla foundation condivisa senza una decisione esplicita."
+    ]
+  }
+}

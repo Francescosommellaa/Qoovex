@@ -18,7 +18,7 @@ Regole:
 Endpoint infrastrutturali e attuale presenti:
 - `auth/credentials`: registrazione credentials verify-first, verifica email e reset password;
 - `account/notification-preferences`: preferenze personali di notifica collegate all'Azienda;
-- `org/[organizationId]`: cantieri, participant, inviti, agreement, timeline, step, richieste, proposte, pagamenti documentati, dispute, allegati, chiusura, post-chiusura, export e impostazioni attuale;
+- `job-sites`, `people` e `payment-profile`: superfici dell'unica Azienda collegata; gli handler derivano `organizationId` dalla sessione prima di delegare ai servizi tenant-scoped;
 - `client`: inviti, immobili privati, cantieri partecipati e proiezioni condivise participant-scoped;
 - `exports`: scambio autenticato di token opachi con grant brevi;
 - `internal/job-site`: runner processi e finalize allegati protetti da segreto interno;

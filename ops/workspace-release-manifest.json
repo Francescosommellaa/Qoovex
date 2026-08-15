@@ -2,15 +2,15 @@
   "schemaVersion": 3,
   "application": {
     "name": "qoovex-workspace",
-    "version": "account-role-single-organization-v1",
+    "version": "direct-workspace-routes-v1",
     "runtimeTrack": "job-site",
     "current": "implemented_not_end_to_end_verified"
   },
   "database": {
     "baselineHead": "20260720010000_calendar_events",
-    "migrationHead": "20260809020000_single_active_organization_membership",
-    "migrationCount": 8,
-    "productionMutationRequiredForAlignment": false,
+    "migrationHead": "20260813010000_direct_workspace_routes",
+    "migrationCount": 9,
+    "productionMutationRequiredForAlignment": true,
     "rolloutMode": "manual_cloud_build_forward_deploy",
     "ledger": "ops/migration-ledger.json"
   },

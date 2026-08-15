@@ -116,8 +116,9 @@ function PasswordInput({
         className="absolute top-1/2 right-2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
         onClick={() => setShowPassword(!showPassword)}
         aria-label={showPassword ? "Nascondi password" : "Mostra password"}
+        aria-pressed={showPassword}
       >
-        {showPassword ? <IconEyeOff /> : <IconEye />}
+        {showPassword ? <IconEyeOff aria-hidden="true" /> : <IconEye aria-hidden="true" />}
       </Button>
     </div>
   )
@@ -154,7 +155,7 @@ function SearchInput({
           onClick={onClear}
           aria-label="Azzera ricerca"
         >
-          <IconX />
+          <IconX aria-hidden="true" />
         </Button>
       ) : null}
     </div>
@@ -211,7 +212,7 @@ function PhoneInput({
         >
           <span>{selectedCountry.flag}</span>
           <span className="font-accent">{selectedCountry.dialCode}</span>
-          <IconChevronDown className="size-3.5 text-muted-foreground" />
+          <IconChevronDown aria-hidden="true" className="size-3.5 text-muted-foreground" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-64 p-2">
           <DropdownMenuGroup>
@@ -301,7 +302,7 @@ function CurrencyInput({
         >
           <span className="font-accent font-bold text-primary">{selectedCurrency.symbol}</span>
           <span className="font-accent text-muted-foreground">{selectedCurrency.code}</span>
-          <IconChevronDown className="size-3.5 text-muted-foreground" />
+          <IconChevronDown aria-hidden="true" className="size-3.5 text-muted-foreground" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-48 p-1.5">
           <DropdownMenuGroup>
@@ -371,8 +372,9 @@ function NumberInput({
         size="icon-xs"
         className="absolute left-1.5 z-10 size-6 rounded-md"
         onClick={handleDecrement}
+        aria-label="Riduci valore"
       >
-        <IconMinus className="size-3" />
+        <IconMinus aria-hidden="true" className="size-3" />
       </Button>
       <Input
         type="number"
@@ -390,8 +392,9 @@ function NumberInput({
         size="icon-xs"
         className="absolute right-1.5 z-10 size-6 rounded-md"
         onClick={handleIncrement}
+        aria-label="Aumenta valore"
       >
-        <IconPlus className="size-3" />
+        <IconPlus aria-hidden="true" className="size-3" />
       </Button>
     </div>
   )
@@ -515,12 +518,13 @@ function DatePickerInput({
               type="button"
               variant="ghost"
               size="icon-xs"
+              aria-label="Mese precedente"
               onClick={(e) => {
                 e.stopPropagation()
                 setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))
               }}
             >
-              <IconChevronLeft />
+              <IconChevronLeft aria-hidden="true" />
             </Button>
             <span className="text-xs font-semibold font-accent">
               {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
@@ -529,12 +533,13 @@ function DatePickerInput({
               type="button"
               variant="ghost"
               size="icon-xs"
+              aria-label="Mese successivo"
               onClick={(e) => {
                 e.stopPropagation()
                 setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))
               }}
             >
-              <IconChevronRight />
+              <IconChevronRight aria-hidden="true" />
             </Button>
           </div>
 

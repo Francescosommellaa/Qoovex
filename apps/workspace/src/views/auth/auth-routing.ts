@@ -10,3 +10,7 @@ export function sanitizeCallbackUrl(value: string | null | undefined) {
   }
   return value;
 }
+
+export function isClientInvitationCallbackUrl(value: string) {
+  return /^\/client\/invitations\/[^/?#]+$/.test(value);
+}

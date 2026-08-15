@@ -25,6 +25,7 @@ import {
   RequestForm,
   StepForm,
   TimelineForm,
+  contextualAttachmentFormData,
 } from "./JobSiteForms";
 import { JobSiteSearch } from "./JobSiteSearch";
 import { NotificationPreferencesForm } from "./NotificationPreferencesForm";
@@ -36,7 +37,7 @@ vi.mock("next/navigation", () => ({
 function OperationalFormsFixture() {
   const endpoint = "/api/test";
   return <>
-    <CreateJobSiteForm organizationId="org-1" />
+    <CreateJobSiteForm />
     <TimelineForm endpoint={endpoint} revision={1} />
     <TimelineForm client endpoint={endpoint} revision={1} />
     <InviteClientForm endpoint={endpoint} revision={1} />
@@ -46,7 +47,7 @@ function OperationalFormsFixture() {
     <DisputeForm endpoint={endpoint} revision={1} />
     <RequestForm endpoint={endpoint} revision={1} />
     <AttachmentForm endpoint={endpoint} revision={1} />
-    <AttachmentForm client endpoint={endpoint} relatedTargets={[{ category: "REQUEST", id: "request-1", label: "Richiesta" }]} revision={1} />
+    <AttachmentForm client context={{ category: "REQUEST", relatedId: "request-1", title: "Allega file a questa richiesta" }} endpoint={endpoint} revision={1} />
     <PropertyForm />
     <LinkPropertyForm jobSites={[{ id: "job-site-1", label: "Cantiere" }]} propertyId="property-1" />
     <PaymentProfileForm endpoint={endpoint} revision={1} />
@@ -55,7 +56,7 @@ function OperationalFormsFixture() {
     <CollaboratorInviteForm endpoint={endpoint} />
     <ParticipantForm endpoint={endpoint} memberships={[{ id: "membership-1", label: "Mario Rossi" }]} />
     <PaymentRequestForm endpoint={endpoint} paymentProfileId="profile-1" revision={1} />
-    <PaymentDeclarationForm amountMinor="10000" endpoint={endpoint} paymentRequestId="payment-1" receiptAttachments={[{ id: "attachment-1", label: "Ricevuta" }]} revision={1} />
+    <PaymentDeclarationForm amountMinor="10000" endpoint={endpoint} paymentRequestId="payment-1" reason="Acconto lavori" receiptAttachments={[{ id: "attachment-1", label: "Ricevuta" }]} revision={1} />
     <PaymentReviewForm endpoint={endpoint} paymentRequestId="payment-1" revision={1} />
     <AuthorityGrantForm endpoint={endpoint} participants={[{ id: "participant-1", label: "Mario Rossi" }]} revision={1} />
     <RecordTransitionForm actions={[{ label: "Conferma", value: "CONFIRM" }]} endpoint={endpoint} revision={1} />
@@ -83,6 +84,16 @@ function fieldControlAttributes(html: string, name: string) {
 }
 
 describe("accessibilità dei form operativi del cantiere", () => {
+  it("mostra l'unica Azienda come contesto e usa il selettore solo quando serve davvero", () => {
+    const singleOrganizationHtml = renderToStaticMarkup(<NotificationPreferencesForm organizations={[{ id: "organization-1", name: "Edilizia Rossi" }]} />);
+    const multipleOrganizationsHtml = renderToStaticMarkup(<NotificationPreferencesForm organizations={[{ id: "organization-1", name: "Edilizia Rossi" }, { id: "organization-2", name: "Edilizia Bianchi" }]} />);
+
+    expect(singleOrganizationHtml).toContain("Edilizia Rossi");
+    expect(singleOrganizationHtml).toContain('name="organizationId"');
+    expect(singleOrganizationHtml).not.toContain('data-field-name="organizationId"');
+    expect(multipleOrganizationsHtml).toContain('data-field-name="organizationId"');
+  });
+
   it("associa una label visibile e un id univoco a ogni controllo", () => {
     const html = renderToStaticMarkup(<OperationalFormsFixture />);
     const customControlNames = new Set([...html.matchAll(/<(button|input|select|span|textarea)\b([^>]*)>/g)]
@@ -162,7 +173,7 @@ describe("accessibilità dei form operativi del cantiere", () => {
 
     const html = renderToStaticMarkup(<OperationalFormsFixture />);
     expect(html).not.toMatch(/<select\b/);
-    expect(html.match(/data-slot="select-trigger"/g)?.length).toBeGreaterThanOrEqual(14);
+    expect(html.match(/data-slot="select-trigger"/g)?.length).toBeGreaterThanOrEqual(13);
     expect(html.match(/data-slot="checkbox"/g)?.length).toBe(6);
     expect(html).toContain("PDF, immagini JPG, PNG o WebP e video MP4, WebM o MOV, fino a 4 MB.");
     expect(html).toContain("Nessun file selezionato.");
@@ -173,6 +184,44 @@ describe("accessibilità dei form operativi del cantiere", () => {
     for (const technicalValue of ["NO_PRICE_CHANGE", "CLARIFICATION_REQUIRED", "COMMERCIAL_NEGOTIATE"]) {
       expect(html).not.toContain(`>${technicalValue}<`);
     }
+  });
+
+  it("collega il file cliente al contesto senza mostrare o richiedere identificativi interni", () => {
+    const html = renderToStaticMarkup(<AttachmentForm client context={{ category: "PAYMENT_RECEIPT", relatedId: "payment-internal-id", title: "Allega ricevuta di pagamento" }} endpoint="/api/test/attachments" revision={1} />);
+    const organizationHtml = renderToStaticMarkup(<AttachmentForm context={{ category: "REQUEST", relatedId: "request-internal-id", title: "Allega file a questa richiesta" }} endpoint="/api/test/attachments" revision={1} />);
+    const genericHtml = renderToStaticMarkup(<AttachmentForm endpoint="/api/test/attachments" revision={1} />);
+
+    expect(html).toContain("Allega ricevuta di pagamento");
+    expect(html).toContain("Il file sarà allegato all&#x27;elemento mostrato qui sopra.");
+    expect(html).toContain('name="file"');
+    expect(html).not.toContain("payment-internal-id");
+    expect(html).not.toContain('name="relatedId"');
+    expect(html).not.toContain("Tipo di elemento");
+    expect(html).not.toContain("Elemento da documentare");
+    expect(organizationHtml).toContain("Allega file a questa richiesta");
+    expect(organizationHtml).toContain("Scegli se il file resta interno oppure viene condiviso con il cliente.");
+    expect(organizationHtml).not.toContain("request-internal-id");
+    expect(organizationHtml).not.toContain('name="relatedId"');
+    expect(organizationHtml).not.toContain("Tipo di file");
+    expect(genericHtml).toContain("Aggiungi file al cantiere");
+    expect(genericHtml).toContain("Usa questo caricamento solo per file del cantiere che non appartengono a una richiesta, proposta, disaccordo o pagamento.");
+    expect(genericHtml).not.toContain("Ricevuta di pagamento");
+  });
+
+  it("invia l'associazione contestuale e mantiene l'errore del file locale", async () => {
+    const data = contextualAttachmentFormData(new FormData(), { category: "DISPUTE", relatedId: "dispute-1", title: "Allega file a questo disaccordo" }, 7);
+    const jobSiteForms = await import("./JobSiteForms") as unknown as Record<string, unknown>;
+    const resolveFailure = jobSiteForms.resolveMutationFailure as ((form: HTMLFormElement | null, failure: { message: string; fieldErrors?: Record<string, string[]> }) => { error: string | null; fieldErrors: Record<string, string[]>; firstFieldName: string | null }) | undefined;
+
+    expect(data.get("category")).toBe("DISPUTE");
+    expect(data.get("relatedId")).toBe("dispute-1");
+    expect(data.get("audience")).toBeNull();
+    expect(data.get("expectedRevision")).toBe("7");
+    expect(resolveFailure).toBeTypeOf("function");
+    if (!resolveFailure) return;
+
+    const failure = resolveFailure({ elements: [{ name: "file" }] } as unknown as HTMLFormElement, { message: "File non valido.", fieldErrors: { file: ["FILE_INVALID"] } });
+    expect(failure).toEqual({ error: null, fieldErrors: { file: ["Scegli un file valido."] }, firstFieldName: "file" });
   });
 
   it("propaga disabled ai controlli canonici durante operazioni non disponibili", async () => {
@@ -215,6 +264,9 @@ describe("accessibilità dei form operativi del cantiere", () => {
 
     const generalFailure = resolveFailure(form, { message: "Operazione non disponibile." });
     expect(generalFailure).toEqual({ error: "Operazione non disponibile.", fieldErrors: {}, firstFieldName: null });
+
+    const disagreementFailure = resolveFailure(form, { message: "Disputa non disponibile." });
+    expect(disagreementFailure).toEqual({ error: "Disaccordo non disponibile.", fieldErrors: {}, firstFieldName: null });
     focus.mockClear();
     focusField(form, generalFailure.firstFieldName);
     expect(focus).not.toHaveBeenCalled();
