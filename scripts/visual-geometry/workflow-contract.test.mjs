@@ -25,7 +25,10 @@ test("visual geometry CI is a read-only required-check candidate", async () => {
   assert.match(workflow, /pnpm install --frozen-lockfile/);
   assert.match(workflow, /pnpm visual:geometry:self-test/);
   assert.match(workflow, /pnpm visual:geometry$/m);
-  assert.match(workflow, /git -C "\$GITHUB_WORKSPACE" diff --check/);
+  assert.match(
+    workflow,
+    /git --git-dir="\$GITHUB_WORKSPACE\/\.git" --work-tree="\$GITHUB_WORKSPACE" diff --check/,
+  );
   assert.doesNotMatch(workflow, /visual:geometry:update|update-snapshots/i);
 });
 

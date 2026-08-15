@@ -35,7 +35,7 @@ jobs:
       - name: Prove fail-closed visual behavior
         run: pnpm visual:geometry:self-test
       - name: Verify committed diff whitespace
-        run: git -C "$GITHUB_WORKSPACE" diff --check
+        run: git --git-dir="$GITHUB_WORKSPACE/.git" --work-tree="$GITHUB_WORKSPACE" diff --check
       - name: Verify governed geometry and screenshots
         run: pnpm visual:geometry
       - name: Summarize visual results
