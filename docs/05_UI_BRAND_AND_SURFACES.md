@@ -6,6 +6,10 @@ La foundation visiva corrente resta invariata: shadcn base-nova, Base UI, Tabler
 
 Impeccable è un layer specializzato obbligatorio di controllo UI/UX, subordinato alle fonti canoniche Qoovex e al codice reale. I context condivisi di Workspace, Web, Sirio e `packages/ui` restano versionati; la distribuzione della skill non è vendorizzata e non costituisce una nuova fonte di verità. Se l'hook automatico non è disponibile, una task UI richiede il detector o la review manuale appropriata prima del completamento.
 
+UI Skills è integrato come registry specialistica on-demand, non come nuova foundation. Il repository versiona soltanto il router `.agents/skills/ui-skills-root`, mentre i comandi `pnpm ui-skills:*` interrogano la CLI pin-nata `ui-skills@0.2.4`. Le skill esterne restano advisory, vengono selezionate nel numero minimo necessario e non possono sostituire le fonti Qoovex, Impeccable o `qoovex-ux-motion`. La copia UI Skills di Impeccable è esplicitamente esclusa per evitare una seconda distribuzione concorrente.
+
+Per interaction e motion il routing è: protocollo Qoovex -> Impeccable context/detector -> `qoovex-ux-motion` -> eventuale specialista UI Skills circoscritto -> tecnologia minima sufficiente -> review Impeccable -> gate Qoovex. La presenza del package `motion` o di una skill Motion esterna non rende Motion runtime obbligatorio; CSS/Tailwind, Base UI, API native del browser o nessuna animazione restano soluzioni valide quando sufficienti.
+
 ## Onboarding e destinazione
 
 Dopo autenticazione l'account sceglie una sola volta `BUSINESS`, `PROFESSIONAL` o `CLIENT`. Senza ruolo non può entrare in un contesto tenant o participant. Un account `BUSINESS` crea e usa una sola Azienda attiva; non esiste una vista per scegliere tra più Aziende. `PROFESSIONAL` attende o accetta un invito Collaborator compatibile; `CLIENT` accede soltanto ai cantieri a cui partecipa.
