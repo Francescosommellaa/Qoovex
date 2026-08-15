@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
     branches: [master]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -25,7 +26,9 @@ jobs:
           cache: pnpm
       - run: pnpm ci:install
       - name: Run skill governance tests
-        run: node --test scripts/skills/*.test.mjs
+        run: pnpm skills:test
       - name: Run skill doctor
-        run: node scripts/skills/doctor.mjs --ci
+        run: pnpm skills:doctor -- --ci
+      - name: Run deterministic routing canary
+        run: pnpm skills:canary
       - run: git diff --check
