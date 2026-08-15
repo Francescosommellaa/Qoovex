@@ -144,6 +144,27 @@ export default function ControlsCatalogPage() {
                 </div>
               </div>
             </Specimen>
+
+            <Specimen title="Stati">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-2">
+                  <Switch id="switch-state-unchecked" />
+                  <label htmlFor="switch-state-unchecked" className="text-sm font-medium leading-none cursor-pointer">Unchecked</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Switch id="switch-state-checked" defaultChecked />
+                  <label htmlFor="switch-state-checked" className="text-sm font-medium leading-none cursor-pointer">Checked</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Switch id="switch-state-disabled-unchecked" disabled />
+                  <label htmlFor="switch-state-disabled-unchecked" className="text-sm font-medium leading-none cursor-not-allowed opacity-60">Disabled unchecked</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Switch id="switch-state-disabled-checked" disabled defaultChecked />
+                  <label htmlFor="switch-state-disabled-checked" className="text-sm font-medium leading-none cursor-not-allowed opacity-60">Disabled checked</label>
+                </div>
+              </div>
+            </Specimen>
           </SpecimenGrid>
         </section>
 

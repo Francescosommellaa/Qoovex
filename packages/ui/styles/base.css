@@ -238,16 +238,58 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  html {
+    scroll-behavior: auto;
   }
 
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none !important;
+  }
+
+  /* Preserve Base UI lifecycle while making spatial surface changes immediate. */
+  :where(
+    .animate-in,
+    .animate-out,
+    [data-open][class*="animate"],
+    [data-closed][class*="animate"]
+  ) {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  :where(
+    [data-open][class*="transition"],
+    [data-closed][class*="transition"],
+    [data-starting-style][class*="transition"],
+    [data-ending-style][class*="transition"],
+    [data-navigation-mode]
+  ) {
+    transition-duration: 1ms !important;
+  }
+
+  /* Decorative and repeated motion is removed; state remains visible. */
+  :where(
+    .animate-spin,
+    .animate-ping,
+    .animate-pulse,
+    .animate-float,
+    .animate-float-delayed,
+    [data-slot="otp-input"][data-status="error"]
+  ) {
+    animation: none !important;
+  }
+
+  /* Measured hover indicators are spatial feedback, not essential state. */
+  :where(
+    .sliding-indicator,
+    .tabs__hover-indicator,
+    .dropdown-menu__hover-indicator,
+    .select__hover-indicator,
+    .sidebar__hover-indicator,
+    .table__hover-indicator
+  ) {
+    transition: none !important;
   }
 }
 

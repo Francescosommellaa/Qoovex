@@ -69,7 +69,12 @@
   --text-sm: 0.875rem;
   --leading-tight: 1.25;
   --z-sticky: 40;
+  --motion-duration-instant: 100ms;
+  --motion-duration-feedback: 160ms;
+  --motion-duration-state: 200ms;
+  --motion-duration-surface: 300ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
   --link-underline-color: color-mix(in oklch, currentColor 42%, transparent);
   --link-underline-offset: 0.2em;
   --link-underline-thickness: max(1px, 0.07em);
