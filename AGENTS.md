@@ -34,13 +34,43 @@ Il routing specialistico si attiva per task che toccano componenti o layout UI, 
 
 Se l'hook automatico non è disponibile o non risolve la superficie corretta, una task UI non può essere dichiarata completata senza eseguire nel context corretto il detector/review Impeccable manuale appropriato. Se anche la skill, il context o il workflow manuale richiesti non sono disponibili, dichiaralo come `hard_stop`: non sostituirli silenziosamente e non dichiarare conclusa la review.
 
+## UI Skills specialist routing
+
+UI Skills è un catalogo esterno di competenze specialistiche on-demand. Non sostituisce Qoovex, Impeccable, Base UI, `qoovex-ux-motion`, Sirio o i gate repository-local. La root skill versionata è `.agents/skills/ui-skills-root/SKILL.md`.
+
+Per ogni task UI/UX:
+
+1. completa prima il protocollo Qoovex obbligatorio e individua superficie, consumer e confini reali;
+2. usa Impeccable come detector/critique generale e `qoovex-ux-motion` quando il task riguarda interaction o motion;
+3. se resta un problema specialistico che beneficerebbe di guida esterna, usa `ui-skills-root` per scegliere la categoria più stretta;
+4. interroga il catalogo soltanto tramite i comandi repository-local pin-nati: `pnpm ui-skills:start`, `pnpm ui-skills:categories`, `pnpm ui-skills:list -- --category <category>`, `pnpm ui-skills:get -- <skill>`;
+5. preferisci una sola skill esterna; usane due soltanto per due angoli distinti e tre soltanto per review/redesign ampi; mai più di tre;
+6. non installare o caricare la copia UI Skills di `impeccable`: Qoovex possiede una distribuzione Impeccable pin-nata, verificata e integrata con hook monorepo;
+7. non usare UI Skills per introdurre autonomamente design system, font, icone, token, dipendenze, provider, primitive, package boundary, architettura, capability prodotto, permessi o affermazioni legali;
+8. dopo l'implementazione esegui comunque la review Impeccable e i gate Qoovex richiesti.
+
+Per motion e microinterazioni l'ordine è vincolante:
+
+```text
+Qoovex protocol
+-> Impeccable context/detector
+-> qoovex-ux-motion decision
+-> optional narrow UI Skills specialist
+-> minimum sufficient implementation technology
+-> Impeccable review
+-> Qoovex gates
+```
+
+Una skill esterna Motion può approfondire una domanda circoscritta, per esempio performance, accessibility, presence, spring o animation review, ma non può rendere Motion runtime obbligatorio. CSS/Tailwind, Base UI, API native del browser o nessuna animazione restano esiti validi quando sono il livello minimo sufficiente.
+
 ### Before implementation
 
 1. completa il protocollo Qoovex obbligatorio;
 2. identifica la superficie e i consumer interessati;
 3. leggi il `PRODUCT.md` e il `DESIGN.md` Impeccable pertinenti alla superficie, usando un target concreto nel monorepo;
 4. ispeziona codice, token, componenti, pattern e confini reali;
-5. usa la skill e il workflow Impeccable appropriati alla task.
+5. usa la skill e il workflow Impeccable appropriati alla task;
+6. carica un eventuale specialista UI Skills soltanto dopo aver definito il problema specifico che deve risolvere.
 
 ### During implementation
 
@@ -48,7 +78,8 @@ Se l'hook automatico non è disponibile o non risolve la superficie corretta, un
 - usa pattern, token e componenti reali, preservando il design system Qoovex;
 - cura tutti gli stati UX pertinenti;
 - cura responsive behavior e accessibilità;
-- cura feedback, focus, tastiera e motion quando pertinenti.
+- cura feedback, focus, tastiera e motion quando pertinenti;
+- considera la guida UI Skills selezionata come advisory e limitata al problema per cui è stata caricata.
 
 Impeccable non è una fonte di verità autonoma e non autorizza redesign, cambi di branding, font, iconografia o token semantici; nuove dipendenze; spostamenti tra package e app; cambi architetturali; modifiche a business logic, auth, permessi, schema/database, privacy o security; nuove feature; oppure la presentazione di feature concettuali come capability implementate. Qualunque azione di questo tipo richiede autorizzazione esplicita e verifica nelle fonti Qoovex.
 
