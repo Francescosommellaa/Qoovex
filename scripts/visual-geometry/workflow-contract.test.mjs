@@ -25,7 +25,7 @@ test("visual geometry CI is a read-only required-check candidate", async () => {
   assert.match(workflow, /pnpm install --frozen-lockfile/);
   assert.match(workflow, /pnpm visual:geometry:self-test/);
   assert.match(workflow, /pnpm visual:geometry$/m);
-  assert.match(workflow, /git diff --check/);
+  assert.match(workflow, /git -C "\$GITHUB_WORKSPACE" diff --check/);
   assert.doesNotMatch(workflow, /visual:geometry:update|update-snapshots/i);
 });
 
@@ -35,5 +35,6 @@ test("failure evidence is short-lived and the workflow does not gate fonts", asy
   assert.match(workflow, /if: failure\(\)/);
   assert.match(workflow, /retention-days: 7/);
   assert.match(workflow, /output\/visual-geometry/);
+  assert.match(workflow, /if-no-files-found: ignore/);
   assert.doesNotMatch(workflow, /document\.fonts|fontshare|font-family|woff2|webfont/i);
 });

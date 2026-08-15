@@ -35,7 +35,7 @@ jobs:
       - name: Prove fail-closed visual behavior
         run: pnpm visual:geometry:self-test
       - name: Verify committed diff whitespace
-        run: git diff --check
+        run: git -C "$GITHUB_WORKSPACE" diff --check
       - name: Verify governed geometry and screenshots
         run: pnpm visual:geometry
       - name: Summarize visual results
@@ -48,5 +48,5 @@ jobs:
         with:
           name: visual-geometry-${{ github.sha }}
           path: output/visual-geometry/
-          if-no-files-found: error
+          if-no-files-found: ignore
           retention-days: 7
