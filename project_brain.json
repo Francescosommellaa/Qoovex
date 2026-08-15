@@ -61,6 +61,16 @@
         "commands": ["pnpm setup:impeccable", "pnpm verify:impeccable"],
         "contexts": ["apps/workspace", "apps/web", "apps/sirio", "packages/ui"],
         "hook": "repository-owned temporary monorepo dispatcher with machine-local session state and local Codex approval"
+      },
+      "ui_skills_specialist_layer": {
+        "status": "implemented_decision",
+        "authority": "optional external specialist discovery after Qoovex and Impeccable routing; never a source of truth or release gate",
+        "cli_pin": "ui-skills@0.2.4",
+        "router": ".agents/skills/ui-skills-root/SKILL.md",
+        "commands": ["pnpm ui-skills:start", "pnpm ui-skills:categories", "pnpm ui-skills:list", "pnpm ui-skills:get"],
+        "selection": "prefer one specialist, use two for distinct angles, maximum three for broad review/redesign",
+        "impeccable_duplicate": "forbidden; use the repository-pinned Impeccable integration",
+        "motion_order": "Qoovex protocol -> Impeccable -> qoovex-ux-motion -> optional narrow UI Skills specialist -> minimum sufficient technology -> Impeccable review -> Qoovex gates"
       }
     },
     "database_release": {
