@@ -58,7 +58,8 @@ yarn-error.log*
 
 # codex
 /.codex-runtime
-.codex
+/.codex/*
+!/.codex/hooks.json
 /tests/*
 !/tests/e2e/
 /tests/e2e/*
@@ -69,9 +70,21 @@ yarn-error.log*
 !/tests/e2e/sirio-design-system.spec.ts
 !/tests/e2e/sirio-design-system.spec.ts-snapshots/
 !/tests/e2e/sirio-design-system.spec.ts-snapshots/*.png
-.agents
+/.agents/skills/impeccable/
+/.agents/skills/.impeccable-install.json
 skills-lock.json
 .mimocode
+
+# Impeccable shared artifacts remain visible to Git; local/runtime state does not.
+**/.impeccable/config.local.json
+**/.impeccable/hook.cache.json
+**/.impeccable/hook.pending.json
+**/.impeccable/live/
+**/.impeccable/critique/
+**/.impeccable/questions/
+**/.impeccable/mocks/
+**/.impeccable-live.json
+**/.impeccable-live/
 
 # typescript
 *.tsbuildinfo

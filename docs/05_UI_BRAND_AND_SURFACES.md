@@ -4,6 +4,8 @@
 
 La foundation visiva corrente resta invariata: shadcn base-nova, Base UI, Tabler, Tailwind v4, General Sans (principale), ARRAY (accent) e token Qoovex. Le composizioni dominio sono app-local nel Workspace; nessun nuovo design system o brand è stato introdotto.
 
+Impeccable è un layer specializzato obbligatorio di controllo UI/UX, subordinato alle fonti canoniche Qoovex e al codice reale. I context condivisi di Workspace, Web, Sirio e `packages/ui` restano versionati; la distribuzione della skill non è vendorizzata e non costituisce una nuova fonte di verità. Se l'hook automatico non è disponibile, una task UI richiede il detector o la review manuale appropriata prima del completamento.
+
 ## Onboarding e destinazione
 
 Dopo autenticazione l'account sceglie una sola volta `BUSINESS`, `PROFESSIONAL` o `CLIENT`. Senza ruolo non può entrare in un contesto tenant o participant. Un account `BUSINESS` crea e usa una sola Azienda attiva; non esiste una vista per scegliere tra più Aziende. `PROFESSIONAL` attende o accetta un invito Collaborator compatibile; `CLIENT` accede soltanto ai cantieri a cui partecipa.
