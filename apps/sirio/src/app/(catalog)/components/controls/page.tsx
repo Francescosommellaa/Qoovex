@@ -13,6 +13,7 @@ import { Toggle, ToggleGroup } from "@qoovex/ui/components/toggle";
 import { Button } from "@qoovex/ui/components/button";
 import {
   IconBold,
+  IconCheck,
   IconItalic,
   IconUnderline,
   IconStrikethrough,
@@ -20,6 +21,104 @@ import {
   IconAlignCenter,
   IconAlignRight,
 } from "@tabler/icons-react";
+import switchInteractionLabStyles from "./switch-interaction-lab.module.css";
+
+type SwitchLabDirection = "precision" | "physical" | "stateRich";
+
+const switchLabDirections: Array<{
+  direction: SwitchLabDirection;
+  title: string;
+  description: string;
+}> = [
+  {
+    direction: "precision",
+    title: "Precision",
+    description: "Geometria bilanciata e continuità essenziale.",
+  },
+  {
+    direction: "physical",
+    title: "Physical",
+    description: "Una micro-risposta al press prima del travel.",
+  },
+  {
+    direction: "stateRich",
+    title: "State-rich",
+    description: "Un cue discreto rafforza lo stato attivo.",
+  },
+];
+
+/** Local Sirio study; composes the shared Switch without creating a public variant. */
+function SwitchInteractionLabControls({
+  direction,
+}: {
+  direction: SwitchLabDirection;
+}) {
+  const stateRich = direction === "stateRich";
+
+  return (
+    <div className="flex w-full max-w-48 flex-col gap-3">
+      <SwitchInteractionLabControl
+        direction={direction}
+        id={`switch-lab-${direction}-off`}
+        label="Disattivato"
+      />
+      <SwitchInteractionLabControl
+        direction={direction}
+        id={`switch-lab-${direction}-on`}
+        label="Attivato"
+        defaultChecked
+      />
+      <SwitchInteractionLabControl
+        direction={direction}
+        id={`switch-lab-${direction}-disabled`}
+        label="Disabilitato"
+        defaultChecked
+        disabled
+      />
+    </div>
+  );
+}
+
+function SwitchInteractionLabControl({
+  defaultChecked = false,
+  direction,
+  disabled = false,
+  id,
+  label,
+}: {
+  defaultChecked?: boolean;
+  direction: SwitchLabDirection;
+  disabled?: boolean;
+  id: string;
+  label: string;
+}) {
+  const stateRich = direction === "stateRich";
+  const directionClassName = direction === "physical"
+    ? switchInteractionLabStyles.physical
+    : stateRich
+      ? switchInteractionLabStyles.stateRich
+      : "";
+
+  return (
+    <div className="flex items-center gap-2">
+      <span className="relative inline-flex size-9 shrink-0 items-center">
+        <Switch
+          id={id}
+          defaultChecked={defaultChecked}
+          disabled={disabled}
+          className={`${switchInteractionLabStyles.switch} ${directionClassName}`}
+        />
+        {stateRich ? <IconCheck aria-hidden="true" className={switchInteractionLabStyles.stateRichCue} stroke={2.5} /> : null}
+      </span>
+      <label
+        htmlFor={id}
+        className={`relative z-10 text-sm font-medium leading-none ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
+      >
+        {label}
+      </label>
+    </div>
+  );
+}
 
 export default function ControlsCatalogPage() {
   const [otpStatus, setOtpStatus] = React.useState<
@@ -144,6 +243,42 @@ export default function ControlsCatalogPage() {
                 </div>
               </div>
             </Specimen>
+
+            <Specimen title="Stati">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-2">
+                  <Switch id="switch-state-unchecked" />
+                  <label htmlFor="switch-state-unchecked" className="text-sm font-medium leading-none cursor-pointer">Unchecked</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Switch id="switch-state-checked" defaultChecked />
+                  <label htmlFor="switch-state-checked" className="text-sm font-medium leading-none cursor-pointer">Checked</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Switch id="switch-state-disabled-unchecked" disabled />
+                  <label htmlFor="switch-state-disabled-unchecked" className="text-sm font-medium leading-none cursor-not-allowed opacity-60">Disabled unchecked</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Switch id="switch-state-disabled-checked" disabled defaultChecked />
+                  <label htmlFor="switch-state-disabled-checked" className="text-sm font-medium leading-none cursor-not-allowed opacity-60">Disabled checked</label>
+                </div>
+              </div>
+            </Specimen>
+          </SpecimenGrid>
+        </section>
+
+        <section aria-labelledby="switch-interaction-lab-title">
+          <div className="mb-4">
+            <h2 id="switch-interaction-lab-title" className="text-2xl font-semibold tracking-tight">Switch Interaction Lab</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Prototipi locali non-production per confrontare risposta, continuità e chiarezza di stato.</p>
+          </div>
+          <SpecimenGrid cols={3}>
+            {switchLabDirections.map(({ description, direction, title }) => (
+              <Specimen key={direction} title={title}>
+                <p className="max-w-44 text-center text-sm leading-5 text-muted-foreground">{description}</p>
+                <SwitchInteractionLabControls direction={direction} />
+              </Specimen>
+            ))}
           </SpecimenGrid>
         </section>
 

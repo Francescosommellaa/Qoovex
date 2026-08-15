@@ -11,8 +11,8 @@ web
 Qoovex Workspace serve tre gruppi di utenti principali, ciascuno con un ruolo essenziale nel rapporto di cantiere.
 
 - **Aziende edili:** usano il prodotto con continuità per gestire più clienti, cantieri e collaboratori. Creano e seguono i cantieri, invitano le persone coinvolte e coordinano attività, informazioni, documenti, richieste e conferme.
-- **Collaboratori e professionisti:** costruiscono un profilo professionale, inseriscono una sola volta dati e documenti propri e scelgono il proprio ruolo. Quando accettano un invito, accedono al cantiere e interagiscono entro i permessi concessi dall'Azienda. Il profilo riutilizzabile evita all'Azienda di rincorrere ogni volta dati e documenti già forniti. La futura ricerca di Aziende presso cui lavorare è una direzione di prodotto confermata, non una capability attualmente implementata.
-- **Clienti dell'Azienda:** sono la parte che Qoovex vuole tutelare maggiormente. Devono poter seguire i lavori, fare domande e richiedere verifiche, fotografie, prove e documenti in un unico luogo dove ogni passaggio resta registrato. Possono gestire più case, ville o altre strutture, conservandone profilo, dati e documenti per non doverli recuperare di nuovo a ogni lavoro.
+- **Collaboratori e professionisti — `verified_current_state`:** un account `PROFESSIONAL` può accettare un invito Collaborator compatibile e accedere alle risorse autorizzate. L'Azienda può gestire record lavoratore propri, con dati operativi essenziali, e collegarli agli account. **`approved_product_direction` + `conceptual_not_implemented`:** il profilo professionale personale, la scelta strutturata del ruolo, i documenti propri riutilizzabili e la futura ricerca di Aziende presso cui lavorare restano direzioni approvate, non capability correnti.
+- **Clienti dell'Azienda — `verified_current_state`:** possono seguire i cantieri a cui partecipano, consultare la proiezione condivisa, interagire nei flussi autorizzati, creare più immobili con dati essenziali e collegare un cantiere attivo a un immobile. I file disponibili oggi restano allegati contestuali al cantiere. **`approved_product_direction` + `conceptual_not_implemented`:** un profilo documentale riutilizzabile dell'immobile e documenti della struttura disponibili automaticamente per lavori successivi non sono implementati.
 
 ## Product Purpose
 
@@ -26,7 +26,7 @@ Qoovex non è soltanto un gestionale di progetto: semplifica e rende trasparente
 
 Il valore distintivo nasce dall'unione di tre elementi:
 
-1. ogni persona inserisce dati e documenti una volta e li riutilizza nei rapporti autorizzati successivi;
+1. `approved_product_direction`: ogni persona inserisce dati e documenti una volta e li riutilizza nei rapporti autorizzati successivi; questa riusabilità trasversale è `conceptual_not_implemented` nello stato corrente;
 2. il cliente può capire, chiedere e verificare senza inseguire conversazioni e file dispersi;
 3. il processo conserva una traccia ordinata di ciò che è stato condiviso, richiesto, dichiarato e confermato, utile anche quando occorre ricostruire i fatti dopo un problema o un sinistro.
 
@@ -34,18 +34,20 @@ Qoovex non promette valore probatorio, validità legale, conformità tecnica, as
 
 ## Operating Context
 
-L'Azienda gestisce più clienti e cantieri, coinvolge Collaboratori e condivide con il cliente soltanto ciò che appartiene al rapporto autorizzato. Il Collaboratore mantiene il proprio profilo professionale e mette a disposizione dati e documenti pertinenti quando accetta un invito. Il cliente mantiene un profilo personale e un archivio delle proprie strutture, con informazioni e documenti riutilizzabili per lavori successivi.
+`verified_current_state`: l'Azienda gestisce più clienti e cantieri, coinvolge Collaboratori e condivide con il cliente soltanto ciò che appartiene al rapporto autorizzato. Il Collaboratore accede tramite invito e permessi effettivi; i record lavoratore correnti sono organizzazione-scoped. Il cliente mantiene immobili privati con dati essenziali e può collegare ciascun cantiere attivo a un immobile.
 
-Il workflow di prodotto desiderato collega l'invito dell'Azienda, l'accettazione del cliente e la scelta di una struttura già censita dal cliente, affinché il nuovo rapporto di cantiere possa partire con i dati necessari già disponibili. Il runtime corrente crea invece il cantiere prima dell'invito cliente: l'eventuale riallineamento del lifecycle al workflow desiderato richiede una task di prodotto e runtime separata.
+`approved_product_direction` + `conceptual_not_implemented`: il Collaboratore mantiene un profilo professionale personale con dati e documenti riutilizzabili; il cliente mantiene un archivio documentale riutilizzabile delle proprie strutture. Queste capacità non devono essere presentate come disponibili finché codice, schema, permessi e superfici non le implementano e verificano.
+
+`approved_product_direction`: il workflow desiderato collega l'invito dell'Azienda, l'accettazione del cliente e la scelta di una struttura già censita dal cliente, affinché il nuovo rapporto di cantiere possa partire con i dati necessari già disponibili. `verified_current_state`: il runtime crea il cantiere prima dell'invito cliente e consente di collegare l'immobile soltanto a un participant cliente `ACTIVE`. L'eventuale riallineamento del lifecycle è `conceptual_not_implemented` e richiede una task di prodotto e runtime separata. Non risultano `open_decision` o `hard_stop` ulteriori per questa sola correzione documentale.
 
 Ogni account sceglie una sola volta `BUSINESS`, `PROFESSIONAL` o `CLIENT`. Un account può avere al massimo una membership Azienda attiva e non sceglie l'Azienda da un selettore. Il ruolo account non concede da solo accesso a dati o cantieri: autorizzazioni, membership, partecipazione e permessi restano espliciti e verificati server-side.
 
 ## Capabilities and Constraints
 
-- Le superfici correnti coprono account e inviti, Azienda, Collaboratori, clienti, strutture, cantieri, cronologia, allegati, step, richieste, proposte e controproposte, pagamenti documentati, dispute, chiusura, export, ricerca e notifiche; la presenza nel codice non equivale automaticamente a readiness end-to-end.
+- `verified_current_state`: le superfici correnti coprono account e inviti, Azienda, record lavoratore e accessi Collaborator, clienti, immobili con dati essenziali, cantieri, cronologia, allegati contestuali, step, richieste, proposte e controproposte, pagamenti documentati, dispute, chiusura, export, ricerca e notifiche; la presenza nel codice non equivale automaticamente a readiness end-to-end.
 - L'Azienda paga il prodotto; Collaboratori e clienti invitati non pagano. Pricing, piani, trial, limiti ed entitlement non sono ancora definiti o implementati.
 - `CLIENT` è un partecipante del cantiere e non un ruolo Azienda. Un Collaboratore opera soltanto nei limiti degli inviti e dei permessi effettivi.
-- Dati, documenti e profili riutilizzabili devono ridurre richieste ripetitive senza indebolire privacy, minimizzazione, isolamento tenant o controllo esplicito delle condivisioni.
+- `approved_product_direction` + `conceptual_not_implemented`: dati, documenti e profili riutilizzabili devono ridurre richieste ripetitive senza indebolire privacy, minimizzazione, isolamento tenant o controllo esplicito delle condivisioni. Non sono una capability corrente.
 - La ricerca di Aziende da parte dei Collaboratori è una direzione futura. Non sono implementati marketplace, pagamenti in-app, escrow, KYC, firma elettronica qualificata, fatturazione, contabilità, paghe, BIM o geolocalizzazione continua.
 - Non è prevista cancellazione fisica di cantieri o account. I file restano privati e mediati dal server.
 

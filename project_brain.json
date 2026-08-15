@@ -1,6 +1,6 @@
 {
   "project": "Qoovex",
-  "updated_at": "2026-08-13",
+  "updated_at": "2026-08-15",
   "state_taxonomy": [
     "verified_current_state",
     "implemented_decision",
@@ -52,7 +52,16 @@
     },
     "visual_foundation": {
       "typography": "General Sans primary and ARRAY accent",
-      "icons": "Tabler"
+      "icons": "Tabler",
+      "impeccable_quality_layer": {
+        "status": "implemented_decision",
+        "authority": "mandatory for UI/UX but subordinate to Qoovex canonical sources and real code",
+        "pin": "skill-v4.1.1 at 5a149f3fdb1b5793f10567233b1dcab98fc305fd",
+        "distribution": "reproducible install; .agents/skills/impeccable is ignored and not vendored",
+        "commands": ["pnpm setup:impeccable", "pnpm verify:impeccable"],
+        "contexts": ["apps/workspace", "apps/web", "apps/sirio", "packages/ui"],
+        "hook": "repository-owned temporary monorepo dispatcher with machine-local session state and local Codex approval"
+      }
     },
     "database_release": {
       "canonical_migration_count": 9,
