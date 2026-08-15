@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -9,6 +10,7 @@ import { IMPECCABLE_CONTEXTS } from "./config.mjs";
 import {
   DEFAULT_REPOSITORY_ROOT,
   dispatchHook,
+  runUpstreamProcess,
   UPSTREAM_HOOK_LIB_RELATIVE,
   UPSTREAM_HOOK_RELATIVE,
 } from "./hook-dispatcher.mjs";
@@ -39,6 +41,19 @@ function eventFor(root, session, target) {
     tool_name: "Write",
     tool_input: { file_path: path.join(root, ...target.split("/")) },
   };
+}
+
+function stopEvent(root, session) {
+  return {
+    hook_event_name: "Stop",
+    session_id: session,
+    cwd: root,
+  };
+}
+
+function statePathFor(root, session) {
+  const token = createHash("sha256").update(session).digest("hex");
+  return path.join(root, ".dispatcher-state", `${token}.json`);
 }
 
 async function runWithCapture(root, event, calls) {
@@ -78,6 +93,67 @@ test("PostToolUse does not attribute a backend package to a UI context", async (
   const calls = [];
   await runWithCapture(root, eventFor(root, "session-backend", "packages/db/src/server.ts"), calls);
   assert.deepEqual(calls, []);
+});
+
+for (const [label, target] of [
+  ["a non-UI edit", "docs/OperationalProtocol.md"],
+  ["a database edit", "packages/db/src/server.ts"],
+  ["an Impeccable verifier edit", "scripts/impeccable/verify.mjs"],
+]) {
+  test(`Stop is a successful no-op after ${label}`, async (t) => {
+    const root = createFixture();
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const calls = [];
+    const session = `session-no-op-${label}`;
+
+    await runWithCapture(root, eventFor(root, session, target), calls);
+    const stdout = await runWithCapture(root, stopEvent(root, session), calls);
+
+    assert.equal(stdout, "");
+    assert.deepEqual(calls, []);
+  });
+}
+
+test("Stop is a successful no-op when no session state exists", async (t) => {
+  const root = createFixture();
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const calls = [];
+
+  const stdout = await runWithCapture(root, stopEvent(root, "session-no-state"), calls);
+
+  assert.equal(stdout, "");
+  assert.deepEqual(calls, []);
+});
+
+test("Stop consumes empty session state without delegating", async (t) => {
+  const root = createFixture();
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const calls = [];
+  const session = "session-empty-state";
+  const statePath = statePathFor(root, session);
+  fs.mkdirSync(path.dirname(statePath), { recursive: true });
+  fs.writeFileSync(statePath, JSON.stringify({ version: 1, contexts: [] }), "utf8");
+
+  const stdout = await runWithCapture(root, stopEvent(root, session), calls);
+
+  assert.equal(stdout, "");
+  assert.deepEqual(calls, []);
+  assert.equal(fs.existsSync(statePath), false);
+});
+
+test("a second Stop is harmless after session state was consumed", async (t) => {
+  const root = createFixture();
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const calls = [];
+  const session = "session-consumed-state";
+  await runWithCapture(root, eventFor(root, session, "apps/web/src/test-target.tsx"), calls);
+  await runWithCapture(root, stopEvent(root, session), calls);
+  const callsAfterFirstStop = calls.length;
+
+  const stdout = await runWithCapture(root, stopEvent(root, session), calls);
+
+  assert.equal(stdout, "");
+  assert.equal(calls.length, callsAfterFirstStop);
 });
 
 test("Stop runs exactly the Workspace and UI contexts touched by the session", async (t) => {
@@ -154,4 +230,45 @@ test("dispatcher delegates a real temporary Web edit to the upstream hook", asyn
     "utf8",
   ));
   assert.ok(cache.sessions[session].files[target]);
+});
+
+test("runUpstreamProcess preserves a real non-zero upstream exit code", async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "qoovex-impeccable-upstream-error-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const failingHook = path.join(root, "failing-hook.mjs");
+  fs.writeFileSync(failingHook, "process.stderr.write('upstream failed\\n'); process.exitCode = 7;\n", "utf8");
+
+  const result = await runUpstreamProcess({
+    upstreamHookPath: failingHook,
+    cwd: root,
+    eventJson: "{}",
+  });
+
+  assert.equal(result.exitCode, 7);
+  assert.equal(result.stderr, "upstream failed\n");
+});
+
+test("dispatchHook propagates a delegated upstream failure", async (t) => {
+  const root = createFixture();
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+
+  await assert.rejects(
+    dispatchHook({
+      stdinJson: JSON.stringify(eventFor(
+        root,
+        "session-upstream-failure",
+        "apps/web/src/test-target.tsx",
+      )),
+      repositoryRoot: root,
+      upstreamHookPath,
+      stateRoot: path.join(root, ".dispatcher-state"),
+      hookApi: upstreamApi,
+      runUpstream: async () => ({ stdout: "", stderr: "upstream failed\n", exitCode: 7 }),
+    }),
+    (error) => {
+      assert.equal(error.exitCode, 7);
+      assert.match(error.message, /upstream failed/);
+      return true;
+    },
+  );
 });

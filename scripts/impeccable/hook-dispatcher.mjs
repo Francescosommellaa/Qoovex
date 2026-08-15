@@ -55,6 +55,26 @@ function sessionToken(event) {
   return createHash("sha256").update(String(identity)).digest("hex");
 }
 
+function diagnostic(entry) {
+  const target = path.join(
+    DEFAULT_REPOSITORY_ROOT,
+    ".codex-runtime",
+    "impeccable-hook-diagnostic.jsonl",
+  );
+  try {
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.appendFileSync(target, `${JSON.stringify({
+      timestamp: new Date().toISOString(),
+      entrypoint: path.basename(process.argv[1] ?? ""),
+      ...entry,
+    })}\n`, "utf8");
+  } catch { /* diagnostic must not affect hook behavior */ }
+}
+
+process.on("uncaughtExceptionMonitor", (error) => {
+  diagnostic({ phase: "uncaught-exception", name: error?.name ?? null, code: error?.code ?? null });
+});
+
 async function loadUpstreamApi(upstreamHookPath) {
   const hookLibPath = path.join(path.dirname(upstreamHookPath), "hook-lib.mjs");
   return import(pathToFileURL(hookLibPath).href);
@@ -180,6 +200,7 @@ async function consumeContexts(event, stateRoot) {
 
 export function runUpstreamProcess({ upstreamHookPath, cwd, eventJson }) {
   return new Promise((resolve) => {
+    diagnostic({ phase: "upstream-start", context: path.basename(cwd) });
     const child = spawn(process.execPath, [upstreamHookPath], {
       cwd,
       env: process.env,
@@ -190,14 +211,37 @@ export function runUpstreamProcess({ upstreamHookPath, cwd, eventJson }) {
     const stderr = [];
     child.stdout.on("data", (chunk) => stdout.push(chunk));
     child.stderr.on("data", (chunk) => stderr.push(chunk));
-    child.on("error", (error) => resolve({ stdout: "", stderr: String(error), exitCode: 0 }));
-    child.on("close", () => resolve({
-      stdout: Buffer.concat(stdout).toString("utf8"),
-      stderr: Buffer.concat(stderr).toString("utf8"),
-      exitCode: 0,
-    }));
+    child.on("error", (error) => {
+      diagnostic({ phase: "upstream-error", name: error?.name ?? null, code: error?.code ?? null });
+      resolve({ stdout: "", stderr: String(error), exitCode: 1 });
+    });
+    child.on("close", (code, signal) => {
+      diagnostic({
+        phase: "upstream-close",
+        exitCode: code,
+        signal: signal ?? null,
+        stdoutBytes: Buffer.concat(stdout).length,
+        stderrBytes: Buffer.concat(stderr).length,
+      });
+      resolve({
+        stdout: Buffer.concat(stdout).toString("utf8"),
+        stderr: Buffer.concat(stderr).toString("utf8"),
+        exitCode: Number.isInteger(code) ? code : 1,
+      });
+    });
     child.stdin.end(eventJson);
   });
+}
+
+function requireSuccessfulUpstream(result) {
+  if (result.exitCode === 0) return result;
+  const detail = result.stderr?.trim();
+  const error = new Error(
+    `Impeccable upstream hook exited with code ${result.exitCode}${detail ? `: ${detail}` : ""}`,
+  );
+  error.exitCode = result.exitCode;
+  error.stderr = result.stderr;
+  throw error;
 }
 
 function additionalContext(stdout) {
@@ -249,28 +293,45 @@ export async function dispatchHook({
   if (eventName === "PostToolUse") {
     const grouped = resolveRoutedTargets(event, { repositoryRoot, hookApi: api });
     const contexts = IMPECCABLE_CONTEXTS.filter((context) => grouped.has(context));
+    diagnostic({
+      phase: "dispatch",
+      eventName,
+      identityField: event?.session_id ? "session_id" : "fallback",
+      contexts,
+      decision: contexts.length > 0 ? "delegate" : "no-op",
+    });
     await rememberContexts(event, contexts, stateRoot);
     for (const context of contexts) {
       const cwd = path.join(repositoryRoot, ...context.split("/"));
       const delegated = delegatedPostEvent(event, cwd, grouped.get(context));
-      outputs.push(await runUpstream({
+      outputs.push(requireSuccessfulUpstream(await runUpstream({
         upstreamHookPath,
         cwd,
         eventJson: JSON.stringify(delegated),
-      }));
+      })));
     }
     return combineOutputs(outputs, eventName);
   }
 
   if (eventName === "Stop") {
+    const files = statePaths(event, stateRoot);
+    const stateExisted = Boolean(files && fs.existsSync(files.state));
     const contexts = await consumeContexts(event, stateRoot);
+    diagnostic({
+      phase: "dispatch",
+      eventName,
+      identityField: event?.session_id ? "session_id" : "fallback",
+      stateExisted,
+      contexts,
+      decision: contexts.length > 0 ? "delegate" : "no-op",
+    });
     for (const context of contexts) {
       const cwd = path.join(repositoryRoot, ...context.split("/"));
-      outputs.push(await runUpstream({
+      outputs.push(requireSuccessfulUpstream(await runUpstream({
         upstreamHookPath,
         cwd,
         eventJson: JSON.stringify(delegatedStopEvent(event, cwd)),
-      }));
+      })));
     }
     return combineOutputs(outputs, eventName);
   }
@@ -290,12 +351,12 @@ async function main() {
     const stdout = await dispatchHook({ stdinJson: await readStdin() });
     if (stdout) process.stdout.write(stdout);
   } catch (error) {
-    if (process.env.IMPECCABLE_DISPATCHER_DEBUG) {
-      process.stderr.write(`[qoovex-impeccable-dispatcher] ${String(error)}\n`);
-    }
+    diagnostic({ phase: "main-catch", name: error?.name ?? null, code: error?.code ?? null });
+    const detail = error?.stderr?.trim() || String(error);
+    process.stderr.write(`[qoovex-impeccable-dispatcher] ${detail}\n`);
+    process.exitCode = Number.isInteger(error?.exitCode) ? error.exitCode : 1;
   }
 }
 
 const invokedPath = process.argv[1] ? pathToFileURL(path.resolve(process.argv[1])).href : null;
 if (invokedPath === import.meta.url) await main();
-

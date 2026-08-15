@@ -9,7 +9,7 @@
             "command": "[ ! -f \"scripts/impeccable/hook-dispatcher.mjs\" ] || node \"scripts/impeccable/hook-dispatcher.mjs\"",
             "timeout": 15,
             "statusMessage": "Checking UI changes",
-            "commandWindows": "if exist \"scripts/impeccable/hook-dispatcher.mjs\" (node \"scripts/impeccable/hook-dispatcher.mjs\" & exit /b)"
+            "commandWindows": "node \"scripts/impeccable/hook-dispatcher.mjs\""
           }
         ]
       }
@@ -22,7 +22,7 @@
             "command": "[ ! -f \"scripts/impeccable/hook-dispatcher.mjs\" ] || node \"scripts/impeccable/hook-dispatcher.mjs\"",
             "timeout": 60,
             "statusMessage": "Design deep pass",
-            "commandWindows": "if exist \"scripts/impeccable/hook-dispatcher.mjs\" (node \"scripts/impeccable/hook-dispatcher.mjs\" & exit /b)"
+            "commandWindows": "node \"scripts/impeccable/hook-dispatcher.mjs\""
           }
         ]
       }
