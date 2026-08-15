@@ -46,7 +46,6 @@ test("flags user-agent and viewport width as touch capability proxies", () => {
     [["capability-from-ua-or-width", 1]],
   );
 });
-
 test("flags 100vh in a constrained overlay but accepts dynamic viewport units", () => {
   const unsafe = auditSourceFiles(
     new Map([
@@ -145,4 +144,3 @@ test("requires the shared touch-target contract in audited controls", () => {
     true,
   );
 });
-

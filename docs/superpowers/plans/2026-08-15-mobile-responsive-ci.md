@@ -105,4 +105,3 @@
 3. Review the task-scoped diff for security boundaries, generated artifacts, secrets, and accidental product changes.
 4. Append the dated session summary to `00_System/session-log.md` through `qoovex_brain` MCP.
 5. Commit by coherent unit, push `codex/mobile-responsive-ci`, open the PR, and verify the dedicated job and existing required gates on the same SHA.
-

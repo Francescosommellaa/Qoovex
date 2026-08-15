@@ -23,7 +23,6 @@ test("shared UI changes trigger every runtime group", () => {
     reasons: ["packages/ui/src/button.tsx matched packages/ui/**"],
   });
 });
-
 test("an app-local change selects only its owning runtime group", () => {
   assert.deepEqual(
     selectMobileGroups(["apps/web/src/app/faq/page.tsx"], impact),
@@ -50,4 +49,3 @@ test("an unknown source change fails closed into the full runtime matrix", () =>
     reasons: ["Unknown source path tooling/new-ui-compiler.mjs; selected full suite."],
   });
 });
-
