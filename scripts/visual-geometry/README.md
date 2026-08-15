@@ -16,6 +16,11 @@ and reviewed platform-specific PNG baselines.
 - Static drift findings inspect added diff lines only and accept only exact,
   reasoned exemption records.
 - Font loading and font identity are deliberately not evaluated.
+- Workspace build/runtime receives an inert PostgreSQL URL on loopback port 9
+  so Prisma configuration can parse while any accidental query fails closed;
+  every ambient database URL is overridden and no database is started.
+- Browser servers never reuse an existing local process; an occupied canonical
+  port fails before capture instead of serving a stale checkout.
 
 Use the root `visual:geometry*` scripts once the runner is installed. Do not
 invoke internal modules as a substitute for the governed entry points.

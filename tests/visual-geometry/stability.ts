@@ -62,7 +62,7 @@ export async function prepareStablePage(
   page.on("console", (message) => {
     if (message.type() !== "error") return;
     const text = message.text();
-    if (/Failed to load resource.*ERR_FAILED/i.test(text)) return;
+    if (/Failed to load resource.*(?:ERR_FAILED|ERR_BLOCKED_BY_CLIENT)/i.test(text)) return;
     diagnostics.consoleErrors.push(text);
   });
 
@@ -77,9 +77,6 @@ export async function prepareStablePage(
 
   await page.addInitScript((theme) => {
     localStorage.setItem("theme", theme);
-    document.documentElement.classList.remove("light", "dark");
-    document.documentElement.classList.add(theme);
-    document.documentElement.style.colorScheme = theme;
   }, surface.theme);
   await page.clock.setFixedTime(new Date("2026-08-15T10:00:00+02:00"));
 

@@ -31,7 +31,7 @@ export const INTERACTION_SETUPS: Readonly<Record<string, InteractionSetup>> = Ob
   },
   "tooltip-open": async (page, surface) => {
     await (await targetFor(page, surface)).getByRole("button", { name: "Superiore (Top)", exact: true }).hover();
-    await expect(page.getByRole("tooltip")).toBeVisible();
+    await expect(page.locator('[data-slot="tooltip-content"]')).toBeVisible();
   },
   "collapsible-expanded": async (page, surface) => {
     const trigger = (await targetFor(page, surface)).getByRole("button").first();
@@ -64,4 +64,3 @@ export function captureTarget(page: Page, surface: VisualSurface): Page | Locato
   if (surface.app !== "sirio") return page;
   return surfaceTarget(page, surface);
 }
-
