@@ -26,6 +26,17 @@
   color: var(--selection-foreground);
 }
 
+@media (hover: none), (pointer: coarse) {
+  .qv-touch-target:not(.qv-touch-target-inline) {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+
+  .qv-touch-target-field {
+    min-height: var(--touch-target-min);
+  }
+}
+
 .floating-navigation__mobile-sections {
   container-type: inline-size;
 }

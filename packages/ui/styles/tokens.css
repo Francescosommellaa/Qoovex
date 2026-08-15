@@ -57,6 +57,11 @@
   --spacing: 0.25rem;
   --control: 2rem;
   --control-lg: 2.5rem;
+  --touch-target-min: 2.75rem;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
   --icon: 1rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;

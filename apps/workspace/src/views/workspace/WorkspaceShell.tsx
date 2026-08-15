@@ -45,12 +45,12 @@ async function getShellState() {
 export async function WorkspaceShell({ children }: { children: ReactNode }) {
   const state = await getShellState();
   const sidebarDefaultOpen = (await cookies()).get(SIDEBAR_COOKIE_NAME)?.value !== "false";
-  if (state.kind === "public") return <div className="min-h-dvh bg-background"><div className="fixed right-3 top-3 z-40"><ThemeToggle /></div>{children}</div>;
+  if (state.kind === "public") return <div className="min-h-dvh bg-background"><div className="fixed right-[max(.75rem,var(--safe-area-right))] top-[max(.75rem,var(--safe-area-top))] z-40"><ThemeToggle /></div>{children}</div>;
   const isWorkspace = state.kind === "workspace";
   return (
     <WorkspaceSidebarProvider defaultOpen={sidebarDefaultOpen}>
       <a
-        className="pointer-events-none fixed left-3 top-3 z-[60] max-w-[calc(100vw-1.5rem)] -translate-y-16 rounded-lg border border-transparent bg-background px-3 py-2 text-sm font-medium text-foreground opacity-0 shadow-lg outline-none transition-[transform,opacity] focus:pointer-events-auto focus:translate-y-0 focus:opacity-100 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none sm:left-4 sm:top-4"
+        className="pointer-events-none fixed left-[max(.75rem,var(--safe-area-left))] top-[max(.75rem,var(--safe-area-top))] z-[60] max-w-[calc(100vw-1.5rem-var(--safe-area-left)-var(--safe-area-right))] -translate-y-16 rounded-lg border border-transparent bg-background px-3 py-2 text-sm font-medium text-foreground opacity-0 shadow-lg outline-none transition-[transform,opacity] focus:pointer-events-auto focus:translate-y-0 focus:opacity-100 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none sm:left-[max(1rem,var(--safe-area-left))] sm:top-[max(1rem,var(--safe-area-top))]"
         href="#workspace-main-content"
       >
         Vai al contenuto principale

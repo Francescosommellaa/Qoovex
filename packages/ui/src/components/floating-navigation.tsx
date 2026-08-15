@@ -193,6 +193,7 @@ function NavigationResourceDropdown({
           className="size-3.5 transition-transform duration-200 group-data-popup-open/resources:rotate-180"
         />
       </DropdownMenuTrigger>
+      {/* mobile-audit-ignore hover-only-interaction -- Hover keeps the pointer bridge open; Base UI trigger click and focus own activation. */}
       <DropdownMenuContent
         align="center"
         className="w-80 rounded-2xl p-2 duration-200 before:absolute before:-top-4 before:left-0 before:h-4 before:w-full"
@@ -499,7 +500,7 @@ export function FloatingNavigation({
   const belowDesktopVisibility = isLg ? "lg:hidden" : "md:hidden";
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-40 h-20 px-3 pt-3">
+    <header className="pointer-events-none fixed inset-x-0 top-[var(--safe-area-top)] z-40 h-20 px-3 pt-3">
       <div
         className={cn(
           "pointer-events-auto mx-auto flex items-center gap-2 border bg-background/80 shadow-sm backdrop-blur-xl transition-[max-width,height,border-radius,padding,box-shadow] duration-300 ease-out supports-[backdrop-filter]:bg-background/70",
@@ -586,7 +587,7 @@ export function FloatingNavigation({
             </DialogPrimitive.Trigger>
             <DialogPrimitive.Portal>
               <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0" />
-              <DialogPrimitive.Popup className="fixed top-18 inset-x-3 z-50 max-h-[calc(100vh-5.5rem)] overflow-y-auto rounded-2xl border border-border/80 bg-popover/95 p-4 text-popover-foreground shadow-2xl backdrop-blur-xl transition-all duration-200 ease-out data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 space-y-4">
+              <DialogPrimitive.Popup className="fixed top-[calc(4.5rem+var(--safe-area-top))] left-[max(.75rem,var(--safe-area-left))] right-[max(.75rem,var(--safe-area-right))] z-50 max-h-[calc(100dvh-5.5rem-var(--safe-area-top)-var(--safe-area-bottom))] overflow-y-auto rounded-2xl border border-border/80 bg-popover/95 p-4 pb-[max(1rem,var(--safe-area-bottom))] text-popover-foreground shadow-2xl backdrop-blur-xl transition-all duration-200 ease-out data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 space-y-4">
                 <div className="flex items-center justify-between border-b border-border/60 pb-3 px-1">
                   <span className="font-semibold text-sm font-accent">{brand(false)}</span>
                   <DialogPrimitive.Close render={<Button aria-label="Chiudi navigazione" size="icon-xs" variant="ghost" />}>

@@ -201,7 +201,7 @@ function Sidebar({
             data-sidebar="sidebar"
             data-slot="sidebar"
             data-mobile="true"
-            className="fixed inset-y-0 left-0 z-50 flex w-(--sidebar-width) max-w-[calc(100vw-2rem)] flex-col bg-sidebar p-0 text-sidebar-foreground shadow-2xl transition-transform duration-250 ease-out data-ending-style:-translate-x-full data-starting-style:-translate-x-full [&>button]:hidden"
+            className="fixed top-[var(--safe-area-top)] bottom-[var(--safe-area-bottom)] left-[var(--safe-area-left)] z-50 flex w-(--sidebar-width) max-w-[calc(100vw-var(--safe-area-left)-var(--safe-area-right)-2rem)] flex-col bg-sidebar p-0 text-sidebar-foreground shadow-2xl transition-transform duration-250 ease-out data-ending-style:-translate-x-full data-starting-style:-translate-x-full [&>button]:hidden"
             style={
               {
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -543,7 +543,7 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
 }
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button group/menu-button relative z-10 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:[&>span]:hidden hover:text-sidebar-accent-foreground focus-visible:ring-2 active:text-sidebar-accent-foreground active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-200 [&>span:last-child]:truncate",
+  "qv-touch-target peer/menu-button group/menu-button relative z-10 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:[&>span]:hidden hover:text-sidebar-accent-foreground focus-visible:ring-2 active:text-sidebar-accent-foreground active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-200 [&>span:last-child]:truncate",
   {
     variants: {
       variant: {

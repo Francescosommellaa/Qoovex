@@ -42,7 +42,7 @@ function DialogOverlay({
 
 const dialogContentVariants = cva(
   // Regola responsiva automatica per tutte le modali: Tendina dal basso su Mobile, Modal centrato 50%/50% su Desktop con animazione molla elastica
-  "fixed z-50 grid gap-5 overflow-y-auto bg-background text-sm text-foreground outline-none transition-all duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] max-sm:fixed max-sm:inset-x-0 max-sm:bottom-0 max-sm:top-auto max-sm:max-h-[90vh] max-sm:w-full max-sm:rounded-t-2xl max-sm:border-t max-sm:border-border max-sm:shadow-2xl max-sm:p-6 max-sm:data-open:slide-in-from-bottom-full max-sm:data-closed:slide-out-to-bottom-full sm:fixed sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-h-[calc(100vh-3rem)] sm:rounded-xl sm:border sm:border-border sm:p-6 sm:shadow-xl sm:data-open:zoom-in-95 sm:data-closed:zoom-out-95",
+  "fixed z-50 grid gap-5 overflow-y-auto bg-background text-sm text-foreground outline-none transition-all duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] max-sm:fixed max-sm:left-[var(--safe-area-left)] max-sm:right-[var(--safe-area-right)] max-sm:bottom-[var(--safe-area-bottom)] max-sm:top-auto max-sm:max-h-[calc(90dvh-var(--safe-area-top)-var(--safe-area-bottom))] max-sm:w-auto max-sm:rounded-t-2xl max-sm:border-t max-sm:border-border max-sm:shadow-2xl max-sm:p-6 max-sm:data-open:slide-in-from-bottom-full max-sm:data-closed:slide-out-to-bottom-full sm:fixed sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-h-[calc(100dvh-3rem)] sm:rounded-xl sm:border sm:border-border sm:p-6 sm:shadow-xl sm:data-open:zoom-in-95 sm:data-closed:zoom-out-95",
   {
     variants: {
       variant: {
