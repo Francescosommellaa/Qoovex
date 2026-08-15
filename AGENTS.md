@@ -32,6 +32,12 @@ Regole:
 
 La CI non può osservare magicamente una skill che l'agent runtime non espone come evento. Per questo il sistema distingue contratto/routing verificabile da evidence runtime: non dichiarare “skill eseguita” senza evidence disponibile.
 
+## Mobile and Responsive Experience gate
+
+`config/mobile-experience.json` e il contratto machine-readable delle superfici, delle route, dei viewport canonici e degli scenari adattivi. Ogni modifica UI, route, layout, navigazione, overlay, controllo condiviso o CSS deve mantenere verde `pnpm mobile:doctor`; le modifiche runtime pertinenti devono inoltre eseguire `pnpm mobile:test`. `pnpm mobile:impact` rende esplicito il blast radius, ma fallisce sempre verso copertura piu ampia quando non riconosce un path.
+
+Non sostituire questi gate con resize manuale o user-agent sniffing. Touch e shortcut derivano dalle capability di input; i fixed surface rispettano safe area e viewport dinamica; il minimo touch condiviso e 44 px. La CI indipendente `mobile-responsive` esegue doctor prima di Playwright e non muta database persistenti, auth, Blob o target remoti.
+
 ## Impeccable obbligatorio per UI/UX
 
 Impeccable è parte obbligatoria del workflow quando una task crea, modifica, corregge, revisiona o rifattorizza:

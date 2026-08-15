@@ -49,6 +49,16 @@ L'updater:
 
 La quarantena impedisce retry silenziosi dello stesso provider/versione. Nessun failure viene convertito in warning per consentire il merge.
 
+## Mobile and Responsive Experience quality infrastructure
+
+`implemented_decision`: `config/mobile-experience.json` e il contratto machine-readable per superfici, owner, route, scenari, viewport ed esclusioni accountable. `pnpm mobile:doctor` valida il contratto, confronta tutte le Next page route con la coverage dichiarata, verifica il wiring dei comandi e della CI e applica l'audit statico repository-local. L'audit segnala capability dedotte da user-agent o larghezza, `100vh` in overlay vincolati, interazioni hover-only, fork Mobile/Desktop, fixed surface senza safe area e controlli condivisi senza contratto touch.
+
+La matrice canonica usa 320, 390, 768, 1024 e 1440 px. `pnpm mobile:test` avvia Web, Workspace e Sirio soltanto su loopback e copre reflow, overflow orizzontale, collisioni fixed, target da 44 px, pointer coarse/hover none, shortcut per capability, navigazione mobile, focus ed Escape, software keyboard simulata, portrait/landscape, zoom 200% equivalente, contenuti lunghi, dynamic viewport, safe area, reduced motion, errori console/runtime/hydration e le viste BUSINESS, PROFESSIONAL e CLIENT. In CI la suite accetta soltanto database PostgreSQL effimero loopback dichiarato `test` e con suffisso `_ci`; non richiede Blob e non interroga target remoti.
+
+`pnpm mobile:impact` classifica i path modificati in gruppi runtime mirati. Cambi a `packages/ui`, al contratto o all'infrastruttura condivisa richiedono la matrice completa; cambi app-local selezionano il consumer; documentazione esegue solo il doctor; path sconosciuti falliscono verso la matrice completa. Il blast radius e informativo per il costo, mentre il job required resta fail-closed.
+
+Il job indipendente `mobile-responsive` esegue install frozen, doctor, report del blast radius, migration deploy su database CI effimero, installazione Chromium e suite Playwright con un worker. Gli artifact di failure sono `mobile-playwright-report`; non esiste dipendenza da SaaS, device cloud o screenshot baseline. Per renderlo required, un maintainer deve selezionare `mobile-responsive` nei required status checks della branch protection.
+
 ## Impeccable UI quality gate
 
 `implemented_decision`: Impeccable è pin-nato a `skill-v4.1.1`, commit `5a149f3fdb1b5793f10567233b1dcab98fc305fd`. `pnpm setup:impeccable` ricostruisce la distribuzione Codex ufficiale ignorata; `pnpm verify:impeccable` è il gate esplicito, offline e read-only per distribuzione, context, doctor, hook, routing, governance e Git hygiene. Non è parte di `check:fast` e non introduce download nei gate backend ordinari.

@@ -71,6 +71,15 @@
         "selection": "prefer one specialist, use two for distinct angles, maximum three for broad review/redesign",
         "impeccable_duplicate": "forbidden; use the repository-pinned Impeccable integration",
         "motion_order": "Qoovex protocol -> Impeccable -> qoovex-ux-motion -> optional narrow UI Skills specialist -> minimum sufficient technology -> Impeccable review -> Qoovex gates"
+      },
+      "mobile_responsive_quality_layer": {
+        "status": "implemented_decision",
+        "authority": "machine-readable responsive and input-capability contract with deterministic static audit and real-browser coverage",
+        "contract": "config/mobile-experience.json",
+        "commands": ["pnpm mobile:doctor", "pnpm mobile:impact", "pnpm mobile:test"],
+        "canonical_widths": [320, 390, 768, 1024, 1440],
+        "ci_check": "mobile-responsive",
+        "runtime_targets": "loopback apps and ephemeral *_ci PostgreSQL only; no remote database or Blob target"
       }
     },
     "database_release": {

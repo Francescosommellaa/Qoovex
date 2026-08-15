@@ -102,6 +102,66 @@ jobs:
           pnpm --filter @qoovex/db test:upgrade
       - run: pnpm check
 
+  mobile-responsive:
+    name: mobile-responsive
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: qoovex_ci
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: package.json
+          cache: pnpm
+      - run: pnpm ci:install
+      - name: Verify deterministic mobile contract
+        run: pnpm mobile:doctor
+      - name: Report mobile blast radius
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            base="$PR_BASE"
+          else
+            base="$PUSH_BEFORE"
+          fi
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
+            base="$(git merge-base origin/master HEAD)"
+          fi
+          MOBILE_BASE_REF="$base" pnpm mobile:impact
+      - name: Apply canonical migration chain to fresh database
+        run: pnpm ci:db:prepare
+      - run: pnpm test:e2e:install
+      - name: Run Mobile and Responsive Experience gate
+        run: pnpm mobile:test
+      - name: Upload mobile Playwright artifacts
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: mobile-playwright-report
+          path: |
+            playwright-report/mobile/
+            test-results/mobile/
+          if-no-files-found: ignore
+          retention-days: 7
+
   workspace-e2e:
     name: workspace-e2e
     runs-on: ubuntu-latest
