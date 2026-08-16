@@ -10,9 +10,10 @@ export default defineConfig({
     // Keep files sequential there; real CI PostgreSQL retains isolation and parallelism.
     fileParallelism: process.env.QOOVEX_E2E_MODE === "1" ? false : undefined,
     maxWorkers: process.env.QOOVEX_E2E_MODE === "1" ? 1 : undefined,
-    exclude: deferPostgresIntegration
-      ? [...configDefaults.exclude, "**/*.integration.test.ts"]
-      : undefined,
+    exclude: [
+      ...configDefaults.exclude,
+      ...(deferPostgresIntegration ? ["**/*.integration.test.ts"] : []),
+    ],
     sequence: runPostgresIntegration ? { hooks: "stack" } : undefined,
     setupFiles: runPostgresIntegration
       ? ["./vitest.postgres-integration.setup.ts"]
