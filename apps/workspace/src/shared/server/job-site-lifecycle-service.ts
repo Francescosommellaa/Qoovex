@@ -16,6 +16,7 @@ import { recordProductAuditEvent } from "./product-audit-service";
 import type { ClientHomeWorkItem } from "@shared/lib/client-home-work-queue";
 import { presentOrganizationHomeRecentActivities } from "@shared/lib/organization-home-recent-activity";
 import type { OrganizationHomeWorkItem } from "@shared/lib/organization-home-work-queue";
+import { jobSiteNotificationTargetId } from "@shared/lib/job-site-notification-destination";
 
 const CLIENT_INVITATION_TTL_MS = 14 * 24 * 60 * 60 * 1000;
 
@@ -120,14 +121,14 @@ export async function getOrganizationHomeOverview(organizationId: string) {
     }
     if (context.permissions.includes("jobSite:requests:respond")) {
       for (const request of jobSite.requests) {
-        workQueueItems.push({ id: `${jobSite.id}:request:${request.id}`, jobSiteName: jobSite.name, kind: request.blocking ? "BLOCKING_REQUEST" : "REQUEST_NEEDS_RESPONSE", detail: request.blocking ? `${request.title} è ancora aperta e impedisce la proposta di chiusura.` : request.title, href: `${jobSiteHref}#richieste`, priority: request.blocking ? "blocking" : "attention", updatedAt: request.updatedAt });
+        workQueueItems.push({ id: `${jobSite.id}:request:${request.id}`, jobSiteName: jobSite.name, kind: request.blocking ? "BLOCKING_REQUEST" : "REQUEST_NEEDS_RESPONSE", detail: request.blocking ? `${request.title} è ancora aperta e impedisce la proposta di chiusura.` : request.title, href: `${jobSiteHref}#${jobSiteNotificationTargetId("request", request.id)}`, priority: request.blocking ? "blocking" : "attention", updatedAt: request.updatedAt });
       }
     }
     for (const proposal of jobSite.changeProposals) {
-      workQueueItems.push({ id: `${jobSite.id}:proposal:${proposal.id}`, jobSiteName: jobSite.name, kind: "CHANGE_PROPOSAL_REVIEW", detail: "Il cliente ha inviato una proposta di modifica da valutare.", href: `${jobSiteHref}#modifiche`, priority: "attention", updatedAt: proposal.updatedAt });
+      workQueueItems.push({ id: `${jobSite.id}:proposal:${proposal.id}`, jobSiteName: jobSite.name, kind: "CHANGE_PROPOSAL_REVIEW", detail: "Il cliente ha inviato una proposta di modifica da valutare.", href: `${jobSiteHref}#${jobSiteNotificationTargetId("proposal", proposal.id)}`, priority: "attention", updatedAt: proposal.updatedAt });
     }
     for (const payment of jobSite.paymentRequests) {
-      workQueueItems.push({ id: `${jobSite.id}:payment:${payment.id}`, jobSiteName: jobSite.name, kind: "PAYMENT_DECLARATION_REVIEW", detail: `${payment.reason}: il cliente ha inviato una dichiarazione da rivedere.`, href: `${jobSiteHref}#pagamenti`, priority: "attention", updatedAt: payment.updatedAt });
+      workQueueItems.push({ id: `${jobSite.id}:payment:${payment.id}`, jobSiteName: jobSite.name, kind: "PAYMENT_DECLARATION_REVIEW", detail: `${payment.reason}: il cliente ha inviato una dichiarazione da rivedere.`, href: `${jobSiteHref}#${jobSiteNotificationTargetId("payment", payment.id)}`, priority: "attention", updatedAt: payment.updatedAt });
     }
     for (const closure of jobSite.closures) {
       const needsOrganization = closure.status === "CLIENT_CONFIRMED";
@@ -653,17 +654,17 @@ export async function listClientHome() {
     const jobSite = participant.jobSite;
     const jobSiteHref = `/client/job-sites/${jobSite.id}`;
     if (participant.status === "PENDING" && jobSite.status === "PENDING_INITIAL_CONFIRMATION" && jobSite.initialAgreement?.status === "PENDING_CLIENT_CONFIRMATION" && jobSite.initialAgreement.currentVersionId) {
-      workQueueItems.push({ id: `${jobSite.id}:initial-agreement`, jobSiteName: jobSite.name, kind: "INITIAL_AGREEMENT_CONFIRMATION", detail: "L'Azienda ha pubblicato il riepilogo iniziale da controllare.", href: `${jobSiteHref}#riepilogo`, updatedAt: jobSite.updatedAt });
+      workQueueItems.push({ id: `${jobSite.id}:initial-agreement`, jobSiteName: jobSite.name, kind: "INITIAL_AGREEMENT_CONFIRMATION", detail: "L'Azienda ha pubblicato il riepilogo iniziale da controllare.", href: `${jobSiteHref}#initial-agreement-review`, updatedAt: jobSite.updatedAt });
     }
     if (participant.status !== "ACTIVE") continue;
     if (jobSite.status === "ACTIVE") {
       for (const step of jobSite.steps) workQueueItems.push({ id: `${jobSite.id}:step:${step.id}`, jobSiteName: jobSite.name, kind: "STEP_CONFIRMATION", detail: `${step.title}: l'Azienda ha indicato il completamento dello step.`, href: `${jobSiteHref}#step`, updatedAt: step.updatedAt });
-      for (const request of jobSite.requests) if (request.openedByParticipantId !== participant.id) workQueueItems.push({ id: `${jobSite.id}:request:${request.id}`, jobSiteName: jobSite.name, kind: "REQUEST_RESPONSE", detail: request.title, href: `${jobSiteHref}#richieste`, updatedAt: request.updatedAt });
-      for (const proposal of jobSite.changeProposals) workQueueItems.push({ id: `${jobSite.id}:proposal:${proposal.id}`, jobSiteName: jobSite.name, kind: "CHANGE_PROPOSAL_DECISION", detail: "L'Azienda ha inviato una proposta di modifica da valutare.", href: `${jobSiteHref}#modifiche`, updatedAt: proposal.updatedAt });
-      for (const payment of jobSite.paymentRequests) workQueueItems.push({ id: `${jobSite.id}:payment:${payment.id}`, jobSiteName: jobSite.name, kind: "PAYMENT_DECLARATION", detail: payment.reason, href: `${jobSiteHref}#pagamenti`, updatedAt: payment.updatedAt });
+      for (const request of jobSite.requests) if (request.openedByParticipantId !== participant.id) workQueueItems.push({ id: `${jobSite.id}:request:${request.id}`, jobSiteName: jobSite.name, kind: "REQUEST_RESPONSE", detail: request.title, href: `${jobSiteHref}#${jobSiteNotificationTargetId("request", request.id)}`, updatedAt: request.updatedAt });
+      for (const proposal of jobSite.changeProposals) workQueueItems.push({ id: `${jobSite.id}:proposal:${proposal.id}`, jobSiteName: jobSite.name, kind: "CHANGE_PROPOSAL_DECISION", detail: "L'Azienda ha inviato una proposta di modifica da valutare.", href: `${jobSiteHref}#${jobSiteNotificationTargetId("proposal", proposal.id)}`, updatedAt: proposal.updatedAt });
+      for (const payment of jobSite.paymentRequests) workQueueItems.push({ id: `${jobSite.id}:payment:${payment.id}`, jobSiteName: jobSite.name, kind: "PAYMENT_DECLARATION", detail: payment.reason, href: `${jobSiteHref}#${jobSiteNotificationTargetId("payment", payment.id)}`, updatedAt: payment.updatedAt });
     }
     if (["ACTIVE", "CLOSURE_PROPOSED"].includes(jobSite.status)) {
-      for (const disagreement of jobSite.disputes) if (disagreement.openedByParticipantId !== participant.id) workQueueItems.push({ id: `${jobSite.id}:disagreement:${disagreement.id}`, jobSiteName: jobSite.name, kind: "DISAGREEMENT_RESPONSE", detail: disagreement.title, href: `${jobSiteHref}#disaccordi`, updatedAt: disagreement.updatedAt });
+      for (const disagreement of jobSite.disputes) if (disagreement.openedByParticipantId !== participant.id) workQueueItems.push({ id: `${jobSite.id}:disagreement:${disagreement.id}`, jobSiteName: jobSite.name, kind: "DISAGREEMENT_RESPONSE", detail: disagreement.title, href: `${jobSiteHref}#${jobSiteNotificationTargetId("disagreement", disagreement.id)}`, updatedAt: disagreement.updatedAt });
     }
     if (jobSite.status === "CLOSURE_PROPOSED") {
       for (const closure of jobSite.closures) workQueueItems.push({ id: `${jobSite.id}:closure:${closure.id}`, jobSiteName: jobSite.name, kind: "CLOSURE_CONFIRMATION", detail: "L'Azienda ha proposto la chiusura e attende la tua decisione.", href: `${jobSiteHref}#chiusura`, updatedAt: closure.proposedAt });

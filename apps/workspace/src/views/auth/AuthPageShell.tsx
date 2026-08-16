@@ -76,6 +76,7 @@ function AuthTrustPanel() {
 }
 
 export function AuthPageShell({
+  as = "main",
   children,
   className,
   currentStep,
@@ -86,6 +87,7 @@ export function AuthPageShell({
   title,
   titleId,
 }: {
+  as?: "div" | "main";
   children: ReactNode;
   className?: string;
   currentStep?: number;
@@ -96,8 +98,10 @@ export function AuthPageShell({
   title: string;
   titleId: string;
 }) {
+  const Root = as;
+
   return (
-    <main className={styles.authPage}>
+    <Root className={styles.authPage}>
       <div aria-hidden="true" className={styles.authBackdrop} />
       <div className={styles.authContainer}>
         <Card className={cn(styles.authCard, className)}>
@@ -119,7 +123,7 @@ export function AuthPageShell({
           </CardContent>
         </Card>
       </div>
-    </main>
+    </Root>
   );
 }
 

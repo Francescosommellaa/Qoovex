@@ -8,6 +8,7 @@ import { ProductFrame } from "@/components/product-frame";
 import { Reveal } from "@/components/reveal";
 import { Section, SectionHeading } from "@/components/section";
 import { SiteShell } from "../site-chrome";
+import { signUpLabel, signUpUrl } from "../site-config";
 
 export const metadata: Metadata = {
   title: "Come funziona Qoovex - Dal cantiere alla cronologia condivisa",
@@ -37,7 +38,7 @@ const steps = [
   {
     step: "03",
     title: "Condivide ciò che il cliente deve vedere",
-    body: "La condivisione è esplicita: ogni contenuto resta interno finché l'impresa non lo condivide.",
+    body: "Note, aggiornamenti e file possono restare interni oppure essere condivisi; richieste e decisioni sono visibili alle parti coinvolte.",
   },
   {
     step: "04",
@@ -47,7 +48,7 @@ const steps = [
   {
     step: "05",
     title: "Fotografie e file non si perdono nelle chat",
-    body: "Le prove restano collegate all'aggiornamento invece di disperdersi tra messaggi.",
+    body: "I file restano nel cantiere o collegati alla richiesta, proposta, disaccordo o dichiarazione di pagamento a cui si riferiscono.",
   },
   {
     step: "06",
@@ -65,7 +66,7 @@ const distinctions = [
   {
     icon: IconEye,
     title: "Viene condiviso",
-    body: "Aggiornamenti, fotografie e modifiche resi visibili al cliente in modo esplicito.",
+    body: "Aggiornamenti e file condivisi, insieme alle richieste e alle decisioni che coinvolgono entrambe le parti.",
   },
   {
     icon: IconClock,
@@ -86,7 +87,7 @@ export default function ComeFunzionaPage() {
         current="Come funziona"
         eyebrow="Come funziona"
         title="Dal cantiere a una cronologia che entrambi possono ricostruire"
-        description="Qoovex segue un flusso semplice: l'impresa organizza e documenta il lavoro, poi condivide con il cliente solo ciò che serve, senza fingere che ogni funzione futura sia già disponibile."
+        description="Qoovex segue un flusso semplice: l'impresa organizza e documenta il lavoro, condivide ciò che serve e mantiene richieste, decisioni e passaggi di chiusura collegati allo stesso cantiere."
       />
 
       <Section bordered aria-labelledby="flusso-title">
@@ -118,7 +119,7 @@ export default function ComeFunzionaPage() {
             <SectionHeading
               titleId="distinzione-title"
               eyebrow="Interno, condiviso, in attesa, cronologia"
-              title="Ogni contenuto ha uno stato chiaro"
+              title="Interno, condiviso o in attesa: il contesto resta chiaro"
               description="Qoovex distingue sempre ciò che resta interno all'impresa da ciò che viene condiviso, ciò che richiede una risposta e ciò che resta nella cronologia."
             />
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
@@ -160,6 +161,8 @@ export default function ComeFunzionaPage() {
       <CtaBand
         title="Vedi come si applica al tuo lavoro"
         description="Scopri come impresa e cliente seguono lo stesso cantiere da due punti di vista diversi."
+        primaryHref={signUpUrl}
+        primaryLabel={signUpLabel}
       />
     </SiteShell>
   );

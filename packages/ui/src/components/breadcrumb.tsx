@@ -12,6 +12,7 @@ export interface BreadcrumbItemSpec {
   isCurrent?: boolean
   render?: useRender.ComponentProps<"a">["render"]
   className?: string
+  separatorClassName?: string
 }
 
 export interface BreadcrumbProps extends React.ComponentProps<"nav"> {
@@ -23,7 +24,7 @@ function Breadcrumb({ className, items, separator, children, ...props }: Breadcr
   if (items && items.length > 0) {
     return (
       <nav
-        aria-label="breadcrumb"
+        aria-label="Percorso di navigazione"
         data-slot="breadcrumb"
         className={cn("w-full min-w-0", className)}
         {...props}
@@ -35,7 +36,7 @@ function Breadcrumb({ className, items, separator, children, ...props }: Breadcr
             return (
               <React.Fragment key={index}>
                 {index > 0 ? (
-                  <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>
+                  <BreadcrumbSeparator className={item.separatorClassName}>{separator}</BreadcrumbSeparator>
                 ) : null}
                 <BreadcrumbItem className={item.className}>
                   {isCurrentPage ? (
@@ -60,7 +61,7 @@ function Breadcrumb({ className, items, separator, children, ...props }: Breadcr
 
   return (
     <nav
-      aria-label="breadcrumb"
+      aria-label="Percorso di navigazione"
       data-slot="breadcrumb"
       className={cn("w-full min-w-0", className)}
       {...props}
@@ -75,7 +76,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        "flex max-w-full overflow-x-auto scrollbar-none items-center gap-1.5 text-xs sm:text-sm text-muted-foreground whitespace-nowrap",
+        "flex max-w-full min-w-0 items-center gap-1.5 overflow-hidden px-1 py-1 text-xs text-muted-foreground whitespace-nowrap sm:text-sm",
         className
       )}
       {...props}
@@ -87,7 +88,7 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">) {
   return (
     <li
       data-slot="breadcrumb-item"
-      className={cn("inline-flex items-center gap-1.5 min-w-0", className)}
+      className={cn("inline-flex min-w-0 max-w-full items-center gap-1.5", className)}
       {...props}
     />
   )
@@ -103,7 +104,7 @@ function BreadcrumbLink({
     props: mergeProps<"a">(
       {
         className: cn(
-          "inline-flex items-center gap-1.5 font-medium transition-colors hover:text-foreground [&_svg]:size-3.5 [&_svg]:shrink-0 [&_svg]:text-muted-foreground hover:[&_svg]:text-foreground",
+          "inline-flex min-h-11 min-w-0 max-w-full items-center gap-1.5 truncate rounded-sm px-0.5 font-medium outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background [&_svg]:size-3.5 [&_svg]:shrink-0 [&_svg]:text-muted-foreground hover:[&_svg]:text-foreground",
           className
         ),
       },
@@ -120,11 +121,9 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
       data-slot="breadcrumb-page"
-      role="link"
-      aria-disabled="true"
       aria-current="page"
       className={cn(
-        "inline-flex items-center gap-1.5 font-semibold text-foreground [&_svg]:size-3.5 [&_svg]:shrink-0",
+        "inline-flex min-w-0 max-w-full items-center gap-1.5 truncate px-0.5 font-semibold text-foreground [&_svg]:size-3.5 [&_svg]:shrink-0",
         className
       )}
       {...props}

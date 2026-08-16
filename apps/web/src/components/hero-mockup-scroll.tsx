@@ -12,7 +12,9 @@ export function HeroMockupScroll({ children, className = "" }: HeroMockupScrollP
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    let animationFrameId: number;
+    let animationFrameId = 0;
+    let listeningForScroll = false;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -29,16 +31,38 @@ export function HeroMockupScroll({ children, className = "" }: HeroMockupScrollP
     };
 
     const onScroll = () => {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
       animationFrameId = requestAnimationFrame(handleScroll);
     };
 
-    handleScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", handleScroll, { passive: true });
-
-    return () => {
+    const stopListeningForScroll = () => {
+      if (!listeningForScroll) return;
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", handleScroll);
+      listeningForScroll = false;
+    };
+
+    const updateMotionPreference = () => {
+      stopListeningForScroll();
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+      if (reducedMotion.matches) {
+        setScrollProgress(1);
+        return;
+      }
+
+      handleScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", handleScroll, { passive: true });
+      listeningForScroll = true;
+    };
+
+    reducedMotion.addEventListener("change", updateMotionPreference);
+    updateMotionPreference();
+
+    return () => {
+      reducedMotion.removeEventListener("change", updateMotionPreference);
+      stopListeningForScroll();
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
   }, []);
@@ -54,6 +78,7 @@ export function HeroMockupScroll({ children, className = "" }: HeroMockupScrollP
   return (
     <div className={`perspective-container w-full ${className}`} ref={containerRef}>
       <div
+        data-hero-mockup-scroll
         style={{
           transform: `rotateX(${rotateX}deg) scale(${scale}) translateY(${translateY}px)`,
           transformOrigin: "50% 0%",

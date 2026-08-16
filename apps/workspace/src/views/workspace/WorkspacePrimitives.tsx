@@ -12,13 +12,14 @@ import { Badge } from "@qoovex/ui/components/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
 import type { ProductStatePresentation } from "@shared/lib/product-state-presentation";
+import { WorkspacePageIdentity } from "./WorkspacePageIdentity";
 
 export function WorkspacePage({ children }: { children: ReactNode }) {
   return <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">{children}</div>;
 }
 
 export function WorkspacePageHeader({ title, description, action }: { title: string; description: string; action?: ReactNode }) {
-  return <header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end"><div><h1 className="text-3xl font-semibold tracking-tight">{title}</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{description}</p></div>{action}</header>;
+  return <><WorkspacePageIdentity label={title} /><header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end"><div><h1 className="text-3xl font-semibold tracking-tight">{title}</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{description}</p></div>{action}</header></>;
 }
 
 export function WorkspacePanel({ title, description, children }: { title?: string; description?: string; children: ReactNode }) {

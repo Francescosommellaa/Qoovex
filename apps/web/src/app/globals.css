@@ -52,6 +52,13 @@
     transform: none;
     transition: none;
   }
+
+  [data-hero-mockup-scroll] {
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.25) !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
 }
 
 .marketing-dashboard-fade {

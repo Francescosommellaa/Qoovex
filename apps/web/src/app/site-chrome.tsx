@@ -85,7 +85,11 @@ export function SiteFooter() {
             </a>
           </div>
           {footerColumns.map((column) => (
-            <nav key={column.title} aria-label={column.title} className="flex flex-col gap-3">
+            <nav
+              key={column.title}
+              aria-label={`${column.title} nel piè di pagina`}
+              className="flex flex-col gap-3"
+            >
               <p className="text-sm font-medium text-foreground">{column.title}</p>
               {column.links.map((link) => (
                 <a
@@ -100,7 +104,7 @@ export function SiteFooter() {
           ))}
         </div>
         <div className="flex flex-col gap-4 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <nav className="flex flex-wrap gap-4 text-sm" aria-label="Link legali">
+          <nav className="flex flex-wrap gap-4 text-sm" aria-label="Link legali nel piè di pagina">
             {legalLinks.map((link) => (
               <a
                 className={cn(buttonVariants({ variant: "link" }), "h-auto w-fit p-0 justify-start font-normal text-muted-foreground hover:text-foreground")}
@@ -121,8 +125,16 @@ export function SiteFooter() {
 export function SiteShell({ children, sections = [] }: SiteShellProps) {
   return (
     <div className="min-h-dvh bg-background">
+      <a
+        className="fixed left-[max(1rem,var(--safe-area-left))] top-[max(1rem,var(--safe-area-top))] z-[60] -translate-y-24 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-lg outline-none transition-transform focus-visible:translate-y-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
+        href="#contenuto-principale"
+      >
+        Vai al contenuto principale
+      </a>
       <SiteHeader sections={sections} />
-      <main>{children}</main>
+      <main className="scroll-mt-24 outline-none" id="contenuto-principale" tabIndex={-1}>
+        {children}
+      </main>
       <SiteFooter />
     </div>
   );
@@ -140,7 +152,7 @@ export function LegalPage({ children, eyebrow = "Bozza da validare", intro, titl
       </section>
       <div className="mx-auto max-w-4xl px-4 sm:px-6">
         <Alert className="mt-8">
-          <IconInfoCircle />
+          <IconInfoCircle aria-hidden="true" />
           <AlertTitle>Contenuto da validare</AlertTitle>
           <AlertDescription>
             Questa traccia richiede verifica qualificata prima dell’uso commerciale.

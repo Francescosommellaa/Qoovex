@@ -7,6 +7,7 @@ export const workspaceUrl = process.env.NEXT_PUBLIC_WORKSPACE_URL?.trim() || "ht
 // Route pubblica reale del Workspace verificata nel repository (apps/workspace/src/app/sign-in).
 // Il proxy di apps/workspace reindirizza gli utenti non autenticati verso "/sign-in": è quindi pubblica.
 export const signInUrl = `${workspaceUrl.replace(/\/$/, "")}/sign-in`;
+export const signUpUrl = `${workspaceUrl.replace(/\/$/, "")}/sign-up`;
 
 // CTA principale del sito: azione di navigazione interna verso la spiegazione del prodotto.
 export const primaryCtaLabel = "Scopri come funziona";
@@ -14,6 +15,7 @@ export const primaryCtaHref = "/come-funziona";
 
 // Azione secondaria discreta: accesso al Workspace reale.
 export const signInLabel = "Accedi";
+export const signUpLabel = "Crea il tuo account";
 
 // Navigazione desktop essenziale.
 export const mainNavLinks = [

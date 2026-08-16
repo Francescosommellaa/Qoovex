@@ -5,7 +5,7 @@ import { CtaBand } from "@/components/cta-band";
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
 import { Section, SectionHeading } from "@/components/section";
-import { legalLinks } from "../site-config";
+import { legalLinks, signUpLabel, signUpUrl } from "../site-config";
 import { SiteShell } from "../site-chrome";
 
 export const metadata: Metadata = {
@@ -41,7 +41,7 @@ const principles = [
   {
     icon: IconLock,
     title: "Condivisione esplicita",
-    body: "Un contenuto diventa visibile a un cliente solo quando l'impresa lo condivide in modo esplicito.",
+    body: "Note, aggiornamenti e file dell'Azienda diventano visibili al cliente solo quando vengono condivisi.",
   },
 ];
 
@@ -129,7 +129,9 @@ export default function FiduciaPage() {
 
       <CtaBand
         title="Documenta il lavoro con riservatezza"
-        description="Attiva l'ambiente Azienda: i contenuti restano privati finché non decidi di condividerli."
+        description="Attiva l'ambiente Azienda: note, aggiornamenti e file possono restare interni oppure essere condivisi con il cliente."
+        primaryHref={signUpUrl}
+        primaryLabel={signUpLabel}
       />
     </SiteShell>
   );

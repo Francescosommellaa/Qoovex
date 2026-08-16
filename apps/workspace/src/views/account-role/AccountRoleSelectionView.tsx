@@ -7,11 +7,41 @@ import { Card, CardContent } from "@qoovex/ui/components/card";
 import type { AccountRole } from "@qoovex/types";
 import { AuthPageShell, AuthStage } from "../auth/AuthPageShell";
 
-const choices: Array<{ role: AccountRole; label: string; description: string; icon: typeof IconBuilding }> = [
-  { role: "BUSINESS", label: "Azienda", description: "Crea la tua Azienda e i suoi cantieri.", icon: IconBuilding },
-  { role: "PROFESSIONAL", label: "Professionista", description: "Accedi solo tramite invito Collaborator.", icon: IconBriefcase },
-  { role: "CLIENT", label: "Cliente", description: "Accedi solo ai cantieri a cui sei invitato.", icon: IconHome },
-];
+interface AccountRoleChoice {
+  access: string;
+  description: string;
+  icon: typeof IconBuilding;
+  label: string;
+  nextStep: string;
+  role: AccountRole;
+}
+
+export const accountRoleChoices = [
+  {
+    role: "BUSINESS",
+    label: "Azienda",
+    description: "Per chi gestisce un’Azienda e i suoi lavori.",
+    access: "Crei la tua Azienda e i cantieri che gestisce.",
+    nextStep: "Se non hai ancora un’Azienda, completerai la sua configurazione.",
+    icon: IconBuilding,
+  },
+  {
+    role: "PROFESSIONAL",
+    label: "Professionista",
+    description: "Per collaboratori e professionisti che lavorano con un’Azienda su Qoovex.",
+    access: "Un’Azienda deve invitarti come Collaboratore: dovrai aprire e accettare l’invito. Potrai usare soltanto i lavori e le funzioni inclusi nei permessi ricevuti.",
+    nextStep: "Se hai già aperto un link di invito, tornerai all’invito; altrimenti vedrai la pagina di attesa.",
+    icon: IconBriefcase,
+  },
+  {
+    role: "CLIENT",
+    label: "Cliente",
+    description: "Per chi segue un lavoro affidato a un’Azienda.",
+    access: "Entri soltanto nei cantieri a cui sei invitato come Cliente.",
+    nextStep: "Se hai già aperto un link di invito, tornerai all’invito; altrimenti aprirai l’area Cliente.",
+    icon: IconHome,
+  },
+] satisfies readonly AccountRoleChoice[];
 
 export function AccountRoleSelectionView({ returnTo }: { returnTo: string }) {
   const [pending, setPending] = useState<AccountRole | null>(null);
@@ -36,16 +66,25 @@ export function AccountRoleSelectionView({ returnTo }: { returnTo: string }) {
       title="Come userai Qoovex?"
       titleId="account-role-title"
       kicker="Account Qoovex"
-      description={<p>Questa scelta definisce il modo in cui puoi entrare nel workspace. Non potra essere modificata in seguito.</p>}
+      description={<p>Scegli il tipo di account adatto a te. Dopo la conferma non potrai cambiarlo.</p>}
     >
       <AuthStage>
         <div className="grid gap-3">
-          {choices.map(({ role, label, description, icon: Icon }) => (
+          {accountRoleChoices.map(({ role, label, description, access, nextStep, icon: Icon }) => (
             <Card key={role} className="border-border/70">
-              <CardContent className="flex items-center gap-3 p-4">
-                <Icon aria-hidden="true" className="size-5 text-muted-foreground" />
-                <div className="min-w-0 flex-1"><h2 className="font-medium">{label}</h2><p className="text-sm text-muted-foreground">{description}</p></div>
-                <Button disabled={pending !== null} onClick={() => void selectRole(role)}>{pending === role ? "Salvataggio…" : "Scegli"}</Button>
+              <CardContent className="flex flex-col gap-4 p-4 sm:flex-row sm:items-start">
+                <Icon aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
+                <div className="min-w-0 flex-1">
+                  <h2 className="font-medium">{label}</h2>
+                  <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+                  <dl className="mt-3 grid gap-2 text-sm">
+                    <div><dt className="font-medium">Come accedi</dt><dd className="text-muted-foreground">{access}</dd></div>
+                    <div><dt className="font-medium">Dopo la scelta</dt><dd className="text-muted-foreground">{nextStep}</dd></div>
+                  </dl>
+                </div>
+                <Button className="w-full shrink-0 sm:w-auto" disabled={pending !== null} onClick={() => void selectRole(role)}>
+                  {pending === role ? "Salvataggio…" : `Scegli ${label}`}
+                </Button>
               </CardContent>
             </Card>
           ))}

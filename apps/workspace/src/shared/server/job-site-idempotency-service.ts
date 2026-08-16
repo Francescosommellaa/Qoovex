@@ -1,6 +1,7 @@
 import "server-only";
 
 import { db, Prisma } from "@qoovex/db";
+import { notificationSourceIdFromResult } from "@shared/lib/job-site-notification-destination";
 import { AccessError } from "./access-errors";
 import { fingerprintPayload } from "./job-site-contracts";
 import { runSerializableTransaction } from "./serializable-transaction";
@@ -33,7 +34,7 @@ export async function executeIdempotentJobSiteMutation<T extends Record<string, 
     if (updated.count !== 1) throw new AccessError("Il cantiere e stato modificato.", 409, "STALE_REVISION");
     const revision = input.expectedRevision + 1;
     await tx.jobSiteActionReceipt.create({ data: { organizationId: input.actor.organizationId, jobSiteId: input.actor.jobSiteId, action: input.action, idempotencyKey: input.idempotencyKey, inputFingerprint, result: result as Prisma.InputJsonValue, resultFingerprint: fingerprintPayload(result), actorUserId: input.actor.userId, actorParticipantId: input.actor.participantId, expectedRevision: input.expectedRevision, resultingRevision: revision } });
-    await queueJobSiteNotifications(tx, { actor: input.actor, action: input.action, idempotencyKey: input.idempotencyKey, sourceId: typeof result.id === "string" ? result.id : null });
+    await queueJobSiteNotifications(tx, { actor: input.actor, action: input.action, idempotencyKey: input.idempotencyKey, result, sourceId: notificationSourceIdFromResult(input.action, result) });
     return { result, revision };
   }, { shouldRetry: (error) => error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002" });
   await recordProductAuditEvent({ organizationId: input.actor.organizationId, actorUserId: input.actor.userId, actorRole: input.actor.role, action: "JOB_SITE_ACTION_EXECUTED", entityType: "JOB_SITE", entityId: input.actor.jobSiteId });

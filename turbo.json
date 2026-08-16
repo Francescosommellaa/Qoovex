@@ -68,7 +68,8 @@
         "DATABASE_URL",
         "DATABASE_POSTGRES_URL",
         "DATABASE_PRISMA_DATABASE_URL",
-        "QOOVEX_AUDIT_SECRET"
+        "QOOVEX_AUDIT_SECRET",
+        "QOOVEX_POSTGRES_INTEGRATION_PHASE"
       ]
     },
     "@qoovex/ui#test": {

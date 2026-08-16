@@ -6,7 +6,7 @@ import { SiteShell } from "../site-chrome";
 
 export const metadata: Metadata = {
   title: "Contattaci | Qoovex",
-  description: "Contatta Qoovex per parlare della direzione prodotto current.",
+  description: "Contatta Qoovex per capire come organizzare il lavoro condiviso tra impresa e cliente.",
 };
 
 export default function ContactPage() {
@@ -35,6 +35,7 @@ export default function ContactPage() {
               <a className={buttonVariants({ className: "mt-6" })} href={contactHref}>
                 Invia un&apos;email{" "}
                 <IconArrowRight
+                  aria-hidden="true"
                   data-icon="inline-end"
                   className="transition-transform duration-200 group-hover/button:translate-x-0.5"
                 />

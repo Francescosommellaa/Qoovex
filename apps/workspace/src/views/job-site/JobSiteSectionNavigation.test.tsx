@@ -67,4 +67,15 @@ describe("JobSiteSectionNavigation", () => {
       ],
     })).toBe("files");
   });
+
+  it("porta un deep link preciso all'elemento e ripiega sulla sezione se non esiste più", async () => {
+    const { clientJobSiteSectionTargets, resolveJobSiteDeepLink } = await import("./JobSiteSectionNavigation");
+    const { jobSiteNotificationTargetId } = await import("@shared/lib/job-site-notification-destination");
+    const sections = ["overview", "activities", "decisions", "payments", "files"] as const;
+    const paymentTarget = jobSiteNotificationTargetId("payment", "payment-1");
+
+    expect(resolveJobSiteDeepLink({ hash: `#${paymentTarget}`, hasTarget: (id) => id === paymentTarget, sections, targets: clientJobSiteSectionTargets })).toEqual({ missing: false, section: "payments", targetId: paymentTarget });
+    expect(resolveJobSiteDeepLink({ hash: "#attachment-missing", hasTarget: () => false, sections, targets: clientJobSiteSectionTargets })).toEqual({ missing: true, section: "files", targetId: "documenti" });
+    expect(resolveJobSiteDeepLink({ hash: "#archivio", hasTarget: () => false, sections, targets: clientJobSiteSectionTargets })).toEqual({ missing: true, section: "overview", targetId: "riepilogo" });
+  });
 });

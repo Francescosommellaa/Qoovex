@@ -88,7 +88,7 @@ export async function uploadJobSiteAttachment(input: { actor: JobSiteActor; file
       if (updated.count !== 1) throw new AccessError("Il cantiere è stato modificato.", 409, "STALE_REVISION");
       const result = { ...attachment, createdAt: attachment.createdAt.toISOString(), timeline: { eventId: event.id, sequence: event.sequence.toString() } };
       await tx.jobSiteActionReceipt.create({ data: { organizationId: input.actor.organizationId, jobSiteId: input.actor.jobSiteId, action: "ATTACHMENT_UPLOAD@1", idempotencyKey: input.idempotencyKey, inputFingerprint, result, resultFingerprint: fingerprintPayload(result), actorUserId: input.actor.userId, actorParticipantId: input.actor.participantId, expectedRevision: input.expectedRevision, resultingRevision: input.expectedRevision + 1 } });
-      await queueJobSiteNotifications(tx, { actor: input.actor, action: "ATTACHMENT_UPLOAD@1", idempotencyKey: input.idempotencyKey, sourceId: attachment.id });
+      await queueJobSiteNotifications(tx, { actor: input.actor, action: "ATTACHMENT_UPLOAD@1", idempotencyKey: input.idempotencyKey, result: { attachmentId: attachment.id }, sourceId: attachment.id });
       return { ...result, replayed: false, revision: input.expectedRevision + 1 };
     }, { shouldRetry: (error) => error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2034" });
     await recordProductAuditEventBestEffort({ organizationId: input.actor.organizationId, actorUserId: input.actor.userId, action: "JOB_SITE_ATTACHMENT_UPLOADED", entityType: "JOB_SITE_ATTACHMENT", entityId: id });

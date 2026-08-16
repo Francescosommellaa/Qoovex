@@ -290,6 +290,7 @@ export type JobSiteDisputeWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"JobSiteDispute"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   jobSite?: Prisma.XOR<Prisma.JobSiteScalarRelationFilter, Prisma.JobSiteWhereInput>
+  openedByParticipant?: Prisma.XOR<Prisma.JobSiteParticipantScalarRelationFilter, Prisma.JobSiteParticipantWhereInput>
   references?: Prisma.JobSiteDisputeArtifactReferenceListRelationFilter
   consents?: Prisma.JobSiteDisputeConsentListRelationFilter
   preservations?: Prisma.JobSiteDisputePreservationListRelationFilter
@@ -312,6 +313,7 @@ export type JobSiteDisputeOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   jobSite?: Prisma.JobSiteOrderByWithRelationInput
+  openedByParticipant?: Prisma.JobSiteParticipantOrderByWithRelationInput
   references?: Prisma.JobSiteDisputeArtifactReferenceOrderByRelationAggregateInput
   consents?: Prisma.JobSiteDisputeConsentOrderByRelationAggregateInput
   preservations?: Prisma.JobSiteDisputePreservationOrderByRelationAggregateInput
@@ -337,6 +339,7 @@ export type JobSiteDisputeWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"JobSiteDispute"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   jobSite?: Prisma.XOR<Prisma.JobSiteScalarRelationFilter, Prisma.JobSiteWhereInput>
+  openedByParticipant?: Prisma.XOR<Prisma.JobSiteParticipantScalarRelationFilter, Prisma.JobSiteParticipantWhereInput>
   references?: Prisma.JobSiteDisputeArtifactReferenceListRelationFilter
   consents?: Prisma.JobSiteDisputeConsentListRelationFilter
   preservations?: Prisma.JobSiteDisputePreservationListRelationFilter
@@ -386,7 +389,6 @@ export type JobSiteDisputeScalarWhereWithAggregatesInput = {
 
 export type JobSiteDisputeCreateInput = {
   id?: string
-  openedByParticipantId: string
   title: string
   description: string
   status?: $Enums.DisputeStatus
@@ -399,6 +401,7 @@ export type JobSiteDisputeCreateInput = {
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutDisputesInput
   jobSite: Prisma.JobSiteCreateNestedOneWithoutDisputesInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedDisputesInput
   references?: Prisma.JobSiteDisputeArtifactReferenceCreateNestedManyWithoutDisputeInput
   consents?: Prisma.JobSiteDisputeConsentCreateNestedManyWithoutDisputeInput
   preservations?: Prisma.JobSiteDisputePreservationCreateNestedManyWithoutDisputeInput
@@ -426,7 +429,6 @@ export type JobSiteDisputeUncheckedCreateInput = {
 
 export type JobSiteDisputeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
@@ -439,6 +441,7 @@ export type JobSiteDisputeUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDisputesNestedInput
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutDisputesNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedDisputesNestedInput
   references?: Prisma.JobSiteDisputeArtifactReferenceUpdateManyWithoutDisputeNestedInput
   consents?: Prisma.JobSiteDisputeConsentUpdateManyWithoutDisputeNestedInput
   preservations?: Prisma.JobSiteDisputePreservationUpdateManyWithoutDisputeNestedInput
@@ -483,7 +486,6 @@ export type JobSiteDisputeCreateManyInput = {
 
 export type JobSiteDisputeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
@@ -671,6 +673,48 @@ export type JobSiteDisputeUncheckedUpdateManyWithoutJobSiteNestedInput = {
   deleteMany?: Prisma.JobSiteDisputeScalarWhereInput | Prisma.JobSiteDisputeScalarWhereInput[]
 }
 
+export type JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput = {
+  create?: Prisma.XOR<Prisma.JobSiteDisputeCreateWithoutOpenedByParticipantInput, Prisma.JobSiteDisputeUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSiteDisputeCreateWithoutOpenedByParticipantInput[] | Prisma.JobSiteDisputeUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSiteDisputeCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSiteDisputeCreateOrConnectWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSiteDisputeCreateManyOpenedByParticipantInputEnvelope
+  connect?: Prisma.JobSiteDisputeWhereUniqueInput | Prisma.JobSiteDisputeWhereUniqueInput[]
+}
+
+export type JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput = {
+  create?: Prisma.XOR<Prisma.JobSiteDisputeCreateWithoutOpenedByParticipantInput, Prisma.JobSiteDisputeUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSiteDisputeCreateWithoutOpenedByParticipantInput[] | Prisma.JobSiteDisputeUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSiteDisputeCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSiteDisputeCreateOrConnectWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSiteDisputeCreateManyOpenedByParticipantInputEnvelope
+  connect?: Prisma.JobSiteDisputeWhereUniqueInput | Prisma.JobSiteDisputeWhereUniqueInput[]
+}
+
+export type JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSiteDisputeCreateWithoutOpenedByParticipantInput, Prisma.JobSiteDisputeUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSiteDisputeCreateWithoutOpenedByParticipantInput[] | Prisma.JobSiteDisputeUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSiteDisputeCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSiteDisputeCreateOrConnectWithoutOpenedByParticipantInput[]
+  upsert?: Prisma.JobSiteDisputeUpsertWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSiteDisputeUpsertWithWhereUniqueWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSiteDisputeCreateManyOpenedByParticipantInputEnvelope
+  set?: Prisma.JobSiteDisputeWhereUniqueInput | Prisma.JobSiteDisputeWhereUniqueInput[]
+  disconnect?: Prisma.JobSiteDisputeWhereUniqueInput | Prisma.JobSiteDisputeWhereUniqueInput[]
+  delete?: Prisma.JobSiteDisputeWhereUniqueInput | Prisma.JobSiteDisputeWhereUniqueInput[]
+  connect?: Prisma.JobSiteDisputeWhereUniqueInput | Prisma.JobSiteDisputeWhereUniqueInput[]
+  update?: Prisma.JobSiteDisputeUpdateWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSiteDisputeUpdateWithWhereUniqueWithoutOpenedByParticipantInput[]
+  updateMany?: Prisma.JobSiteDisputeUpdateManyWithWhereWithoutOpenedByParticipantInput | Prisma.JobSiteDisputeUpdateManyWithWhereWithoutOpenedByParticipantInput[]
+  deleteMany?: Prisma.JobSiteDisputeScalarWhereInput | Prisma.JobSiteDisputeScalarWhereInput[]
+}
+
+export type JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSiteDisputeCreateWithoutOpenedByParticipantInput, Prisma.JobSiteDisputeUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSiteDisputeCreateWithoutOpenedByParticipantInput[] | Prisma.JobSiteDisputeUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSiteDisputeCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSiteDisputeCreateOrConnectWithoutOpenedByParticipantInput[]
+  upsert?: Prisma.JobSiteDisputeUpsertWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSiteDisputeUpsertWithWhereUniqueWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSiteDisputeCreateManyOpenedByParticipantInputEnvelope
+  set?: Prisma.JobSiteDisputeWhereUniqueInput | Prisma.JobSiteDisputeWhereUniqueInput[]
+  disconnect?: Prisma.JobSiteDisputeWhereUniqueInput | Prisma.JobSiteDisputeWhereUniqueInput[]
+  delete?: Prisma.JobSiteDisputeWhereUniqueInput | Prisma.JobSiteDisputeWhereUniqueInput[]
+  connect?: Prisma.JobSiteDisputeWhereUniqueInput | Prisma.JobSiteDisputeWhereUniqueInput[]
+  update?: Prisma.JobSiteDisputeUpdateWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSiteDisputeUpdateWithWhereUniqueWithoutOpenedByParticipantInput[]
+  updateMany?: Prisma.JobSiteDisputeUpdateManyWithWhereWithoutOpenedByParticipantInput | Prisma.JobSiteDisputeUpdateManyWithWhereWithoutOpenedByParticipantInput[]
+  deleteMany?: Prisma.JobSiteDisputeScalarWhereInput | Prisma.JobSiteDisputeScalarWhereInput[]
+}
+
 export type EnumDisputeStatusFieldUpdateOperationsInput = {
   set?: $Enums.DisputeStatus
 }
@@ -723,7 +767,6 @@ export type JobSiteDisputeUpdateOneRequiredWithoutPreservationsNestedInput = {
 
 export type JobSiteDisputeCreateWithoutOrganizationInput = {
   id?: string
-  openedByParticipantId: string
   title: string
   description: string
   status?: $Enums.DisputeStatus
@@ -735,6 +778,7 @@ export type JobSiteDisputeCreateWithoutOrganizationInput = {
   withdrawnAt?: Date | string | null
   updatedAt?: Date | string
   jobSite: Prisma.JobSiteCreateNestedOneWithoutDisputesInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedDisputesInput
   references?: Prisma.JobSiteDisputeArtifactReferenceCreateNestedManyWithoutDisputeInput
   consents?: Prisma.JobSiteDisputeConsentCreateNestedManyWithoutDisputeInput
   preservations?: Prisma.JobSiteDisputePreservationCreateNestedManyWithoutDisputeInput
@@ -807,7 +851,6 @@ export type JobSiteDisputeScalarWhereInput = {
 
 export type JobSiteDisputeCreateWithoutJobSiteInput = {
   id?: string
-  openedByParticipantId: string
   title: string
   description: string
   status?: $Enums.DisputeStatus
@@ -819,6 +862,7 @@ export type JobSiteDisputeCreateWithoutJobSiteInput = {
   withdrawnAt?: Date | string | null
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutDisputesInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedDisputesInput
   references?: Prisma.JobSiteDisputeArtifactReferenceCreateNestedManyWithoutDisputeInput
   consents?: Prisma.JobSiteDisputeConsentCreateNestedManyWithoutDisputeInput
   preservations?: Prisma.JobSiteDisputePreservationCreateNestedManyWithoutDisputeInput
@@ -869,9 +913,8 @@ export type JobSiteDisputeUpdateManyWithWhereWithoutJobSiteInput = {
   data: Prisma.XOR<Prisma.JobSiteDisputeUpdateManyMutationInput, Prisma.JobSiteDisputeUncheckedUpdateManyWithoutJobSiteInput>
 }
 
-export type JobSiteDisputeCreateWithoutReferencesInput = {
+export type JobSiteDisputeCreateWithoutOpenedByParticipantInput = {
   id?: string
-  openedByParticipantId: string
   title: string
   description: string
   status?: $Enums.DisputeStatus
@@ -884,6 +927,71 @@ export type JobSiteDisputeCreateWithoutReferencesInput = {
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutDisputesInput
   jobSite: Prisma.JobSiteCreateNestedOneWithoutDisputesInput
+  references?: Prisma.JobSiteDisputeArtifactReferenceCreateNestedManyWithoutDisputeInput
+  consents?: Prisma.JobSiteDisputeConsentCreateNestedManyWithoutDisputeInput
+  preservations?: Prisma.JobSiteDisputePreservationCreateNestedManyWithoutDisputeInput
+}
+
+export type JobSiteDisputeUncheckedCreateWithoutOpenedByParticipantInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  title: string
+  description: string
+  status?: $Enums.DisputeStatus
+  revision?: number
+  relatedType?: $Enums.ArtifactReferenceType | null
+  relatedId?: string | null
+  openedAt?: Date | string
+  resolvedAt?: Date | string | null
+  withdrawnAt?: Date | string | null
+  updatedAt?: Date | string
+  references?: Prisma.JobSiteDisputeArtifactReferenceUncheckedCreateNestedManyWithoutDisputeInput
+  consents?: Prisma.JobSiteDisputeConsentUncheckedCreateNestedManyWithoutDisputeInput
+  preservations?: Prisma.JobSiteDisputePreservationUncheckedCreateNestedManyWithoutDisputeInput
+}
+
+export type JobSiteDisputeCreateOrConnectWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSiteDisputeWhereUniqueInput
+  create: Prisma.XOR<Prisma.JobSiteDisputeCreateWithoutOpenedByParticipantInput, Prisma.JobSiteDisputeUncheckedCreateWithoutOpenedByParticipantInput>
+}
+
+export type JobSiteDisputeCreateManyOpenedByParticipantInputEnvelope = {
+  data: Prisma.JobSiteDisputeCreateManyOpenedByParticipantInput | Prisma.JobSiteDisputeCreateManyOpenedByParticipantInput[]
+  skipDuplicates?: boolean
+}
+
+export type JobSiteDisputeUpsertWithWhereUniqueWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSiteDisputeWhereUniqueInput
+  update: Prisma.XOR<Prisma.JobSiteDisputeUpdateWithoutOpenedByParticipantInput, Prisma.JobSiteDisputeUncheckedUpdateWithoutOpenedByParticipantInput>
+  create: Prisma.XOR<Prisma.JobSiteDisputeCreateWithoutOpenedByParticipantInput, Prisma.JobSiteDisputeUncheckedCreateWithoutOpenedByParticipantInput>
+}
+
+export type JobSiteDisputeUpdateWithWhereUniqueWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSiteDisputeWhereUniqueInput
+  data: Prisma.XOR<Prisma.JobSiteDisputeUpdateWithoutOpenedByParticipantInput, Prisma.JobSiteDisputeUncheckedUpdateWithoutOpenedByParticipantInput>
+}
+
+export type JobSiteDisputeUpdateManyWithWhereWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSiteDisputeScalarWhereInput
+  data: Prisma.XOR<Prisma.JobSiteDisputeUpdateManyMutationInput, Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantInput>
+}
+
+export type JobSiteDisputeCreateWithoutReferencesInput = {
+  id?: string
+  title: string
+  description: string
+  status?: $Enums.DisputeStatus
+  revision?: number
+  relatedType?: $Enums.ArtifactReferenceType | null
+  relatedId?: string | null
+  openedAt?: Date | string
+  resolvedAt?: Date | string | null
+  withdrawnAt?: Date | string | null
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutDisputesInput
+  jobSite: Prisma.JobSiteCreateNestedOneWithoutDisputesInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedDisputesInput
   consents?: Prisma.JobSiteDisputeConsentCreateNestedManyWithoutDisputeInput
   preservations?: Prisma.JobSiteDisputePreservationCreateNestedManyWithoutDisputeInput
 }
@@ -925,7 +1033,6 @@ export type JobSiteDisputeUpdateToOneWithWhereWithoutReferencesInput = {
 
 export type JobSiteDisputeUpdateWithoutReferencesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
@@ -938,6 +1045,7 @@ export type JobSiteDisputeUpdateWithoutReferencesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDisputesNestedInput
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutDisputesNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedDisputesNestedInput
   consents?: Prisma.JobSiteDisputeConsentUpdateManyWithoutDisputeNestedInput
   preservations?: Prisma.JobSiteDisputePreservationUpdateManyWithoutDisputeNestedInput
 }
@@ -963,7 +1071,6 @@ export type JobSiteDisputeUncheckedUpdateWithoutReferencesInput = {
 
 export type JobSiteDisputeCreateWithoutConsentsInput = {
   id?: string
-  openedByParticipantId: string
   title: string
   description: string
   status?: $Enums.DisputeStatus
@@ -976,6 +1083,7 @@ export type JobSiteDisputeCreateWithoutConsentsInput = {
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutDisputesInput
   jobSite: Prisma.JobSiteCreateNestedOneWithoutDisputesInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedDisputesInput
   references?: Prisma.JobSiteDisputeArtifactReferenceCreateNestedManyWithoutDisputeInput
   preservations?: Prisma.JobSiteDisputePreservationCreateNestedManyWithoutDisputeInput
 }
@@ -1017,7 +1125,6 @@ export type JobSiteDisputeUpdateToOneWithWhereWithoutConsentsInput = {
 
 export type JobSiteDisputeUpdateWithoutConsentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
@@ -1030,6 +1137,7 @@ export type JobSiteDisputeUpdateWithoutConsentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDisputesNestedInput
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutDisputesNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedDisputesNestedInput
   references?: Prisma.JobSiteDisputeArtifactReferenceUpdateManyWithoutDisputeNestedInput
   preservations?: Prisma.JobSiteDisputePreservationUpdateManyWithoutDisputeNestedInput
 }
@@ -1055,7 +1163,6 @@ export type JobSiteDisputeUncheckedUpdateWithoutConsentsInput = {
 
 export type JobSiteDisputeCreateWithoutPreservationsInput = {
   id?: string
-  openedByParticipantId: string
   title: string
   description: string
   status?: $Enums.DisputeStatus
@@ -1068,6 +1175,7 @@ export type JobSiteDisputeCreateWithoutPreservationsInput = {
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutDisputesInput
   jobSite: Prisma.JobSiteCreateNestedOneWithoutDisputesInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedDisputesInput
   references?: Prisma.JobSiteDisputeArtifactReferenceCreateNestedManyWithoutDisputeInput
   consents?: Prisma.JobSiteDisputeConsentCreateNestedManyWithoutDisputeInput
 }
@@ -1109,7 +1217,6 @@ export type JobSiteDisputeUpdateToOneWithWhereWithoutPreservationsInput = {
 
 export type JobSiteDisputeUpdateWithoutPreservationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
@@ -1122,6 +1229,7 @@ export type JobSiteDisputeUpdateWithoutPreservationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDisputesNestedInput
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutDisputesNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedDisputesNestedInput
   references?: Prisma.JobSiteDisputeArtifactReferenceUpdateManyWithoutDisputeNestedInput
   consents?: Prisma.JobSiteDisputeConsentUpdateManyWithoutDisputeNestedInput
 }
@@ -1163,7 +1271,6 @@ export type JobSiteDisputeCreateManyOrganizationInput = {
 
 export type JobSiteDisputeUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
@@ -1175,6 +1282,7 @@ export type JobSiteDisputeUpdateWithoutOrganizationInput = {
   withdrawnAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutDisputesNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedDisputesNestedInput
   references?: Prisma.JobSiteDisputeArtifactReferenceUpdateManyWithoutDisputeNestedInput
   consents?: Prisma.JobSiteDisputeConsentUpdateManyWithoutDisputeNestedInput
   preservations?: Prisma.JobSiteDisputePreservationUpdateManyWithoutDisputeNestedInput
@@ -1233,7 +1341,6 @@ export type JobSiteDisputeCreateManyJobSiteInput = {
 
 export type JobSiteDisputeUpdateWithoutJobSiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
@@ -1245,6 +1352,7 @@ export type JobSiteDisputeUpdateWithoutJobSiteInput = {
   withdrawnAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDisputesNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedDisputesNestedInput
   references?: Prisma.JobSiteDisputeArtifactReferenceUpdateManyWithoutDisputeNestedInput
   consents?: Prisma.JobSiteDisputeConsentUpdateManyWithoutDisputeNestedInput
   preservations?: Prisma.JobSiteDisputePreservationUpdateManyWithoutDisputeNestedInput
@@ -1273,6 +1381,76 @@ export type JobSiteDisputeUncheckedUpdateManyWithoutJobSiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  relatedType?: Prisma.NullableEnumArtifactReferenceTypeFieldUpdateOperationsInput | $Enums.ArtifactReferenceType | null
+  relatedId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  withdrawnAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type JobSiteDisputeCreateManyOpenedByParticipantInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  title: string
+  description: string
+  status?: $Enums.DisputeStatus
+  revision?: number
+  relatedType?: $Enums.ArtifactReferenceType | null
+  relatedId?: string | null
+  openedAt?: Date | string
+  resolvedAt?: Date | string | null
+  withdrawnAt?: Date | string | null
+  updatedAt?: Date | string
+}
+
+export type JobSiteDisputeUpdateWithoutOpenedByParticipantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  relatedType?: Prisma.NullableEnumArtifactReferenceTypeFieldUpdateOperationsInput | $Enums.ArtifactReferenceType | null
+  relatedId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  withdrawnAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDisputesNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutDisputesNestedInput
+  references?: Prisma.JobSiteDisputeArtifactReferenceUpdateManyWithoutDisputeNestedInput
+  consents?: Prisma.JobSiteDisputeConsentUpdateManyWithoutDisputeNestedInput
+  preservations?: Prisma.JobSiteDisputePreservationUpdateManyWithoutDisputeNestedInput
+}
+
+export type JobSiteDisputeUncheckedUpdateWithoutOpenedByParticipantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  relatedType?: Prisma.NullableEnumArtifactReferenceTypeFieldUpdateOperationsInput | $Enums.ArtifactReferenceType | null
+  relatedId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  openedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  withdrawnAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  references?: Prisma.JobSiteDisputeArtifactReferenceUncheckedUpdateManyWithoutDisputeNestedInput
+  consents?: Prisma.JobSiteDisputeConsentUncheckedUpdateManyWithoutDisputeNestedInput
+  preservations?: Prisma.JobSiteDisputePreservationUncheckedUpdateManyWithoutDisputeNestedInput
+}
+
+export type JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDisputeStatusFieldUpdateOperationsInput | $Enums.DisputeStatus
@@ -1351,6 +1529,7 @@ export type JobSiteDisputeSelect<ExtArgs extends runtime.Types.Extensions.Intern
   updatedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
   references?: boolean | Prisma.JobSiteDispute$referencesArgs<ExtArgs>
   consents?: boolean | Prisma.JobSiteDispute$consentsArgs<ExtArgs>
   preservations?: boolean | Prisma.JobSiteDispute$preservationsArgs<ExtArgs>
@@ -1374,6 +1553,7 @@ export type JobSiteDisputeSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   updatedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jobSiteDispute"]>
 
 export type JobSiteDisputeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1393,6 +1573,7 @@ export type JobSiteDisputeSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   updatedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jobSiteDispute"]>
 
 export type JobSiteDisputeSelectScalar = {
@@ -1416,6 +1597,7 @@ export type JobSiteDisputeOmit<ExtArgs extends runtime.Types.Extensions.Internal
 export type JobSiteDisputeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
   references?: boolean | Prisma.JobSiteDispute$referencesArgs<ExtArgs>
   consents?: boolean | Prisma.JobSiteDispute$consentsArgs<ExtArgs>
   preservations?: boolean | Prisma.JobSiteDispute$preservationsArgs<ExtArgs>
@@ -1424,10 +1606,12 @@ export type JobSiteDisputeInclude<ExtArgs extends runtime.Types.Extensions.Inter
 export type JobSiteDisputeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }
 export type JobSiteDisputeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }
 
 export type $JobSiteDisputePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1435,6 +1619,7 @@ export type $JobSiteDisputePayload<ExtArgs extends runtime.Types.Extensions.Inte
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs>
     jobSite: Prisma.$JobSitePayload<ExtArgs>
+    openedByParticipant: Prisma.$JobSiteParticipantPayload<ExtArgs>
     references: Prisma.$JobSiteDisputeArtifactReferencePayload<ExtArgs>[]
     consents: Prisma.$JobSiteDisputeConsentPayload<ExtArgs>[]
     preservations: Prisma.$JobSiteDisputePreservationPayload<ExtArgs>[]
@@ -1850,6 +2035,7 @@ export interface Prisma__JobSiteDisputeClient<T, Null = never, ExtArgs extends r
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   jobSite<T extends Prisma.JobSiteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteDefaultArgs<ExtArgs>>): Prisma.Prisma__JobSiteClient<runtime.Types.Result.GetResult<Prisma.$JobSitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  openedByParticipant<T extends Prisma.JobSiteParticipantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteParticipantDefaultArgs<ExtArgs>>): Prisma.Prisma__JobSiteParticipantClient<runtime.Types.Result.GetResult<Prisma.$JobSiteParticipantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   references<T extends Prisma.JobSiteDispute$referencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteDispute$referencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteDisputeArtifactReferencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   consents<T extends Prisma.JobSiteDispute$consentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteDispute$consentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteDisputeConsentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   preservations<T extends Prisma.JobSiteDispute$preservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteDispute$preservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteDisputePreservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>

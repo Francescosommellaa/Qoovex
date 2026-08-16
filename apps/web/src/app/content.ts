@@ -39,7 +39,7 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "Il cliente vede tutto ciò che carica l'impresa?",
         answer:
-          "No. Il cliente vede soltanto ciò che l'impresa condivide in modo esplicito. I contenuti interni all'impresa restano interni.",
+          "No. Il cliente vede ciò che l'impresa condivide e le attività del lavoro che coinvolgono entrambe le parti. Note e file interni all'impresa restano interni.",
       },
       {
         question: "Qoovex è uno strumento di controllo sull'impresa?",

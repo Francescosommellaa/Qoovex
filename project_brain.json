@@ -96,16 +96,15 @@
       }
     },
     "database_release": {
-      "canonical_migration_count": 9,
-      "migration_head": "20260813010000_direct_workspace_routes",
-      "local": "nine_migrations_aligned_zero_drift_fresh_and_upgrade_verified",
+      "canonical_migration_count": 10,
+      "migration_head": "20260816010000_job_site_participant_opener_foreign_keys",
+      "local": "ten_migrations_aligned_zero_drift_and_upgrade_from_previous_local_head_verified; fresh_and_historical_upgrade_require_isolated_ci_database",
       "preview": "previous_head_verified_new_head_pending_guarded_rehearsal",
       "production_database": "previous_head_verified_new_head_pending_guarded_cloud_build",
       "public_alias": "promoted_only_by_manual_guarded_workflow"
     },
     "known_blockers": [
-      "guarded Preview and Production rollout pending for 20260813010000_direct_workspace_routes",
-      "JobSite conversation selects reference openedByParticipant, while the current Prisma schema and generated client expose only openedByParticipantId; resolving it requires a database-sensitive relation decision before authenticated detail walkthroughs can complete."
+      "guarded Preview and Production rollout pending for 20260816010000_job_site_participant_opener_foreign_keys"
     ]
   },
   "approved_product_direction": {

@@ -8,8 +8,8 @@
   },
   "database": {
     "baselineHead": "20260720010000_calendar_events",
-    "migrationHead": "20260813010000_direct_workspace_routes",
-    "migrationCount": 9,
+    "migrationHead": "20260816010000_job_site_participant_opener_foreign_keys",
+    "migrationCount": 10,
     "productionMutationRequiredForAlignment": true,
     "rolloutMode": "manual_cloud_build_forward_deploy",
     "ledger": "ops/migration-ledger.json"

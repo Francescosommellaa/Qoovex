@@ -3,6 +3,7 @@ import type { JobSiteRequestStatus } from "@qoovex/db";
 import type { ChangeProposalStatus, DisputeStatus, JobSiteParticipantKind } from "@qoovex/types";
 import { presentProposalVersion } from "@shared/lib/product-metadata-presentation";
 import { presentChangeProposalStatus } from "@shared/lib/product-state-presentation";
+import { jobSiteNotificationTargetId } from "@shared/lib/job-site-notification-destination";
 import { ChangeProposalComparison } from "./ChangeProposalComparison";
 import { ChangeProposalActions, DeleteActionButton } from "./JobSiteForms";
 import { JobSiteFormDisclosure } from "./job-site-form-disclosure";
@@ -138,7 +139,7 @@ export function JobSiteChangeProposalDecision({
       ? { label: actor === "Cliente" ? "In attesa del Cliente" : "In attesa dell'Azienda", tone: "info" as const }
       : { label: "Nessuna azione richiesta", tone: "neutral" as const };
 
-  return <article className="space-y-3 py-4 first:pt-0">
+  return <article className="scroll-mt-24 space-y-3 py-4 outline-none focus-visible:ring-2 focus-visible:ring-ring" id={jobSiteNotificationTargetId("proposal", proposal.id)}>
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div><h3 className="font-medium">{presentProposalVersion(proposal.currentVersion?.version)}</h3><p className="mt-1 text-sm text-muted-foreground">Proposta di modifica alle condizioni del lavoro.</p></div>
       <WorkspaceState state={presentChangeProposalStatus(proposal.status)} />

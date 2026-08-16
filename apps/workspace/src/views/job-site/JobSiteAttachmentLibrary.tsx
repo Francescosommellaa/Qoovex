@@ -3,6 +3,7 @@ import type { AttachmentCategory } from "@qoovex/db";
 import type { TimelineAudience } from "@qoovex/types";
 import { formatDateTime, formatFileSize, presentProposalVersion } from "@shared/lib/product-metadata-presentation";
 import { presentAttachmentCategory, presentTimelineAudience } from "@shared/lib/product-state-presentation";
+import { jobSiteNotificationTargetId } from "@shared/lib/job-site-notification-destination";
 
 export interface JobSiteAttachmentListItem {
   id: string;
@@ -64,12 +65,14 @@ export function JobSiteAttachmentList<TAttachment extends JobSiteAttachmentListI
   attachments,
   base,
   contextReferences,
+  exposeNotificationTargets = true,
   title,
   visibilityForAttachment,
 }: {
   attachments: readonly TAttachment[];
   base: string;
   contextReferences: JobSiteAttachmentContextReferences;
+  exposeNotificationTargets?: boolean;
   title?: string;
   visibilityForAttachment: (attachment: TAttachment) => TimelineAudience;
 }) {
@@ -80,7 +83,7 @@ export function JobSiteAttachmentList<TAttachment extends JobSiteAttachmentListI
     <ul className={title ? "mt-2 divide-y" : "divide-y"}>
       {attachments.map((attachment) => {
         const visibility = presentTimelineAudience(visibilityForAttachment(attachment));
-        return <li className="flex flex-wrap items-start justify-between gap-3 py-3" key={attachment.id}>
+        return <li className="flex scroll-mt-24 flex-wrap items-start justify-between gap-3 py-3 outline-none focus-visible:ring-2 focus-visible:ring-ring" id={exposeNotificationTargets ? jobSiteNotificationTargetId("attachment", attachment.id) : undefined} key={attachment.id}>
           <div className="min-w-0">
             <strong className="break-words">{attachment.originalFileName}</strong>
             <dl className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground">

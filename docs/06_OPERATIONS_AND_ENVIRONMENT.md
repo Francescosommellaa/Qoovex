@@ -2,11 +2,11 @@
 
 ## Migration
 
-La history contiene nove migration. Le prime cinque costituiscono il baseline storico immutabile; le migration forward successive introducono il dominio corrente, `AccountRole`, gli allegati contestuali, il vincolo di una sola membership Azienda attiva e la migrazione dei link Workspace persistiti. La history non viene riscritta e i target remoti non usano `db push`, `migrate reset`, `migrate resolve` o SQL manuale.
+La history contiene dieci migration. Le prime cinque costituiscono il baseline storico immutabile; le migration forward successive introducono il dominio corrente, `AccountRole`, gli allegati contestuali, il vincolo di una sola membership Azienda attiva, la migrazione dei link Workspace persistiti e le FK `Restrict` degli apritori participant-scoped. La history non viene riscritta e i target remoti non usano `db push`, `migrate reset`, `migrate resolve` o SQL manuale.
 
 ## Stato verificato
 
-- Local: nove migration applicate, zero drift; fresh e upgrade alla head sono verificati.
+- Local: dieci migration applicate, zero drift e upgrade dalla precedente head locale verificato; fresh e upgrade dal baseline storico restano coperti dal job CI su database isolato.
 - Preview: rehearsal manuale completato con database isolato, cloud migration, deploy e smoke verdi.
 - Production database: otto migration applicate alla precedente head, zero drift nell'ultima verifica; la nona resta pendente fino al prossimo cloud build Production guardato.
 - Production pubblico: la promozione del deployment staged è un passaggio manuale separato, eseguito soltanto dopo CI verde e smoke.

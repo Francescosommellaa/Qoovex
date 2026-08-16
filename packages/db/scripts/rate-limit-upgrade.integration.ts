@@ -71,19 +71,26 @@ async function main() {
     SELECT
       (SELECT COUNT(*)::int FROM "User") AS users,
       to_regclass('public."JobSiteParticipant"') IS NOT NULL AS has_participant,
-      to_regclass('public."JobSiteActionReceipt"') IS NOT NULL AS has_receipt;
+      to_regclass('public."JobSiteActionReceipt"') IS NOT NULL AS has_receipt,
+      (SELECT COUNT(*)::int FROM pg_constraint WHERE conname IN (
+        'JobSiteRequest_openedByParticipantId_fkey',
+        'JobSiteDispute_openedByParticipantId_fkey',
+        'JobSitePostClosureRequest_openedByParticipantId_fkey'
+      )) AS opener_foreign_keys;
   `);
   const final = jobSite.rows[0] as {
     users: number;
     has_participant: boolean;
     has_receipt: boolean;
+    opener_foreign_keys: number;
   };
   if (
     final.users !== 0 ||
     !final.has_participant ||
-    !final.has_receipt
+    !final.has_receipt ||
+    final.opener_foreign_keys !== 3
   ) {
-    throw new Error("Verifica upgrade baseline -> schema corrente fallita.");
+    throw new Error("Verifica upgrade baseline -> schema corrente e FK degli apritori fallita.");
   }
 
   const diff = spawnPrisma(["migrate", "diff", "--from-config-datasource", "--to-schema", "prisma/schema.prisma", "--exit-code"]);

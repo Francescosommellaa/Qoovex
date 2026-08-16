@@ -2,7 +2,7 @@
 
 ## verified_current_state
 
-La history Prisma contiene nove migration canoniche. Le migration forward pubblicate rimuovono fisicamente le tabelle autonome del prodotto precedente, aggiungono `AccountRole`, mantengono `JobSiteAttachment`, vincolano ogni account a una sola membership Azienda attiva e migrano i link Workspace persistiti alle route dirette. Blob è privato; upload e download passano dal server, applicano autorizzazione oggetto, audit, pathname generato, checksum SHA-256, MIME reale e limite tecnico 4 MiB.
+La history Prisma contiene dieci migration canoniche. Le migration forward pubblicate rimuovono fisicamente le tabelle autonome del prodotto precedente, aggiungono `AccountRole`, mantengono `JobSiteAttachment`, vincolano ogni account a una sola membership Azienda attiva, migrano i link Workspace persistiti alle route dirette e collegano con FK `Restrict` gli apritori di richieste, dispute e richieste post-chiusura ai rispettivi `JobSiteParticipant`. Blob è privato; upload e download passano dal server, applicano autorizzazione oggetto, audit, pathname generato, checksum SHA-256, MIME reale e limite tecnico 4 MiB.
 
 ## Timeline, snapshot e allegati
 

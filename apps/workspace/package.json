@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
-    "test": "node scripts/verify-fsd-boundaries.mjs && vitest run"
+    "test": "node scripts/verify-fsd-boundaries.mjs && vitest run",
+    "test:postgres-integration": "vitest run src/shared/server/rate-limit-concurrency.integration.test.ts src/shared/server/organization-membership-concurrency.integration.test.ts src/shared/server/job-site-creation.integration.test.ts src/shared/server/job-site-client-initial-agreement.integration.test.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
