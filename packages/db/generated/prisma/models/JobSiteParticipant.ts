@@ -368,6 +368,9 @@ export type JobSiteParticipantWhereInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestListRelationFilter
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationListRelationFilter
   paymentReviews?: Prisma.JobSitePaymentReviewListRelationFilter
+  openedRequests?: Prisma.JobSiteRequestListRelationFilter
+  openedDisputes?: Prisma.JobSiteDisputeListRelationFilter
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestListRelationFilter
 }
 
 export type JobSiteParticipantOrderByWithRelationInput = {
@@ -409,6 +412,9 @@ export type JobSiteParticipantOrderByWithRelationInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestOrderByRelationAggregateInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationOrderByRelationAggregateInput
   paymentReviews?: Prisma.JobSitePaymentReviewOrderByRelationAggregateInput
+  openedRequests?: Prisma.JobSiteRequestOrderByRelationAggregateInput
+  openedDisputes?: Prisma.JobSiteDisputeOrderByRelationAggregateInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestOrderByRelationAggregateInput
 }
 
 export type JobSiteParticipantWhereUniqueInput = Prisma.AtLeast<{
@@ -453,6 +459,9 @@ export type JobSiteParticipantWhereUniqueInput = Prisma.AtLeast<{
   requestedPayments?: Prisma.JobSitePaymentRequestListRelationFilter
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationListRelationFilter
   paymentReviews?: Prisma.JobSitePaymentReviewListRelationFilter
+  openedRequests?: Prisma.JobSiteRequestListRelationFilter
+  openedDisputes?: Prisma.JobSiteDisputeListRelationFilter
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestListRelationFilter
 }, "id" | "activeKey" | "primaryClientKey" | "userSideKey">
 
 export type JobSiteParticipantOrderByWithAggregationInput = {
@@ -548,6 +557,9 @@ export type JobSiteParticipantCreateInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateInput = {
@@ -585,6 +597,9 @@ export type JobSiteParticipantUncheckedCreateInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUpdateInput = {
@@ -622,6 +637,9 @@ export type JobSiteParticipantUpdateInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateInput = {
@@ -659,6 +677,9 @@ export type JobSiteParticipantUncheckedUpdateInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateManyInput = {
@@ -1043,6 +1064,20 @@ export type JobSiteParticipantUpdateOneRequiredWithoutStepAssignmentsNestedInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteParticipantUpdateToOneWithWhereWithoutStepAssignmentsInput, Prisma.JobSiteParticipantUpdateWithoutStepAssignmentsInput>, Prisma.JobSiteParticipantUncheckedUpdateWithoutStepAssignmentsInput>
 }
 
+export type JobSiteParticipantCreateNestedOneWithoutOpenedRequestsInput = {
+  create?: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedRequestsInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedRequestsInput>
+  connectOrCreate?: Prisma.JobSiteParticipantCreateOrConnectWithoutOpenedRequestsInput
+  connect?: Prisma.JobSiteParticipantWhereUniqueInput
+}
+
+export type JobSiteParticipantUpdateOneRequiredWithoutOpenedRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedRequestsInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedRequestsInput>
+  connectOrCreate?: Prisma.JobSiteParticipantCreateOrConnectWithoutOpenedRequestsInput
+  upsert?: Prisma.JobSiteParticipantUpsertWithoutOpenedRequestsInput
+  connect?: Prisma.JobSiteParticipantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteParticipantUpdateToOneWithWhereWithoutOpenedRequestsInput, Prisma.JobSiteParticipantUpdateWithoutOpenedRequestsInput>, Prisma.JobSiteParticipantUncheckedUpdateWithoutOpenedRequestsInput>
+}
+
 export type JobSiteParticipantCreateNestedOneWithoutProposalConsentsInput = {
   create?: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutProposalConsentsInput, Prisma.JobSiteParticipantUncheckedCreateWithoutProposalConsentsInput>
   connectOrCreate?: Prisma.JobSiteParticipantCreateOrConnectWithoutProposalConsentsInput
@@ -1099,6 +1134,20 @@ export type JobSiteParticipantUpdateOneRequiredWithoutPaymentReviewsNestedInput 
   update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteParticipantUpdateToOneWithWhereWithoutPaymentReviewsInput, Prisma.JobSiteParticipantUpdateWithoutPaymentReviewsInput>, Prisma.JobSiteParticipantUncheckedUpdateWithoutPaymentReviewsInput>
 }
 
+export type JobSiteParticipantCreateNestedOneWithoutOpenedDisputesInput = {
+  create?: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedDisputesInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedDisputesInput>
+  connectOrCreate?: Prisma.JobSiteParticipantCreateOrConnectWithoutOpenedDisputesInput
+  connect?: Prisma.JobSiteParticipantWhereUniqueInput
+}
+
+export type JobSiteParticipantUpdateOneRequiredWithoutOpenedDisputesNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedDisputesInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedDisputesInput>
+  connectOrCreate?: Prisma.JobSiteParticipantCreateOrConnectWithoutOpenedDisputesInput
+  upsert?: Prisma.JobSiteParticipantUpsertWithoutOpenedDisputesInput
+  connect?: Prisma.JobSiteParticipantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteParticipantUpdateToOneWithWhereWithoutOpenedDisputesInput, Prisma.JobSiteParticipantUpdateWithoutOpenedDisputesInput>, Prisma.JobSiteParticipantUncheckedUpdateWithoutOpenedDisputesInput>
+}
+
 export type JobSiteParticipantCreateNestedOneWithoutDisputeConsentsInput = {
   create?: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutDisputeConsentsInput, Prisma.JobSiteParticipantUncheckedCreateWithoutDisputeConsentsInput>
   connectOrCreate?: Prisma.JobSiteParticipantCreateOrConnectWithoutDisputeConsentsInput
@@ -1125,6 +1174,20 @@ export type JobSiteParticipantUpdateOneRequiredWithoutClosureConsentsNestedInput
   upsert?: Prisma.JobSiteParticipantUpsertWithoutClosureConsentsInput
   connect?: Prisma.JobSiteParticipantWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteParticipantUpdateToOneWithWhereWithoutClosureConsentsInput, Prisma.JobSiteParticipantUpdateWithoutClosureConsentsInput>, Prisma.JobSiteParticipantUncheckedUpdateWithoutClosureConsentsInput>
+}
+
+export type JobSiteParticipantCreateNestedOneWithoutOpenedPostClosureRequestsInput = {
+  create?: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedPostClosureRequestsInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedPostClosureRequestsInput>
+  connectOrCreate?: Prisma.JobSiteParticipantCreateOrConnectWithoutOpenedPostClosureRequestsInput
+  connect?: Prisma.JobSiteParticipantWhereUniqueInput
+}
+
+export type JobSiteParticipantUpdateOneRequiredWithoutOpenedPostClosureRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedPostClosureRequestsInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedPostClosureRequestsInput>
+  connectOrCreate?: Prisma.JobSiteParticipantCreateOrConnectWithoutOpenedPostClosureRequestsInput
+  upsert?: Prisma.JobSiteParticipantUpsertWithoutOpenedPostClosureRequestsInput
+  connect?: Prisma.JobSiteParticipantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.JobSiteParticipantUpdateToOneWithWhereWithoutOpenedPostClosureRequestsInput, Prisma.JobSiteParticipantUpdateWithoutOpenedPostClosureRequestsInput>, Prisma.JobSiteParticipantUncheckedUpdateWithoutOpenedPostClosureRequestsInput>
 }
 
 export type JobSiteParticipantCreateNestedOneWithoutReopeningConsentsInput = {
@@ -1217,6 +1280,9 @@ export type JobSiteParticipantCreateWithoutUserInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutUserInput = {
@@ -1253,6 +1319,9 @@ export type JobSiteParticipantUncheckedCreateWithoutUserInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutUserInput = {
@@ -1343,6 +1412,9 @@ export type JobSiteParticipantCreateWithoutOrganizationInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutOrganizationInput = {
@@ -1379,6 +1451,9 @@ export type JobSiteParticipantUncheckedCreateWithoutOrganizationInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutOrganizationInput = {
@@ -1441,6 +1516,9 @@ export type JobSiteParticipantCreateWithoutJobSiteInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutJobSiteInput = {
@@ -1477,6 +1555,9 @@ export type JobSiteParticipantUncheckedCreateWithoutJobSiteInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutJobSiteInput = {
@@ -1523,6 +1604,9 @@ export type JobSiteParticipantCreateWithoutResponsibleForInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutResponsibleForInput = {
@@ -1559,6 +1643,9 @@ export type JobSiteParticipantUncheckedCreateWithoutResponsibleForInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutResponsibleForInput = {
@@ -1627,6 +1714,9 @@ export type JobSiteParticipantUpdateWithoutResponsibleForInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutResponsibleForInput = {
@@ -1663,6 +1753,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutResponsibleForInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutAcceptedInvitationsInput = {
@@ -1699,6 +1792,9 @@ export type JobSiteParticipantCreateWithoutAcceptedInvitationsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutAcceptedInvitationsInput = {
@@ -1735,6 +1831,9 @@ export type JobSiteParticipantUncheckedCreateWithoutAcceptedInvitationsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutAcceptedInvitationsInput = {
@@ -1787,6 +1886,9 @@ export type JobSiteParticipantUpdateWithoutAcceptedInvitationsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutAcceptedInvitationsInput = {
@@ -1823,6 +1925,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutAcceptedInvitationsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutAuthorityGrantsInput = {
@@ -1859,6 +1964,9 @@ export type JobSiteParticipantCreateWithoutAuthorityGrantsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutAuthorityGrantsInput = {
@@ -1895,6 +2003,9 @@ export type JobSiteParticipantUncheckedCreateWithoutAuthorityGrantsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutAuthorityGrantsInput = {
@@ -1947,6 +2058,9 @@ export type JobSiteParticipantUpdateWithoutAuthorityGrantsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutAuthorityGrantsInput = {
@@ -1983,6 +2097,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutAuthorityGrantsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutAgreementConsentsInput = {
@@ -2019,6 +2136,9 @@ export type JobSiteParticipantCreateWithoutAgreementConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutAgreementConsentsInput = {
@@ -2055,6 +2175,9 @@ export type JobSiteParticipantUncheckedCreateWithoutAgreementConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutAgreementConsentsInput = {
@@ -2107,6 +2230,9 @@ export type JobSiteParticipantUpdateWithoutAgreementConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutAgreementConsentsInput = {
@@ -2143,6 +2269,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutAgreementConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutStepAssignmentsInput = {
@@ -2179,6 +2308,9 @@ export type JobSiteParticipantCreateWithoutStepAssignmentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutStepAssignmentsInput = {
@@ -2215,6 +2347,9 @@ export type JobSiteParticipantUncheckedCreateWithoutStepAssignmentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutStepAssignmentsInput = {
@@ -2267,6 +2402,9 @@ export type JobSiteParticipantUpdateWithoutStepAssignmentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutStepAssignmentsInput = {
@@ -2303,6 +2441,181 @@ export type JobSiteParticipantUncheckedUpdateWithoutStepAssignmentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+}
+
+export type JobSiteParticipantCreateWithoutOpenedRequestsInput = {
+  id?: string
+  kind: $Enums.JobSiteParticipantKind
+  status?: $Enums.JobSiteParticipantStatus
+  accessVersion?: number
+  publicRoleLabel?: string | null
+  activeKey?: string | null
+  primaryClientKey?: string | null
+  userSideKey: string
+  invitedAt?: Date | string | null
+  activatedAt?: Date | string | null
+  suspendedAt?: Date | string | null
+  endedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  createdByUserId?: string | null
+  endedByUserId?: string | null
+  endReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutJobSiteParticipantsInput
+  jobSite: Prisma.JobSiteCreateNestedOneWithoutParticipantsInput
+  user: Prisma.UserCreateNestedOneWithoutJobSiteParticipantsInput
+  membership?: Prisma.OrganizationMembershipCreateNestedOneWithoutParticipantsInput
+  responsibleFor?: Prisma.JobSiteCreateNestedManyWithoutResponsibleParticipantInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutAcceptedByParticipantInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutParticipantInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentCreateNestedManyWithoutParticipantInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentCreateNestedManyWithoutParticipantInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentCreateNestedManyWithoutParticipantInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentCreateNestedManyWithoutParticipantInput
+  closureConsents?: Prisma.JobSiteClosureConsentCreateNestedManyWithoutParticipantInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentCreateNestedManyWithoutParticipantInput
+  requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
+  paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
+}
+
+export type JobSiteParticipantUncheckedCreateWithoutOpenedRequestsInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  userId: string
+  membershipId?: string | null
+  kind: $Enums.JobSiteParticipantKind
+  status?: $Enums.JobSiteParticipantStatus
+  accessVersion?: number
+  publicRoleLabel?: string | null
+  activeKey?: string | null
+  primaryClientKey?: string | null
+  userSideKey: string
+  invitedAt?: Date | string | null
+  activatedAt?: Date | string | null
+  suspendedAt?: Date | string | null
+  endedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  createdByUserId?: string | null
+  endedByUserId?: string | null
+  endReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  responsibleFor?: Prisma.JobSiteUncheckedCreateNestedManyWithoutResponsibleParticipantInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutAcceptedByParticipantInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutParticipantInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentUncheckedCreateNestedManyWithoutParticipantInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentUncheckedCreateNestedManyWithoutParticipantInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentUncheckedCreateNestedManyWithoutParticipantInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentUncheckedCreateNestedManyWithoutParticipantInput
+  closureConsents?: Prisma.JobSiteClosureConsentUncheckedCreateNestedManyWithoutParticipantInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedCreateNestedManyWithoutParticipantInput
+  requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
+  paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+}
+
+export type JobSiteParticipantCreateOrConnectWithoutOpenedRequestsInput = {
+  where: Prisma.JobSiteParticipantWhereUniqueInput
+  create: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedRequestsInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedRequestsInput>
+}
+
+export type JobSiteParticipantUpsertWithoutOpenedRequestsInput = {
+  update: Prisma.XOR<Prisma.JobSiteParticipantUpdateWithoutOpenedRequestsInput, Prisma.JobSiteParticipantUncheckedUpdateWithoutOpenedRequestsInput>
+  create: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedRequestsInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedRequestsInput>
+  where?: Prisma.JobSiteParticipantWhereInput
+}
+
+export type JobSiteParticipantUpdateToOneWithWhereWithoutOpenedRequestsInput = {
+  where?: Prisma.JobSiteParticipantWhereInput
+  data: Prisma.XOR<Prisma.JobSiteParticipantUpdateWithoutOpenedRequestsInput, Prisma.JobSiteParticipantUncheckedUpdateWithoutOpenedRequestsInput>
+}
+
+export type JobSiteParticipantUpdateWithoutOpenedRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
+  status?: Prisma.EnumJobSiteParticipantStatusFieldUpdateOperationsInput | $Enums.JobSiteParticipantStatus
+  accessVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  publicRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryClientKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userSideKey?: Prisma.StringFieldUpdateOperationsInput | string
+  invitedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSiteParticipantsNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutParticipantsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutJobSiteParticipantsNestedInput
+  membership?: Prisma.OrganizationMembershipUpdateOneWithoutParticipantsNestedInput
+  responsibleFor?: Prisma.JobSiteUpdateManyWithoutResponsibleParticipantNestedInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutAcceptedByParticipantNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutParticipantNestedInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentUpdateManyWithoutParticipantNestedInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentUpdateManyWithoutParticipantNestedInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentUpdateManyWithoutParticipantNestedInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentUpdateManyWithoutParticipantNestedInput
+  closureConsents?: Prisma.JobSiteClosureConsentUpdateManyWithoutParticipantNestedInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentUpdateManyWithoutParticipantNestedInput
+  requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
+  paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
+}
+
+export type JobSiteParticipantUncheckedUpdateWithoutOpenedRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  membershipId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kind?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
+  status?: Prisma.EnumJobSiteParticipantStatusFieldUpdateOperationsInput | $Enums.JobSiteParticipantStatus
+  accessVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  publicRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryClientKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userSideKey?: Prisma.StringFieldUpdateOperationsInput | string
+  invitedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  responsibleFor?: Prisma.JobSiteUncheckedUpdateManyWithoutResponsibleParticipantNestedInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutAcceptedByParticipantNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutParticipantNestedInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentUncheckedUpdateManyWithoutParticipantNestedInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  closureConsents?: Prisma.JobSiteClosureConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
+  paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutProposalConsentsInput = {
@@ -2339,6 +2652,9 @@ export type JobSiteParticipantCreateWithoutProposalConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutProposalConsentsInput = {
@@ -2375,6 +2691,9 @@ export type JobSiteParticipantUncheckedCreateWithoutProposalConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutProposalConsentsInput = {
@@ -2427,6 +2746,9 @@ export type JobSiteParticipantUpdateWithoutProposalConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutProposalConsentsInput = {
@@ -2463,6 +2785,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutProposalConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutRequestedPaymentsInput = {
@@ -2499,6 +2824,9 @@ export type JobSiteParticipantCreateWithoutRequestedPaymentsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentCreateNestedManyWithoutParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutRequestedPaymentsInput = {
@@ -2535,6 +2863,9 @@ export type JobSiteParticipantUncheckedCreateWithoutRequestedPaymentsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedCreateNestedManyWithoutParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutRequestedPaymentsInput = {
@@ -2587,6 +2918,9 @@ export type JobSiteParticipantUpdateWithoutRequestedPaymentsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentUpdateManyWithoutParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutRequestedPaymentsInput = {
@@ -2623,6 +2957,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutRequestedPaymentsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedUpdateManyWithoutParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutPaymentDeclarationsInput = {
@@ -2659,6 +2996,9 @@ export type JobSiteParticipantCreateWithoutPaymentDeclarationsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentCreateNestedManyWithoutParticipantInput
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutPaymentDeclarationsInput = {
@@ -2695,6 +3035,9 @@ export type JobSiteParticipantUncheckedCreateWithoutPaymentDeclarationsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedCreateNestedManyWithoutParticipantInput
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutPaymentDeclarationsInput = {
@@ -2747,6 +3090,9 @@ export type JobSiteParticipantUpdateWithoutPaymentDeclarationsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentUpdateManyWithoutParticipantNestedInput
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutPaymentDeclarationsInput = {
@@ -2783,6 +3129,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutPaymentDeclarationsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedUpdateManyWithoutParticipantNestedInput
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutPaymentReviewsInput = {
@@ -2819,6 +3168,9 @@ export type JobSiteParticipantCreateWithoutPaymentReviewsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentCreateNestedManyWithoutParticipantInput
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutPaymentReviewsInput = {
@@ -2855,6 +3207,9 @@ export type JobSiteParticipantUncheckedCreateWithoutPaymentReviewsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedCreateNestedManyWithoutParticipantInput
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutPaymentReviewsInput = {
@@ -2907,6 +3262,9 @@ export type JobSiteParticipantUpdateWithoutPaymentReviewsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentUpdateManyWithoutParticipantNestedInput
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutPaymentReviewsInput = {
@@ -2943,6 +3301,181 @@ export type JobSiteParticipantUncheckedUpdateWithoutPaymentReviewsInput = {
   reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedUpdateManyWithoutParticipantNestedInput
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+}
+
+export type JobSiteParticipantCreateWithoutOpenedDisputesInput = {
+  id?: string
+  kind: $Enums.JobSiteParticipantKind
+  status?: $Enums.JobSiteParticipantStatus
+  accessVersion?: number
+  publicRoleLabel?: string | null
+  activeKey?: string | null
+  primaryClientKey?: string | null
+  userSideKey: string
+  invitedAt?: Date | string | null
+  activatedAt?: Date | string | null
+  suspendedAt?: Date | string | null
+  endedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  createdByUserId?: string | null
+  endedByUserId?: string | null
+  endReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutJobSiteParticipantsInput
+  jobSite: Prisma.JobSiteCreateNestedOneWithoutParticipantsInput
+  user: Prisma.UserCreateNestedOneWithoutJobSiteParticipantsInput
+  membership?: Prisma.OrganizationMembershipCreateNestedOneWithoutParticipantsInput
+  responsibleFor?: Prisma.JobSiteCreateNestedManyWithoutResponsibleParticipantInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutAcceptedByParticipantInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutParticipantInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentCreateNestedManyWithoutParticipantInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentCreateNestedManyWithoutParticipantInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentCreateNestedManyWithoutParticipantInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentCreateNestedManyWithoutParticipantInput
+  closureConsents?: Prisma.JobSiteClosureConsentCreateNestedManyWithoutParticipantInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentCreateNestedManyWithoutParticipantInput
+  requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
+  paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
+}
+
+export type JobSiteParticipantUncheckedCreateWithoutOpenedDisputesInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  userId: string
+  membershipId?: string | null
+  kind: $Enums.JobSiteParticipantKind
+  status?: $Enums.JobSiteParticipantStatus
+  accessVersion?: number
+  publicRoleLabel?: string | null
+  activeKey?: string | null
+  primaryClientKey?: string | null
+  userSideKey: string
+  invitedAt?: Date | string | null
+  activatedAt?: Date | string | null
+  suspendedAt?: Date | string | null
+  endedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  createdByUserId?: string | null
+  endedByUserId?: string | null
+  endReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  responsibleFor?: Prisma.JobSiteUncheckedCreateNestedManyWithoutResponsibleParticipantInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutAcceptedByParticipantInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutParticipantInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentUncheckedCreateNestedManyWithoutParticipantInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentUncheckedCreateNestedManyWithoutParticipantInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentUncheckedCreateNestedManyWithoutParticipantInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentUncheckedCreateNestedManyWithoutParticipantInput
+  closureConsents?: Prisma.JobSiteClosureConsentUncheckedCreateNestedManyWithoutParticipantInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedCreateNestedManyWithoutParticipantInput
+  requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
+  paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+}
+
+export type JobSiteParticipantCreateOrConnectWithoutOpenedDisputesInput = {
+  where: Prisma.JobSiteParticipantWhereUniqueInput
+  create: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedDisputesInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedDisputesInput>
+}
+
+export type JobSiteParticipantUpsertWithoutOpenedDisputesInput = {
+  update: Prisma.XOR<Prisma.JobSiteParticipantUpdateWithoutOpenedDisputesInput, Prisma.JobSiteParticipantUncheckedUpdateWithoutOpenedDisputesInput>
+  create: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedDisputesInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedDisputesInput>
+  where?: Prisma.JobSiteParticipantWhereInput
+}
+
+export type JobSiteParticipantUpdateToOneWithWhereWithoutOpenedDisputesInput = {
+  where?: Prisma.JobSiteParticipantWhereInput
+  data: Prisma.XOR<Prisma.JobSiteParticipantUpdateWithoutOpenedDisputesInput, Prisma.JobSiteParticipantUncheckedUpdateWithoutOpenedDisputesInput>
+}
+
+export type JobSiteParticipantUpdateWithoutOpenedDisputesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
+  status?: Prisma.EnumJobSiteParticipantStatusFieldUpdateOperationsInput | $Enums.JobSiteParticipantStatus
+  accessVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  publicRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryClientKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userSideKey?: Prisma.StringFieldUpdateOperationsInput | string
+  invitedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSiteParticipantsNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutParticipantsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutJobSiteParticipantsNestedInput
+  membership?: Prisma.OrganizationMembershipUpdateOneWithoutParticipantsNestedInput
+  responsibleFor?: Prisma.JobSiteUpdateManyWithoutResponsibleParticipantNestedInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutAcceptedByParticipantNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutParticipantNestedInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentUpdateManyWithoutParticipantNestedInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentUpdateManyWithoutParticipantNestedInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentUpdateManyWithoutParticipantNestedInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentUpdateManyWithoutParticipantNestedInput
+  closureConsents?: Prisma.JobSiteClosureConsentUpdateManyWithoutParticipantNestedInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentUpdateManyWithoutParticipantNestedInput
+  requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
+  paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
+}
+
+export type JobSiteParticipantUncheckedUpdateWithoutOpenedDisputesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  membershipId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kind?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
+  status?: Prisma.EnumJobSiteParticipantStatusFieldUpdateOperationsInput | $Enums.JobSiteParticipantStatus
+  accessVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  publicRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryClientKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userSideKey?: Prisma.StringFieldUpdateOperationsInput | string
+  invitedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  responsibleFor?: Prisma.JobSiteUncheckedUpdateManyWithoutResponsibleParticipantNestedInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutAcceptedByParticipantNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutParticipantNestedInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentUncheckedUpdateManyWithoutParticipantNestedInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  closureConsents?: Prisma.JobSiteClosureConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
+  paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutDisputeConsentsInput = {
@@ -2979,6 +3512,9 @@ export type JobSiteParticipantCreateWithoutDisputeConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutDisputeConsentsInput = {
@@ -3015,6 +3551,9 @@ export type JobSiteParticipantUncheckedCreateWithoutDisputeConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutDisputeConsentsInput = {
@@ -3067,6 +3606,9 @@ export type JobSiteParticipantUpdateWithoutDisputeConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutDisputeConsentsInput = {
@@ -3103,6 +3645,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutDisputeConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutClosureConsentsInput = {
@@ -3139,6 +3684,9 @@ export type JobSiteParticipantCreateWithoutClosureConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutClosureConsentsInput = {
@@ -3175,6 +3723,9 @@ export type JobSiteParticipantUncheckedCreateWithoutClosureConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutClosureConsentsInput = {
@@ -3227,6 +3778,9 @@ export type JobSiteParticipantUpdateWithoutClosureConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutClosureConsentsInput = {
@@ -3263,6 +3817,181 @@ export type JobSiteParticipantUncheckedUpdateWithoutClosureConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+}
+
+export type JobSiteParticipantCreateWithoutOpenedPostClosureRequestsInput = {
+  id?: string
+  kind: $Enums.JobSiteParticipantKind
+  status?: $Enums.JobSiteParticipantStatus
+  accessVersion?: number
+  publicRoleLabel?: string | null
+  activeKey?: string | null
+  primaryClientKey?: string | null
+  userSideKey: string
+  invitedAt?: Date | string | null
+  activatedAt?: Date | string | null
+  suspendedAt?: Date | string | null
+  endedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  createdByUserId?: string | null
+  endedByUserId?: string | null
+  endReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutJobSiteParticipantsInput
+  jobSite: Prisma.JobSiteCreateNestedOneWithoutParticipantsInput
+  user: Prisma.UserCreateNestedOneWithoutJobSiteParticipantsInput
+  membership?: Prisma.OrganizationMembershipCreateNestedOneWithoutParticipantsInput
+  responsibleFor?: Prisma.JobSiteCreateNestedManyWithoutResponsibleParticipantInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationCreateNestedManyWithoutAcceptedByParticipantInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantCreateNestedManyWithoutParticipantInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentCreateNestedManyWithoutParticipantInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentCreateNestedManyWithoutParticipantInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentCreateNestedManyWithoutParticipantInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentCreateNestedManyWithoutParticipantInput
+  closureConsents?: Prisma.JobSiteClosureConsentCreateNestedManyWithoutParticipantInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentCreateNestedManyWithoutParticipantInput
+  requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
+  paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+}
+
+export type JobSiteParticipantUncheckedCreateWithoutOpenedPostClosureRequestsInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  userId: string
+  membershipId?: string | null
+  kind: $Enums.JobSiteParticipantKind
+  status?: $Enums.JobSiteParticipantStatus
+  accessVersion?: number
+  publicRoleLabel?: string | null
+  activeKey?: string | null
+  primaryClientKey?: string | null
+  userSideKey: string
+  invitedAt?: Date | string | null
+  activatedAt?: Date | string | null
+  suspendedAt?: Date | string | null
+  endedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  createdByUserId?: string | null
+  endedByUserId?: string | null
+  endReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  responsibleFor?: Prisma.JobSiteUncheckedCreateNestedManyWithoutResponsibleParticipantInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationUncheckedCreateNestedManyWithoutAcceptedByParticipantInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedCreateNestedManyWithoutParticipantInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentUncheckedCreateNestedManyWithoutParticipantInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentUncheckedCreateNestedManyWithoutParticipantInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentUncheckedCreateNestedManyWithoutParticipantInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentUncheckedCreateNestedManyWithoutParticipantInput
+  closureConsents?: Prisma.JobSiteClosureConsentUncheckedCreateNestedManyWithoutParticipantInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedCreateNestedManyWithoutParticipantInput
+  requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
+  paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+}
+
+export type JobSiteParticipantCreateOrConnectWithoutOpenedPostClosureRequestsInput = {
+  where: Prisma.JobSiteParticipantWhereUniqueInput
+  create: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedPostClosureRequestsInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedPostClosureRequestsInput>
+}
+
+export type JobSiteParticipantUpsertWithoutOpenedPostClosureRequestsInput = {
+  update: Prisma.XOR<Prisma.JobSiteParticipantUpdateWithoutOpenedPostClosureRequestsInput, Prisma.JobSiteParticipantUncheckedUpdateWithoutOpenedPostClosureRequestsInput>
+  create: Prisma.XOR<Prisma.JobSiteParticipantCreateWithoutOpenedPostClosureRequestsInput, Prisma.JobSiteParticipantUncheckedCreateWithoutOpenedPostClosureRequestsInput>
+  where?: Prisma.JobSiteParticipantWhereInput
+}
+
+export type JobSiteParticipantUpdateToOneWithWhereWithoutOpenedPostClosureRequestsInput = {
+  where?: Prisma.JobSiteParticipantWhereInput
+  data: Prisma.XOR<Prisma.JobSiteParticipantUpdateWithoutOpenedPostClosureRequestsInput, Prisma.JobSiteParticipantUncheckedUpdateWithoutOpenedPostClosureRequestsInput>
+}
+
+export type JobSiteParticipantUpdateWithoutOpenedPostClosureRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
+  status?: Prisma.EnumJobSiteParticipantStatusFieldUpdateOperationsInput | $Enums.JobSiteParticipantStatus
+  accessVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  publicRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryClientKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userSideKey?: Prisma.StringFieldUpdateOperationsInput | string
+  invitedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSiteParticipantsNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutParticipantsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutJobSiteParticipantsNestedInput
+  membership?: Prisma.OrganizationMembershipUpdateOneWithoutParticipantsNestedInput
+  responsibleFor?: Prisma.JobSiteUpdateManyWithoutResponsibleParticipantNestedInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationUpdateManyWithoutAcceptedByParticipantNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUpdateManyWithoutParticipantNestedInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentUpdateManyWithoutParticipantNestedInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentUpdateManyWithoutParticipantNestedInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentUpdateManyWithoutParticipantNestedInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentUpdateManyWithoutParticipantNestedInput
+  closureConsents?: Prisma.JobSiteClosureConsentUpdateManyWithoutParticipantNestedInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentUpdateManyWithoutParticipantNestedInput
+  requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
+  paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+}
+
+export type JobSiteParticipantUncheckedUpdateWithoutOpenedPostClosureRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  membershipId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kind?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
+  status?: Prisma.EnumJobSiteParticipantStatusFieldUpdateOperationsInput | $Enums.JobSiteParticipantStatus
+  accessVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  publicRoleLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryClientKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userSideKey?: Prisma.StringFieldUpdateOperationsInput | string
+  invitedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  responsibleFor?: Prisma.JobSiteUncheckedUpdateManyWithoutResponsibleParticipantNestedInput
+  acceptedInvitations?: Prisma.JobSiteClientInvitationUncheckedUpdateManyWithoutAcceptedByParticipantNestedInput
+  authorityGrants?: Prisma.JobSiteAuthorityGrantUncheckedUpdateManyWithoutParticipantNestedInput
+  agreementConsents?: Prisma.JobSiteInitialAgreementConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  stepAssignments?: Prisma.JobSiteStepUserAssignmentUncheckedUpdateManyWithoutParticipantNestedInput
+  proposalConsents?: Prisma.JobSiteChangeProposalConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  disputeConsents?: Prisma.JobSiteDisputeConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  closureConsents?: Prisma.JobSiteClosureConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  reopeningConsents?: Prisma.JobSiteReopeningConsentUncheckedUpdateManyWithoutParticipantNestedInput
+  requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
+  paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
+  paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutReopeningConsentsInput = {
@@ -3299,6 +4028,9 @@ export type JobSiteParticipantCreateWithoutReopeningConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutReopeningConsentsInput = {
@@ -3335,6 +4067,9 @@ export type JobSiteParticipantUncheckedCreateWithoutReopeningConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutReopeningConsentsInput = {
@@ -3387,6 +4122,9 @@ export type JobSiteParticipantUpdateWithoutReopeningConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutReopeningConsentsInput = {
@@ -3423,6 +4161,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutReopeningConsentsInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantCreateWithoutMembershipInput = {
@@ -3459,6 +4200,9 @@ export type JobSiteParticipantCreateWithoutMembershipInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantUncheckedCreateWithoutMembershipInput = {
@@ -3495,6 +4239,9 @@ export type JobSiteParticipantUncheckedCreateWithoutMembershipInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedCreateNestedManyWithoutRequestedByParticipantInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedCreateNestedManyWithoutDeclaredByParticipantInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedCreateNestedManyWithoutReviewedByParticipantInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedCreateNestedManyWithoutOpenedByParticipantInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput
 }
 
 export type JobSiteParticipantCreateOrConnectWithoutMembershipInput = {
@@ -3581,6 +4328,9 @@ export type JobSiteParticipantUpdateWithoutUserInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutUserInput = {
@@ -3617,6 +4367,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutUserInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateManyWithoutUserInput = {
@@ -3701,6 +4454,9 @@ export type JobSiteParticipantUpdateWithoutOrganizationInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutOrganizationInput = {
@@ -3737,6 +4493,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutOrganizationInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateManyWithoutOrganizationInput = {
@@ -3821,6 +4580,9 @@ export type JobSiteParticipantUpdateWithoutJobSiteInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutJobSiteInput = {
@@ -3857,6 +4619,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutJobSiteInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateManyWithoutJobSiteInput = {
@@ -3941,6 +4706,9 @@ export type JobSiteParticipantUpdateWithoutMembershipInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateWithoutMembershipInput = {
@@ -3977,6 +4745,9 @@ export type JobSiteParticipantUncheckedUpdateWithoutMembershipInput = {
   requestedPayments?: Prisma.JobSitePaymentRequestUncheckedUpdateManyWithoutRequestedByParticipantNestedInput
   paymentDeclarations?: Prisma.JobSitePaymentTransferDeclarationUncheckedUpdateManyWithoutDeclaredByParticipantNestedInput
   paymentReviews?: Prisma.JobSitePaymentReviewUncheckedUpdateManyWithoutReviewedByParticipantNestedInput
+  openedRequests?: Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedDisputes?: Prisma.JobSiteDisputeUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
+  openedPostClosureRequests?: Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput
 }
 
 export type JobSiteParticipantUncheckedUpdateManyWithoutMembershipInput = {
@@ -4021,6 +4792,9 @@ export type JobSiteParticipantCountOutputType = {
   requestedPayments: number
   paymentDeclarations: number
   paymentReviews: number
+  openedRequests: number
+  openedDisputes: number
+  openedPostClosureRequests: number
 }
 
 export type JobSiteParticipantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4036,6 +4810,9 @@ export type JobSiteParticipantCountOutputTypeSelect<ExtArgs extends runtime.Type
   requestedPayments?: boolean | JobSiteParticipantCountOutputTypeCountRequestedPaymentsArgs
   paymentDeclarations?: boolean | JobSiteParticipantCountOutputTypeCountPaymentDeclarationsArgs
   paymentReviews?: boolean | JobSiteParticipantCountOutputTypeCountPaymentReviewsArgs
+  openedRequests?: boolean | JobSiteParticipantCountOutputTypeCountOpenedRequestsArgs
+  openedDisputes?: boolean | JobSiteParticipantCountOutputTypeCountOpenedDisputesArgs
+  openedPostClosureRequests?: boolean | JobSiteParticipantCountOutputTypeCountOpenedPostClosureRequestsArgs
 }
 
 /**
@@ -4132,6 +4909,27 @@ export type JobSiteParticipantCountOutputTypeCountPaymentReviewsArgs<ExtArgs ext
   where?: Prisma.JobSitePaymentReviewWhereInput
 }
 
+/**
+ * JobSiteParticipantCountOutputType without action
+ */
+export type JobSiteParticipantCountOutputTypeCountOpenedRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteRequestWhereInput
+}
+
+/**
+ * JobSiteParticipantCountOutputType without action
+ */
+export type JobSiteParticipantCountOutputTypeCountOpenedDisputesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSiteDisputeWhereInput
+}
+
+/**
+ * JobSiteParticipantCountOutputType without action
+ */
+export type JobSiteParticipantCountOutputTypeCountOpenedPostClosureRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JobSitePostClosureRequestWhereInput
+}
+
 
 export type JobSiteParticipantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4172,6 +4970,9 @@ export type JobSiteParticipantSelect<ExtArgs extends runtime.Types.Extensions.In
   requestedPayments?: boolean | Prisma.JobSiteParticipant$requestedPaymentsArgs<ExtArgs>
   paymentDeclarations?: boolean | Prisma.JobSiteParticipant$paymentDeclarationsArgs<ExtArgs>
   paymentReviews?: boolean | Prisma.JobSiteParticipant$paymentReviewsArgs<ExtArgs>
+  openedRequests?: boolean | Prisma.JobSiteParticipant$openedRequestsArgs<ExtArgs>
+  openedDisputes?: boolean | Prisma.JobSiteParticipant$openedDisputesArgs<ExtArgs>
+  openedPostClosureRequests?: boolean | Prisma.JobSiteParticipant$openedPostClosureRequestsArgs<ExtArgs>
   _count?: boolean | Prisma.JobSiteParticipantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jobSiteParticipant"]>
 
@@ -4276,6 +5077,9 @@ export type JobSiteParticipantInclude<ExtArgs extends runtime.Types.Extensions.I
   requestedPayments?: boolean | Prisma.JobSiteParticipant$requestedPaymentsArgs<ExtArgs>
   paymentDeclarations?: boolean | Prisma.JobSiteParticipant$paymentDeclarationsArgs<ExtArgs>
   paymentReviews?: boolean | Prisma.JobSiteParticipant$paymentReviewsArgs<ExtArgs>
+  openedRequests?: boolean | Prisma.JobSiteParticipant$openedRequestsArgs<ExtArgs>
+  openedDisputes?: boolean | Prisma.JobSiteParticipant$openedDisputesArgs<ExtArgs>
+  openedPostClosureRequests?: boolean | Prisma.JobSiteParticipant$openedPostClosureRequestsArgs<ExtArgs>
   _count?: boolean | Prisma.JobSiteParticipantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type JobSiteParticipantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4310,6 +5114,9 @@ export type $JobSiteParticipantPayload<ExtArgs extends runtime.Types.Extensions.
     requestedPayments: Prisma.$JobSitePaymentRequestPayload<ExtArgs>[]
     paymentDeclarations: Prisma.$JobSitePaymentTransferDeclarationPayload<ExtArgs>[]
     paymentReviews: Prisma.$JobSitePaymentReviewPayload<ExtArgs>[]
+    openedRequests: Prisma.$JobSiteRequestPayload<ExtArgs>[]
+    openedDisputes: Prisma.$JobSiteDisputePayload<ExtArgs>[]
+    openedPostClosureRequests: Prisma.$JobSitePostClosureRequestPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4744,6 +5551,9 @@ export interface Prisma__JobSiteParticipantClient<T, Null = never, ExtArgs exten
   requestedPayments<T extends Prisma.JobSiteParticipant$requestedPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteParticipant$requestedPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSitePaymentRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   paymentDeclarations<T extends Prisma.JobSiteParticipant$paymentDeclarationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteParticipant$paymentDeclarationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSitePaymentTransferDeclarationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   paymentReviews<T extends Prisma.JobSiteParticipant$paymentReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteParticipant$paymentReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSitePaymentReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  openedRequests<T extends Prisma.JobSiteParticipant$openedRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteParticipant$openedRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  openedDisputes<T extends Prisma.JobSiteParticipant$openedDisputesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteParticipant$openedDisputesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteDisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  openedPostClosureRequests<T extends Prisma.JobSiteParticipant$openedPostClosureRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteParticipant$openedPostClosureRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSitePostClosureRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5500,6 +6310,78 @@ export type JobSiteParticipant$paymentReviewsArgs<ExtArgs extends runtime.Types.
   take?: number
   skip?: number
   distinct?: Prisma.JobSitePaymentReviewScalarFieldEnum | Prisma.JobSitePaymentReviewScalarFieldEnum[]
+}
+
+/**
+ * JobSiteParticipant.openedRequests
+ */
+export type JobSiteParticipant$openedRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteRequest
+   */
+  select?: Prisma.JobSiteRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteRequest
+   */
+  omit?: Prisma.JobSiteRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteRequestInclude<ExtArgs> | null
+  where?: Prisma.JobSiteRequestWhereInput
+  orderBy?: Prisma.JobSiteRequestOrderByWithRelationInput | Prisma.JobSiteRequestOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteRequestScalarFieldEnum | Prisma.JobSiteRequestScalarFieldEnum[]
+}
+
+/**
+ * JobSiteParticipant.openedDisputes
+ */
+export type JobSiteParticipant$openedDisputesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSiteDispute
+   */
+  select?: Prisma.JobSiteDisputeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSiteDispute
+   */
+  omit?: Prisma.JobSiteDisputeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSiteDisputeInclude<ExtArgs> | null
+  where?: Prisma.JobSiteDisputeWhereInput
+  orderBy?: Prisma.JobSiteDisputeOrderByWithRelationInput | Prisma.JobSiteDisputeOrderByWithRelationInput[]
+  cursor?: Prisma.JobSiteDisputeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSiteDisputeScalarFieldEnum | Prisma.JobSiteDisputeScalarFieldEnum[]
+}
+
+/**
+ * JobSiteParticipant.openedPostClosureRequests
+ */
+export type JobSiteParticipant$openedPostClosureRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JobSitePostClosureRequest
+   */
+  select?: Prisma.JobSitePostClosureRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JobSitePostClosureRequest
+   */
+  omit?: Prisma.JobSitePostClosureRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JobSitePostClosureRequestInclude<ExtArgs> | null
+  where?: Prisma.JobSitePostClosureRequestWhereInput
+  orderBy?: Prisma.JobSitePostClosureRequestOrderByWithRelationInput | Prisma.JobSitePostClosureRequestOrderByWithRelationInput[]
+  cursor?: Prisma.JobSitePostClosureRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JobSitePostClosureRequestScalarFieldEnum | Prisma.JobSitePostClosureRequestScalarFieldEnum[]
 }
 
 /**

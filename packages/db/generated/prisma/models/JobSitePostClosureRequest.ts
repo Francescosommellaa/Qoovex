@@ -266,6 +266,7 @@ export type JobSitePostClosureRequestWhereInput = {
   resolvedAt?: Prisma.DateTimeNullableFilter<"JobSitePostClosureRequest"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   jobSite?: Prisma.XOR<Prisma.JobSiteScalarRelationFilter, Prisma.JobSiteWhereInput>
+  openedByParticipant?: Prisma.XOR<Prisma.JobSiteParticipantScalarRelationFilter, Prisma.JobSiteParticipantWhereInput>
   reopeningProposals?: Prisma.JobSiteReopeningProposalListRelationFilter
 }
 
@@ -283,6 +284,7 @@ export type JobSitePostClosureRequestOrderByWithRelationInput = {
   resolvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   jobSite?: Prisma.JobSiteOrderByWithRelationInput
+  openedByParticipant?: Prisma.JobSiteParticipantOrderByWithRelationInput
   reopeningProposals?: Prisma.JobSiteReopeningProposalOrderByRelationAggregateInput
 }
 
@@ -303,6 +305,7 @@ export type JobSitePostClosureRequestWhereUniqueInput = Prisma.AtLeast<{
   resolvedAt?: Prisma.DateTimeNullableFilter<"JobSitePostClosureRequest"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   jobSite?: Prisma.XOR<Prisma.JobSiteScalarRelationFilter, Prisma.JobSiteWhereInput>
+  openedByParticipant?: Prisma.XOR<Prisma.JobSiteParticipantScalarRelationFilter, Prisma.JobSiteParticipantWhereInput>
   reopeningProposals?: Prisma.JobSiteReopeningProposalListRelationFilter
 }, "id">
 
@@ -344,7 +347,6 @@ export type JobSitePostClosureRequestScalarWhereWithAggregatesInput = {
 
 export type JobSitePostClosureRequestCreateInput = {
   id?: string
-  openedByParticipantId: string
   title: string
   body: string
   status?: $Enums.PostClosureRequestStatus
@@ -354,6 +356,7 @@ export type JobSitePostClosureRequestCreateInput = {
   resolvedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutPostClosureRequestsInput
   jobSite: Prisma.JobSiteCreateNestedOneWithoutPostClosureRequestsInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedPostClosureRequestsInput
   reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutPostClosureRequestInput
 }
 
@@ -374,7 +377,6 @@ export type JobSitePostClosureRequestUncheckedCreateInput = {
 
 export type JobSitePostClosureRequestUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   body?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPostClosureRequestStatusFieldUpdateOperationsInput | $Enums.PostClosureRequestStatus
@@ -384,6 +386,7 @@ export type JobSitePostClosureRequestUpdateInput = {
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPostClosureRequestsNestedInput
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutPostClosureRequestsNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedPostClosureRequestsNestedInput
   reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutPostClosureRequestNestedInput
 }
 
@@ -418,7 +421,6 @@ export type JobSitePostClosureRequestCreateManyInput = {
 
 export type JobSitePostClosureRequestUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   body?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPostClosureRequestStatusFieldUpdateOperationsInput | $Enums.PostClosureRequestStatus
@@ -591,6 +593,48 @@ export type JobSitePostClosureRequestUncheckedUpdateManyWithoutJobSiteNestedInpu
   deleteMany?: Prisma.JobSitePostClosureRequestScalarWhereInput | Prisma.JobSitePostClosureRequestScalarWhereInput[]
 }
 
+export type JobSitePostClosureRequestCreateNestedManyWithoutOpenedByParticipantInput = {
+  create?: Prisma.XOR<Prisma.JobSitePostClosureRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSitePostClosureRequestUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSitePostClosureRequestCreateWithoutOpenedByParticipantInput[] | Prisma.JobSitePostClosureRequestUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSitePostClosureRequestCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSitePostClosureRequestCreateOrConnectWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSitePostClosureRequestCreateManyOpenedByParticipantInputEnvelope
+  connect?: Prisma.JobSitePostClosureRequestWhereUniqueInput | Prisma.JobSitePostClosureRequestWhereUniqueInput[]
+}
+
+export type JobSitePostClosureRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput = {
+  create?: Prisma.XOR<Prisma.JobSitePostClosureRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSitePostClosureRequestUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSitePostClosureRequestCreateWithoutOpenedByParticipantInput[] | Prisma.JobSitePostClosureRequestUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSitePostClosureRequestCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSitePostClosureRequestCreateOrConnectWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSitePostClosureRequestCreateManyOpenedByParticipantInputEnvelope
+  connect?: Prisma.JobSitePostClosureRequestWhereUniqueInput | Prisma.JobSitePostClosureRequestWhereUniqueInput[]
+}
+
+export type JobSitePostClosureRequestUpdateManyWithoutOpenedByParticipantNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSitePostClosureRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSitePostClosureRequestUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSitePostClosureRequestCreateWithoutOpenedByParticipantInput[] | Prisma.JobSitePostClosureRequestUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSitePostClosureRequestCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSitePostClosureRequestCreateOrConnectWithoutOpenedByParticipantInput[]
+  upsert?: Prisma.JobSitePostClosureRequestUpsertWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSitePostClosureRequestUpsertWithWhereUniqueWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSitePostClosureRequestCreateManyOpenedByParticipantInputEnvelope
+  set?: Prisma.JobSitePostClosureRequestWhereUniqueInput | Prisma.JobSitePostClosureRequestWhereUniqueInput[]
+  disconnect?: Prisma.JobSitePostClosureRequestWhereUniqueInput | Prisma.JobSitePostClosureRequestWhereUniqueInput[]
+  delete?: Prisma.JobSitePostClosureRequestWhereUniqueInput | Prisma.JobSitePostClosureRequestWhereUniqueInput[]
+  connect?: Prisma.JobSitePostClosureRequestWhereUniqueInput | Prisma.JobSitePostClosureRequestWhereUniqueInput[]
+  update?: Prisma.JobSitePostClosureRequestUpdateWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSitePostClosureRequestUpdateWithWhereUniqueWithoutOpenedByParticipantInput[]
+  updateMany?: Prisma.JobSitePostClosureRequestUpdateManyWithWhereWithoutOpenedByParticipantInput | Prisma.JobSitePostClosureRequestUpdateManyWithWhereWithoutOpenedByParticipantInput[]
+  deleteMany?: Prisma.JobSitePostClosureRequestScalarWhereInput | Prisma.JobSitePostClosureRequestScalarWhereInput[]
+}
+
+export type JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSitePostClosureRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSitePostClosureRequestUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSitePostClosureRequestCreateWithoutOpenedByParticipantInput[] | Prisma.JobSitePostClosureRequestUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSitePostClosureRequestCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSitePostClosureRequestCreateOrConnectWithoutOpenedByParticipantInput[]
+  upsert?: Prisma.JobSitePostClosureRequestUpsertWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSitePostClosureRequestUpsertWithWhereUniqueWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSitePostClosureRequestCreateManyOpenedByParticipantInputEnvelope
+  set?: Prisma.JobSitePostClosureRequestWhereUniqueInput | Prisma.JobSitePostClosureRequestWhereUniqueInput[]
+  disconnect?: Prisma.JobSitePostClosureRequestWhereUniqueInput | Prisma.JobSitePostClosureRequestWhereUniqueInput[]
+  delete?: Prisma.JobSitePostClosureRequestWhereUniqueInput | Prisma.JobSitePostClosureRequestWhereUniqueInput[]
+  connect?: Prisma.JobSitePostClosureRequestWhereUniqueInput | Prisma.JobSitePostClosureRequestWhereUniqueInput[]
+  update?: Prisma.JobSitePostClosureRequestUpdateWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSitePostClosureRequestUpdateWithWhereUniqueWithoutOpenedByParticipantInput[]
+  updateMany?: Prisma.JobSitePostClosureRequestUpdateManyWithWhereWithoutOpenedByParticipantInput | Prisma.JobSitePostClosureRequestUpdateManyWithWhereWithoutOpenedByParticipantInput[]
+  deleteMany?: Prisma.JobSitePostClosureRequestScalarWhereInput | Prisma.JobSitePostClosureRequestScalarWhereInput[]
+}
+
 export type EnumPostClosureRequestStatusFieldUpdateOperationsInput = {
   set?: $Enums.PostClosureRequestStatus
 }
@@ -613,7 +657,6 @@ export type JobSitePostClosureRequestUpdateOneWithoutReopeningProposalsNestedInp
 
 export type JobSitePostClosureRequestCreateWithoutOrganizationInput = {
   id?: string
-  openedByParticipantId: string
   title: string
   body: string
   status?: $Enums.PostClosureRequestStatus
@@ -622,6 +665,7 @@ export type JobSitePostClosureRequestCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   resolvedAt?: Date | string | null
   jobSite: Prisma.JobSiteCreateNestedOneWithoutPostClosureRequestsInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedPostClosureRequestsInput
   reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutPostClosureRequestInput
 }
 
@@ -684,7 +728,6 @@ export type JobSitePostClosureRequestScalarWhereInput = {
 
 export type JobSitePostClosureRequestCreateWithoutJobSiteInput = {
   id?: string
-  openedByParticipantId: string
   title: string
   body: string
   status?: $Enums.PostClosureRequestStatus
@@ -693,6 +736,7 @@ export type JobSitePostClosureRequestCreateWithoutJobSiteInput = {
   updatedAt?: Date | string
   resolvedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutPostClosureRequestsInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedPostClosureRequestsInput
   reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutPostClosureRequestInput
 }
 
@@ -736,9 +780,8 @@ export type JobSitePostClosureRequestUpdateManyWithWhereWithoutJobSiteInput = {
   data: Prisma.XOR<Prisma.JobSitePostClosureRequestUpdateManyMutationInput, Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutJobSiteInput>
 }
 
-export type JobSitePostClosureRequestCreateWithoutReopeningProposalsInput = {
+export type JobSitePostClosureRequestCreateWithoutOpenedByParticipantInput = {
   id?: string
-  openedByParticipantId: string
   title: string
   body: string
   status?: $Enums.PostClosureRequestStatus
@@ -748,6 +791,61 @@ export type JobSitePostClosureRequestCreateWithoutReopeningProposalsInput = {
   resolvedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutPostClosureRequestsInput
   jobSite: Prisma.JobSiteCreateNestedOneWithoutPostClosureRequestsInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalCreateNestedManyWithoutPostClosureRequestInput
+}
+
+export type JobSitePostClosureRequestUncheckedCreateWithoutOpenedByParticipantInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  title: string
+  body: string
+  status?: $Enums.PostClosureRequestStatus
+  revision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  resolvedAt?: Date | string | null
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedCreateNestedManyWithoutPostClosureRequestInput
+}
+
+export type JobSitePostClosureRequestCreateOrConnectWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSitePostClosureRequestWhereUniqueInput
+  create: Prisma.XOR<Prisma.JobSitePostClosureRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSitePostClosureRequestUncheckedCreateWithoutOpenedByParticipantInput>
+}
+
+export type JobSitePostClosureRequestCreateManyOpenedByParticipantInputEnvelope = {
+  data: Prisma.JobSitePostClosureRequestCreateManyOpenedByParticipantInput | Prisma.JobSitePostClosureRequestCreateManyOpenedByParticipantInput[]
+  skipDuplicates?: boolean
+}
+
+export type JobSitePostClosureRequestUpsertWithWhereUniqueWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSitePostClosureRequestWhereUniqueInput
+  update: Prisma.XOR<Prisma.JobSitePostClosureRequestUpdateWithoutOpenedByParticipantInput, Prisma.JobSitePostClosureRequestUncheckedUpdateWithoutOpenedByParticipantInput>
+  create: Prisma.XOR<Prisma.JobSitePostClosureRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSitePostClosureRequestUncheckedCreateWithoutOpenedByParticipantInput>
+}
+
+export type JobSitePostClosureRequestUpdateWithWhereUniqueWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSitePostClosureRequestWhereUniqueInput
+  data: Prisma.XOR<Prisma.JobSitePostClosureRequestUpdateWithoutOpenedByParticipantInput, Prisma.JobSitePostClosureRequestUncheckedUpdateWithoutOpenedByParticipantInput>
+}
+
+export type JobSitePostClosureRequestUpdateManyWithWhereWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSitePostClosureRequestScalarWhereInput
+  data: Prisma.XOR<Prisma.JobSitePostClosureRequestUpdateManyMutationInput, Prisma.JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantInput>
+}
+
+export type JobSitePostClosureRequestCreateWithoutReopeningProposalsInput = {
+  id?: string
+  title: string
+  body: string
+  status?: $Enums.PostClosureRequestStatus
+  revision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  resolvedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutPostClosureRequestsInput
+  jobSite: Prisma.JobSiteCreateNestedOneWithoutPostClosureRequestsInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedPostClosureRequestsInput
 }
 
 export type JobSitePostClosureRequestUncheckedCreateWithoutReopeningProposalsInput = {
@@ -782,7 +880,6 @@ export type JobSitePostClosureRequestUpdateToOneWithWhereWithoutReopeningProposa
 
 export type JobSitePostClosureRequestUpdateWithoutReopeningProposalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   body?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPostClosureRequestStatusFieldUpdateOperationsInput | $Enums.PostClosureRequestStatus
@@ -792,6 +889,7 @@ export type JobSitePostClosureRequestUpdateWithoutReopeningProposalsInput = {
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPostClosureRequestsNestedInput
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutPostClosureRequestsNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedPostClosureRequestsNestedInput
 }
 
 export type JobSitePostClosureRequestUncheckedUpdateWithoutReopeningProposalsInput = {
@@ -823,7 +921,6 @@ export type JobSitePostClosureRequestCreateManyOrganizationInput = {
 
 export type JobSitePostClosureRequestUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   body?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPostClosureRequestStatusFieldUpdateOperationsInput | $Enums.PostClosureRequestStatus
@@ -832,6 +929,7 @@ export type JobSitePostClosureRequestUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutPostClosureRequestsNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedPostClosureRequestsNestedInput
   reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutPostClosureRequestNestedInput
 }
 
@@ -877,7 +975,6 @@ export type JobSitePostClosureRequestCreateManyJobSiteInput = {
 
 export type JobSitePostClosureRequestUpdateWithoutJobSiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   body?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPostClosureRequestStatusFieldUpdateOperationsInput | $Enums.PostClosureRequestStatus
@@ -886,6 +983,7 @@ export type JobSitePostClosureRequestUpdateWithoutJobSiteInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutPostClosureRequestsNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedPostClosureRequestsNestedInput
   reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutPostClosureRequestNestedInput
 }
 
@@ -907,6 +1005,60 @@ export type JobSitePostClosureRequestUncheckedUpdateManyWithoutJobSiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPostClosureRequestStatusFieldUpdateOperationsInput | $Enums.PostClosureRequestStatus
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type JobSitePostClosureRequestCreateManyOpenedByParticipantInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  title: string
+  body: string
+  status?: $Enums.PostClosureRequestStatus
+  revision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  resolvedAt?: Date | string | null
+}
+
+export type JobSitePostClosureRequestUpdateWithoutOpenedByParticipantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPostClosureRequestStatusFieldUpdateOperationsInput | $Enums.PostClosureRequestStatus
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutPostClosureRequestsNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutPostClosureRequestsNestedInput
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUpdateManyWithoutPostClosureRequestNestedInput
+}
+
+export type JobSitePostClosureRequestUncheckedUpdateWithoutOpenedByParticipantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPostClosureRequestStatusFieldUpdateOperationsInput | $Enums.PostClosureRequestStatus
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reopeningProposals?: Prisma.JobSiteReopeningProposalUncheckedUpdateManyWithoutPostClosureRequestNestedInput
+}
+
+export type JobSitePostClosureRequestUncheckedUpdateManyWithoutOpenedByParticipantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   body?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumPostClosureRequestStatusFieldUpdateOperationsInput | $Enums.PostClosureRequestStatus
@@ -961,6 +1113,7 @@ export type JobSitePostClosureRequestSelect<ExtArgs extends runtime.Types.Extens
   resolvedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
   reopeningProposals?: boolean | Prisma.JobSitePostClosureRequest$reopeningProposalsArgs<ExtArgs>
   _count?: boolean | Prisma.JobSitePostClosureRequestCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jobSitePostClosureRequest"]>
@@ -979,6 +1132,7 @@ export type JobSitePostClosureRequestSelectCreateManyAndReturn<ExtArgs extends r
   resolvedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jobSitePostClosureRequest"]>
 
 export type JobSitePostClosureRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -995,6 +1149,7 @@ export type JobSitePostClosureRequestSelectUpdateManyAndReturn<ExtArgs extends r
   resolvedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jobSitePostClosureRequest"]>
 
 export type JobSitePostClosureRequestSelectScalar = {
@@ -1015,16 +1170,19 @@ export type JobSitePostClosureRequestOmit<ExtArgs extends runtime.Types.Extensio
 export type JobSitePostClosureRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
   reopeningProposals?: boolean | Prisma.JobSitePostClosureRequest$reopeningProposalsArgs<ExtArgs>
   _count?: boolean | Prisma.JobSitePostClosureRequestCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type JobSitePostClosureRequestIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }
 export type JobSitePostClosureRequestIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }
 
 export type $JobSitePostClosureRequestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1032,6 +1190,7 @@ export type $JobSitePostClosureRequestPayload<ExtArgs extends runtime.Types.Exte
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs>
     jobSite: Prisma.$JobSitePayload<ExtArgs>
+    openedByParticipant: Prisma.$JobSiteParticipantPayload<ExtArgs>
     reopeningProposals: Prisma.$JobSiteReopeningProposalPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1442,6 +1601,7 @@ export interface Prisma__JobSitePostClosureRequestClient<T, Null = never, ExtArg
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   jobSite<T extends Prisma.JobSiteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteDefaultArgs<ExtArgs>>): Prisma.Prisma__JobSiteClient<runtime.Types.Result.GetResult<Prisma.$JobSitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  openedByParticipant<T extends Prisma.JobSiteParticipantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteParticipantDefaultArgs<ExtArgs>>): Prisma.Prisma__JobSiteParticipantClient<runtime.Types.Result.GetResult<Prisma.$JobSiteParticipantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   reopeningProposals<T extends Prisma.JobSitePostClosureRequest$reopeningProposalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSitePostClosureRequest$reopeningProposalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSiteReopeningProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

@@ -62,7 +62,7 @@ function OperationalFormsFixture() {
     <RecordTransitionForm actions={[{ label: "Conferma", value: "CONFIRM" }]} endpoint={endpoint} revision={1} />
     <ProposalCounterForm currentVersion={1} endpoint={endpoint} revision={1} />
     <LegalHoldForm endpoint={endpoint} />
-    <JobSiteSearch endpoint={endpoint} />
+    <JobSiteSearch endpoint={endpoint} fileSectionId="file" jobSiteName="Cantiere" jobSitePath="/job-sites/job-site-1" />
     <NotificationPreferencesForm organizations={[{ id: "organization-1", name: "Edilizia Rossi" }]} />
   </>;
 }

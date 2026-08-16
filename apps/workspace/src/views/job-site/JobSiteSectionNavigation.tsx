@@ -5,6 +5,7 @@ import { buttonVariants } from "@qoovex/ui/components/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
 import type { JobSiteStatus } from "@qoovex/types";
 import { focusVisibleTarget } from "@shared/lib/focus-management";
+import { WorkspacePageSectionIdentity } from "@/views/workspace/WorkspacePageIdentity";
 
 const sectionLabels = {
   overview: "Panoramica",
@@ -149,45 +150,48 @@ export function JobSiteSectionNavigation({ sections, targets }: { sections: read
   }
 
   return (
-    <nav
-      aria-label="Sezioni cantiere"
-      className="sticky top-0 z-20 -mx-3 border-y border-border/80 bg-background/95 px-3 py-2 backdrop-blur-sm [&~section[id]]:scroll-mt-24 sm:-mx-4 sm:px-4 md:static md:mx-0 md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none"
-      ref={navigationRef}
-    >
-      <div className="md:hidden">
-        <span className="mb-1 block text-xs font-medium text-muted-foreground">Sezione corrente</span>
-        <Select
-          items={sections.map((section) => ({ label: sectionLabels[section], value: section }))}
-          onOpenChange={(open) => {
-            const section = pendingSelectFocusRef.current;
-            if (open || !section) return;
-            pendingSelectFocusRef.current = null;
-            requestAnimationFrame(() => focusSection(targets[section]));
-          }}
-          onValueChange={(value) => {
-            if (!value || !sections.includes(value as JobSiteNavigationSection)) return;
-            pendingSelectFocusRef.current = value as JobSiteNavigationSection;
-            navigateToSection(value as JobSiteNavigationSection, false);
-          }}
-          value={activeSection}
-        >
-          <SelectTrigger aria-label="Sezione corrente del cantiere" className="w-full"><SelectValue /></SelectTrigger>
-          <SelectContent align="start"><SelectGroup>{sections.map((section) => <SelectItem key={section} value={section}>{sectionLabels[section]}</SelectItem>)}</SelectGroup></SelectContent>
-        </Select>
-      </div>
-      <div className="hidden flex-wrap gap-2 md:flex">
-        {sections.map((section) => (
-          <a
-            aria-current={activeSection === section ? "location" : undefined}
-            className={buttonVariants({ className: activeSection === section ? "bg-accent font-semibold shadow-none" : undefined, variant: "outline", size: "sm" })}
-            href={`#${targets[section]}`}
-            key={section}
-            onClick={(event) => handleSectionNavigation(event, targets[section])}
+    <>
+      <WorkspacePageSectionIdentity label={sectionLabels[activeSection]} />
+      <nav
+        aria-label="Sezioni cantiere"
+        className="sticky top-0 z-20 -mx-3 border-y border-border/80 bg-background/95 px-3 py-2 backdrop-blur-sm [&~section[id]]:scroll-mt-24 sm:-mx-4 sm:px-4 md:static md:mx-0 md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none"
+        ref={navigationRef}
+      >
+        <div className="md:hidden">
+          <span className="mb-1 block text-xs font-medium text-muted-foreground">Sezione corrente</span>
+          <Select
+            items={sections.map((section) => ({ label: sectionLabels[section], value: section }))}
+            onOpenChange={(open) => {
+              const section = pendingSelectFocusRef.current;
+              if (open || !section) return;
+              pendingSelectFocusRef.current = null;
+              requestAnimationFrame(() => focusSection(targets[section]));
+            }}
+            onValueChange={(value) => {
+              if (!value || !sections.includes(value as JobSiteNavigationSection)) return;
+              pendingSelectFocusRef.current = value as JobSiteNavigationSection;
+              navigateToSection(value as JobSiteNavigationSection, false);
+            }}
+            value={activeSection}
           >
-            {sectionLabels[section]}
-          </a>
-        ))}
-      </div>
-    </nav>
+            <SelectTrigger aria-label="Sezione corrente del cantiere" className="w-full"><SelectValue /></SelectTrigger>
+            <SelectContent align="start"><SelectGroup>{sections.map((section) => <SelectItem key={section} value={section}>{sectionLabels[section]}</SelectItem>)}</SelectGroup></SelectContent>
+          </Select>
+        </div>
+        <div className="hidden flex-wrap gap-2 md:flex">
+          {sections.map((section) => (
+            <a
+              aria-current={activeSection === section ? "location" : undefined}
+              className={buttonVariants({ className: activeSection === section ? "bg-accent font-semibold shadow-none" : undefined, variant: "outline", size: "sm" })}
+              href={`#${targets[section]}`}
+              key={section}
+              onClick={(event) => handleSectionNavigation(event, targets[section])}
+            >
+              {sectionLabels[section]}
+            </a>
+          ))}
+        </div>
+      </nav>
+    </>
   );
 }

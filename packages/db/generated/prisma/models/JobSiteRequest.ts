@@ -322,6 +322,7 @@ export type JobSiteRequestWhereInput = {
   resolvedAt?: Prisma.DateTimeNullableFilter<"JobSiteRequest"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   jobSite?: Prisma.XOR<Prisma.JobSiteScalarRelationFilter, Prisma.JobSiteWhereInput>
+  openedByParticipant?: Prisma.XOR<Prisma.JobSiteParticipantScalarRelationFilter, Prisma.JobSiteParticipantWhereInput>
 }
 
 export type JobSiteRequestOrderByWithRelationInput = {
@@ -345,6 +346,7 @@ export type JobSiteRequestOrderByWithRelationInput = {
   resolvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   jobSite?: Prisma.JobSiteOrderByWithRelationInput
+  openedByParticipant?: Prisma.JobSiteParticipantOrderByWithRelationInput
 }
 
 export type JobSiteRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -371,6 +373,7 @@ export type JobSiteRequestWhereUniqueInput = Prisma.AtLeast<{
   resolvedAt?: Prisma.DateTimeNullableFilter<"JobSiteRequest"> | Date | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   jobSite?: Prisma.XOR<Prisma.JobSiteScalarRelationFilter, Prisma.JobSiteWhereInput>
+  openedByParticipant?: Prisma.XOR<Prisma.JobSiteParticipantScalarRelationFilter, Prisma.JobSiteParticipantWhereInput>
 }, "id">
 
 export type JobSiteRequestOrderByWithAggregationInput = {
@@ -425,7 +428,6 @@ export type JobSiteRequestScalarWhereWithAggregatesInput = {
 
 export type JobSiteRequestCreateInput = {
   id?: string
-  openedByParticipantId: string
   type?: $Enums.JobSiteRequestType
   assignedSide: $Enums.JobSiteParticipantKind
   title: string
@@ -442,6 +444,7 @@ export type JobSiteRequestCreateInput = {
   resolvedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSiteRequestsInput
   jobSite: Prisma.JobSiteCreateNestedOneWithoutRequestsInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedRequestsInput
 }
 
 export type JobSiteRequestUncheckedCreateInput = {
@@ -467,7 +470,6 @@ export type JobSiteRequestUncheckedCreateInput = {
 
 export type JobSiteRequestUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJobSiteRequestTypeFieldUpdateOperationsInput | $Enums.JobSiteRequestType
   assignedSide?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -484,6 +486,7 @@ export type JobSiteRequestUpdateInput = {
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSiteRequestsNestedInput
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutRequestsNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedRequestsNestedInput
 }
 
 export type JobSiteRequestUncheckedUpdateInput = {
@@ -530,7 +533,6 @@ export type JobSiteRequestCreateManyInput = {
 
 export type JobSiteRequestUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJobSiteRequestTypeFieldUpdateOperationsInput | $Enums.JobSiteRequestType
   assignedSide?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -733,6 +735,48 @@ export type JobSiteRequestUncheckedUpdateManyWithoutJobSiteNestedInput = {
   deleteMany?: Prisma.JobSiteRequestScalarWhereInput | Prisma.JobSiteRequestScalarWhereInput[]
 }
 
+export type JobSiteRequestCreateNestedManyWithoutOpenedByParticipantInput = {
+  create?: Prisma.XOR<Prisma.JobSiteRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSiteRequestUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSiteRequestCreateWithoutOpenedByParticipantInput[] | Prisma.JobSiteRequestUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSiteRequestCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSiteRequestCreateOrConnectWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSiteRequestCreateManyOpenedByParticipantInputEnvelope
+  connect?: Prisma.JobSiteRequestWhereUniqueInput | Prisma.JobSiteRequestWhereUniqueInput[]
+}
+
+export type JobSiteRequestUncheckedCreateNestedManyWithoutOpenedByParticipantInput = {
+  create?: Prisma.XOR<Prisma.JobSiteRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSiteRequestUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSiteRequestCreateWithoutOpenedByParticipantInput[] | Prisma.JobSiteRequestUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSiteRequestCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSiteRequestCreateOrConnectWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSiteRequestCreateManyOpenedByParticipantInputEnvelope
+  connect?: Prisma.JobSiteRequestWhereUniqueInput | Prisma.JobSiteRequestWhereUniqueInput[]
+}
+
+export type JobSiteRequestUpdateManyWithoutOpenedByParticipantNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSiteRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSiteRequestUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSiteRequestCreateWithoutOpenedByParticipantInput[] | Prisma.JobSiteRequestUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSiteRequestCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSiteRequestCreateOrConnectWithoutOpenedByParticipantInput[]
+  upsert?: Prisma.JobSiteRequestUpsertWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSiteRequestUpsertWithWhereUniqueWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSiteRequestCreateManyOpenedByParticipantInputEnvelope
+  set?: Prisma.JobSiteRequestWhereUniqueInput | Prisma.JobSiteRequestWhereUniqueInput[]
+  disconnect?: Prisma.JobSiteRequestWhereUniqueInput | Prisma.JobSiteRequestWhereUniqueInput[]
+  delete?: Prisma.JobSiteRequestWhereUniqueInput | Prisma.JobSiteRequestWhereUniqueInput[]
+  connect?: Prisma.JobSiteRequestWhereUniqueInput | Prisma.JobSiteRequestWhereUniqueInput[]
+  update?: Prisma.JobSiteRequestUpdateWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSiteRequestUpdateWithWhereUniqueWithoutOpenedByParticipantInput[]
+  updateMany?: Prisma.JobSiteRequestUpdateManyWithWhereWithoutOpenedByParticipantInput | Prisma.JobSiteRequestUpdateManyWithWhereWithoutOpenedByParticipantInput[]
+  deleteMany?: Prisma.JobSiteRequestScalarWhereInput | Prisma.JobSiteRequestScalarWhereInput[]
+}
+
+export type JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantNestedInput = {
+  create?: Prisma.XOR<Prisma.JobSiteRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSiteRequestUncheckedCreateWithoutOpenedByParticipantInput> | Prisma.JobSiteRequestCreateWithoutOpenedByParticipantInput[] | Prisma.JobSiteRequestUncheckedCreateWithoutOpenedByParticipantInput[]
+  connectOrCreate?: Prisma.JobSiteRequestCreateOrConnectWithoutOpenedByParticipantInput | Prisma.JobSiteRequestCreateOrConnectWithoutOpenedByParticipantInput[]
+  upsert?: Prisma.JobSiteRequestUpsertWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSiteRequestUpsertWithWhereUniqueWithoutOpenedByParticipantInput[]
+  createMany?: Prisma.JobSiteRequestCreateManyOpenedByParticipantInputEnvelope
+  set?: Prisma.JobSiteRequestWhereUniqueInput | Prisma.JobSiteRequestWhereUniqueInput[]
+  disconnect?: Prisma.JobSiteRequestWhereUniqueInput | Prisma.JobSiteRequestWhereUniqueInput[]
+  delete?: Prisma.JobSiteRequestWhereUniqueInput | Prisma.JobSiteRequestWhereUniqueInput[]
+  connect?: Prisma.JobSiteRequestWhereUniqueInput | Prisma.JobSiteRequestWhereUniqueInput[]
+  update?: Prisma.JobSiteRequestUpdateWithWhereUniqueWithoutOpenedByParticipantInput | Prisma.JobSiteRequestUpdateWithWhereUniqueWithoutOpenedByParticipantInput[]
+  updateMany?: Prisma.JobSiteRequestUpdateManyWithWhereWithoutOpenedByParticipantInput | Prisma.JobSiteRequestUpdateManyWithWhereWithoutOpenedByParticipantInput[]
+  deleteMany?: Prisma.JobSiteRequestScalarWhereInput | Prisma.JobSiteRequestScalarWhereInput[]
+}
+
 export type EnumJobSiteRequestTypeFieldUpdateOperationsInput = {
   set?: $Enums.JobSiteRequestType
 }
@@ -743,7 +787,6 @@ export type EnumJobSiteRequestStatusFieldUpdateOperationsInput = {
 
 export type JobSiteRequestCreateWithoutOrganizationInput = {
   id?: string
-  openedByParticipantId: string
   type?: $Enums.JobSiteRequestType
   assignedSide: $Enums.JobSiteParticipantKind
   title: string
@@ -759,6 +802,7 @@ export type JobSiteRequestCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   resolvedAt?: Date | string | null
   jobSite: Prisma.JobSiteCreateNestedOneWithoutRequestsInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedRequestsInput
 }
 
 export type JobSiteRequestUncheckedCreateWithoutOrganizationInput = {
@@ -833,7 +877,6 @@ export type JobSiteRequestScalarWhereInput = {
 
 export type JobSiteRequestCreateWithoutJobSiteInput = {
   id?: string
-  openedByParticipantId: string
   type?: $Enums.JobSiteRequestType
   assignedSide: $Enums.JobSiteParticipantKind
   title: string
@@ -849,6 +892,7 @@ export type JobSiteRequestCreateWithoutJobSiteInput = {
   updatedAt?: Date | string
   resolvedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutJobSiteRequestsInput
+  openedByParticipant: Prisma.JobSiteParticipantCreateNestedOneWithoutOpenedRequestsInput
 }
 
 export type JobSiteRequestUncheckedCreateWithoutJobSiteInput = {
@@ -897,6 +941,72 @@ export type JobSiteRequestUpdateManyWithWhereWithoutJobSiteInput = {
   data: Prisma.XOR<Prisma.JobSiteRequestUpdateManyMutationInput, Prisma.JobSiteRequestUncheckedUpdateManyWithoutJobSiteInput>
 }
 
+export type JobSiteRequestCreateWithoutOpenedByParticipantInput = {
+  id?: string
+  type?: $Enums.JobSiteRequestType
+  assignedSide: $Enums.JobSiteParticipantKind
+  title: string
+  body: string
+  status?: $Enums.JobSiteRequestStatus
+  blocking?: boolean
+  stepId?: string | null
+  proposalId?: string | null
+  paymentRequestId?: string | null
+  timelineEventId?: string | null
+  revision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  resolvedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutJobSiteRequestsInput
+  jobSite: Prisma.JobSiteCreateNestedOneWithoutRequestsInput
+}
+
+export type JobSiteRequestUncheckedCreateWithoutOpenedByParticipantInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  type?: $Enums.JobSiteRequestType
+  assignedSide: $Enums.JobSiteParticipantKind
+  title: string
+  body: string
+  status?: $Enums.JobSiteRequestStatus
+  blocking?: boolean
+  stepId?: string | null
+  proposalId?: string | null
+  paymentRequestId?: string | null
+  timelineEventId?: string | null
+  revision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  resolvedAt?: Date | string | null
+}
+
+export type JobSiteRequestCreateOrConnectWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSiteRequestWhereUniqueInput
+  create: Prisma.XOR<Prisma.JobSiteRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSiteRequestUncheckedCreateWithoutOpenedByParticipantInput>
+}
+
+export type JobSiteRequestCreateManyOpenedByParticipantInputEnvelope = {
+  data: Prisma.JobSiteRequestCreateManyOpenedByParticipantInput | Prisma.JobSiteRequestCreateManyOpenedByParticipantInput[]
+  skipDuplicates?: boolean
+}
+
+export type JobSiteRequestUpsertWithWhereUniqueWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSiteRequestWhereUniqueInput
+  update: Prisma.XOR<Prisma.JobSiteRequestUpdateWithoutOpenedByParticipantInput, Prisma.JobSiteRequestUncheckedUpdateWithoutOpenedByParticipantInput>
+  create: Prisma.XOR<Prisma.JobSiteRequestCreateWithoutOpenedByParticipantInput, Prisma.JobSiteRequestUncheckedCreateWithoutOpenedByParticipantInput>
+}
+
+export type JobSiteRequestUpdateWithWhereUniqueWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSiteRequestWhereUniqueInput
+  data: Prisma.XOR<Prisma.JobSiteRequestUpdateWithoutOpenedByParticipantInput, Prisma.JobSiteRequestUncheckedUpdateWithoutOpenedByParticipantInput>
+}
+
+export type JobSiteRequestUpdateManyWithWhereWithoutOpenedByParticipantInput = {
+  where: Prisma.JobSiteRequestScalarWhereInput
+  data: Prisma.XOR<Prisma.JobSiteRequestUpdateManyMutationInput, Prisma.JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantInput>
+}
+
 export type JobSiteRequestCreateManyOrganizationInput = {
   id?: string
   jobSiteId: string
@@ -919,7 +1029,6 @@ export type JobSiteRequestCreateManyOrganizationInput = {
 
 export type JobSiteRequestUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJobSiteRequestTypeFieldUpdateOperationsInput | $Enums.JobSiteRequestType
   assignedSide?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -935,6 +1044,7 @@ export type JobSiteRequestUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutRequestsNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedRequestsNestedInput
 }
 
 export type JobSiteRequestUncheckedUpdateWithoutOrganizationInput = {
@@ -999,7 +1109,6 @@ export type JobSiteRequestCreateManyJobSiteInput = {
 
 export type JobSiteRequestUpdateWithoutJobSiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  openedByParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumJobSiteRequestTypeFieldUpdateOperationsInput | $Enums.JobSiteRequestType
   assignedSide?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1015,6 +1124,7 @@ export type JobSiteRequestUpdateWithoutJobSiteInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSiteRequestsNestedInput
+  openedByParticipant?: Prisma.JobSiteParticipantUpdateOneRequiredWithoutOpenedRequestsNestedInput
 }
 
 export type JobSiteRequestUncheckedUpdateWithoutJobSiteInput = {
@@ -1057,6 +1167,86 @@ export type JobSiteRequestUncheckedUpdateManyWithoutJobSiteInput = {
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
+export type JobSiteRequestCreateManyOpenedByParticipantInput = {
+  id?: string
+  organizationId: string
+  jobSiteId: string
+  type?: $Enums.JobSiteRequestType
+  assignedSide: $Enums.JobSiteParticipantKind
+  title: string
+  body: string
+  status?: $Enums.JobSiteRequestStatus
+  blocking?: boolean
+  stepId?: string | null
+  proposalId?: string | null
+  paymentRequestId?: string | null
+  timelineEventId?: string | null
+  revision?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  resolvedAt?: Date | string | null
+}
+
+export type JobSiteRequestUpdateWithoutOpenedByParticipantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumJobSiteRequestTypeFieldUpdateOperationsInput | $Enums.JobSiteRequestType
+  assignedSide?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobSiteRequestStatusFieldUpdateOperationsInput | $Enums.JobSiteRequestStatus
+  blocking?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutJobSiteRequestsNestedInput
+  jobSite?: Prisma.JobSiteUpdateOneRequiredWithoutRequestsNestedInput
+}
+
+export type JobSiteRequestUncheckedUpdateWithoutOpenedByParticipantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumJobSiteRequestTypeFieldUpdateOperationsInput | $Enums.JobSiteRequestType
+  assignedSide?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobSiteRequestStatusFieldUpdateOperationsInput | $Enums.JobSiteRequestStatus
+  blocking?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type JobSiteRequestUncheckedUpdateManyWithoutOpenedByParticipantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  jobSiteId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumJobSiteRequestTypeFieldUpdateOperationsInput | $Enums.JobSiteRequestType
+  assignedSide?: Prisma.EnumJobSiteParticipantKindFieldUpdateOperationsInput | $Enums.JobSiteParticipantKind
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumJobSiteRequestStatusFieldUpdateOperationsInput | $Enums.JobSiteRequestStatus
+  blocking?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  proposalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timelineEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 
 
 export type JobSiteRequestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1080,6 +1270,7 @@ export type JobSiteRequestSelect<ExtArgs extends runtime.Types.Extensions.Intern
   resolvedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jobSiteRequest"]>
 
 export type JobSiteRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1103,6 +1294,7 @@ export type JobSiteRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   resolvedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jobSiteRequest"]>
 
 export type JobSiteRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1126,6 +1318,7 @@ export type JobSiteRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   resolvedAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jobSiteRequest"]>
 
 export type JobSiteRequestSelectScalar = {
@@ -1153,14 +1346,17 @@ export type JobSiteRequestOmit<ExtArgs extends runtime.Types.Extensions.Internal
 export type JobSiteRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }
 export type JobSiteRequestIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }
 export type JobSiteRequestIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   jobSite?: boolean | Prisma.JobSiteDefaultArgs<ExtArgs>
+  openedByParticipant?: boolean | Prisma.JobSiteParticipantDefaultArgs<ExtArgs>
 }
 
 export type $JobSiteRequestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1168,6 +1364,7 @@ export type $JobSiteRequestPayload<ExtArgs extends runtime.Types.Extensions.Inte
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs>
     jobSite: Prisma.$JobSitePayload<ExtArgs>
+    openedByParticipant: Prisma.$JobSiteParticipantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1584,6 +1781,7 @@ export interface Prisma__JobSiteRequestClient<T, Null = never, ExtArgs extends r
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   jobSite<T extends Prisma.JobSiteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteDefaultArgs<ExtArgs>>): Prisma.Prisma__JobSiteClient<runtime.Types.Result.GetResult<Prisma.$JobSitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  openedByParticipant<T extends Prisma.JobSiteParticipantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JobSiteParticipantDefaultArgs<ExtArgs>>): Prisma.Prisma__JobSiteParticipantClient<runtime.Types.Result.GetResult<Prisma.$JobSiteParticipantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

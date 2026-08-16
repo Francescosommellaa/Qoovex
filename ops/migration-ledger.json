@@ -65,6 +65,13 @@
       "productionApplied": false,
       "destructiveApproved": false,
       "executionPolicy": "PENDING_GUARDED_CLOUD_BUILD"
+    },
+    {
+      "name": "20260816010000_job_site_participant_opener_foreign_keys",
+      "sha256": "1848bff508570c233c4c59e97cf068354a239571a2f3354ce150164f80efc7f9",
+      "productionApplied": false,
+      "destructiveApproved": false,
+      "executionPolicy": "PENDING_GUARDED_CLOUD_BUILD"
     }
   ]
 }

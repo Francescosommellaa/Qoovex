@@ -80,8 +80,8 @@ describe("first vertical slice - verified green guardrails", () => {
     expect(idempotency).toContain("organizationId_action_idempotencyKey");
     expect(idempotency).toContain("IDEMPOTENCY_FINGERPRINT_MISMATCH");
     expect(schema).toContain("@@unique([organizationId, action, idempotencyKey])");
-    expect(schema).toContain("userSideKey         String                              @unique");
-    expect(schema).toContain("primaryClientKey    String?                             @unique");
+    expect(schema).toMatch(/userSideKey\s+String\s+@unique/);
+    expect(schema).toMatch(/primaryClientKey\s+String\?\s+@unique/);
     expect(schema).toContain("@@unique([versionId, participantId])");
   });
 });
