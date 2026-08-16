@@ -5,6 +5,7 @@ import { presentProposalVersion } from "@shared/lib/product-metadata-presentatio
 import { presentChangeProposalStatus } from "@shared/lib/product-state-presentation";
 import { ChangeProposalComparison } from "./ChangeProposalComparison";
 import { ChangeProposalActions, DeleteActionButton } from "./JobSiteForms";
+import { JobSiteFormDisclosure } from "./job-site-form-disclosure";
 import { WorkspacePanel, WorkspaceState } from "../workspace/WorkspacePrimitives";
 
 type DecisionViewer = "CLIENT" | "ORGANIZATION";
@@ -60,7 +61,7 @@ export function JobSiteDecisionCollection({
   secondaryTitle,
   title,
 }: {
-  creation?: ReactNode;
+  creation?: { content: ReactNode; description: string; triggerLabel: string };
   description: string;
   emptyDescription: string;
   id: string;
@@ -83,7 +84,7 @@ export function JobSiteDecisionCollection({
         </details> : null}
       </div>
     </WorkspacePanel>
-    {creation ? <WorkspacePanel>{creation}</WorkspacePanel> : null}
+    {creation ? <WorkspacePanel><JobSiteFormDisclosure description={creation.description} triggerLabel={creation.triggerLabel}>{creation.content}</JobSiteFormDisclosure></WorkspacePanel> : null}
   </section>;
 }
 

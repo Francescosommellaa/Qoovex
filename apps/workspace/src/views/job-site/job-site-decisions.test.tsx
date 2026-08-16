@@ -54,6 +54,28 @@ describe("JobSite decisions presentation", () => {
     expect(html).toContain("Nessun elemento aperto.");
   });
 
+  it("mantiene la creazione secondaria chiusa dietro una CTA contestuale", () => {
+    const html = renderToStaticMarkup(<JobSiteDecisionCollection
+      creation={{
+        content: <form><label htmlFor="titolo-richiesta">Titolo</label><input id="titolo-richiesta" /></form>,
+        description: "Apri il modulo quando serve una risposta dall'altra parte.",
+        triggerLabel: "Apri una richiesta",
+      }}
+      description="Contesto"
+      emptyDescription="Nessun elemento aperto."
+      id="richieste"
+      openItems={[]}
+      openTitle="Richieste aperte"
+      secondaryItems={[]}
+      secondaryTitle="Richieste concluse"
+      title="Richieste e risposte"
+    />);
+
+    expect(html).toContain("Apri una richiesta");
+    expect(html).toContain("Apri il modulo quando serve una risposta dall&#x27;altra parte.");
+    expect(html).toContain('aria-expanded="false"');
+  });
+
   it("rende una proposta con stato, attore e prossimo passo umani senza esporre enum o ID", () => {
     const html = renderToStaticMarkup(<JobSiteChangeProposalDecision
       actionsEndpoint="/api/actions-internal"

@@ -20,22 +20,17 @@ import {
   IconBuildingEstate,
   IconBriefcase,
   IconCrane,
-  IconCreditCard,
   IconDashboard,
-  IconHome,
-  IconLogout,
-  IconSettings,
   IconShieldLock,
   IconTerminal2,
   IconUserCircle,
   IconUsers,
-  IconUsersGroup,
   IconAlertTriangle,
   IconBuilding,
   IconGavel,
 } from "@tabler/icons-react";
 import { WorkspaceLogoutButton } from "./WorkspaceSessionControls";
-import { isWorkspaceNavigationItemCurrent, type WorkspaceNavigationModel } from "./workspace-navigation-policy";
+import { isWorkspaceNavigationItemCurrent, organizationPrimaryNavigation, type WorkspaceNavigationItem, type WorkspaceNavigationModel } from "./workspace-navigation-policy";
 
 /* ─── Icon map ─────────────────────────────────────────────────── */
 
@@ -46,28 +41,24 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   "/qoovex-admin/organizations": IconBuilding,
   "/qoovex-admin/errors": IconAlertTriangle,
   /* Organization */
-  "Panoramica Azienda": IconDashboard,
+  "Panoramica": IconDashboard,
   "Cantieri": IconCrane,
-  "Collaboratori": IconUsersGroup,
-  "Profilo pagamento": IconCreditCard,
   /* Client */
   "I tuoi lavori": IconBriefcase,
   "Account e dati": IconUserCircle,
   /* Account footer */
   "Console supporto": IconShieldLock,
   "Console Qoovex": IconTerminal2,
-  "Gestisci azienda": IconBuildingEstate,
-  "Gestisci collaboratori": IconUsersGroup,
-  "Gestisci account": IconUserCircle,
-  "Impostazioni": IconSettings,
+  "Azienda e impostazioni": IconBuildingEstate,
+  "Account e sicurezza": IconUserCircle,
 };
 
-const platformItems = [
+const platformItems: readonly WorkspaceNavigationItem[] = [
   { label: "Panoramica", href: "/qoovex-admin" },
   { label: "Utenti", href: "/qoovex-admin/users" },
   { label: "Aziende", href: "/qoovex-admin/organizations" },
   { label: "Errori", href: "/qoovex-admin/errors" },
-] as const;
+];
 
 const platformIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   "Panoramica": IconDashboard,
@@ -93,13 +84,8 @@ export function WorkspaceNavigation({ account, authenticated, navigation, platfo
   const searchParams = useSearchParams();
   const platformOnly = (platformRole === "SUPPORT_AGENT" || platformRole === "PLATFORM_ADMIN") && !support;
   const hasOrganizationContext = Boolean(account.organizationName) && !pathname.startsWith("/client");
-  const accountItems = pathname.startsWith("/client") ? [{ label: "Account e dati", href: "/account/security" }] : navigation.account;
-  const contextItems = hasOrganizationContext ? [
-    { label: "Panoramica Azienda", href: "/" },
-    { label: "Cantieri", href: "/job-sites" },
-    { label: "Collaboratori", href: "/people" },
-    { label: "Profilo pagamento", href: "/payment-profile" },
-  ] : pathname.startsWith("/client") ? [
+  const accountItems: readonly WorkspaceNavigationItem[] = pathname.startsWith("/client") ? [{ label: "Account e dati", href: "/account/security" }] : navigation.account;
+  const contextItems: readonly WorkspaceNavigationItem[] = hasOrganizationContext ? organizationPrimaryNavigation : pathname.startsWith("/client") ? [
     { label: "I tuoi lavori", href: "/client" },
   ] : navigation.primary;
   const primary = platformOnly ? platformItems : contextItems;
@@ -113,9 +99,10 @@ export function WorkspaceNavigation({ account, authenticated, navigation, platfo
             <SidebarMenu>
               {primary.map((item) => {
                 const Icon = resolveIcon(item);
+                const isActive = isWorkspaceNavigationItemCurrent(pathname, searchParams, item.href, item.activePaths);
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton render={<Link href={item.href} />} isActive={isWorkspaceNavigationItemCurrent(pathname, searchParams, item.href)} tooltip={item.label}>
+                    <SidebarMenuButton render={<Link aria-current={isActive ? "page" : undefined} href={item.href} />} isActive={isActive} tooltip={item.label}>
                       <Icon className="size-4 shrink-0" />
                       <span>{item.label}</span>
                     </SidebarMenuButton>
@@ -150,9 +137,10 @@ export function WorkspaceNavigation({ account, authenticated, navigation, platfo
             <SidebarMenu>
               {accountItems.map((item) => {
                 const Icon = resolveIcon(item);
+                const isActive = isWorkspaceNavigationItemCurrent(pathname, searchParams, item.href, item.activePaths);
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton render={<Link href={item.href} />} size="sm" tooltip={item.label}>
+                    <SidebarMenuButton render={<Link aria-current={isActive ? "page" : undefined} href={item.href} />} isActive={isActive} size="sm" tooltip={item.label}>
                       <Icon className="size-4 shrink-0" />
                       <span>{item.label}</span>
                     </SidebarMenuButton>

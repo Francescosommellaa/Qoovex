@@ -1,6 +1,6 @@
 {
   "project": "Qoovex",
-  "updated_at": "2026-08-15",
+  "updated_at": "2026-08-16",
   "state_taxonomy": [
     "verified_current_state",
     "implemented_decision",
@@ -103,7 +103,10 @@
       "production_database": "previous_head_verified_new_head_pending_guarded_cloud_build",
       "public_alias": "promoted_only_by_manual_guarded_workflow"
     },
-    "known_blockers": ["guarded Preview and Production rollout pending for 20260813010000_direct_workspace_routes"]
+    "known_blockers": [
+      "guarded Preview and Production rollout pending for 20260813010000_direct_workspace_routes",
+      "JobSite conversation selects reference openedByParticipant, while the current Prisma schema and generated client expose only openedByParticipantId; resolving it requires a database-sensitive relation decision before authenticated detail walkthroughs can complete."
+    ]
   },
   "approved_product_direction": {
     "product_promise": "A construction company and its client share the work history, updates, requests, changes, contextual files, decisions and closure of a job site.",
