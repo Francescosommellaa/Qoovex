@@ -10,6 +10,12 @@ describe("JobSiteSectionNavigation", () => {
     const html = renderToStaticMarkup(<Component sections={["overview", "activities", "decisions", "files"]} targets={sectionNavigation!.clientJobSiteSectionTargets} />);
 
     expect(html).toContain('aria-label="Sezioni cantiere"');
+    expect(html).toContain("Sezione corrente");
+    expect(html).toContain('aria-label="Sezione corrente del cantiere"');
+    expect(html).toContain("md:hidden");
+    expect(html).toContain("md:flex");
+    expect(html).toContain("sticky");
+    expect(html).not.toContain("overflow-x-auto");
     expect(html).toContain('href="#riepilogo"');
     expect(html).toContain('href="#timeline"');
     expect(html).toContain('href="#decisioni"');
@@ -18,6 +24,7 @@ describe("JobSiteSectionNavigation", () => {
     expect(html).toContain("Attività");
     expect(html).toContain("Decisioni");
     expect(html).toContain("File");
+    expect(html).toContain('aria-current="location"');
     expect(html).not.toContain(">Timeline<");
   });
 
@@ -35,5 +42,29 @@ describe("JobSiteSectionNavigation", () => {
     expect(getClientJobSiteNavigationSections({ status: "PENDING_INITIAL_CONFIRMATION", hasClosure: false })).toEqual(["overview"]);
     expect(getClientJobSiteNavigationSections({ status: "ACTIVE", hasClosure: true })).toContain("closure");
     expect(getClientJobSiteNavigationSections({ status: "ARCHIVED", hasClosure: false })).toEqual(["overview", "activities", "decisions", "payments", "files", "details", "archive"]);
+  });
+
+  it("riconosce la sezione visibile usando l'ordine reale della pagina", async () => {
+    const { resolveActiveJobSiteNavigationSection } = await import("./JobSiteSectionNavigation");
+
+    expect(resolveActiveJobSiteNavigationSection({
+      activationLine: 120,
+      atEnd: false,
+      fallback: "overview",
+      positions: [
+        { section: "files", top: 300 },
+        { section: "details", top: 100 },
+        { section: "payments", top: -200 },
+      ],
+    })).toBe("details");
+    expect(resolveActiveJobSiteNavigationSection({
+      activationLine: 120,
+      atEnd: true,
+      fallback: "overview",
+      positions: [
+        { section: "files", top: 300 },
+        { section: "details", top: 100 },
+      ],
+    })).toBe("files");
   });
 });

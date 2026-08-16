@@ -383,7 +383,21 @@ export function RequestForm({ endpoint, revision }: { endpoint: string; revision
 
 export function ActionButton<TResult = Record<string, unknown>>({ endpoint, body, label, success, confirmMessage, method, onSuccess, mapError }: { endpoint: string; body: Record<string, unknown>; label: string; success: string; confirmMessage?: string; method?: string; onSuccess?: (result: TResult) => void; mapError?: (message: string) => string }) {
   const mutation = useMutation();
-  return <div><Button disabled={mutation.state.pending} onClick={() => { if (confirmMessage && !window.confirm(confirmMessage)) return; void mutation.run(() => requestJson<TResult>(endpoint, body, { idempotent: true, method }), success, { onSuccess, mapError }); }} type="button">{mutation.state.pending ? "Attendi…" : label}</Button>{mutation.state.error ? <p role="alert" className="mt-2 text-sm text-destructive">{mutation.state.error}</p> : null}{mutation.state.success ? <p role="status" className="mt-2 text-sm text-emerald-700 dark:text-emerald-300">{mutation.state.success}</p> : null}</div>;
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const runAction = () => void mutation.run(() => requestJson<TResult>(endpoint, body, { idempotent: true, method }), success, { onSuccess, mapError });
+
+  function closeConfirmation(open: boolean) {
+    setConfirmationOpen(open);
+    if (!open) requestAnimationFrame(() => triggerRef.current?.focus());
+  }
+
+  return <div>
+    <Button disabled={mutation.state.pending} onClick={() => confirmMessage ? setConfirmationOpen(true) : runAction()} ref={triggerRef} type="button">{mutation.state.pending ? "Attendi…" : label}</Button>
+    {confirmMessage ? <Dialog onOpenChange={closeConfirmation} open={confirmationOpen}><DialogContent aria-busy={mutation.state.pending} size="sm"><DialogHeader><DialogTitle>Conferma azione</DialogTitle><DialogDescription>{confirmMessage}</DialogDescription></DialogHeader><DialogFooter><DialogClose render={<Button disabled={mutation.state.pending} type="button" variant="outline" />}>Annulla</DialogClose><Button disabled={mutation.state.pending} onClick={() => { setConfirmationOpen(false); runAction(); requestAnimationFrame(() => triggerRef.current?.focus()); }} type="button">{mutation.state.pending ? "Attendi…" : label}</Button></DialogFooter></DialogContent></Dialog> : null}
+    {mutation.state.error ? <p role="alert" className="mt-2 text-sm text-destructive">{mutation.state.error}</p> : null}
+    {mutation.state.success ? <p role="status" className="mt-2 text-sm text-emerald-700 dark:text-emerald-300">{mutation.state.success}</p> : null}
+  </div>;
 }
 
 type ClosureConfirmationDecision = "ACCEPTED" | "REJECTED";
@@ -858,8 +872,21 @@ export function PaymentReviewForm({ actionable = true, declaration, endpoint, pa
 
 export function AuthorityGrantForm({ endpoint, revision, participants }: { endpoint: string; revision: number; participants: Array<{ id: string; label: string }> }) {
   const mutation = useMutation();
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const submitRef = useRef<HTMLButtonElement>(null);
   if (!participants.length) return <p className="text-sm text-muted-foreground">Nessun partecipante Azienda disponibile.</p>;
-  return <form aria-busy={mutation.state.pending} ref={mutation.formRef} onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); if (!window.confirm("Confermi questa delega economica esplicita?")) return; void mutation.run(() => requestJson(endpoint, { expectedRevision: revision, participantId: data.get("participantId"), capabilities: data.getAll("capabilities"), validFrom: new Date().toISOString(), expiresAt: data.get("expiresAt") ? new Date(String(data.get("expiresAt"))).toISOString() : null, reason: data.get("reason") }, { idempotent: true }), "Delega aggiornata."); }}><FormShell title="Concedi autorità economica" state={mutation.state}><SelectField className="h-9 w-full" disabled={mutation.state.pending} label="Persona" name="participantId" options={participants.map((participant) => ({ label: participant.label, value: participant.id }))} /><CheckboxGroupField description="Questi permessi autorizzano la persona a compiere le azioni selezionate per il cantiere." disabled={mutation.state.pending} legend="Permessi economici" name="capabilities" options={[["COMMERCIAL_NEGOTIATE", "Negoziare"], ["COMMERCIAL_ACCEPT", "Accettare"], ["PAYMENT_REQUEST", "Richiedere pagamenti"], ["PAYMENT_CONFIRM_RECEIPT", "Confermare ricezione"], ["CLOSURE_PROPOSE", "Proporre chiusura"]].map(([value, label]) => ({ label, value }))} /><InputField label="Scadenza (facoltativa)" name="expiresAt" type="datetime-local" /><TextareaField required minLength={10} label="Motivazione" name="reason" /><Button disabled={mutation.state.pending} type="submit">{mutation.state.pending ? "Salvataggio…" : "Concedi delega"}</Button></FormShell></form>;
+  function closeConfirmation(open: boolean) {
+    setConfirmationOpen(open);
+    if (!open) requestAnimationFrame(() => submitRef.current?.focus());
+  }
+  function submitGrant() {
+    const form = mutation.formRef.current;
+    if (!form) return;
+    const data = new FormData(form);
+    setConfirmationOpen(false);
+    void mutation.run(() => requestJson(endpoint, { expectedRevision: revision, participantId: data.get("participantId"), capabilities: data.getAll("capabilities"), validFrom: new Date().toISOString(), expiresAt: data.get("expiresAt") ? new Date(String(data.get("expiresAt"))).toISOString() : null, reason: data.get("reason") }, { idempotent: true }), "Delega aggiornata.");
+  }
+  return <form aria-busy={mutation.state.pending} ref={mutation.formRef} onSubmit={(event) => { event.preventDefault(); setConfirmationOpen(true); }}><FormShell title="Concedi autorità economica" state={mutation.state}><SelectField className="h-9 w-full" disabled={mutation.state.pending} label="Persona" name="participantId" options={participants.map((participant) => ({ label: participant.label, value: participant.id }))} /><CheckboxGroupField description="Questi permessi autorizzano la persona a compiere le azioni selezionate per il cantiere." disabled={mutation.state.pending} legend="Permessi economici" name="capabilities" options={[["COMMERCIAL_NEGOTIATE", "Negoziare"], ["COMMERCIAL_ACCEPT", "Accettare"], ["PAYMENT_REQUEST", "Richiedere pagamenti"], ["PAYMENT_CONFIRM_RECEIPT", "Confermare ricezione"], ["CLOSURE_PROPOSE", "Proporre chiusura"]].map(([value, label]) => ({ label, value }))} /><InputField label="Scadenza (facoltativa)" name="expiresAt" type="datetime-local" /><TextareaField required minLength={10} label="Motivazione" name="reason" /><Button disabled={mutation.state.pending} ref={submitRef} type="submit">{mutation.state.pending ? "Salvataggio…" : "Concedi delega"}</Button><Dialog onOpenChange={closeConfirmation} open={confirmationOpen}><DialogContent aria-busy={mutation.state.pending} size="sm"><DialogHeader><DialogTitle>Conferma la delega economica</DialogTitle><DialogDescription>Stai per concedere alla persona selezionata i permessi economici indicati nel modulo per questo cantiere.</DialogDescription></DialogHeader><DialogFooter><DialogClose render={<Button disabled={mutation.state.pending} type="button" variant="outline" />}>Annulla</DialogClose><Button disabled={mutation.state.pending} onClick={submitGrant} type="button">{mutation.state.pending ? "Salvataggio…" : "Conferma delega"}</Button></DialogFooter></DialogContent></Dialog></FormShell></form>;
 }
 
 export function RecordTransitionForm({ actions, description, endpoint, messageLabel = "Messaggio", revision, title }: { actions: Array<{ value: string; label: string }>; description?: string; endpoint: string; messageLabel?: string; revision: number; title?: string }) {
@@ -875,17 +902,33 @@ export function ProposalCounterForm({ currentVersion, disabled = false, endpoint
 
 export function DeleteActionButton({ endpoint, body, label, success, confirmMessage }: { endpoint: string; body: Record<string, unknown>; label: string; success: string; confirmMessage: string }) {
   const mutation = useMutation();
-  return <div><Button disabled={mutation.state.pending} variant="outline" size="sm" type="button" onClick={() => { if (!window.confirm(confirmMessage)) return; void mutation.run(() => requestJson(endpoint, body, { method: "DELETE", idempotent: true }), success); }}>{label}</Button>{mutation.state.error ? <p role="alert" className="mt-2 text-sm text-destructive">{mutation.state.error}</p> : null}</div>;
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  function closeConfirmation(open: boolean) {
+    setConfirmationOpen(open);
+    if (!open) requestAnimationFrame(() => triggerRef.current?.focus());
+  }
+
+  return <div><Button disabled={mutation.state.pending} variant="outline" size="sm" type="button" onClick={() => setConfirmationOpen(true)} ref={triggerRef}>{label}</Button><Dialog onOpenChange={closeConfirmation} open={confirmationOpen}><DialogContent aria-busy={mutation.state.pending} size="sm" variant="destructive"><DialogHeader><DialogTitle>Conferma azione</DialogTitle><DialogDescription>{confirmMessage}</DialogDescription></DialogHeader><DialogFooter><DialogClose render={<Button disabled={mutation.state.pending} type="button" variant="outline" />}>Annulla</DialogClose><Button disabled={mutation.state.pending} onClick={() => { setConfirmationOpen(false); void mutation.run(() => requestJson(endpoint, body, { method: "DELETE", idempotent: true }), success); requestAnimationFrame(() => triggerRef.current?.focus()); }} type="button" variant="destructive">{mutation.state.pending ? "Attendi…" : label}</Button></DialogFooter></DialogContent></Dialog>{mutation.state.error ? <p role="alert" className="mt-2 text-sm text-destructive">{mutation.state.error}</p> : null}</div>;
 }
 
 export function LegalHoldForm({ endpoint }: { endpoint: string }) {
   const mutation = useMutation();
-  return <form ref={mutation.formRef} onSubmit={(event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    if (!window.confirm("Bloccare la conservazione dei contenuti collegati a questo cantiere?")) return;
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const submitRef = useRef<HTMLButtonElement>(null);
+  function closeConfirmation(open: boolean) {
+    setConfirmationOpen(open);
+    if (!open) requestAnimationFrame(() => submitRef.current?.focus());
+  }
+  function submitLegalHold() {
+    const form = mutation.formRef.current;
+    if (!form) return;
+    const data = new FormData(form);
+    setConfirmationOpen(false);
     void mutation.run(() => requestJson(endpoint, { reason: data.get("reason") }), "Conservazione bloccata.");
-  }}><FormShell title="Conservazione" state={mutation.state}><TextareaField required minLength={10} label="Motivazione della conservazione" name="reason" /><Button disabled={mutation.state.pending} type="submit">Blocca conservazione</Button></FormShell></form>;
+  }
+  return <form aria-busy={mutation.state.pending} ref={mutation.formRef} onSubmit={(event) => { event.preventDefault(); setConfirmationOpen(true); }}><FormShell title="Conservazione" state={mutation.state}><TextareaField required minLength={10} label="Motivazione della conservazione" name="reason" /><Button disabled={mutation.state.pending} ref={submitRef} type="submit">{mutation.state.pending ? "Salvataggio…" : "Blocca conservazione"}</Button><Dialog onOpenChange={closeConfirmation} open={confirmationOpen}><DialogContent aria-busy={mutation.state.pending} size="sm"><DialogHeader><DialogTitle>Conferma il blocco della conservazione</DialogTitle><DialogDescription>I contenuti collegati a questo cantiere non verranno eliminati automaticamente finché il blocco resta attivo.</DialogDescription></DialogHeader><DialogFooter><DialogClose render={<Button disabled={mutation.state.pending} type="button" variant="outline" />}>Annulla</DialogClose><Button disabled={mutation.state.pending} onClick={submitLegalHold} type="button">{mutation.state.pending ? "Salvataggio…" : "Conferma blocco"}</Button></DialogFooter></DialogContent></Dialog></FormShell></form>;
 }
 
 export function ReleaseLegalHoldButton({ endpoint, holdId }: { endpoint: string; holdId: string }) {

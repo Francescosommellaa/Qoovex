@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isWorkspaceNavigationItemCurrent } from "./workspace-navigation-policy";
+import { buildWorkspaceNavigation, isWorkspaceNavigationItemCurrent, organizationPrimaryNavigation } from "./workspace-navigation-policy";
 
 describe("isWorkspaceNavigationItemCurrent", () => {
   const searchParams = new URLSearchParams();
@@ -24,5 +24,56 @@ describe("isWorkspaceNavigationItemCurrent", () => {
     const adminHref = "/qoovex-admin";
     expect(isWorkspaceNavigationItemCurrent("/qoovex-admin", searchParams, adminHref)).toBe(true);
     expect(isWorkspaceNavigationItemCurrent("/qoovex-admin/users", searchParams, adminHref)).toBe(false);
+  });
+});
+
+describe("organizationPrimaryNavigation", () => {
+  it("mantiene nella primaria solo le destinazioni operative frequenti", () => {
+    expect(organizationPrimaryNavigation).toEqual([
+      { label: "Panoramica", href: "/" },
+      { label: "Cantieri", href: "/job-sites" },
+    ]);
+    expect(organizationPrimaryNavigation.map((item) => item.href)).not.toContain("/payment-profile");
+    expect(organizationPrimaryNavigation.map((item) => item.href)).not.toContain("/people");
+  });
+});
+
+describe("buildWorkspaceNavigation", () => {
+  it("aggrega le destinazioni Azienda e account per il Titolare", () => {
+    const navigation = buildWorkspaceNavigation("OWNER", "USER");
+
+    expect(navigation.account).toEqual([
+      expect.objectContaining({ label: "Azienda e impostazioni", href: "/settings" }),
+    ]);
+  });
+
+  it("propone lo stesso hub al Collaboratore con accesso Azienda", () => {
+    const navigation = buildWorkspaceNavigation(["organization:read", "organizationProfile:read"], "USER");
+
+    expect(navigation.account).toEqual([
+      expect.objectContaining({ label: "Azienda e impostazioni", href: "/settings" }),
+    ]);
+  });
+
+  it("mantiene la sicurezza personale per un account senza Azienda", () => {
+    const navigation = buildWorkspaceNavigation([], "USER");
+
+    expect(navigation.account).toEqual([{ label: "Account e sicurezza", href: "/account/security" }]);
+  });
+});
+
+describe("account navigation active state", () => {
+  const searchParams = new URLSearchParams();
+  const accountItem = buildWorkspaceNavigation("OWNER", "USER").account[0];
+
+  it.each(["/settings", "/settings/organization-profile", "/people/access", "/payment-profile", "/account/security", "/account/notifications", "/audit-log", "/data-control"])(
+    "mantiene attivo l'hub in %s",
+    (pathname) => {
+      expect(isWorkspaceNavigationItemCurrent(pathname, searchParams, accountItem.href, accountItem.activePaths)).toBe(true);
+    },
+  );
+
+  it("non marca l'hub durante il lavoro operativo", () => {
+    expect(isWorkspaceNavigationItemCurrent("/job-sites", searchParams, accountItem.href, accountItem.activePaths)).toBe(false);
   });
 });
