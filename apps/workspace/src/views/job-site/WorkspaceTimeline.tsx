@@ -23,6 +23,7 @@ import {
   type TimelineEventPresentationInput,
 } from "@shared/lib/timeline-event-presentation";
 import { presentTimelineAudience, type ProductStateTone } from "@shared/lib/product-state-presentation";
+import { jobSiteNotificationTargetId } from "@shared/lib/job-site-notification-destination";
 import { WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 
 export interface WorkspaceTimelineEvent extends TimelineEventPresentationInput {
@@ -88,7 +89,7 @@ export function WorkspaceTimeline({
         const occurredAt = event.occurredAt ?? event.createdAt;
 
         return (
-          <TimelineEntry key={event.id}>
+          <TimelineEntry className="scroll-mt-24 outline-none focus-visible:ring-2 focus-visible:ring-ring" id={jobSiteNotificationTargetId("timeline-event", event.id)} key={event.id}>
             <TimelineMarker variant={markerVariant(presentation.tone)}>
               <EventIcon />
             </TimelineMarker>

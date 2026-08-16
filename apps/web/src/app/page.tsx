@@ -74,7 +74,7 @@ const howItWorks = [
   {
     step: "02",
     title: "Condivide ciò che il cliente deve vedere",
-    body: "Ogni contenuto resta interno finché non viene condiviso in modo esplicito.",
+    body: "Note, aggiornamenti e file possono restare interni oppure essere condivisi; richieste e decisioni seguono il loro flusso tra le parti.",
   },
   {
     step: "03",
@@ -84,29 +84,28 @@ const howItWorks = [
 ];
 
 const linkedInfo = [
-  { icon: IconCamera, label: "Fotografie collegate all'aggiornamento" },
+  { icon: IconCamera, label: "Fotografie e file raccolti nel cantiere" },
   { icon: IconPencil, label: "Modifiche con lo stato della decisione" },
-  { icon: IconFileInvoice, label: "Prove e documenti allegati agli step" },
+  { icon: IconFileInvoice, label: "Allegati collegati a richieste, proposte e pagamenti" },
   { icon: IconHistory, label: "Cronologia di ciò che è stato condiviso" },
 ];
 
-// Direzione di prodotto approvata, non ancora disponibile nel prodotto.
-const currentDirection = [
+const sharedWorkflow = [
   {
-    title: "Timeline condivisa in tempo reale",
-    body: "Impresa e cliente sulla stessa cronologia del lavoro, con ciò che è stato condiviso sempre allineato.",
+    title: "Timeline condivisa",
+    body: "Impresa e cliente consultano la stessa cronologia condivisa, mentre le note interne restano separate.",
   },
   {
-    title: "Negoziazioni tracciate",
-    body: "Richieste e controproposte con lo stato della decisione, collegate allo step a cui si riferiscono.",
+    title: "Richieste e modifiche tracciate",
+    body: "Richieste, proposte e controproposte restano collegate al lavoro e allo stato della decisione.",
   },
   {
     title: "Pagamenti documentati",
-    body: "Riepiloghi pronti per revisione che collegano un importo dichiarato al lavoro documentato.",
+    body: "Richieste, dichiarazioni e ricevute restano collegate al cantiere. Qoovex non movimenta né verifica automaticamente il denaro.",
   },
   {
     title: "Chiusura reciproca",
-    body: "Un momento condiviso in cui entrambe le parti confermano ciò che risulta dal lavoro.",
+    body: "La chiusura procede con la conferma delle parti e resta registrata nella cronologia del lavoro.",
   },
 ];
 
@@ -129,9 +128,10 @@ export default function HomePage() {
                 Tutto ciò che lo racconta resta in ordine.
               </h1>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <a className={cn(buttonVariants({ size: "lg" }))} href="/come-funziona">
-                  Scopri come funziona
+                <a className={cn(buttonVariants({ size: "lg" }))} href={primaryCtaHref}>
+                  {primaryCtaLabel}
                   <IconArrowRight
+                    aria-hidden="true"
                     data-icon="inline-end"
                     className="transition-transform duration-200 group-hover/button:translate-x-0.5"
                   />
@@ -150,7 +150,9 @@ export default function HomePage() {
               />
               <div className="relative flex items-center justify-center">
                 <svg
+                  aria-hidden="true"
                   className="size-36 sm:size-48 lg:size-56 text-foreground drop-shadow-2xl transition-transform duration-700 hover:scale-105"
+                  focusable="false"
                   viewBox="0 0 1100 1100"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -179,7 +181,7 @@ export default function HomePage() {
               </p>
               <p className="flex items-center gap-2.5">
                 <span className="size-1.5 rounded-full bg-primary" />
-                Cronologia chiara e invariabile
+                Cronologia chiara e ricostruibile
               </p>
             </div>
           </div>
@@ -210,7 +212,7 @@ export default function HomePage() {
               <div>
                 <div className="flex items-center justify-between">
                   <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <IconPhoto className="size-5" />
+                    <IconPhoto aria-hidden="true" className="size-5" />
                   </div>
                   <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-1 text-[0.7rem] font-medium text-rose-600 dark:text-rose-400">
                     Dispersione dati
@@ -220,20 +222,20 @@ export default function HomePage() {
                   Foto e documenti dispersi tra più telefoni
                 </h3>
                 <p className="mt-2 text-muted-foreground text-sm leading-relaxed max-w-lg">
-                  Le immagini del cantiere finiscono in chat diverse, email o gallerie personali. Diventa impossibile dimostrare esattamente quando e come è stato realizzato un lavoro.
+                  Le immagini del cantiere finiscono in chat diverse, email o gallerie personali. Diventa difficile ricostruire quando e come è stato documentato un lavoro.
                 </p>
               </div>
 
               {/* Static visual chips inside card */}
               <div className="mt-6 flex flex-wrap items-center gap-2 pt-4 border-t border-border/60">
                 <span className="inline-flex items-center gap-1.5 rounded-lg border bg-background px-3 py-1.5 text-xs text-muted-foreground shadow-2xs">
-                  💬 WhatsApp (Chat perse)
+                  <span aria-hidden="true">💬</span> WhatsApp (Chat perse)
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-lg border bg-background px-3 py-1.5 text-xs text-muted-foreground shadow-2xs">
-                  📧 Email e allegati
+                  <span aria-hidden="true">📧</span> Email e allegati
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 shadow-2xs">
-                  ✓ Unificato in Qoovex
+                  <span aria-hidden="true">✓</span> Unificato in Qoovex
                 </span>
               </div>
             </div>
@@ -244,7 +246,7 @@ export default function HomePage() {
             <div className="vercel-card h-full p-6 flex flex-col justify-between">
               <div>
                 <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <IconMessage2 className="size-5" />
+                  <IconMessage2 aria-hidden="true" className="size-5" />
                 </div>
                 <h3 className="mt-4 text-lg font-bold tracking-tight text-foreground">
                   Modifiche nei messaggi
@@ -265,7 +267,7 @@ export default function HomePage() {
             <div className="vercel-card h-full p-6 flex flex-col justify-between">
               <div>
                 <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <IconFileInvoice className="size-5" />
+                  <IconFileInvoice aria-hidden="true" className="size-5" />
                 </div>
                 <h3 className="mt-4 text-lg font-bold tracking-tight text-foreground">
                   Ricevute scollegate
@@ -295,7 +297,7 @@ export default function HomePage() {
             />
             <ul className="mt-8 space-y-3">
               {[
-                { label: "Cronologia unificata per entrambe le parti", desc: "Un solo registro condiviso dove ogni aggiornamento ha il suo posto." },
+                { label: "Cronologia condivisa tra le parti", desc: "Gli aggiornamenti condivisi restano nello stesso registro del lavoro." },
                 { label: "Modifiche d'opera tracciate con decisione", desc: "Varianti e costi approvati o in attesa di risposta visibili chiaramente." },
                 { label: "Isolamento sicuro delle note interne", desc: "L'impresa lavora con il proprio team senza esporre bozze o promemoria privati." },
               ].map((item) => (
@@ -330,7 +332,7 @@ export default function HomePage() {
           titleId="come-funziona-title"
           eyebrow="Come funziona"
           title="Un flusso semplice, dallo stesso spazio"
-          description="Distingue sempre ciò che resta interno all'impresa da ciò che viene condiviso in modo esplicito."
+          description="Distingue le note e i file interni dai contenuti condivisi e dalle azioni che coinvolgono entrambe le parti."
         />
         <ol className="mt-12 grid gap-4 md:grid-cols-3">
           {howItWorks.map((item, index) => (
@@ -355,7 +357,7 @@ export default function HomePage() {
             href="/come-funziona"
           >
             Vedi il flusso completo
-            <IconArrowRight data-icon="inline-end" className="transition-transform duration-200 group-hover/button:translate-x-0.5" />
+            <IconArrowRight aria-hidden="true" data-icon="inline-end" className="transition-transform duration-200 group-hover/button:translate-x-0.5" />
           </a>
         </div>
       </Section>
@@ -394,10 +396,10 @@ export default function HomePage() {
                 <Badge variant="secondary" className="w-fit">
                   Per i clienti
                 </Badge>
-                <h3 className="mt-4 text-2xl font-bold text-foreground">Solo ciò che è condiviso</h3>
+                <h3 className="mt-4 text-2xl font-bold text-foreground">Il contesto condiviso, senza note interne</h3>
                 <p className="mt-3 text-muted-foreground leading-relaxed">
                   Segui i lavori sui tuoi immobili, capisci cosa è cambiato e ritrova file, prove e
-                  informazioni ufficiali in un unico posto pulito e sempre accessibile.
+                  informazioni condivise in un unico posto ordinato e facile da ritrovare.
                 </p>
               </div>
               <div className="mt-8 pt-4 border-t border-border/60">
@@ -418,7 +420,7 @@ export default function HomePage() {
               titleId="collegate-title"
               eyebrow="Informazioni che restano collegate"
               title="Aggiornamenti, modifiche e prove nello stesso posto"
-              description="Ogni contenuto è collegato al cantiere e alla sua cronologia, così è più facile capire cosa è stato condiviso e cosa richiede una risposta."
+              description="Aggiornamenti, decisioni e allegati restano collegati al cantiere, così è più facile capire cosa è stato condiviso e cosa richiede una risposta."
             />
             <ul className="mt-8 grid gap-3 sm:grid-cols-2">
               {linkedInfo.map((item) => (
@@ -445,8 +447,8 @@ export default function HomePage() {
         <SectionHeading
           titleId="fiducia-title"
           eyebrow="Fiducia e controllo"
-          title="La condivisione è sempre esplicita"
-          description="Qoovex documenta ciò che le parti inseriscono. Non certifica lavori o documenti e non movimenta denaro."
+          title="Interno e condiviso restano distinti"
+          description="L'Azienda controlla la visibilità di note, aggiornamenti e file; le azioni condivise restano nel contesto del lavoro. Qoovex non certifica lavori o documenti e non movimenta denaro."
         />
         <div className="mt-12 grid gap-4 sm:grid-cols-3">
           {[
@@ -482,26 +484,26 @@ export default function HomePage() {
         <div className="mt-8">
           <a className={cn(buttonVariants({ variant: "outline" }))} href="/fiducia">
             Fiducia e privacy
-            <IconArrowRight data-icon="inline-end" className="transition-transform duration-200 group-hover/button:translate-x-0.5" />
+            <IconArrowRight aria-hidden="true" data-icon="inline-end" className="transition-transform duration-200 group-hover/button:translate-x-0.5" />
           </a>
         </div>
       </Section>
 
-      {/* Direzione di prodotto (current) - non ancora disponibile */}
+      {/* Flusso condiviso disponibile nel Workspace */}
       <Section bordered aria-labelledby="job-site-title">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.05fr] lg:items-center">
           <div>
             <SectionHeading
               titleId="job-site-title"
-              eyebrow="Direzione di prodotto"
-              title="Dove sta andando Qoovex"
-              description="Qoovex è la direzione approvata del prodotto. Queste capacità sono in sviluppo e non sono ancora disponibili: le raccontiamo per trasparenza, non come funzioni attive."
+              eyebrow="Dal primo accordo alla chiusura"
+              title="Il lavoro resta leggibile lungo tutto il percorso"
+              description="Timeline, richieste, modifiche, pagamenti documentati e chiusura reciproca vivono nello stesso cantiere. Qoovex registra ciò che le parti inseriscono e confermano, senza certificare il lavoro."
             />
             <div className="mt-6">
-              <Badge variant="secondary">In sviluppo · non ancora disponibile</Badge>
+              <Badge variant="secondary">Parte del Workspace</Badge>
             </div>
             <ul className="mt-8 grid gap-4">
-              {currentDirection.map((item) => (
+              {sharedWorkflow.map((item) => (
                 <li key={item.title} className="border-l-2 border-border pl-4">
                   <p className="text-sm font-medium">{item.title}</p>
                   <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
@@ -511,8 +513,8 @@ export default function HomePage() {
           </div>
           <Reveal>
             <ProductFrame
-              title="Anteprima direzione"
-              subtitle="Esempio illustrativo, non una funzione attiva"
+              title="Esempio di lavoro condiviso"
+              subtitle="Dati illustrativi · stati presenti nel Workspace"
             >
               <div className="grid gap-3">
                 <ReceiptCard />

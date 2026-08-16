@@ -30,7 +30,7 @@ export function CookieBanner() {
     <aside aria-label="Informativa cookie" className="fixed left-[max(1rem,var(--safe-area-left))] right-[max(1rem,var(--safe-area-right))] bottom-[max(1rem,var(--safe-area-bottom))] z-40 mx-auto max-w-3xl">
       <Card className="shadow-xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><IconCookie /> Cookie e tecnologie necessarie</CardTitle>
+          <CardTitle className="flex items-center gap-2"><IconCookie aria-hidden="true" /> Cookie e tecnologie necessarie</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm leading-6 text-muted-foreground">In questa fase il sito usa solo preferenze tecniche necessarie, come il salvataggio di questa scelta nel browser. Non vengono caricati strumenti opzionali.</p>

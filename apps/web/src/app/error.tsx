@@ -12,11 +12,13 @@ export default function GlobalError({
   reset: () => void;
 }) {
   return (
-    <div className="flex min-h-dvh items-center justify-center p-4">
+    <main className="flex min-h-dvh items-center justify-center p-4">
       <div className="w-full max-w-md space-y-4">
         <Alert variant="destructive">
-          <IconAlertTriangle />
-          <AlertTitle>Qualcosa è andato storto</AlertTitle>
+          <IconAlertTriangle aria-hidden="true" />
+          <AlertTitle>
+            <h1>Qualcosa è andato storto</h1>
+          </AlertTitle>
           <AlertDescription>
             Si è verificato un errore imprevisto. Riprova più tardi o torna alla
             home.
@@ -24,12 +26,12 @@ export default function GlobalError({
         </Alert>
         <div className="flex gap-2">
           <Button variant="outline" onClick={reset}>
-            <IconRefresh />
+            <IconRefresh aria-hidden="true" />
             Riprova
           </Button>
           <Button render={<Link href="/" />}>Home</Button>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

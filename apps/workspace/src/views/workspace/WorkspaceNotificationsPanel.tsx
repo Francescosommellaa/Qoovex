@@ -2,6 +2,7 @@
 
 import type { NotificationListResponse, NotificationResponse, NotificationSeverity } from "@qoovex/types";
 import { presentNotificationSeverity } from "@shared/lib/product-state-presentation";
+import { presentNotificationActionLabel } from "@shared/lib/job-site-notification-destination";
 import {
   IconAlertTriangle,
   IconBell,
@@ -69,7 +70,7 @@ function NotificationPreviewItem({ notification }: { notification: NotificationR
           <time className="text-xs text-muted-foreground" dateTime={notification.createdAt}>{dateFormatter.format(new Date(notification.createdAt))}</time>
           {notification.actionHref ? (
             <Link className="ml-auto inline-flex items-center gap-1 rounded-md text-xs font-medium text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring" data-link="plain" href={notification.actionHref}>
-              Apri elemento <IconChevronRight aria-hidden="true" />
+              {presentNotificationActionLabel(notification.sourceType, notification.actionHref)} <IconChevronRight aria-hidden="true" />
             </Link>
           ) : null}
         </div>

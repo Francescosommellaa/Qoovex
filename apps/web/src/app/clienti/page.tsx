@@ -8,11 +8,12 @@ import { ProductFrame } from "@/components/product-frame";
 import { Reveal } from "@/components/reveal";
 import { Section, SectionHeading } from "@/components/section";
 import { SiteShell } from "../site-chrome";
+import { signInUrl } from "../site-config";
 
 export const metadata: Metadata = {
   title: "Qoovex per i clienti - Segui il lavoro che ti riguarda",
   description:
-    "Vedi ciò che l'impresa condivide sul tuo lavoro: avanzamento, aggiornamenti, richieste e riepiloghi, in un unico posto ordinato.",
+    "Segui ciò che viene condiviso sul tuo lavoro e gestisci richieste, decisioni e dichiarazioni documentate in un unico posto ordinato.",
   alternates: { canonical: "/clienti" },
   openGraph: {
     title: "Qoovex per i clienti",
@@ -25,23 +26,23 @@ export const metadata: Metadata = {
 const benefits = [
   {
     icon: IconEye,
-    title: "Vedi solo ciò che è condiviso",
-    body: "L'impresa decide cosa mostrarti. Quello che vedi è ordinato e collegato al lavoro.",
+    title: "Vedi il lavoro condiviso",
+    body: "Trovi ciò che l'impresa condivide e le attività scambiate tra le parti; le note interne dell'Azienda restano separate.",
   },
   {
     icon: IconTimeline,
     title: "Un avanzamento leggibile",
-    body: "La cronologia ti aiuta a capire a che punto è il lavoro e cosa è già stato fatto.",
+    body: "La Panoramica mostra stato e prossimo passo; la cronologia condivisa aiuta a ricostruire cosa è successo.",
   },
   {
     icon: IconMessage2,
     title: "Richieste che non si perdono",
-    body: "Le richieste restano collegate al lavoro, così è chiaro cosa è ancora in attesa di risposta.",
+    body: "Puoi aprire o rispondere a una richiesta nel lavoro corretto e vedere chi deve intervenire.",
   },
   {
     icon: IconReceipt,
-    title: "Riepiloghi documentati",
-    body: "I contenuti condivisi restano disponibili come riferimento, inserito dall'impresa.",
+    title: "Decisioni e pagamenti documentati",
+    body: "Puoi rivedere il riepilogo iniziale, valutare le proposte e dichiarare un pagamento richiesto, senza spostare denaro su Qoovex.",
   },
 ];
 
@@ -59,7 +60,7 @@ export default function ClientiPage() {
         <SectionHeading
           eyebrow="Cosa vedi"
           title="Chiarezza su ciò che è stato condiviso"
-          description="Qoovex non certifica il lavoro né garantisce i pagamenti: mostra in modo ordinato ciò che l'impresa condivide con te."
+          description="Qoovex ordina ciò che le parti condividono e decidono nel lavoro. Non certifica il lavoro né garantisce i pagamenti."
         />
         <div className="grid gap-4 sm:grid-cols-2">
           {benefits.map((item, index) => (
@@ -96,8 +97,11 @@ export default function ClientiPage() {
       </Section>
 
       <CtaBand
-        title="Hai ricevuto un invito?"
-        description="Accedi per vedere ciò che l'impresa ha condiviso con te sul tuo lavoro."
+        title="Hai già accesso a un lavoro?"
+        description="Accedi al Workspace per ritrovare i lavori a cui hai già aderito. Per un nuovo invito, usa il collegamento ricevuto dall'Azienda."
+        primaryHref={signInUrl}
+        primaryLabel="Accedi al Workspace"
+        secondaryHref={null}
       />
     </SiteShell>
   );

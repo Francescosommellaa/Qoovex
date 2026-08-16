@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IconArrowRight, IconBook2, IconUsersGroup } from "@tabler/icons-react";
+import { IconArrowRight, IconUsersGroup } from "@tabler/icons-react";
 import { buttonVariants } from "@qoovex/ui/components/button";
 import { SiteShell } from "../site-chrome";
 
@@ -21,16 +21,16 @@ export default function CommunityPage() {
             Risorse condivise, quando sono davvero pronte.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-            Lo spazio community è in preparazione. Nel frattempo il manuale
-            raccoglie le indicazioni disponibili per orientarsi nel prodotto e
-            nei suoi flussi operativi.
+            Lo spazio community è in preparazione. Nel frattempo puoi scoprire
+            come Qoovex organizza il lavoro condiviso tra impresa e cliente.
           </p>
           <a
             className={buttonVariants({ className: "mt-8", variant: "outline" })}
-            href="/manuale-operativo"
+            href="/come-funziona"
           >
-            <IconBook2 aria-hidden="true" /> Leggi il manuale
+            Scopri come funziona
             <IconArrowRight
+              aria-hidden="true"
               data-icon="inline-end"
               className="transition-transform duration-200 group-hover/button:translate-x-0.5"
             />

@@ -8,6 +8,7 @@ import { ProductFrame } from "@/components/product-frame";
 import { Reveal } from "@/components/reveal";
 import { Section, SectionHeading } from "@/components/section";
 import { SiteShell } from "../site-chrome";
+import { signUpLabel, signUpUrl } from "../site-config";
 
 export const metadata: Metadata = {
   title: "Qoovex per le imprese edili - Organizza e documenta il lavoro",
@@ -32,7 +33,7 @@ const capabilities = [
   {
     icon: IconTimeline,
     title: "Avanzamento sempre leggibile",
-    body: "La cronologia mostra cosa è stato fatto, cosa è in attesa e cosa richiede attenzione.",
+    body: "La Panoramica evidenzia stato e prossima azione; la cronologia ricostruisce ciò che è successo.",
   },
   {
     icon: IconUsers,
@@ -42,7 +43,7 @@ const capabilities = [
   {
     icon: IconShieldLock,
     title: "Condivisione esplicita",
-    body: "Ogni contenuto resta interno finché non decidi di condividerlo. Nessun download è pubblico.",
+    body: "Note, aggiornamenti e file possono restare interni o essere condivisi. Nessun download è pubblico.",
   },
 ];
 
@@ -117,6 +118,8 @@ export default function ImpresePage() {
       <CtaBand
         title="Porta ordine nei tuoi cantieri"
         description="Attiva l'ambiente Azienda e inizia a documentare il primo lavoro."
+        primaryHref={signUpUrl}
+        primaryLabel={signUpLabel}
       />
     </SiteShell>
   );

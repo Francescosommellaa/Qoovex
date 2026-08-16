@@ -314,7 +314,7 @@ export async function executeJobSiteAction(input: {
         resultingRevision,
       },
     });
-    await queueJobSiteNotifications(tx, { actor: input.actor, action: action.action, idempotencyKey: input.idempotencyKey });
+    await queueJobSiteNotifications(tx, { actor: input.actor, action: action.action, idempotencyKey: input.idempotencyKey, result });
     return { result, revision: resultingRevision };
   }, { shouldRetry: (error) => error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002" });
 

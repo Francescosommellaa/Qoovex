@@ -15,6 +15,7 @@ import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
 import { Section, SectionHeading } from "@/components/section";
 import { SiteShell } from "../site-chrome";
+import { signUpLabel, signUpUrl } from "../site-config";
 
 export const metadata: Metadata = {
   title: "Funzionalità di Qoovex - Cantiere, cronologia e condivisione",
@@ -43,7 +44,7 @@ const current = [
   {
     icon: IconShare,
     title: "Condivisione esplicita",
-    body: "I contenuti restano interni finché l'impresa non li condivide. Nessun accesso pubblico.",
+    body: "Note, aggiornamenti e file dell'Azienda possono restare interni oppure essere condivisi. Nessun accesso pubblico.",
   },
   {
     icon: IconMessage2,
@@ -62,11 +63,11 @@ const current = [
   },
 ];
 
-const direction = [
-  "Account cliente e partecipazione a più lavori",
+const sharedLifecycle = [
+  "Partecipazione del cliente ai lavori autorizzati",
   "Timeline condivisa tra impresa e cliente",
-  "Negoziazioni e pagamenti documentati",
-  "Chiusura reciproca del lavoro",
+  "Richieste, proposte e pagamenti documentati",
+  "Chiusura reciproca e attività post-chiusura",
 ];
 
 export default function FunzionalitaPage() {
@@ -75,7 +76,7 @@ export default function FunzionalitaPage() {
       <PageHero
         eyebrow="Funzionalità"
         title="Ciò che Qoovex fa oggi, con chiarezza"
-        description="Queste capacità riflettono lo stato attuale del prodotto. Le direzioni future sono indicate separatamente e non sono ancora disponibili."
+        description="Queste capacità riflettono lo stato attuale del Workspace e restano separate da ciò che Qoovex non fa: non certifica lavori e non gestisce denaro."
         current="Funzionalità"
       />
 
@@ -108,18 +109,18 @@ export default function FunzionalitaPage() {
         <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-center">
           <SectionHeading
             align="start"
-            eyebrow="Direzione di prodotto"
-            title="Dove stiamo andando"
-            description="Concetti approvati come direzione, non ancora implementati. Li raccontiamo per trasparenza, senza presentarli come disponibili."
+            eyebrow="Lungo tutto il lavoro"
+            title="Dall'accordo iniziale alla chiusura"
+            description="Il Workspace collega ogni passaggio al cantiere corretto. Le informazioni restano inserite e confermate dagli utenti: Qoovex non le certifica."
           />
           <ul className="grid gap-3 sm:grid-cols-2">
-            {direction.map((item) => (
+            {sharedLifecycle.map((item) => (
               <li
                 key={item}
                 className="flex items-start gap-3 rounded-lg border border-dashed border-border bg-background/60 p-4 text-sm leading-relaxed text-muted-foreground"
               >
                 <Badge variant="secondary" className="mt-0.5 shrink-0">
-                  Concetto
+                  Nel Workspace
                 </Badge>
                 {item}
               </li>
@@ -154,6 +155,8 @@ export default function FunzionalitaPage() {
       <CtaBand
         title="Pronto a documentare il primo lavoro?"
         description="Attiva l'ambiente Azienda e organizza il tuo primo cantiere su Qoovex."
+        primaryHref={signUpUrl}
+        primaryLabel={signUpLabel}
       />
     </SiteShell>
   );

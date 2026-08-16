@@ -35,15 +35,15 @@ export function WorkspaceTimeline() {
 
       <TimelineEntry>
         <TimelineMarker>
-          <IconCamera className="size-3.5" />
+          <IconCamera aria-hidden="true" className="size-3.5" />
         </TimelineMarker>
         <TimelineContent>
           <div className="flex items-center justify-between gap-2">
-            <p className="text-sm font-medium">Impianto completato, fotografie aggiunte</p>
+            <p className="text-sm font-medium">Fotografie del bagno aggiunte al cantiere</p>
             <VisibilityTag shared />
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            Tre foto collegate all&apos;aggiornamento del bagno.
+            Tre immagini condivise nel contesto del lavoro.
           </p>
           <TimelineActor>Impresa</TimelineActor>
         </TimelineContent>
@@ -51,7 +51,7 @@ export function WorkspaceTimeline() {
 
       <TimelineEntry>
         <TimelineMarker>
-          <IconPencil className="size-3.5" />
+          <IconPencil aria-hidden="true" className="size-3.5" />
         </TimelineMarker>
         <TimelineContent>
           <div className="flex items-center justify-between gap-2">
@@ -65,7 +65,7 @@ export function WorkspaceTimeline() {
 
       <TimelineEntry>
         <TimelineMarker>
-          <IconMessage2 className="size-3.5" />
+          <IconMessage2 aria-hidden="true" className="size-3.5" />
         </TimelineMarker>
         <TimelineContent>
           <div className="flex items-center justify-between gap-2">
@@ -130,7 +130,7 @@ export function ConfirmedUpdateCard() {
           <p className="text-sm font-medium">Aggiornamento del 14 maggio</p>
         </div>
         <p className="text-xs text-muted-foreground">
-          Visto dal cliente · fotografie e nota condivise
+          Condiviso con il cliente · fotografie e nota
         </p>
       </WorkQueueItemContent>
       <WorkQueueItemActions>

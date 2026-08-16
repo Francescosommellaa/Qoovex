@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { NotificationListResponse, NotificationResponse } from "@qoovex/types";
 import { presentNotificationSeverity } from "@shared/lib/product-state-presentation";
+import { presentNotificationActionLabel } from "@shared/lib/job-site-notification-destination";
 import styles from "../AdminCore.module.css";
 import { NotificationActionButtons } from "./NotificationActionButtons";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
@@ -25,7 +26,7 @@ function NotificationCard({ notification }: { notification: NotificationResponse
       </div>
       <div className={styles.actions}>
         <WorkspaceState state={presentNotificationSeverity(notification.severity)} />
-        {notification.actionHref ? <Link className={styles.linkButton} href={notification.actionHref}>Apri</Link> : null}
+        {notification.actionHref ? <Link className={styles.linkButton} href={notification.actionHref}>{presentNotificationActionLabel(notification.sourceType, notification.actionHref)}</Link> : null}
         <NotificationActionButtons notificationId={notification.id} read={read} />
       </div>
     </article>

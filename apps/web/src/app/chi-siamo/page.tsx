@@ -5,6 +5,7 @@ import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
 import { Section, SectionHeading } from "@/components/section";
 import { SiteShell } from "../site-chrome";
+import { signUpLabel, signUpUrl } from "../site-config";
 
 export const metadata: Metadata = {
   title: "Chi siamo - La missione di Qoovex",
@@ -50,17 +51,17 @@ export default function ChiSiamoPage() {
       <Section>
         <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-start">
           <div className="space-y-5 text-pretty leading-relaxed text-muted-foreground">
-            <p className="text-lg text-foreground">
+            <h2 className="text-lg text-foreground">
               Crediamo che documentare un lavoro non debba essere un peso.
-            </p>
+            </h2>
             <p>
               Nelle piccole imprese edili il contesto di un lavoro si disperde spesso tra messaggi,
               foto e telefonate. Qoovex raccoglie questi elementi in un unico spazio operativo, così
               l&apos;avanzamento resta leggibile per chi lavora e per il cliente.
             </p>
             <p>
-              Manteniamo il prodotto onesto: descriviamo ciò che fa oggi e teniamo separate le
-              direzioni future. Qoovex organizza e documenta, ma non certifica il lavoro, non
+              Manteniamo il prodotto onesto: descriviamo ciò che fa oggi senza confonderlo con ciò
+              che non è disponibile. Qoovex organizza e documenta, ma non certifica il lavoro, non
               garantisce i pagamenti e non sostituisce consulenti o tecnici.
             </p>
           </div>
@@ -96,6 +97,8 @@ export default function ChiSiamoPage() {
       <CtaBand
         title="Costruiamo chiarezza, insieme"
         description="Attiva l'ambiente Azienda e inizia a documentare il tuo primo lavoro con Qoovex."
+        primaryHref={signUpUrl}
+        primaryLabel={signUpLabel}
       />
     </SiteShell>
   );

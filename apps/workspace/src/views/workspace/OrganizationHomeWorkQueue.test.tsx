@@ -35,8 +35,8 @@ describe("OrganizationHomeWorkQueue", () => {
     expect(html).toContain("Da verificare");
     expect(html).toContain("1 attività");
     expect(html.match(/<h4[^>]*>Invita il cliente principale<\/h4>/g)).toHaveLength(1);
-    expect(html.match(/In attesa dell&#x27;accettazione del cliente/g)).toHaveLength(1);
-    expect(html).toContain("Dichiarazione di pagamento da rivedere");
+    expect(html.match(/Attendi l&#x27;accettazione del cliente/g)).toHaveLength(1);
+    expect(html).toContain("Controlla la dichiarazione di pagamento");
     expect(html).toContain("Ristrutturazione cucina");
     expect(html).toContain("Deve intervenire:");
     expect(html).toContain("Azienda");
@@ -57,7 +57,7 @@ describe("OrganizationHomeWorkQueue", () => {
       priority: "attention",
     }]} />);
 
-    expect(html).toContain("Conferma della chiusura richiesta");
+    expect(html).toContain("Conferma la chiusura");
     expect(html).toContain("Nessuna attività è in attesa del cliente.");
     expect(html).toContain("Nessun elemento da verificare al momento.");
   });

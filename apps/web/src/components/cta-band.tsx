@@ -6,10 +6,21 @@ import { primaryCtaHref, primaryCtaLabel, signInLabel, signInUrl } from "@/app/s
 type CtaBandProps = {
   title: string;
   description: string;
+  primaryHref?: string;
+  primaryLabel?: string;
+  secondaryHref?: string | null;
+  secondaryLabel?: string;
 };
 
 /** Fascia CTA finale coerente su tutte le pagine. Una sola azione primaria. */
-export function CtaBand({ title, description }: CtaBandProps) {
+export function CtaBand({
+  title,
+  description,
+  primaryHref = primaryCtaHref,
+  primaryLabel = primaryCtaLabel,
+  secondaryHref = signInUrl,
+  secondaryLabel = signInLabel,
+}: CtaBandProps) {
   return (
     <section className="border-t bg-card">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-16 sm:px-6 sm:py-20 lg:flex-row lg:items-center lg:justify-between">
@@ -20,16 +31,19 @@ export function CtaBand({ title, description }: CtaBandProps) {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <a className={cn(buttonVariants({ size: "lg" }))} href={primaryCtaHref}>
-            {primaryCtaLabel}
+          <a className={cn(buttonVariants({ size: "lg" }))} href={primaryHref}>
+            {primaryLabel}
             <IconArrowRight
+              aria-hidden="true"
               data-icon="inline-end"
               className="transition-transform duration-200 group-hover/button:translate-x-0.5"
             />
           </a>
-          <a className={cn(buttonVariants({ variant: "ghost", size: "lg" }))} href={signInUrl}>
-            {signInLabel}
-          </a>
+          {secondaryHref ? (
+            <a className={cn(buttonVariants({ variant: "ghost", size: "lg" }))} href={secondaryHref}>
+              {secondaryLabel}
+            </a>
+          ) : null}
         </div>
       </div>
     </section>

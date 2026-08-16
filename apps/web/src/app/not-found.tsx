@@ -2,20 +2,22 @@ import Link from "next/link";
 import { IconMoodEmpty } from "@tabler/icons-react";
 import { buttonVariants } from "@qoovex/ui/components/button";
 import { Card, CardContent } from "@qoovex/ui/components/card";
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia } from "@qoovex/ui/components/empty";
 import { cn } from "@qoovex/ui/lib/utils";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-dvh items-center justify-center p-4">
+    <main className="flex min-h-dvh items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardContent>
           <Empty>
             <EmptyHeader>
               <EmptyMedia variant="icon">
-                <IconMoodEmpty />
+                <IconMoodEmpty aria-hidden="true" />
               </EmptyMedia>
-              <EmptyTitle>Pagina non trovata</EmptyTitle>
+              <h1 className="text-base font-semibold leading-snug tracking-tight text-foreground sm:text-lg">
+                Pagina non trovata
+              </h1>
               <EmptyDescription>
                 La pagina che cerchi non esiste o è stata spostata.
               </EmptyDescription>
@@ -28,6 +30,6 @@ export default function NotFound() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </main>
   );
 }

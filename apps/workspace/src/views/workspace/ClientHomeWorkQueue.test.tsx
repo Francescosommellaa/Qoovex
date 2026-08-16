@@ -38,8 +38,8 @@ describe("ClientHomeWorkQueue", () => {
     }]} />);
 
     expect(html).toContain("2 attività");
-    expect(html.match(/<h4[^>]*>Verifica uno step completato<\/h4>/g)).toHaveLength(1);
-    expect(html.match(/<h4[^>]*>Rispondi a una richiesta<\/h4>/g)).toHaveLength(1);
+    expect(html.match(/<h4[^>]*>Controlla lo step completato<\/h4>/g)).toHaveLength(1);
+    expect(html.match(/<h4[^>]*>Rispondi alla richiesta<\/h4>/g)).toHaveLength(1);
     expect(html).toContain('href="/client/job-sites/cucina#step"');
     expect(html).toContain('href="/client/job-sites/bagno#richieste"');
   });

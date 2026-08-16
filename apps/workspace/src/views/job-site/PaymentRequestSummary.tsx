@@ -2,11 +2,13 @@ import type { PaymentRequestStatus } from "@qoovex/types";
 import { formatEuroFromMinorUnits } from "@shared/lib/money";
 import { formatDateTime } from "@shared/lib/product-metadata-presentation";
 import { presentPaymentRequestStatus } from "@shared/lib/product-state-presentation";
+import { jobSiteNotificationTargetId } from "@shared/lib/job-site-notification-destination";
 import { WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 
 type PaymentViewer = "ORGANIZATION" | "CLIENT";
 
 export interface PaymentRequestSummaryInput {
+  id?: string;
   status: PaymentRequestStatus;
   amountMinor: bigint | string;
   reason: string;
@@ -54,7 +56,7 @@ export function presentPaymentNextAction(status: PaymentRequestStatus, viewer: P
 export function PaymentRequestSummary({ payment, viewer }: { payment: PaymentRequestSummaryInput; viewer: PaymentViewer }) {
   const requestedAt = payment.requestedAt ?? payment.createdAt;
 
-  return <div className="space-y-3">
+  return <div className="scroll-mt-24 space-y-3 outline-none focus-visible:ring-2 focus-visible:ring-ring" id={payment.id ? jobSiteNotificationTargetId("payment", payment.id) : undefined}>
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div>
         <h3 className="text-sm font-semibold">Richiesta di pagamento</h3>

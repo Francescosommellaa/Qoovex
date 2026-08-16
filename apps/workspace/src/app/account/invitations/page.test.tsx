@@ -31,6 +31,7 @@ describe("AccountInvitationsPage", () => {
     expect(html).toContain("chiedi all’Azienda");
     expect(html).toContain("inviare nuovamente l’invito");
     expect(html).toContain('href="/account/security"');
+    expect(html).not.toContain("<main");
     expect(html).not.toMatch(/marketplace|candidatura|crea(?:re)? (?:un )?(?:lavoro|cantiere)/i);
   });
 });

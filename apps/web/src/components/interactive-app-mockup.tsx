@@ -45,7 +45,7 @@ export function InteractiveAppMockup() {
           <div className="rounded-xl border bg-card p-4 shadow-2xs space-y-2">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 text-xs font-medium text-foreground">
-                <IconCamera className="size-4 text-emerald-600 dark:text-emerald-400" />
+                <IconCamera aria-hidden="true" className="size-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Impresa Bianchi</span>
                 <span className="text-[0.68rem] text-muted-foreground font-normal">· Oggi 10:30</span>
               </div>
@@ -53,12 +53,12 @@ export function InteractiveAppMockup() {
                 Condiviso
               </Badge>
             </div>
-            <h3 className="font-semibold text-xs sm:text-sm text-foreground">
-              Posa impianti idraulici e collaudo bagno padronale
-            </h3>
+            <p className="font-semibold text-xs sm:text-sm text-foreground">
+              Aggiornamento sulla posa degli impianti del bagno
+            </p>
             <div className="flex items-center gap-1 text-[0.68rem] text-emerald-600 dark:text-emerald-400 font-medium pt-1 border-t border-border/40">
-              <IconCheck className="size-3.5" />
-              <span>Visto dal cliente Marco C.</span>
+              <IconCheck aria-hidden="true" className="size-3.5" />
+              <span>Condiviso con il cliente</span>
             </div>
           </div>
 
@@ -66,17 +66,17 @@ export function InteractiveAppMockup() {
           <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 dark:bg-amber-500/10 p-4 shadow-2xs space-y-2">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 text-xs font-medium text-foreground">
-                <IconPencil className="size-4 text-amber-600 dark:text-amber-400" />
-                <span>Variante d&apos;Opera #03</span>
+                <IconPencil aria-hidden="true" className="size-4 text-amber-600 dark:text-amber-400" />
+                <span>Proposta di modifica</span>
               </div>
               <Badge variant="warning" className="text-[0.65rem]">
-                In Attesa
+                In attesa
               </Badge>
             </div>
             <div className="flex items-center justify-between gap-2">
-              <h3 className="font-semibold text-xs sm:text-sm text-foreground">
+              <p className="font-semibold text-xs sm:text-sm text-foreground">
                 Punti luce LED soggiorno
-              </h3>
+              </p>
               <span className="font-bold text-xs text-foreground">+ € 380,00</span>
             </div>
           </div>
@@ -85,10 +85,10 @@ export function InteractiveAppMockup() {
           <div className="rounded-xl border border-dashed bg-muted/30 p-3 space-y-1">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5 font-medium text-foreground">
-                <IconLock className="size-3.5" /> Nota Interna Impresa
+                <IconLock aria-hidden="true" className="size-3.5" /> Nota Interna Impresa
               </span>
               <span className="text-[0.65rem] border rounded px-1.5 py-0.5 bg-muted">
-                🔒 Solo Impresa
+                Solo Impresa
               </span>
             </div>
             <p className="text-xs text-muted-foreground">

@@ -55,6 +55,8 @@ export default function FaqPage() {
       <CtaBand
         title="Hai un'altra domanda?"
         description="Scrivici: rispondiamo volentieri a imprese e clienti che vogliono capire meglio Qoovex."
+        primaryHref="/contattaci"
+        primaryLabel="Contattaci"
       />
 
       <script
