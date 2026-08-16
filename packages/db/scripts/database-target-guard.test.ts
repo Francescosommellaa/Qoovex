@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   assertDatabaseTargetForCommand,
   assertVercelDatabaseEnvironmentMarker,
+  isLocalPrismaDevTarget,
   isLoopbackDatabaseConnection,
 } from "../src/database-target-guard";
 
@@ -10,6 +11,13 @@ test("recognizes loopback PostgreSQL targets", () => {
   assert.equal(isLoopbackDatabaseConnection("postgresql://user:pass@localhost:5432/qoovex"), true);
   assert.equal(isLoopbackDatabaseConnection("postgresql://user:pass@127.0.0.1:5432/qoovex"), true);
   assert.equal(isLoopbackDatabaseConnection("postgresql://user:pass@db.example.test:5432/qoovex"), false);
+});
+
+test("serializes every declared local Prisma Dev target without affecting CI PostgreSQL", () => {
+  const nonCanonicalPort = "postgresql://user:pass@localhost:51261/qoovex_ci";
+  assert.equal(isLocalPrismaDevTarget(nonCanonicalPort, { QOOVEX_DATABASE_ENVIRONMENT: "local" }), true);
+  assert.equal(isLocalPrismaDevTarget(nonCanonicalPort, { QOOVEX_DATABASE_ENVIRONMENT: "test" }), false);
+  assert.equal(isLocalPrismaDevTarget("postgresql://user:pass@db.example.test:5432/qoovex", { QOOVEX_DATABASE_ENVIRONMENT: "local" }), false);
 });
 
 test("refuses remote local targets unless maintenance is explicitly attested", () => {

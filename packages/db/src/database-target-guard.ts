@@ -24,6 +24,14 @@ export function isLoopbackDatabaseConnection(connectionString: string) {
   return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]" || hostname === "::1";
 }
 
+export function isLocalPrismaDevTarget(
+  connectionString: string,
+  env: NodeJS.ProcessEnv = process.env,
+) {
+  return env.QOOVEX_DATABASE_ENVIRONMENT?.trim() === "local"
+    && isLoopbackDatabaseConnection(connectionString);
+}
+
 export function assertVercelDatabaseEnvironmentMarker(env: NodeJS.ProcessEnv = process.env) {
   const vercelEnvironment = env.VERCEL_ENV?.trim();
   const declaredEnvironment = env.QOOVEX_DATABASE_ENVIRONMENT?.trim();

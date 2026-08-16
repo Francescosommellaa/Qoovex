@@ -3,7 +3,10 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
 import { normalizeDatabaseConnectionString } from "../src/connection-string";
-import { assertVercelDatabaseEnvironmentMarker } from "../src/database-target-guard";
+import {
+  assertVercelDatabaseEnvironmentMarker,
+  isLocalPrismaDevTarget,
+} from "../src/database-target-guard";
 import { recordDatabaseOperation } from "../src/operation-metrics";
 
 const DATABASE_ENV_NAMES = [
@@ -26,14 +29,11 @@ function getDatabaseConnectionString() {
 function createPrismaClient(): PrismaClient {
   assertVercelDatabaseEnvironmentMarker();
   const connectionString = normalizeDatabaseConnectionString(getDatabaseConnectionString());
-  const target = new URL(connectionString);
-  const isCanonicalPrismaDev = process.env.QOOVEX_DATABASE_ENVIRONMENT?.trim() === "local"
-    && ["localhost", "127.0.0.1", "::1", "[::1]"].includes(target.hostname.toLowerCase())
-    && target.port === "51225";
+  const isLocalPrismaDev = isLocalPrismaDevTarget(connectionString);
   // Prisma Dev uses a single-process PGlite protocol server. Queueing through a
   // one-connection pool prevents overlapping prepared messages locally; CI and
   // remote PostgreSQL targets retain the adapter's normal pool concurrency.
-  const adapter = new PrismaPg({ connectionString, ...(isCanonicalPrismaDev ? { max: 1 } : {}) });
+  const adapter = new PrismaPg({ connectionString, ...(isLocalPrismaDev ? { max: 1 } : {}) });
   return new PrismaClient({ adapter }).$extends({
     name: "qoovex-operation-metrics",
     query: {
