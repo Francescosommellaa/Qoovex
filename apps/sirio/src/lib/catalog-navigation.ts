@@ -17,6 +17,7 @@ import {
   IconLayoutSidebar,
   IconListCheck,
   IconLoader,
+  IconMail,
   IconMinus,
   IconPalette,
   IconPaperclip,
@@ -55,6 +56,7 @@ export const catalogNavigationGroups = [
       { name: "Money", href: "/patterns/money", icon: IconCurrencyEuro },
       { name: "Proposal Review", href: "/patterns/proposal-review", icon: IconArrowsExchange },
       { name: "Contextual Attachment", href: "/patterns/contextual-attachment", icon: IconPaperclip },
+      { name: "Invitation", href: "/patterns/invitation", icon: IconMail },
     ],
   },
   {

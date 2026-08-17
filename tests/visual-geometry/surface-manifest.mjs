@@ -160,6 +160,7 @@ const nonCriticalSirio = [
   "/patterns/money",
   "/patterns/proposal-review",
   "/patterns/contextual-attachment",
+  "/patterns/invitation",
   "/components/avatar",
   "/components/badge",
   "/components/breadcrumb",

@@ -21,7 +21,7 @@ const patterns = [
   { name: "Proposal Review", href: "/patterns/proposal-review", status: "Documentato" },
   { name: "Confirmation Review", status: "Previsto" },
   { name: "Contextual Attachment", href: "/patterns/contextual-attachment", status: "Documentato" },
-  { name: "Invitation", status: "Previsto" },
+  { name: "Invitation", href: "/patterns/invitation", status: "Documentato" },
 ] as const;
 
 export default function PatternsOverviewPage() {
