@@ -19,6 +19,7 @@ import {
   IconLoader,
   IconMinus,
   IconPalette,
+  IconPaperclip,
   IconRoute,
   IconRulerMeasure,
   IconSearch,
@@ -53,6 +54,7 @@ export const catalogNavigationGroups = [
       { name: "Form Validation", href: "/patterns/form-validation", icon: IconForms },
       { name: "Money", href: "/patterns/money", icon: IconCurrencyEuro },
       { name: "Proposal Review", href: "/patterns/proposal-review", icon: IconArrowsExchange },
+      { name: "Contextual Attachment", href: "/patterns/contextual-attachment", icon: IconPaperclip },
     ],
   },
   {

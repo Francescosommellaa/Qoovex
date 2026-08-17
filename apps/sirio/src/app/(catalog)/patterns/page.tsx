@@ -20,7 +20,7 @@ const patterns = [
   { name: "Money", href: "/patterns/money", status: "Documentato" },
   { name: "Proposal Review", href: "/patterns/proposal-review", status: "Documentato" },
   { name: "Confirmation Review", status: "Previsto" },
-  { name: "Contextual Attachment", status: "Previsto" },
+  { name: "Contextual Attachment", href: "/patterns/contextual-attachment", status: "Documentato" },
   { name: "Invitation", status: "Previsto" },
 ] as const;
 

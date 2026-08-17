@@ -77,7 +77,7 @@
       "app": "sirio",
       "owner": "apps/sirio",
       "routePatterns": ["/patterns", "/patterns/**"],
-      "runtimeRoutes": ["/patterns", "/patterns/work-queue", "/patterns/timeline-event", "/patterns/status-presentation", "/patterns/form-validation", "/patterns/money", "/patterns/proposal-review"],
+      "runtimeRoutes": ["/patterns", "/patterns/work-queue", "/patterns/timeline-event", "/patterns/status-presentation", "/patterns/form-validation", "/patterns/money", "/patterns/proposal-review", "/patterns/contextual-attachment"],
       "requiredScenarios": ["coarse-touch", "fine-hover", "portrait", "landscape", "zoom-200", "reduced-motion", "safe-area"]
     }
   ],

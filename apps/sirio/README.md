@@ -18,6 +18,7 @@ I marchi provengono dagli SVG canonici di `@qoovex/brand-resources`. Provenienza
 - `/patterns/form-validation`: pattern canonico per label, errori locali, focus e feedback accessibili nei form;
 - `/patterns/money`: pattern canonico per lettura, input e variazioni economiche in euro;
 - `/patterns/proposal-review`: pattern canonico per comprendere una proposta, confrontarne i dati affidabili e vedere le azioni disponibili;
+- `/patterns/contextual-attachment`: pattern canonico per allegare file dal contesto corretto senza esporre riferimenti tecnici;
 - `/marketing`: landing Qoovex rappresentativa;
 - `/dashboard`: shell e dashboard Qoovex rappresentativa.
 
