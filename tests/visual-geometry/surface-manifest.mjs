@@ -152,6 +152,13 @@ const excluded = (app, route, reasonCode, reason) => ({
 });
 
 const nonCriticalSirio = [
+  "/patterns",
+  "/patterns/work-queue",
+  "/patterns/timeline-event",
+  "/patterns/status-presentation",
+  "/patterns/form-validation",
+  "/patterns/money",
+  "/patterns/proposal-review",
   "/components/avatar",
   "/components/badge",
   "/components/breadcrumb",

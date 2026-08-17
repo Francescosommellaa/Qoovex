@@ -1,6 +1,6 @@
 # Sirio App
 
-Catalogo e superficie di verifica del design system canonico Qoovex.
+Catalogo e reference UX del design system canonico Qoovex.
 
 Sirio consuma la stessa foundation di marketing e workspace da `@qoovex/ui`: shadcn `base-nova`, Base UI, Tabler Icons, Tailwind CSS v4, General Sans / ARRAY e tema Vercel light/dark/system. Componenti, hook, utility e comportamenti condivisi non vengono duplicati nell'app.
 
@@ -8,7 +8,16 @@ I marchi provengono dagli SVG canonici di `@qoovex/brand-resources`. Provenienza
 
 ## Route
 
-- `/`: catalogo di fondazioni, primitive e stati limite;
+- `/`: reindirizzamento all’ingresso canonico del catalogo;
+- `/foundations/*`: token e fondazioni visuali;
+- `/components/*`: primitive condivise e relativi stati;
+- `/patterns`: overview delle composizioni operative canoniche, distinta dalla documentazione dei componenti;
+- `/patterns/work-queue`: pattern canonico per code operative, gruppi, item ed empty state;
+- `/patterns/timeline-event`: pattern canonico per eventi human-readable, dettagli e fallback della cronologia;
+- `/patterns/status-presentation`: pattern canonico per tradurre gli stati di dominio in label, tono e contesto umani;
+- `/patterns/form-validation`: pattern canonico per label, errori locali, focus e feedback accessibili nei form;
+- `/patterns/money`: pattern canonico per lettura, input e variazioni economiche in euro;
+- `/patterns/proposal-review`: pattern canonico per comprendere una proposta, confrontarne i dati affidabili e vedere le azioni disponibili;
 - `/marketing`: landing Qoovex rappresentativa;
 - `/dashboard`: shell e dashboard Qoovex rappresentativa.
 

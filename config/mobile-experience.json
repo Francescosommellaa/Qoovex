@@ -71,6 +71,14 @@
       "routePatterns": ["/components/**", "/foundations/**"],
       "runtimeRoutes": ["/components/button", "/components/dialog", "/components/sidebar", "/components/table", "/components/floating-navigation"],
       "requiredScenarios": ["coarse-touch", "fine-hover", "portrait", "landscape", "zoom-200", "reduced-motion", "safe-area", "software-keyboard"]
+    },
+    {
+      "id": "sirio-patterns",
+      "app": "sirio",
+      "owner": "apps/sirio",
+      "routePatterns": ["/patterns", "/patterns/**"],
+      "runtimeRoutes": ["/patterns", "/patterns/work-queue", "/patterns/timeline-event", "/patterns/status-presentation", "/patterns/form-validation", "/patterns/money", "/patterns/proposal-review"],
+      "requiredScenarios": ["coarse-touch", "fine-hover", "portrait", "landscape", "zoom-200", "reduced-motion", "safe-area"]
     }
   ],
   "exclusions": [

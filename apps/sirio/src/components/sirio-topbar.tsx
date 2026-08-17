@@ -12,6 +12,10 @@ import { Button } from "@qoovex/ui/components/button";
 import { KbdShortcut } from "@qoovex/ui/components/kbd-shortcut";
 import { IconSearch } from "@tabler/icons-react";
 import { CatalogSearchModal } from "@/components/catalog-search-modal";
+import {
+  catalogNavigationGroups,
+  findCatalogNavigation,
+} from "@/lib/catalog-navigation";
 
 export function SirioTopbar() {
   const pathname = usePathname() ?? "";
@@ -21,18 +25,26 @@ export function SirioTopbar() {
     if (pathname === "/" || pathname === "") {
       return [{ label: "Sirio Catalog" }];
     }
-    const parts = pathname.split("/").filter(Boolean);
-    const category = parts[0] === "foundations" ? "Foundations" : "Componenti";
-    const rawName = parts[parts.length - 1] ?? "";
-    const name = rawName
-      .split("-")
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(" ");
+    const current = findCatalogNavigation(pathname);
+    if (!current) return [{ label: "Sirio" }];
+
+    const sirioHome = catalogNavigationGroups[0].href;
+
+    if (current.group.href === current.item.href) {
+      return [
+        { label: "Sirio", href: sirioHome, render: <Link href={sirioHome} /> },
+        { label: current.group.label },
+      ];
+    }
 
     return [
-      { label: "Sirio", href: "/components/button", render: <Link href="/components/button" /> },
-      { label: category },
-      { label: name },
+      { label: "Sirio", href: sirioHome, render: <Link href={sirioHome} /> },
+      {
+        label: current.group.label,
+        href: current.group.href,
+        render: <Link href={current.group.href} />,
+      },
+      { label: current.item.name },
     ];
   }, [pathname]);
 
@@ -51,12 +63,13 @@ export function SirioTopbar() {
 
         <TopbarEnd>
           <Button
+            aria-label="Cerca nel catalogo"
             variant="outline"
             size="sm"
             className="h-7 text-xs gap-1.5"
             onClick={() => setSearchOpen(true)}
           >
-            <IconSearch className="size-3.5" />
+            <IconSearch aria-hidden="true" className="size-3.5" />
             <span className="hidden sm:inline">Cerca...</span>
             <KbdShortcut value="⌘K" className="text-[0.6rem] opacity-60" />
           </Button>
