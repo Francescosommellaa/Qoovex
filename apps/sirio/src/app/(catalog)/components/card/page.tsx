@@ -78,12 +78,12 @@ export default function CardCatalogPage() {
               </Card>
             </Specimen>
 
-            <Specimen title="Card KPI Finanziario / Totale Saldo">
+            <Specimen title="Card di riepilogo importo">
               <Card variant="default" className="w-full">
                 <div className="flex items-center justify-between">
                   <CardHeader className="gap-0.5">
                     <CardDescription className="text-xs font-medium uppercase tracking-wider">
-                      Pagamenti Documentati
+                      Importo indicato
                     </CardDescription>
                     <CardTitle className="font-accent text-2xl font-bold tracking-tight text-foreground">
                       € 124.500,00
@@ -97,14 +97,14 @@ export default function CardCatalogPage() {
                 <CardContent className="pt-2">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Badge variant="secondary" className="gap-1 bg-success/10 text-success font-accent text-[0.6875rem]">
-                      <IconTrendingUp className="h-3 w-3" /> +14.2%
+                      <IconTrendingUp className="h-3 w-3" /> Aggiornato
                     </Badge>
-                    <span>rispetto al mese precedente</span>
+                    <span>rispetto alla proposta precedente</span>
                   </div>
                 </CardContent>
 
                 <CardFooter>
-                  <span>18 ricevute registrate dalle parti</span>
+                  <span>Mostra un valore quando il contesto lo rende utile.</span>
                 </CardFooter>
               </Card>
             </Specimen>

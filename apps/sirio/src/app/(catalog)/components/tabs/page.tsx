@@ -84,9 +84,9 @@ export default function TabsCatalogPage() {
                 <TabsContent value="payments" className="mt-4">
                   <Card>
                     <CardContent className="p-5">
-                      <h3 className="text-base font-semibold mb-1">Stato Pagamenti</h3>
+                      <h3 className="text-base font-semibold mb-1">Pagamenti documentati</h3>
                       <p className="text-sm text-muted-foreground">
-                        € 12.450 saldati su € 45.000 totali. 3 fatture in sospeso.
+                        Una richiesta di pagamento e una dichiarazione del Cliente da consultare.
                       </p>
                     </CardContent>
                   </Card>
@@ -97,7 +97,7 @@ export default function TabsCatalogPage() {
                     <CardContent className="p-5">
                       <h3 className="text-base font-semibold mb-1">Documentazione</h3>
                       <p className="text-sm text-muted-foreground">
-                        Contratti, dichiarazioni di conformità e permessi di cantiere.
+                        File allegati al lavoro e documenti condivisi nel relativo contesto.
                       </p>
                     </CardContent>
                   </Card>
@@ -154,17 +154,17 @@ export default function TabsCatalogPage() {
 
                 <TabsContent value="general" className="mt-4">
                   <p className="text-sm text-muted-foreground">
-                    Gestisci ragione sociale, IBAN e ruoli organizzativi.
+                    Gestisci le informazioni della tua azienda.
                   </p>
                 </TabsContent>
                 <TabsContent value="notifications" className="mt-4">
                   <p className="text-sm text-muted-foreground">
-                    Configura le notifiche per richieste e cambi di stato.
+                    Configura le notifiche per richieste e aggiornamenti del lavoro.
                   </p>
                 </TabsContent>
                 <TabsContent value="security" className="mt-4">
                   <p className="text-sm text-muted-foreground">
-                    Gestione 2FA e codici di recupero d'emergenza.
+                    Gestisci le opzioni di accesso al tuo account.
                   </p>
                 </TabsContent>
               </Tabs>

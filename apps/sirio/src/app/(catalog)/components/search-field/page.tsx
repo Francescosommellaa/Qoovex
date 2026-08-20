@@ -10,9 +10,9 @@ import { IconBuildingStore, IconFileText } from "@tabler/icons-react";
 
 const sampleData = [
   { id: "1", title: "Ristrutturazione Via Roma 42", type: "Cantiere", location: "Milano" },
-  { id: "2", title: "Piano Operativo Sicurezza (POS)", type: "Documento", location: "PDF" },
+  { id: "2", title: "Preventivo aggiornato", type: "Documento", location: "PDF" },
   { id: "3", title: "Riqualificazione Parco Sud", type: "Cantiere", location: "Monza" },
-  { id: "4", title: "Certificato DURC Aziendale", type: "Documento", location: "PDF" },
+  { id: "4", title: "Foto sopralluogo", type: "Documento", location: "JPG" },
 ];
 
 export default function SearchFieldCatalogPage() {
@@ -43,7 +43,7 @@ export default function SearchFieldCatalogPage() {
             <Specimen title="Search Field con Reset Dinamico">
               <div className="w-full max-w-lg space-y-4">
                 <SearchField
-                  placeholder="Cerca cantieri o documenti (es. Via Roma, DURC...)"
+                  placeholder="Cerca lavori o documenti (es. Via Roma, preventivo...)"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   onClear={() => setSearchValue("")}

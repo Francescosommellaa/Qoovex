@@ -37,35 +37,35 @@ interface FAQItem {
 const faqItems: FAQItem[] = [
   {
     id: "faq-1",
-    category: "Piattaforma",
+    category: "Stato del lavoro",
     icon: IconSparkles,
-    question: "Come funziona il tracciamento in tempo reale dei cantieri?",
+    question: "Come viene presentato lo stato del lavoro?",
     answer:
-      "Tutti i dati provenienti dai dispositivi sul campo, timbrature digitali ed avanzamento SAL vengono sincronizzati istantaneamente sui server cloud di Qoovex con crittografia end-to-end e registro di audit inalterabile.",
+      "Lo stato viene mostrato con una label comprensibile e, quando esiste, con la prossima azione disponibile.",
   },
   {
     id: "faq-2",
-    category: "Amministrazione",
+    category: "Modifiche",
     icon: IconCreditCard,
-    question: "Quali sono i limiti della delega economica per responsabile?",
+    question: "Come viene mostrata una modifica proposta?",
     answer:
-      "La delega economica è personalizzabile fino a € 50.000 per singola transazione. Al superamento della soglia impostata, la piattaforma richiede l'approvazione a doppio fattore dell'Amministratore Delegato.",
+      "Quando esiste una baseline affidabile, il riepilogo mette a confronto ciò che cambia rispetto alla situazione precedente.",
   },
   {
     id: "faq-3",
-    category: "Sicurezza",
+    category: "Allegati",
     icon: IconShieldCheck,
-    question: "Come vengono protetti gli allegati di cantiere?",
+    question: "Come vengono caricati gli allegati?",
     answer:
-      "Gli allegati restano privati e vengono scaricati tramite il server solo dopo la verifica dell'accesso al cantiere e della visibilità assegnata.",
+      "Un file viene caricato nel contesto dell’elemento a cui appartiene, senza chiedere riferimenti tecnici a chi lo invia.",
   },
   {
     id: "faq-4",
-    category: "Collaboratori",
+    category: "Inviti",
     icon: IconUsers,
-    question: "Posso invitare subappaltatori ed ingegneri esterni alla piattaforma?",
+    question: "Cosa mostra un invito al Cliente?",
     answer:
-      "Sì, è possibile invitare un numero illimitato di collaboratori esterni assegnando ruoli ad accesso limitato (Visualizzatore, Certificatore, Direttore Lavori) senza costi aggiuntivi di licenza.",
+      "Prima dell’accettazione, l’invito chiarisce quale Azienda condivide quale lavoro e dove l’utente verrà portato dopo l’azione.",
   },
 ];
 
@@ -236,7 +236,7 @@ export default function CollapsibleCatalogPage() {
                             <div className="flex items-center gap-1.5">
                               <Checkbox id="filter-director" defaultChecked />
                               <Label htmlFor="filter-director" className="text-xs font-normal cursor-pointer">
-                                Direttore Lavori
+                                Collaboratori
                               </Label>
                             </div>
                           </div>
@@ -260,7 +260,7 @@ export default function CollapsibleCatalogPage() {
                   <div className="flex items-center gap-2">
                     <IconFolderCheck className="size-4 text-success" />
                     <span className="text-sm font-semibold font-accent">
-                      Fascicolo Tecnico Cantiere Via Roma 42
+                      Documenti del lavoro Via Roma 42
                     </span>
                   </div>
                   <Badge variant="outline" size="sm" className="font-mono">
@@ -273,11 +273,11 @@ export default function CollapsibleCatalogPage() {
                   <div className="flex items-center justify-between rounded-lg border border-border/60 bg-muted/20 p-2.5">
                     <div className="flex items-center gap-2 text-xs font-medium font-accent">
                       <IconFileText className="size-3.5 text-muted-foreground" />
-                      <span>1. Certificazioni di Sicurezza (POS / DURC)</span>
+                      <span>Documenti condivisi</span>
                     </div>
                     <CollapsibleTrigger
                       render={
-                        <Button aria-label={openNestedDocs ? "Riduci certificazioni di sicurezza" : "Espandi certificazioni di sicurezza"} variant="ghost" size="icon-sm" className="size-6">
+                        <Button aria-label={openNestedDocs ? "Riduci documenti condivisi" : "Espandi documenti condivisi"} variant="ghost" size="icon-sm" className="size-6">
                           <IconChevronDown
                             aria-hidden="true"
                             className={`size-3.5 transition-transform duration-200 ${
@@ -291,12 +291,12 @@ export default function CollapsibleCatalogPage() {
                   <CollapsibleContent className="pt-2">
                     <div className="ml-5 space-y-1.5 border-l-2 border-border/60 pl-3 text-xs text-muted-foreground">
                       <div className="flex items-center justify-between rounded-md p-1.5 hover:bg-muted/30">
-                        <span>• DURC_Inail_Azienda_2026.pdf</span>
-                        <Badge variant="success" size="sm">Valido</Badge>
+                        <span>• Preventivo_aggiornato.pdf</span>
+                        <Badge variant="success" size="sm">Condiviso</Badge>
                       </div>
                       <div className="flex items-center justify-between rounded-md p-1.5 hover:bg-muted/30">
-                        <span>• Piano_Operativo_Sicurezza_v3.pdf</span>
-                        <Badge variant="info" size="sm">Approvato</Badge>
+                        <span>• Foto_sopralluogo.jpg</span>
+                        <Badge variant="info" size="sm">Caricato</Badge>
                       </div>
                     </div>
                   </CollapsibleContent>

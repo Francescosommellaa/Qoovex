@@ -264,23 +264,23 @@ export default function ControlsCatalogPage() {
             </Specimen>
 
             <Specimen title="Radio Card">
-              <RadioGroup defaultValue="plan-pro" className="gap-2">
-                <RadioCard value="plan-starter">
+              <RadioGroup defaultValue="option-b" className="gap-2">
+                <RadioCard value="option-a">
                   <div>
-                    <p className="font-semibold">Starter</p>
-                    <p className="text-muted-foreground text-xs">Perfetto per iniziare, include le funzionalità base.</p>
+                    <p className="font-semibold">Opzione A</p>
+                    <p className="text-muted-foreground text-xs">Esempio di scelta con una breve descrizione.</p>
                   </div>
                 </RadioCard>
-                <RadioCard value="plan-pro">
+                <RadioCard value="option-b">
                   <div>
-                    <p className="font-semibold">Professional</p>
-                    <p className="text-muted-foreground text-xs">Per team in crescita che necessitano di strumenti avanzati.</p>
+                    <p className="font-semibold">Opzione B</p>
+                    <p className="text-muted-foreground text-xs">Esempio selezionato per mostrare lo stato attivo.</p>
                   </div>
                 </RadioCard>
-                <RadioCard value="plan-enterprise">
+                <RadioCard value="option-c">
                   <div>
-                    <p className="font-semibold">Enterprise</p>
-                    <p className="text-muted-foreground text-xs">Soluzioni su misura con supporto dedicato.</p>
+                    <p className="font-semibold">Opzione C</p>
+                    <p className="text-muted-foreground text-xs">Esempio aggiuntivo per confrontare contenuti più lunghi.</p>
                   </div>
                 </RadioCard>
               </RadioGroup>

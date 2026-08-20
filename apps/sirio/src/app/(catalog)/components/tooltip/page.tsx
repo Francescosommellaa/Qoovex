@@ -160,11 +160,11 @@ export default function TooltipCatalogPage() {
             <Specimen title="Tooltip con Icona e Testo">
               <Tooltip>
                 <TooltipTrigger render={<Button variant="secondary" size="sm" />}>
-                  Sicurezza Spazio
+                  Informazioni sullo spazio
                 </TooltipTrigger>
                 <TooltipContent className="gap-2">
                   <IconLock className="size-3.5 text-primary" />
-                  <span>Crittografia end-to-end attiva</span>
+                  <span>Dettagli disponibili nel contesto</span>
                 </TooltipContent>
               </Tooltip>
             </Specimen>

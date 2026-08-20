@@ -22,15 +22,15 @@ const previewGroups = [
     label: "Principale",
     items: [
       { name: "Panoramica", href: "#", icon: IconHome, isActive: true },
-      { name: "Cantieri Attivi", href: "#", icon: IconBuildingStore, badge: "12" },
-      { name: "Analytics & SAL", href: "#", icon: IconChartBar },
+      { name: "Lavori", href: "#", icon: IconBuildingStore, badge: "12" },
+      { name: "Attività recenti", href: "#", icon: IconChartBar },
     ],
   },
   {
     label: "Gestione",
     items: [
-      { name: "Personale & Ruoli", href: "#", icon: IconUsers },
-      { name: "Documenti POS/DURC", href: "#", icon: IconFileText },
+      { name: "Persone", href: "#", icon: IconUsers },
+      { name: "Documenti", href: "#", icon: IconFileText },
     ],
   },
 ];
@@ -54,7 +54,7 @@ export default function SidebarCatalogPage() {
                   <AdaptiveSidebar
                     inline
                     brand={{
-                      title: "Qoovex Enterprise",
+                      title: "Qoovex",
                       logo: (
                         <span className="inline-flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground font-bold font-accent text-xs">
                           Q
@@ -70,7 +70,7 @@ export default function SidebarCatalogPage() {
                       account: {
                         name: "Mario Rossi",
                         email: "m.rossi@qoovex.it",
-                        role: "Admin",
+                        role: "Titolare azienda",
                       },
                     }}
                     resizable

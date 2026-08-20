@@ -55,13 +55,13 @@ export default function SpinnerCatalogPage() {
 
                 <div className="flex items-center gap-2">
                   <Badge variant={status === "success" ? "success" : "outline"} className="font-mono text-xs">
-                    {status === "loading" ? `Progresso SAL: ${progress}%` : status === "success" ? "Caricamento Completato!" : "Errore Sincronizzazione"}
+                    {status === "loading" ? `Caricamento: ${progress}%` : status === "success" ? "Caricamento completato" : "Errore di caricamento"}
                   </Badge>
                 </div>
 
                 <div className="flex items-center gap-2 pt-1">
                   <Button size="sm" onClick={handleSimulateProcess}>
-                    Simula Upload POS
+                    Simula caricamento file
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => setStatus("error")}>
                     Simula Errore
@@ -75,7 +75,7 @@ export default function SpinnerCatalogPage() {
                 <Spinner
                   size="lg"
                   color="primary"
-                  label={["Inizializzazione sessione...", "Verifica permessi cantiere...", "Caricamento planimetrie...", "Completato!"]}
+                  label={["Preparazione del caricamento...", "Caricamento file...", "Aggiornamento del contenuto...", "Completato"]}
                   labelPosition="bottom"
                 />
               </div>

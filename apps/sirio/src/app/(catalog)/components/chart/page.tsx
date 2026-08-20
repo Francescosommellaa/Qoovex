@@ -32,21 +32,21 @@ import {
 } from "@tabler/icons-react";
 
 const areaData = [
-  { month: "Gen", completati: 14, programmati: 18 },
-  { month: "Feb", completati: 22, programmati: 26 },
-  { month: "Mar", completati: 31, programmati: 34 },
-  { month: "Apr", completati: 42, programmati: 44 },
-  { month: "Mag", completati: 56, programmati: 58 },
-  { month: "Giu", completati: 68, programmati: 72 },
+  { month: "Gen", completati: 14, pianificati: 18 },
+  { month: "Feb", completati: 22, pianificati: 26 },
+  { month: "Mar", completati: 31, pianificati: 34 },
+  { month: "Apr", completati: 42, pianificati: 44 },
+  { month: "Mag", completati: 56, pianificati: 58 },
+  { month: "Giu", completati: 68, pianificati: 72 },
 ];
 
 const areaChartConfig = {
   completati: {
-    label: "Cantieri Chiusi",
+    label: "Elementi completati",
     color: "var(--chart-1)",
   },
-  programmati: {
-    label: "Obiettivo Mensile",
+  pianificati: {
+    label: "Elementi pianificati",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
@@ -61,7 +61,7 @@ const barData = [
 
 const barChartConfig = {
   costo: {
-    label: "Spesa Effettiva (€)",
+    label: "Importo indicato (€)",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig;
@@ -70,14 +70,14 @@ const pieData = [
   { name: "In Corso", value: 38, fill: "var(--chart-1)" },
   { name: "Completati", value: 45, fill: "var(--chart-2)" },
   { name: "In Attesa", value: 12, fill: "var(--chart-3)" },
-  { name: "Sospesi", value: 5, fill: "var(--chart-4)" },
+  { name: "Archiviati", value: 5, fill: "var(--chart-4)" },
 ];
 
 const pieChartConfig = {
   "In Corso": { label: "In Corso", color: "var(--chart-1)" },
   Completati: { label: "Completati", color: "var(--chart-2)" },
   "In Attesa": { label: "In Attesa", color: "var(--chart-3)" },
-  Sospesi: { label: "Sospesi", color: "var(--chart-4)" },
+  Archiviati: { label: "Archiviati", color: "var(--chart-4)" },
 } satisfies ChartConfig;
 
 export default function ChartCatalogPage() {
@@ -102,7 +102,7 @@ export default function ChartCatalogPage() {
               <CardHeader className="p-4 pb-3">
                 <div className="flex items-center justify-between">
                   <CardDescription className="text-[0.6875rem] font-accent uppercase tracking-wider text-muted-foreground">
-                    Cantieri Operativi
+                    Elementi attivi
                   </CardDescription>
                   <Badge variant="outline" size="sm" className="font-mono text-[0.65rem]">
                     +14%
@@ -116,7 +116,7 @@ export default function ChartCatalogPage() {
               <CardHeader className="p-4 pb-3">
                 <div className="flex items-center justify-between">
                   <CardDescription className="text-[0.6875rem] font-accent uppercase tracking-wider text-muted-foreground">
-                    Budget Erogato
+                    Importi indicati
                   </CardDescription>
                   <Badge variant="outline" size="sm" className="font-mono text-[0.65rem]">
                     Q3 2026
@@ -130,13 +130,13 @@ export default function ChartCatalogPage() {
               <CardHeader className="p-4 pb-3">
                 <div className="flex items-center justify-between">
                   <CardDescription className="text-[0.6875rem] font-accent uppercase tracking-wider text-muted-foreground">
-                    Efficienza
+                    Stato esempio
                   </CardDescription>
                   <Badge variant="outline" size="sm" className="font-mono text-[0.65rem]">
                     94.8%
                   </Badge>
                 </div>
-                <CardTitle className="mt-1 text-2xl font-semibold font-accent tracking-tight">Ottimizzato</CardTitle>
+                <CardTitle className="mt-1 text-2xl font-semibold font-accent tracking-tight">In evidenza</CardTitle>
               </CardHeader>
             </Card>
           </div>
@@ -146,7 +146,7 @@ export default function ChartCatalogPage() {
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Grafico ad Area (Linee & Gradienti Neutri)</h2>
           <SpecimenGrid cols={1}>
-            <Specimen title="Progresso Cantieri vs Target">
+            <Specimen title="Elementi completati e pianificati">
               <ChartContainer config={areaChartConfig} className="h-72 w-full">
                 <AreaChart data={areaData} margin={{ top: 16, right: 16, left: -16, bottom: 0 }}>
                   <defs>
@@ -155,8 +155,8 @@ export default function ChartCatalogPage() {
                       <stop offset="95%" stopColor="var(--color-completati)" stopOpacity={0.0} />
                     </linearGradient>
                     <linearGradient id="fillProgrammati" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--color-programmati)" stopOpacity={0.1} />
-                      <stop offset="95%" stopColor="var(--color-programmati)" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="var(--color-pianificati)" stopOpacity={0.1} />
+                      <stop offset="95%" stopColor="var(--color-pianificati)" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid vertical={false} stroke="var(--border)" strokeOpacity={0.25} strokeDasharray="3 3" />
@@ -176,8 +176,8 @@ export default function ChartCatalogPage() {
                   <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
                   <Area
                     type="monotone"
-                    dataKey="programmati"
-                    stroke="var(--color-programmati)"
+                    dataKey="pianificati"
+                    stroke="var(--color-pianificati)"
                     strokeOpacity={0.5}
                     strokeDasharray="4 4"
                     fillOpacity={1}

@@ -222,7 +222,7 @@ export default function TablePage() {
                     </TableRow>
                     <TableRow>
                       <TableCell className="font-accent font-semibold">PART-03</TableCell>
-                      <TableCell>Collaudo e certificazione impianto</TableCell>
+                      <TableCell>Rifiniture e completamento lavori</TableCell>
                       <TableCell className="text-right font-accent">12 h</TableCell>
                       <TableCell className="text-right font-accent">€ 65,00/h</TableCell>
                       <TableCell className="text-right font-accent font-bold">€ 780,00</TableCell>

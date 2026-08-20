@@ -220,7 +220,7 @@ export default function FieldPage() {
               <Field className="w-full">
                 <FieldLabel>Codice di Verifica OTP (6 cifre)</FieldLabel>
                 <OTPInput length={6} value={otpVal} onChangeOTP={setOtpVal} className="mt-1" />
-                <FieldDescription>Inserisci il codice ricevuto via SMS per autorizzare la firma.</FieldDescription>
+                <FieldDescription>Inserisci il codice ricevuto per completare l’accesso.</FieldDescription>
               </Field>
             </Specimen>
 

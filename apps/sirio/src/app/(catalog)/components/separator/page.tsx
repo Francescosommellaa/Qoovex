@@ -24,12 +24,12 @@ export default function SeparatorCatalogPage() {
             <Specimen title="Orizzontale (Horizontal)">
               <div className="w-full space-y-3 text-xs">
                 <div>
-                  <h4 className="font-semibold text-foreground font-accent">Fascicolo Cantiere Via Roma 42</h4>
-                  <p className="text-muted-foreground">Documentazione di idoneità professionale ed allegati</p>
+                  <h4 className="font-semibold text-foreground font-accent">Documenti del lavoro Via Roma 42</h4>
+                  <p className="text-muted-foreground">File allegati e documenti condivisi</p>
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between text-muted-foreground">
-                  <span>Stato: Approvato</span>
+                  <span>Stato: Condiviso</span>
                   <span>Ultima modifica: 14 Maggio 2026</span>
                 </div>
               </div>
