@@ -16,6 +16,19 @@ Un task esclusivamente documentale:
 
 Non interrogare database o Blob per provare una specifica concettuale. Non eseguire reset, seed, `db push`, migration, deploy, cancellazioni Azienda o cleanup Blob.
 
+## Contratto di completamento
+
+Ogni task con modifiche deve chiudere nella stessa iterazione requisito, regressione e gate pertinenti. Prima della modifica si classifica il blast radius; prima della consegna si eseguono i gate sul diff finale secondo `07_QUALITY_AND_RELEASE.md`.
+
+- un bug riproducibile richiede una regressione focalizzata che protegga la causa corretta;
+- una modifica dopo un test ne invalida l'evidenza quando cambia uno dei suoi input;
+- un check fallito, pending, saltato o eseguito su uno SHA diverso resta non verificato;
+- quando PR o push sono nel perimetro, i required check devono risultare verdi sullo SHA finale;
+- una failure pertinente non viene trasferita alla task successiva e non viene resa verde indebolendo il gate;
+- un impedimento esterno diventa `hard_stop` soltanto dopo i controlli sicuri disponibili, con prova del comando, dell'errore e del perimetro non verificato.
+
+Gli output ordinari dei test sono effimeri. Screenshot, report e cartelle diagnostiche non entrano nel repository; fanno eccezione le baseline visuali canoniche, che sono fixture versionate e richiedono una variazione intenzionale, ispezionata e attestata.
+
 
 ## Database operation impact
 

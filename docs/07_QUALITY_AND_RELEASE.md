@@ -15,6 +15,28 @@ Prisma format/validate/generate/status/diff, fresh e upgrade; type-check; unit; 
 
 Le suite devono includere due Aziende, Owner/Collaborator/cliente, inviti/replay, participant e tenant isolation, authority revocata, stale revision/version, receipt idempotenti, receipt visibility, export/search leakage, hold e minimizzazione audit.
 
+## Matrice di chiusura per task
+
+`implemented_decision`: ogni task deve dichiarare il proprio blast radius, eseguire prima la regressione focalizzata e poi i gate applicabili sul diff finale. La matrice e cumulativa: una modifica che attraversa piu superfici eredita tutti i relativi gate.
+
+| Impatto reale | Prove minime obbligatorie |
+| --- | --- |
+| Solo documentazione/contratti testuali | validazione dei formati e riferimenti modificati, `pnpm check:fast`, `git diff --check` |
+| Codice o configurazione TypeScript/JavaScript | regressione focalizzata, type-check/lint/test del package proprietario, `pnpm check:push`; `pnpm check` quando il blast radius attraversa package o contratti condivisi |
+| Workspace route, auth, service, API, serializzazione o flussi multi-ruolo | test unit/integration pertinenti, build/check Workspace e `workspace-e2e` quando il comportamento e riproducibile nel browser o attraversa confini server/client |
+| UI, layout, navigazione, accessibilita, CSS, `packages/ui`, Sirio, Web o Workspace UI | review Impeccable, `pnpm verify:impeccable`, `pnpm mobile:doctor`, `pnpm mobile:impact`; `pnpm mobile:test` per modifiche runtime pertinenti e `pnpm visual:geometry` quando geometria o specimen governati possono cambiare |
+| Prisma, schema o migration | format/validate/generate senza diff inatteso, fresh, upgrade dal baseline, drift e `pnpm check` su database locale/CI attestato |
+| Dipendenze o lockfile | installazione frozen, audit, build e gate dei consumer impattati |
+| Skill, registry o routing agent | `pnpm skills:doctor`, `pnpm skills:test`, `pnpm skills:canary` e i gate prodotto eventualmente impattati |
+
+Il comando piu stretto serve a trovare rapidamente il difetto; non sostituisce il gate cumulativo. Se un comando richiede database, Blob, segreti o browser non attestabili localmente, non va puntato a target remoti: il required check CI corrispondente deve passare sullo SHA finale oppure la task resta in `hard_stop` per quella prova.
+
+### Gestione delle failure
+
+Una failure pertinente resta parte della task. Prima si conserva l'errore originale, poi si identifica la causa, si aggiunge o corregge la regressione e si riesegue l'intera catena invalidata sul diff finale. Non sono correzioni accettabili: skip, timeout arbitrariamente aumentati, assertion indebolite, ordine forzato per mascherare race, mock globali non isolati o update indiscriminati delle baseline.
+
+Per i visual test si ispezionano actual, expected e diff. Le baseline canoniche si aggiornano soltanto se la variazione e intenzionale e corretta; report, screenshot diagnostici, `test-results`, `playwright-report` e `output` restano artifact temporanei o failure-only. Per PR e push, la chiusura richiede i required check verdi sullo stesso SHA finale: rerun su SHA differenti o job verdi precedenti non costituiscono evidenza.
+
 ## Performance budget
 
 Dataset target: almeno 3 Aziende, 200 JobSite, 20.000 eventi, 1.000 step e 500 record per proposte/pagamenti. Home e dettaglio iniziale ≤12 query; timeline ≤4 query per pagina da 50; search ≤8 query bounded; nessun N+1.
