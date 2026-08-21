@@ -1,6 +1,6 @@
 {
   "project": "Qoovex",
-  "updated_at": "2026-08-16",
+  "updated_at": "2026-08-21",
   "state_taxonomy": [
     "verified_current_state",
     "implemented_decision",
@@ -94,6 +94,20 @@
         "ci_check": "mobile-responsive",
         "runtime_targets": "loopback apps and ephemeral *_ci PostgreSQL only; no remote database or Blob target"
       }
+    },
+    "task_completion_quality_contract": {
+      "status": "implemented_decision",
+      "definition_of_done": "A repository-changing task is complete only after a focused regression when applicable, all cumulative gates required by the real blast radius pass on the final diff, and required PR checks pass on the same final SHA when PR or push is in scope.",
+      "failure_policy": "A pertinent failure remains in the current task until its root cause and regression are fixed; tests must not be skipped, weakened or disabled to obtain green status. An external or unattestable blocker must be reported as hard_stop with exact evidence.",
+      "gate_source": "docs/07_QUALITY_AND_RELEASE.md",
+      "evidence_rules": [
+        "a changed input invalidates earlier test evidence",
+        "failed, pending, skipped or previous-SHA checks are not green",
+        "focused tests do not replace cumulative package and cross-consumer gates",
+        "ordinary reports and diagnostic screenshots are transient",
+        "versioned visual baselines are canonical fixtures and change only after intentional review"
+      ],
+      "ci_required_checks": ["push-gate", "quality-gate", "mobile-responsive", "workspace-e2e", "visual-geometry"]
     },
     "database_release": {
       "canonical_migration_count": 10,

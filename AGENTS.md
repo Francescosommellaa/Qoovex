@@ -13,6 +13,20 @@ L'ordine di autorità è: richiesta corrente; regole business/legal approvate; s
 
 Al termine, dopo i gate richiesti, appendi tramite MCP un breve riepilogo con data, task completata e file modificati in `00_System/session-log.md`.
 
+## Definition of Done per task
+
+Una task che modifica repository non e conclusa quando il codice "sembra corretto", ma soltanto quando il diff finale e provato contro il suo reale blast radius.
+
+1. ricostruisci la causa o il requisito sul codice reale e identifica prima di modificare quali check locali e remoti possono essere impattati;
+2. aggiungi o aggiorna una regressione mirata quando la task corregge un difetto osservabile; la regressione deve fallire per la causa originaria e non limitarsi a fotografare l'output nuovo;
+3. esegui prima i test focalizzati, poi tutti i gate richiesti dalla matrice in `docs/07_QUALITY_AND_RELEASE.md` sul diff finale;
+4. riesegui un gate se il suo input cambia dopo l'ultima esecuzione: test verdi su un diff precedente non provano la head corrente;
+5. ispeziona `git diff --check`, lo stato Git e gli artifact prima della consegna; output ordinari, report, screenshot diagnostici e cartelle temporanee restano fuori dal repository, mentre le baseline visuali canoniche sono fixture versionate e possono cambiare soltanto per una modifica intenzionale verificata;
+6. quando la task comprende una PR o un push, verifica i required check sullo stesso SHA finale; un check fallito, pending, non eseguito o relativo a uno SHA precedente non e verde;
+7. se un gate pertinente fallisce, correggi causa e regressione nella stessa task. Fermati con `hard_stop` e prova precisa soltanto quando un vincolo esterno o un ambiente non attestabile impedisce realmente la chiusura.
+
+Non disabilitare, indebolire o saltare test per ottenere il verde. Non aggiornare baseline in massa senza ispezionare actual e diff. Non rinviare failure pertinenti come debito per una task successiva.
+
 ## Skill Governance System
 
 `config/skills/registry.json` è il contratto machine-readable per disponibilità, ownership, dipendenze, ordine e update policy delle skill governate. Non è una fonte prodotto e non può scavalcare la gerarchia sopra.
