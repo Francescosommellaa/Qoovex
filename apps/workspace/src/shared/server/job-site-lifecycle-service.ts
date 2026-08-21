@@ -753,5 +753,11 @@ export async function getClientJobSiteDetail(jobSiteId: string) {
     },
   });
   if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
-  return jobSite;
+  return {
+    ...jobSite,
+    timelineEvents: jobSite.timelineEvents.map((event) => ({
+      ...event,
+      sequence: event.sequence.toString(),
+    })),
+  };
 }
