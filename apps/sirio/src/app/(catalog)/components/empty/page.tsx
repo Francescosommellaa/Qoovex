@@ -17,7 +17,6 @@ import {
   IconBellOff,
   IconFileUpload,
   IconPlus,
-  IconUpload,
   IconRotateClockwise,
 } from "@tabler/icons-react";
 
@@ -41,19 +40,15 @@ export default function EmptyCatalogPage() {
                   <IconBuildingStore />
                 </EmptyMedia>
                 <EmptyHeader>
-                  <EmptyTitle>Nessun Cantiere Registrato</EmptyTitle>
+                  <EmptyTitle>Nessun lavoro ancora creato</EmptyTitle>
                   <EmptyDescription>
-                    Non hai ancora aggiunto alcun cantiere al tuo spazio di lavoro. Inizia creando un nuovo progetto o importando dati.
+                    Quando creerai un lavoro, lo troverai qui.
                   </EmptyDescription>
                 </EmptyHeader>
                 <EmptyActions>
                   <Button>
                     <IconPlus />
-                    <span>Nuovo Cantiere</span>
-                  </Button>
-                  <Button variant="outline">
-                    <IconUpload />
-                    <span>Importa CSV</span>
+                    <span>Crea lavoro</span>
                   </Button>
                 </EmptyActions>
               </Empty>
@@ -67,7 +62,7 @@ export default function EmptyCatalogPage() {
                 <EmptyHeader>
                   <EmptyTitle>Trascina qui i tuoi documenti</EmptyTitle>
                   <EmptyDescription>
-                    Carica ricevute, planimetrie e contratti firmati. Formati supportati: PDF, PNG, JPG fino a 25MB.
+                    Scegli un file da allegare al contesto corretto. I tipi accettati sono indicati quando il flusso li definisce.
                   </EmptyDescription>
                 </EmptyHeader>
                 <EmptyActions>

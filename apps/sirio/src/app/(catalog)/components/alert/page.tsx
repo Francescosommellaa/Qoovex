@@ -30,25 +30,25 @@ export default function AlertCatalogPage() {
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Varianti Semantiche</h2>
           <SpecimenGrid cols={2}>
-            <Specimen title="Info / Notifica Cantiere">
+            <Specimen title="Info / Aggiornamento del lavoro">
               <Alert variant="info" className="w-full">
                 <IconInfoCircle />
                 <div>
-                  <AlertTitle>Informazione Cantiere</AlertTitle>
+                  <AlertTitle>Nuovo aggiornamento</AlertTitle>
                   <AlertDescription>
-                    Gli aggiornamenti della Fase 02 sono attualmente visibili solo al responsabile interno.
+                    È stato aggiunto un aggiornamento alla cronologia del lavoro.
                   </AlertDescription>
                 </div>
               </Alert>
             </Specimen>
 
-            <Specimen title="Success / Accordo Confermato">
+            <Specimen title="Success / Modifica accettata">
               <Alert variant="success" className="w-full">
                 <IconCheck />
                 <div>
-                  <AlertTitle>Accordo Confermato</AlertTitle>
+                  <AlertTitle>Modifica accettata</AlertTitle>
                   <AlertDescription>
-                    Il cliente ha approvato la proposta di variante #04 e lo stimato integrativo.
+                    La controparte ha accettato la proposta. Puoi consultare il riepilogo aggiornato.
                   </AlertDescription>
                 </div>
               </Alert>
@@ -60,7 +60,7 @@ export default function AlertCatalogPage() {
                 <div>
                   <AlertTitle>In Attesa di Risposta</AlertTitle>
                   <AlertDescription>
-                    La richiesta di variazione richiede una risposta del committente entro 48 ore.
+                    La richiesta di modifica è in attesa di una risposta della controparte.
                   </AlertDescription>
                 </div>
               </Alert>
@@ -72,7 +72,7 @@ export default function AlertCatalogPage() {
                 <div>
                   <AlertTitle>Azione Bloccata</AlertTitle>
                   <AlertDescription>
-                    Impossibile avanzare lo stato del cantiere prima del caricamento della ricevuta.
+                    Questa azione non è disponibile nello stato attuale del lavoro.
                   </AlertDescription>
                 </div>
               </Alert>
@@ -89,13 +89,13 @@ export default function AlertCatalogPage() {
                 <Alert variant="info" className="w-full">
                   <IconInfoCircle />
                   <div>
-                    <AlertTitle>Delega Economica Richiesta</AlertTitle>
+                    <AlertTitle>Modifica da valutare</AlertTitle>
                     <AlertDescription>
-                      Per confermare l'accordo integrativo occorre autorizzare la delega di saldo aziendale.
+                      Apri la proposta per vedere cosa cambia e decidere come procedere.
                     </AlertDescription>
                     <div className="mt-3 flex items-center gap-2">
                       <Button size="sm" variant="default">
-                        Autorizza Ora
+                        Apri proposta
                       </Button>
                       <Button size="sm" variant="ghost">
                         Dettagli <IconExternalLink className="ml-1 h-3.5 w-3.5" />

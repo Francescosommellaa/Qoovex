@@ -28,8 +28,8 @@ import {
 
 export default function TextareaPage() {
   const [basicText, setBasicText] = useState("Descrizione iniziale del cantiere...");
-  const [charText, setCharText] = useState("Lavorazione eseguita secondo la normativa di sicurezza V3.");
-  const [wordText, setWordText] = useState("Il committente ha approvato lo stato d'avanzamento dei lavori per il primo lotto.");
+  const [charText, setCharText] = useState("Aggiornamento sullo stato del lavoro e sulle attività completate.");
+  const [wordText, setWordText] = useState("Il Cliente ha accettato una modifica relativa al primo lotto.");
   const [commentText, setCommentText] = useState("");
   const [chatMessage, setChatMessage] = useState("");
   const [feedbackText, setFeedbackText] = useState("");

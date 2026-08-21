@@ -208,6 +208,9 @@ function Sidebar({
               } as React.CSSProperties
             }
           >
+            <DialogPrimitive.Title className="sr-only">
+              Navigazione principale
+            </DialogPrimitive.Title>
             <div className="flex h-full w-full flex-col" id={sidebarId}>{children}</div>
           </DialogPrimitive.Popup>
         </DialogPrimitive.Portal>
@@ -1032,7 +1035,12 @@ function AdaptiveSidebar({
                         isActive={active}
                         onClick={item.onClick}
                         tooltip={item.name}
-                        render={<a href={item.href} />}
+                        render={
+                          <a
+                            aria-current={active ? "page" : undefined}
+                            href={item.href}
+                          />
+                        }
                       >
                         {ItemIcon && <ItemIcon />}
                         <span>{item.name}</span>

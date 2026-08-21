@@ -9,6 +9,7 @@ overrides:
   find-my-way: 9.7.0
   valibot: 1.4.2
   postcss: 8.5.25
+  deepmerge-ts: 8.0.1
   nanoid: '>=3.3.17'
 
 importers:
@@ -1474,8 +1475,8 @@ packages:
   decimal.js-light@2.5.1:
     resolution: {integrity: sha512-qIMFpTMZmny+MMIitAB6D7iVPEorVw6YQRWkvarTkT4tBeSLLiHzcwj6q0MmYSFCiVpiqPJTJEYIrpcPzVEIvg==}
 
-  deepmerge-ts@7.1.5:
-    resolution: {integrity: sha512-HOJkrhaYsweh+W+e74Yn7YStZOilkoPb6fycpwNLKzSPtruFs48nYis0zy5yJz1+ktUhHxoRDJ27RQAWLIJVJw==}
+  deepmerge-ts@8.0.1:
+    resolution: {integrity: sha512-szCXE7YLCvLKR9bFPJcvsezOShdalctSvrgN/LM/QGUEPZQajwjmsMObZ6/DuANT5lxzM/wtO8Feubwdkz8myA==}
     engines: {node: '>=16.0.0'}
 
   defu@6.1.7:
@@ -2730,7 +2731,7 @@ snapshots:
   '@prisma/config@7.9.1':
     dependencies:
       c12: 3.3.4
-      deepmerge-ts: 7.1.5
+      deepmerge-ts: 8.0.1
       effect: 3.20.0
       empathic: 2.0.0
     transitivePeerDependencies:
@@ -3432,7 +3433,7 @@ snapshots:
 
   decimal.js-light@2.5.1: {}
 
-  deepmerge-ts@7.1.5: {}
+  deepmerge-ts@8.0.1: {}
 
   defu@6.1.7: {}
 

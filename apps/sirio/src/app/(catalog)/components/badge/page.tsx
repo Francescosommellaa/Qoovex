@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { Specimen, SpecimenGrid } from "@/components/specimen";
 import { Badge } from "@qoovex/ui/components/badge";
@@ -5,8 +6,7 @@ import {
   IconCheck,
   IconAlertTriangle,
   IconInfoCircle,
-  IconShieldCheck,
-  IconFlame,
+  IconAlertCircle,
 } from "@tabler/icons-react";
 
 export default function BadgePage() {
@@ -14,89 +14,57 @@ export default function BadgePage() {
     <div className="mx-auto w-full max-w-6xl">
       <PageHeader
         title="Badge"
-        description="Piccolo indicatore visivo per status, etichette e metadati stilizzato con bordi di precisione e supporto per dimensioni e glassmorphism."
+        description="Primitiva compatta per etichette, metadati e rappresentazioni di stato. Il significato di prodotto appartiene al pattern Status Presentation."
         importPath="import { Badge } from '@qoovex/ui/components/badge'"
       />
 
       <div className="flex flex-col gap-12">
-        {/* ── Varianti di Colore e Stato ─────────────────────────────── */}
         <section>
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight">Varianti di Colore & Stato</h2>
+          <h2 className="mb-4 text-2xl font-semibold tracking-tight">Varianti semantiche</h2>
           <SpecimenGrid cols={3}>
-            <Specimen title="Default & Primary">
-              <Badge>Attivo</Badge>
+            <Specimen title="Default">
+              <Badge>Etichetta</Badge>
             </Specimen>
 
-            <Specimen title="Secondary & Neutral">
-              <Badge variant="secondary">In Bozza</Badge>
+            <Specimen title="Secondary">
+              <Badge variant="secondary">Informazione secondaria</Badge>
             </Specimen>
 
-            <Specimen title="Outline & Glass">
+            <Specimen title="Outline e glass">
               <div className="flex items-center gap-2">
-                <Badge variant="outline">Standard</Badge>
-                <Badge variant="glass">Glassmorphism</Badge>
+                <Badge variant="outline">Neutro</Badge>
+                <Badge variant="glass">In evidenza</Badge>
               </div>
             </Specimen>
 
-            <Specimen title="Success & Confermato">
+            <Specimen title="Success">
               <Badge variant="success">
-                <IconCheck /> Confermato
+                <IconCheck aria-hidden="true" /> Completato
               </Badge>
             </Specimen>
 
-            <Specimen title="Warning & Attenzione">
+            <Specimen title="Warning">
               <Badge variant="warning">
-                <IconAlertTriangle /> In Revisione
+                <IconAlertTriangle aria-hidden="true" /> Richiede attenzione
               </Badge>
             </Specimen>
 
-            <Specimen title="Destructive & Errore">
-              <Badge variant="destructive">Sospeso</Badge>
+            <Specimen title="Destructive">
+              <Badge variant="destructive"><IconAlertCircle aria-hidden="true" /> Errore</Badge>
             </Specimen>
           </SpecimenGrid>
         </section>
 
-        {/* ── Indicatore di Stato Pulsante (Status Dots) ──────────────── */}
         <section>
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight">Indicatori con Punto di Stato (Status Dots)</h2>
-          <SpecimenGrid cols={3}>
-            <Specimen title="Live & Operativo">
-              <Badge variant="success" className="gap-2">
-                <span className="relative flex size-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
-                  <span className="relative inline-flex size-2 rounded-full bg-success" />
-                </span>
-                Cantiere Attivo
-              </Badge>
-            </Specimen>
-
-            <Specimen title="Info & Sincronizzazione">
-              <Badge variant="info" className="gap-2">
-                <span className="size-2 rounded-full bg-info" />
-                Sync in corso
-              </Badge>
-            </Specimen>
-
-            <Specimen title="Allarme / Critico">
-              <Badge variant="destructive" className="gap-2">
-                <span className="size-2 rounded-full bg-destructive" />
-                Blocco Legale
-              </Badge>
-            </Specimen>
-          </SpecimenGrid>
-        </section>
-
-        {/* ── Dimensioni (Sizes) ─────────────────────────────────────── */}
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight">Dimensioni (Sizes)</h2>
+          <h2 className="mb-4 text-2xl font-semibold tracking-tight">Dimensioni</h2>
           <SpecimenGrid cols={3}>
             <Specimen title="Small (sm)">
               <div className="flex items-center gap-2">
                 <Badge size="sm" variant="success">
-                  v2.4.0
+                  Etichetta breve
                 </Badge>
                 <Badge size="sm" variant="outline">
-                  PROD
+                  Metadato
                 </Badge>
               </div>
             </Specimen>
@@ -104,19 +72,28 @@ export default function BadgePage() {
             <Specimen title="Default (md)">
               <div className="flex items-center gap-2">
                 <Badge variant="info">
-                  <IconInfoCircle /> Info Cantiere
+                  <IconInfoCircle aria-hidden="true" /> Informazione
                 </Badge>
               </div>
             </Specimen>
 
             <Specimen title="Large (lg)">
               <div className="flex items-center gap-2">
-                <Badge size="lg" variant="glass">
-                  <IconFlame className="text-warning-emphasis" /> Feature In Evidenza
+                <Badge size="lg" variant="success">
+                  <IconCheck aria-hidden="true" /> Operazione completata
                 </Badge>
               </div>
             </Specimen>
           </SpecimenGrid>
+        </section>
+
+        <section className="max-w-3xl rounded-xl border bg-card p-5 sm:p-6" aria-labelledby="product-status-title">
+          <h2 id="product-status-title" className="text-xl font-semibold tracking-tight">Stati di prodotto</h2>
+          <p className="mt-2 leading-7 text-muted-foreground">
+            Questa pagina documenta la primitiva. Label, tono, descrizione ed eventuale azione di uno stato reale sono
+            definiti dal pattern <Link className="font-medium text-foreground underline underline-offset-4" href="/patterns/status-presentation">Status Presentation</Link>,
+            non dal componente Badge e non dalla singola pagina prodotto.
+          </p>
         </section>
       </div>
     </div>

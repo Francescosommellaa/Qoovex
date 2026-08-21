@@ -349,6 +349,7 @@ describeOnLocalCi("current pending client initial agreement lifecycle on Postgre
     await expect(db.jobSiteInitialAgreementConsent.count({ where: { participantId: pendingParticipant.id } })).resolves.toBe(1);
     const activeDetail = await getClientJobSiteDetail(invitationA.jobSiteId);
     expect(activeDetail.timelineEvents.every((event) => event.audience === "SHARED")).toBe(true);
+    expect(() => JSON.stringify(activeDetail)).not.toThrow();
 
     identity.currentUserId = clientB.user.id;
     await expect(resolveClientJobSiteActor(invitationA.jobSiteId)).rejects.toMatchObject({ status: 404 });

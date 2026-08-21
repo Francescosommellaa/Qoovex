@@ -17,6 +17,7 @@ import type { ClientHomeWorkItem } from "@shared/lib/client-home-work-queue";
 import { presentOrganizationHomeRecentActivities } from "@shared/lib/organization-home-recent-activity";
 import type { OrganizationHomeWorkItem } from "@shared/lib/organization-home-work-queue";
 import { jobSiteNotificationTargetId } from "@shared/lib/job-site-notification-destination";
+import { projectHistoricalTimelineActors } from "@shared/lib/historical-timeline-actor";
 
 const CLIENT_INVITATION_TTL_MS = 14 * 24 * 60 * 60 * 1000;
 
@@ -356,9 +357,15 @@ const requestConversationSelect = {
 } as const;
 
 const requestConversationEventSelect = {
-  actorParticipant: { select: { publicRoleLabel: true, user: { select: { firstName: true, lastName: true } } } },
+  actorParticipantId: true,
   createdAt: true,
   payload: true,
+} as const;
+
+const historicalTimelineActorParticipantSelect = {
+  id: true,
+  publicRoleLabel: true,
+  user: { select: { firstName: true, lastName: true } },
 } as const;
 
 export async function getOrganizationRequestConversations(organizationId: string, jobSiteId: string) {
@@ -368,13 +375,15 @@ export async function getOrganizationRequestConversations(organizationId: string
   const jobSite = await db.jobSite.findFirst({
     where: { id: jobSiteId, organizationId, ...(context.role === "OWNER" || context.scopeMode === "FULL" ? {} : { participants: { some: { membershipId: context.membershipId, status: "ACTIVE" } } }) },
     select: {
+      participants: { select: historicalTimelineActorParticipantSelect },
       requests: { orderBy: { updatedAt: "desc" }, take: 50, select: requestConversationSelect },
       timelineEvents: { orderBy: { createdAt: "asc" }, take: 200, select: requestConversationEventSelect },
     },
   });
   if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
   const requestViewer = { canRespond: Boolean(viewer) && context.permissions.includes("jobSite:requests:respond"), participantId: viewer?.id ?? "", side: "ORGANIZATION_MEMBER" as const };
-  return presentRequestConversations(jobSite.requests, requestInteractionsByRequestId(jobSite.timelineEvents), requestViewer);
+  const events = projectHistoricalTimelineActors(jobSite.timelineEvents, jobSite.participants);
+  return presentRequestConversations(jobSite.requests, requestInteractionsByRequestId(events), requestViewer);
 }
 
 export async function getClientRequestConversations(jobSiteId: string) {
@@ -382,12 +391,14 @@ export async function getClientRequestConversations(jobSiteId: string) {
   const jobSite = await db.jobSite.findFirst({
     where: { id: jobSiteId, organizationId: viewer.organizationId },
     select: {
+      participants: { select: historicalTimelineActorParticipantSelect },
       requests: { orderBy: { updatedAt: "desc" }, take: 50, select: requestConversationSelect },
       timelineEvents: { where: { audience: "SHARED" }, orderBy: { createdAt: "asc" }, take: 200, select: requestConversationEventSelect },
     },
   });
   if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
-  return presentRequestConversations(jobSite.requests, requestInteractionsByRequestId(jobSite.timelineEvents), { canRespond: true, participantId: viewer.id, side: "CLIENT" });
+  const events = projectHistoricalTimelineActors(jobSite.timelineEvents, jobSite.participants);
+  return presentRequestConversations(jobSite.requests, requestInteractionsByRequestId(events), { canRespond: true, participantId: viewer.id, side: "CLIENT" });
 }
 
 type DisagreementInteractionAction = "RESPOND" | "AGREE" | "WITHDRAW" | "CLOSE_WITHOUT_AGREEMENT";
@@ -445,12 +456,14 @@ export async function getOrganizationDisagreementConversations(organizationId: s
   const jobSite = await db.jobSite.findFirst({
     where: { id: jobSiteId, organizationId, ...(context.role === "OWNER" || context.scopeMode === "FULL" ? {} : { participants: { some: { membershipId: context.membershipId, status: "ACTIVE" } } }) },
     select: {
+      participants: { select: historicalTimelineActorParticipantSelect },
       disputes: { orderBy: { updatedAt: "desc" }, take: 50, select: disagreementConversationSelect },
       timelineEvents: { orderBy: { createdAt: "asc" }, take: 200, select: requestConversationEventSelect },
     },
   });
   if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
-  return presentDisagreementConversations(jobSite.disputes, disagreementInteractionsByDisagreementId(jobSite.timelineEvents), { canRespond: Boolean(viewer) && context.permissions.includes("jobSite:disputes:respond"), participantId: viewer?.id ?? "", side: "ORGANIZATION_MEMBER" });
+  const events = projectHistoricalTimelineActors(jobSite.timelineEvents, jobSite.participants);
+  return presentDisagreementConversations(jobSite.disputes, disagreementInteractionsByDisagreementId(events), { canRespond: Boolean(viewer) && context.permissions.includes("jobSite:disputes:respond"), participantId: viewer?.id ?? "", side: "ORGANIZATION_MEMBER" });
 }
 
 export async function getClientDisagreementConversations(jobSiteId: string) {
@@ -458,12 +471,14 @@ export async function getClientDisagreementConversations(jobSiteId: string) {
   const jobSite = await db.jobSite.findFirst({
     where: { id: jobSiteId, organizationId: viewer.organizationId },
     select: {
+      participants: { select: historicalTimelineActorParticipantSelect },
       disputes: { orderBy: { updatedAt: "desc" }, take: 50, select: disagreementConversationSelect },
       timelineEvents: { where: { audience: "SHARED" }, orderBy: { createdAt: "asc" }, take: 200, select: requestConversationEventSelect },
     },
   });
   if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
-  return presentDisagreementConversations(jobSite.disputes, disagreementInteractionsByDisagreementId(jobSite.timelineEvents), { canRespond: true, participantId: viewer.id, side: "CLIENT" });
+  const events = projectHistoricalTimelineActors(jobSite.timelineEvents, jobSite.participants);
+  return presentDisagreementConversations(jobSite.disputes, disagreementInteractionsByDisagreementId(events), { canRespond: true, participantId: viewer.id, side: "CLIENT" });
 }
 
 export async function acceptPrimaryClientInvitation(rawToken: string) {
@@ -738,5 +753,11 @@ export async function getClientJobSiteDetail(jobSiteId: string) {
     },
   });
   if (!jobSite) throw new AccessError("Cantiere non trovato.", 404);
-  return jobSite;
+  return {
+    ...jobSite,
+    timelineEvents: jobSite.timelineEvents.map((event) => ({
+      ...event,
+      sequence: event.sequence.toString(),
+    })),
+  };
 }

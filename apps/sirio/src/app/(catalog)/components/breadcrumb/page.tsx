@@ -111,8 +111,8 @@ export default function BreadcrumbCatalogPage() {
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
                       <BreadcrumbPage className="gap-2">
-                        <span>Ricevuta #4092</span>
-                        <Badge variant="outline" className="font-accent text-[0.6875rem]">CONFERMATO</Badge>
+                        <span>Dichiarazione di pagamento</span>
+                        <Badge variant="outline" className="font-accent text-[0.6875rem]">INVIATA</Badge>
                       </BreadcrumbPage>
                     </BreadcrumbItem>
                   </BreadcrumbList>

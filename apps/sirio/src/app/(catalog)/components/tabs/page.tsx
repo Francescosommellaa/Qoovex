@@ -33,6 +33,12 @@ export default function TabsCatalogPage() {
           <SpecimenGrid cols={1}>
             <Specimen title="Navigazione Cantiere" visualId="tabs-selected">
               <Tabs defaultValue="overview" className="w-full">
+                <div
+                  className="w-full overflow-x-auto rounded-lg px-1 pb-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  role="region"
+                  aria-label="Sezioni del cantiere"
+                  tabIndex={0}
+                >
                 <TabsList>
                   <TabsTrigger value="overview">
                     <IconInfoCircle />
@@ -41,14 +47,14 @@ export default function TabsCatalogPage() {
                   <TabsTrigger value="timeline">
                     <IconTimeline />
                     Timeline
-                    <Badge variant="secondary" className="ml-1.5 font-accent text-[0.6875rem]">
+                    <Badge variant="secondary" className="ml-1.5 font-accent text-xs">
                       12
                     </Badge>
                   </TabsTrigger>
                   <TabsTrigger value="payments">
                     <IconReceipt2 />
                     Pagamenti
-                    <Badge variant="secondary" className="ml-1.5 font-accent text-[0.6875rem]">
+                    <Badge variant="secondary" className="ml-1.5 font-accent text-xs">
                       € 12.450
                     </Badge>
                   </TabsTrigger>
@@ -57,6 +63,7 @@ export default function TabsCatalogPage() {
                     Documentazione
                   </TabsTrigger>
                 </TabsList>
+                </div>
 
                 <TabsContent value="overview" className="mt-4">
                   <Card>
@@ -84,9 +91,9 @@ export default function TabsCatalogPage() {
                 <TabsContent value="payments" className="mt-4">
                   <Card>
                     <CardContent className="p-5">
-                      <h3 className="text-base font-semibold mb-1">Stato Pagamenti</h3>
+                      <h3 className="text-base font-semibold mb-1">Pagamenti documentati</h3>
                       <p className="text-sm text-muted-foreground">
-                        € 12.450 saldati su € 45.000 totali. 3 fatture in sospeso.
+                        Una richiesta di pagamento e una dichiarazione del Cliente da consultare.
                       </p>
                     </CardContent>
                   </Card>
@@ -97,7 +104,7 @@ export default function TabsCatalogPage() {
                     <CardContent className="p-5">
                       <h3 className="text-base font-semibold mb-1">Documentazione</h3>
                       <p className="text-sm text-muted-foreground">
-                        Contratti, dichiarazioni di conformità e permessi di cantiere.
+                        File allegati al lavoro e documenti condivisi nel relativo contesto.
                       </p>
                     </CardContent>
                   </Card>
@@ -114,17 +121,24 @@ export default function TabsCatalogPage() {
           </h2>
           <SpecimenGrid cols={1}>
             <Specimen title="Usato come segmented control senza contenuto associato">
+              <div
+                className="w-full overflow-x-auto rounded-lg px-1 pb-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                role="region"
+                aria-label="Filtri per stato"
+                tabIndex={0}
+              >
               <TabsList activeValue="tutti">
                 <TabsTrigger value="tutti">Tutti</TabsTrigger>
                 <TabsTrigger value="attivi">
                   Attivi
-                  <Badge variant="secondary" className="ml-1.5 font-accent text-[0.6875rem]">
+                  <Badge variant="secondary" className="ml-1.5 font-accent text-xs">
                     8
                   </Badge>
                 </TabsTrigger>
                 <TabsTrigger value="archiviati">Archiviati</TabsTrigger>
                 <TabsTrigger value="bozze">Bozze</TabsTrigger>
               </TabsList>
+              </div>
             </Specimen>
           </SpecimenGrid>
         </section>
@@ -137,6 +151,12 @@ export default function TabsCatalogPage() {
           <SpecimenGrid cols={1}>
             <Specimen title="Pannello impostazioni con icone">
               <Tabs defaultValue="general" className="w-full">
+                <div
+                  className="w-full overflow-x-auto rounded-lg px-1 pb-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  role="region"
+                  aria-label="Sezioni delle impostazioni"
+                  tabIndex={0}
+                >
                 <TabsList>
                   <TabsTrigger value="general">
                     <IconBuildingStore />
@@ -151,20 +171,21 @@ export default function TabsCatalogPage() {
                     Sicurezza
                   </TabsTrigger>
                 </TabsList>
+                </div>
 
                 <TabsContent value="general" className="mt-4">
                   <p className="text-sm text-muted-foreground">
-                    Gestisci ragione sociale, IBAN e ruoli organizzativi.
+                    Gestisci le informazioni della tua azienda.
                   </p>
                 </TabsContent>
                 <TabsContent value="notifications" className="mt-4">
                   <p className="text-sm text-muted-foreground">
-                    Configura le notifiche per richieste e cambi di stato.
+                    Configura le notifiche per richieste e aggiornamenti del lavoro.
                   </p>
                 </TabsContent>
                 <TabsContent value="security" className="mt-4">
                   <p className="text-sm text-muted-foreground">
-                    Gestione 2FA e codici di recupero d'emergenza.
+                    Gestisci le opzioni di accesso al tuo account.
                   </p>
                 </TabsContent>
               </Tabs>
