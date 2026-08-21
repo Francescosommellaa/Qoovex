@@ -9,6 +9,9 @@ overrides:
   find-my-way: "9.7.0"
   valibot: "1.4.2"
   postcss: "8.5.25"
+  # Prisma 7.9.1 pins the vulnerable 7.1.5 release; keep the patched leaf until upstream catches up.
+  # Recheck and remove after Prisma updates @prisma/config; review no later than 2026-08-28.
+  deepmerge-ts: "8.0.1"
   # postcss pulls nanoid <3.3.17 which has GHSA-2v37-7h3g-55p8 (custom generator infinite loop).
   nanoid: ">=3.3.17"
 auditConfig:
@@ -33,3 +36,4 @@ minimumReleaseAgeExclude:
   - '@turbo/windows-64@2.10.10'
   - '@turbo/windows-arm64@2.10.10'
   - turbo@2.10.10
+  - deepmerge-ts@8.0.1

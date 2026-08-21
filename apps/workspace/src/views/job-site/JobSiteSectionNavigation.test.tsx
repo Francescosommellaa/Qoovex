@@ -1,5 +1,13 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import {
+  clientJobSiteSectionTargets,
+  getClientJobSiteNavigationSections,
+  getOrganizationJobSiteNavigationSections,
+  resolveActiveJobSiteNavigationSection,
+  resolveJobSiteDeepLink,
+} from "@shared/lib/job-site-section-navigation";
+
 describe("JobSiteSectionNavigation", () => {
   it("groups the navigation by user task while preserving the established anchors", async () => {
     const sectionNavigation = await import("./JobSiteSectionNavigation").catch(() => null);
@@ -7,7 +15,7 @@ describe("JobSiteSectionNavigation", () => {
     expect(Component).toBeTypeOf("function");
     if (!Component) return;
 
-    const html = renderToStaticMarkup(<Component sections={["overview", "activities", "decisions", "files"]} targets={sectionNavigation!.clientJobSiteSectionTargets} />);
+    const html = renderToStaticMarkup(<Component sections={["overview", "activities", "decisions", "files"]} targets={clientJobSiteSectionTargets} />);
 
     expect(html).toContain('aria-label="Sezioni cantiere"');
     expect(html).toContain("Sezione corrente");
@@ -28,25 +36,19 @@ describe("JobSiteSectionNavigation", () => {
     expect(html).not.toContain(">Timeline<");
   });
 
-  it("mostra la chiusura e l'archivio solo negli stati pertinenti per l'Azienda", async () => {
-    const { getOrganizationJobSiteNavigationSections } = await import("./JobSiteSectionNavigation");
-
+  it("mostra la chiusura e l'archivio solo negli stati pertinenti per l'Azienda", () => {
     expect(getOrganizationJobSiteNavigationSections({ status: "DRAFT", hasClosure: false })).not.toContain("closure");
     expect(getOrganizationJobSiteNavigationSections({ status: "ACTIVE", hasClosure: false })).toContain("closure");
     expect(getOrganizationJobSiteNavigationSections({ status: "CLOSED", hasClosure: false })).toEqual(["overview", "activities", "decisions", "payments", "files", "details", "archive"]);
   });
 
-  it("mantiene per il Cliente solo la panoramica prima dell'attivazione", async () => {
-    const { getClientJobSiteNavigationSections } = await import("./JobSiteSectionNavigation");
-
+  it("mantiene per il Cliente solo la panoramica prima dell'attivazione", () => {
     expect(getClientJobSiteNavigationSections({ status: "PENDING_INITIAL_CONFIRMATION", hasClosure: false })).toEqual(["overview"]);
     expect(getClientJobSiteNavigationSections({ status: "ACTIVE", hasClosure: true })).toContain("closure");
     expect(getClientJobSiteNavigationSections({ status: "ARCHIVED", hasClosure: false })).toEqual(["overview", "activities", "decisions", "payments", "files", "details", "archive"]);
   });
 
-  it("riconosce la sezione visibile usando l'ordine reale della pagina", async () => {
-    const { resolveActiveJobSiteNavigationSection } = await import("./JobSiteSectionNavigation");
-
+  it("riconosce la sezione visibile usando l'ordine reale della pagina", () => {
     expect(resolveActiveJobSiteNavigationSection({
       activationLine: 120,
       atEnd: false,
@@ -69,7 +71,6 @@ describe("JobSiteSectionNavigation", () => {
   });
 
   it("porta un deep link preciso all'elemento e ripiega sulla sezione se non esiste più", async () => {
-    const { clientJobSiteSectionTargets, resolveJobSiteDeepLink } = await import("./JobSiteSectionNavigation");
     const { jobSiteNotificationTargetId } = await import("@shared/lib/job-site-notification-destination");
     const sections = ["overview", "activities", "decisions", "payments", "files"] as const;
     const paymentTarget = jobSiteNotificationTargetId("payment", "payment-1");
