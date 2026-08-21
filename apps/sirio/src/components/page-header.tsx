@@ -14,7 +14,7 @@ export function PageHeader({
         <p className="mt-2 text-muted-foreground">{description}</p>
       </div>
       {importPath && (
-        <code className="relative rounded-md bg-muted px-4 py-2 font-mono text-sm shadow-sm ring-1 ring-border">
+        <code className="relative max-w-full whitespace-pre-wrap break-words rounded-md bg-muted px-4 py-2 font-mono text-sm shadow-sm ring-1 ring-border">
           {importPath}
         </code>
       )}

@@ -118,7 +118,7 @@ const typeScale: {
     weight: "400 (Regular)",
     size: "0.75rem / 12px",
     lineHeight: "1rem / 16px",
-    sample: "APPROVATO DA COMMITTENTE",
+    sample: "MODIFICA ACCETTATA",
   },
 ];
 

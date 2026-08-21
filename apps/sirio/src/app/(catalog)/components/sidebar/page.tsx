@@ -40,7 +40,7 @@ export default function SidebarCatalogPage() {
     <div className="mx-auto w-full max-w-6xl">
       <PageHeader
         title="Sidebar"
-        description="Sistema di navigazione enterprise a scomparsa (collapsible) con supporto per tasti di scelta rapida, gruppi di risorse, badge, temi e contrazione fluida."
+        description="Sistema di navigazione adattivo con gruppi di destinazioni, badge, scorciatoie da tastiera e modalità compatta."
         importPath="import { SidebarProvider, AdaptiveSidebar, AppSidebar, SidebarInset } from '@qoovex/ui/components/sidebar'"
       />
 
@@ -49,7 +49,12 @@ export default function SidebarCatalogPage() {
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Anatomia e Componente Reale (`AdaptiveSidebar`)</h2>
           <SpecimenGrid cols={1}>
             <Specimen title="Specimen Reale Operativo (AdaptiveSidebar in Modalità Contenitore Specimen)">
-              <div className="relative flex h-[32rem] w-full overflow-hidden rounded-xl border border-border/80 bg-background shadow-xs">
+              <div
+                className="relative flex h-[32rem] w-full overflow-x-auto overflow-y-hidden rounded-xl border border-border/80 bg-background shadow-xs outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                role="region"
+                aria-label="Anteprima navigazione adattiva"
+                tabIndex={0}
+              >
                 <SidebarProvider defaultOpen={true} inline className="h-full w-full">
                   <AdaptiveSidebar
                     inline
@@ -79,7 +84,7 @@ export default function SidebarCatalogPage() {
                   />
                   <SidebarInset className="p-6">
                     <div className="flex items-center justify-between border-b border-border/60 pb-3">
-                      <h3 className="text-lg font-bold font-accent">Dashboard Cantieri</h3>
+                      <h3 className="text-lg font-bold font-accent">Panoramica lavori</h3>
                       <Badge variant="glass">Componente Reale Attivo</Badge>
                     </div>
                     <div className="mt-4 space-y-3 text-xs text-muted-foreground leading-relaxed">

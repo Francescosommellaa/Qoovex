@@ -100,20 +100,20 @@ export default function TooltipCatalogPage() {
                 </Tooltip>
 
                 <Tooltip>
-                  <TooltipTrigger render={<Button variant="outline" size="icon-sm" aria-label="Condividi" />}>
+                  <TooltipTrigger render={<Button variant="outline" size="icon-sm" aria-label="Condividi allegato" />}>
                     <IconShare aria-hidden="true" className="size-4" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    Genera link esplicito di condivisione
+                    Condividi l'allegato nel contesto corrente
                   </TooltipContent>
                 </Tooltip>
 
                 <Tooltip>
-                  <TooltipTrigger render={<Button variant="destructive" size="icon-sm" aria-label="Elimina" />}>
+                  <TooltipTrigger render={<Button variant="destructive" size="icon-sm" aria-label="Rimuovi elemento di esempio" />}>
                     <IconTrash aria-hidden="true" className="size-4" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    Elimina definitvamente il cantiere
+                    Rimuove questo elemento dimostrativo
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -172,10 +172,10 @@ export default function TooltipCatalogPage() {
             <Specimen title="Tooltip Dettagliato con Descrizione">
               <Tooltip>
                 <TooltipTrigger render={<Button variant="default" size="sm" />}>
-                  Archiviazione ZIP
+                  Mostra dettagli
                 </TooltipTrigger>
                 <TooltipContent side="top">
-                  Genera pacchetto scaricabile con firma digitale
+                  Apre le informazioni aggiuntive dell'elemento
                 </TooltipContent>
               </Tooltip>
             </Specimen>

@@ -17,7 +17,6 @@ import {
   IconBellOff,
   IconFileUpload,
   IconPlus,
-  IconUpload,
   IconRotateClockwise,
 } from "@tabler/icons-react";
 

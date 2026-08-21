@@ -11,7 +11,7 @@ import { BrandMark } from "@/components/brand-mark";
 const demoSurfaceLinks: FloatingNavigationLink[] = [
   { href: "#", label: "Panoramica" },
   { href: "#funzionalita", label: "Funzionalità" },
-  { href: "#prezzi", label: "Prezzi" },
+  { href: "#esempi", label: "Esempi" },
 ];
 
 const demoResourceLinks: FloatingNavigationLink[] = [
@@ -22,8 +22,8 @@ const demoResourceLinks: FloatingNavigationLink[] = [
   },
   {
     href: "#",
-    label: "Stato del servizio",
-    description: "Monitora uptime e incidenti in tempo reale.",
+    label: "Aggiornamenti",
+    description: "Novità e cambiamenti relativi all'interfaccia.",
   },
 ];
 

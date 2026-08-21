@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type KeyboardEvent } from "react";
 import { PageHeader } from "@/components/page-header";
 import { Specimen, SpecimenGrid } from "@/components/specimen";
 import {
@@ -76,21 +76,48 @@ export default function TablePage() {
   const [selectedRow, setSelectedRow] = useState("JOB-8942");
   const [page, setPage] = useState(1);
 
+  const handleTableScrollKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.currentTarget !== event.target) return;
+
+    const container = event.currentTarget;
+    const step = Math.max(container.clientWidth * 0.75, 160);
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      container.scrollBy({ left: step });
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      container.scrollBy({ left: -step });
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      container.scrollTo({ left: 0 });
+    } else if (event.key === "End") {
+      event.preventDefault();
+      container.scrollTo({ left: container.scrollWidth });
+    }
+  };
+
   return (
     <div className="mx-auto w-full max-w-6xl">
       <PageHeader
         title="Table"
-        description="Data table di livello enterprise per la gestione di cantieri, report finanziari e dati complessi con ordinamento, toolbar, impaginazione e contenitore card."
+        description="Tabella per elenchi strutturati con ordinamento, toolbar, impaginazione e contenitore card."
         importPath="import { TableContainer, Table, TableHeader, TableHeadSort, TableBody, TableRow, TableCell, TableToolbar, TablePagination } from '@qoovex/ui/components/table'"
       />
 
       <div className="flex flex-col gap-12">
         {/* ── Sezione 1: Tabella Enterprise Completa ────────────────────────────── */}
         <section>
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight">Data Table Enterprise (Gestione Cantieri)</h2>
+          <h2 className="mb-4 text-2xl font-semibold tracking-tight">Tabella completa per i lavori</h2>
           <SpecimenGrid cols={1}>
             <Specimen title="Tabella Completa con Toolbar, Ordinamento & Impaginazione">
-              <TableContainer>
+              <TableContainer
+                aria-label="Tabella dei lavori: scorri orizzontalmente per vedere tutte le colonne"
+                className="outline-none focus-visible:ring-2 focus-visible:ring-ring [&>div:has(>table[data-slot=table])]:overflow-visible"
+                onKeyDown={handleTableScrollKeyDown}
+                role="region"
+                tabIndex={0}
+              >
                 <TableToolbar>
                   <div className="flex items-center gap-2 max-w-xs w-full">
                     <SearchInput
@@ -149,7 +176,7 @@ export default function TablePage() {
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Avatar size="xs">
-                              <AvatarFallback className="text-[0.625rem] bg-primary/10 text-primary font-bold">
+                              <AvatarFallback className="bg-primary/10 text-xs font-bold text-primary">
                                 {site.initials}
                               </AvatarFallback>
                             </Avatar>
@@ -157,7 +184,7 @@ export default function TablePage() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant={site.statusVariant} className="font-accent text-[0.6875rem]">
+                          <Badge variant={site.statusVariant} className="font-accent text-xs">
                             {site.status}
                           </Badge>
                         </TableCell>
@@ -194,7 +221,13 @@ export default function TablePage() {
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Densità Compatta & Righe Striped Zebra</h2>
           <SpecimenGrid cols={1}>
             <Specimen title="Tabella Compatta Striped Zebra (density=compact, striped=true)">
-              <TableContainer>
+              <TableContainer
+                aria-label="Tabella delle lavorazioni: scorri orizzontalmente per vedere tutte le colonne"
+                className="outline-none focus-visible:ring-2 focus-visible:ring-ring [&>div:has(>table[data-slot=table])]:overflow-visible"
+                onKeyDown={handleTableScrollKeyDown}
+                role="region"
+                tabIndex={0}
+              >
                 <Table density="compact" striped>
                   <TableHeader>
                     <TableRow>

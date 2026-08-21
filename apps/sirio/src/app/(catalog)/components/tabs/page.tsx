@@ -33,6 +33,12 @@ export default function TabsCatalogPage() {
           <SpecimenGrid cols={1}>
             <Specimen title="Navigazione Cantiere" visualId="tabs-selected">
               <Tabs defaultValue="overview" className="w-full">
+                <div
+                  className="w-full overflow-x-auto rounded-lg px-1 pb-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  role="region"
+                  aria-label="Sezioni del cantiere"
+                  tabIndex={0}
+                >
                 <TabsList>
                   <TabsTrigger value="overview">
                     <IconInfoCircle />
@@ -41,14 +47,14 @@ export default function TabsCatalogPage() {
                   <TabsTrigger value="timeline">
                     <IconTimeline />
                     Timeline
-                    <Badge variant="secondary" className="ml-1.5 font-accent text-[0.6875rem]">
+                    <Badge variant="secondary" className="ml-1.5 font-accent text-xs">
                       12
                     </Badge>
                   </TabsTrigger>
                   <TabsTrigger value="payments">
                     <IconReceipt2 />
                     Pagamenti
-                    <Badge variant="secondary" className="ml-1.5 font-accent text-[0.6875rem]">
+                    <Badge variant="secondary" className="ml-1.5 font-accent text-xs">
                       € 12.450
                     </Badge>
                   </TabsTrigger>
@@ -57,6 +63,7 @@ export default function TabsCatalogPage() {
                     Documentazione
                   </TabsTrigger>
                 </TabsList>
+                </div>
 
                 <TabsContent value="overview" className="mt-4">
                   <Card>
@@ -114,17 +121,24 @@ export default function TabsCatalogPage() {
           </h2>
           <SpecimenGrid cols={1}>
             <Specimen title="Usato come segmented control senza contenuto associato">
+              <div
+                className="w-full overflow-x-auto rounded-lg px-1 pb-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                role="region"
+                aria-label="Filtri per stato"
+                tabIndex={0}
+              >
               <TabsList activeValue="tutti">
                 <TabsTrigger value="tutti">Tutti</TabsTrigger>
                 <TabsTrigger value="attivi">
                   Attivi
-                  <Badge variant="secondary" className="ml-1.5 font-accent text-[0.6875rem]">
+                  <Badge variant="secondary" className="ml-1.5 font-accent text-xs">
                     8
                   </Badge>
                 </TabsTrigger>
                 <TabsTrigger value="archiviati">Archiviati</TabsTrigger>
                 <TabsTrigger value="bozze">Bozze</TabsTrigger>
               </TabsList>
+              </div>
             </Specimen>
           </SpecimenGrid>
         </section>
@@ -137,6 +151,12 @@ export default function TabsCatalogPage() {
           <SpecimenGrid cols={1}>
             <Specimen title="Pannello impostazioni con icone">
               <Tabs defaultValue="general" className="w-full">
+                <div
+                  className="w-full overflow-x-auto rounded-lg px-1 pb-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  role="region"
+                  aria-label="Sezioni delle impostazioni"
+                  tabIndex={0}
+                >
                 <TabsList>
                   <TabsTrigger value="general">
                     <IconBuildingStore />
@@ -151,6 +171,7 @@ export default function TabsCatalogPage() {
                     Sicurezza
                   </TabsTrigger>
                 </TabsList>
+                </div>
 
                 <TabsContent value="general" className="mt-4">
                   <p className="text-sm text-muted-foreground">

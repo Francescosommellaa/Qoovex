@@ -320,7 +320,7 @@ export default function ControlsCatalogPage() {
             <Specimen title="ToggleGroup — Toolbar di Formattazione">
               <div className="flex flex-col gap-4">
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-1.5 block">
+                  <span className="mb-1.5 block font-mono text-xs text-muted-foreground">
                     Stile testo
                   </span>
                   <ToggleGroup multiple variant="outline" size="icon-sm">
@@ -339,7 +339,7 @@ export default function ControlsCatalogPage() {
                   </ToggleGroup>
                 </div>
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-1.5 block">
+                  <span className="mb-1.5 block font-mono text-xs text-muted-foreground">
                     Allineamento
                   </span>
                   <ToggleGroup variant="outline" size="icon-sm">
@@ -368,19 +368,19 @@ export default function ControlsCatalogPage() {
             <Specimen title="Colori & Tooltip">
               <div className="flex flex-col gap-6 py-2">
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-2 block">Primary (tooltip on hover)</span>
+                  <span className="mb-2 block font-mono text-xs text-muted-foreground">Primary (tooltip on hover)</span>
                   <Slider defaultValue={40} color="primary" showTooltip />
                 </div>
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-2 block">Success</span>
+                  <span className="mb-2 block font-mono text-xs text-muted-foreground">Success</span>
                   <Slider defaultValue={65} color="success" showValue />
                 </div>
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-2 block">Destructive</span>
+                  <span className="mb-2 block font-mono text-xs text-muted-foreground">Destructive</span>
                   <Slider defaultValue={80} color="destructive" showValue />
                 </div>
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-2 block">Warning</span>
+                  <span className="mb-2 block font-mono text-xs text-muted-foreground">Warning</span>
                   <Slider defaultValue={30} color="warning" showValue />
                 </div>
               </div>
@@ -389,19 +389,19 @@ export default function ControlsCatalogPage() {
             <Specimen title="Dimensioni">
               <div className="flex flex-col gap-6 py-2">
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-2 block">size="sm"</span>
+                  <span className="mb-2 block font-mono text-xs text-muted-foreground">size="sm"</span>
                   <Slider defaultValue={50} size="sm" showValue />
                 </div>
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-2 block">size="default"</span>
+                  <span className="mb-2 block font-mono text-xs text-muted-foreground">size="default"</span>
                   <Slider defaultValue={50} size="default" showValue />
                 </div>
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-2 block">size="lg"</span>
+                  <span className="mb-2 block font-mono text-xs text-muted-foreground">size="lg"</span>
                   <Slider defaultValue={50} size="lg" showValue />
                 </div>
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-2 block">Disabilitato</span>
+                  <span className="mb-2 block font-mono text-xs text-muted-foreground">Disabilitato</span>
                   <Slider defaultValue={50} disabled showValue />
                 </div>
               </div>
@@ -416,18 +416,27 @@ export default function ControlsCatalogPage() {
           </h2>
           <SpecimenGrid cols={2}>
             <Specimen title="Verifica Codice (123456 = Ok, altro = Errore)">
-              <div className="flex flex-col items-center gap-3 py-2">
-                <OtpInput
-                  length={6}
-                  status={otpStatus}
-                  value={otpValue}
-                  onValueChange={(val) => {
-                    setOtpValue(val);
-                    if (otpStatus !== "default") setOtpStatus("default");
-                  }}
-                  onComplete={handleComplete}
-                />
-                <div className="flex items-center gap-2 pt-1">
+              <div className="flex min-w-0 w-full flex-col items-center gap-3 py-2">
+                <div
+                  className="w-full overflow-x-auto rounded-md px-1 pb-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  role="region"
+                  aria-label="Codice di verifica a sei cifre"
+                  tabIndex={0}
+                >
+                  <div className="mx-auto w-max">
+                    <OtpInput
+                      length={6}
+                      status={otpStatus}
+                      value={otpValue}
+                      onValueChange={(val) => {
+                        setOtpValue(val);
+                        if (otpStatus !== "default") setOtpStatus("default");
+                      }}
+                      onComplete={handleComplete}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
                   <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => { setOtpValue("123456"); setOtpStatus("success"); }}>
                     Prova Ok
                   </Button>
@@ -442,17 +451,17 @@ export default function ControlsCatalogPage() {
             </Specimen>
 
             <Specimen title="Dimensioni & PIN Mascherato">
-              <div className="flex flex-col gap-5 py-1">
+              <div className="flex min-w-0 w-full flex-col gap-5 py-1">
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-1.5 block">size="sm"</span>
-                  <OtpInput length={6} size="sm" />
+                  <span className="mb-1.5 block font-mono text-xs text-muted-foreground">size="sm"</span>
+                  <div className="w-full overflow-x-auto pb-2"><div className="w-max"><OtpInput length={6} size="sm" /></div></div>
                 </div>
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-1.5 block">size="lg"</span>
-                  <OtpInput length={6} size="lg" />
+                  <span className="mb-1.5 block font-mono text-xs text-muted-foreground">size="lg"</span>
+                  <div className="w-full overflow-x-auto pb-2"><div className="w-max"><OtpInput length={6} size="lg" /></div></div>
                 </div>
                 <div>
-                  <span className="text-[0.6875rem] font-mono text-muted-foreground mb-1.5 block">PIN mascherato (4 cifre)</span>
+                  <span className="mb-1.5 block font-mono text-xs text-muted-foreground">PIN mascherato (4 cifre)</span>
                   <OtpInput length={4} mask groupSeparator={false} />
                 </div>
               </div>

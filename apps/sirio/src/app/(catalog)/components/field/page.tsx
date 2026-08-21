@@ -185,7 +185,7 @@ export default function FieldPage() {
             </Specimen>
 
             <Specimen title="9. Date & 10. Time (DatePicker e TimePicker Custom)">
-              <div className="grid grid-cols-2 gap-3 w-full">
+              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
                 <Field>
                   <FieldLabel>9. Data Inizio</FieldLabel>
                   <DatePickerInput value={dateVal} onChangeDate={setDateVal} />
@@ -198,7 +198,7 @@ export default function FieldPage() {
             </Specimen>
 
             <Specimen title="11. Date & Time (Data e Ora Combinati)">
-              <div className="grid grid-cols-2 gap-3 w-full">
+              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
                 <Field>
                   <FieldLabel>11a. Data Sopralluogo</FieldLabel>
                   <DatePickerInput value={dateVal} onChangeDate={setDateVal} />
@@ -219,7 +219,14 @@ export default function FieldPage() {
             <Specimen title="12. OTP / Codice di Verifica">
               <Field className="w-full">
                 <FieldLabel>Codice di Verifica OTP (6 cifre)</FieldLabel>
-                <OTPInput length={6} value={otpVal} onChangeOTP={setOtpVal} className="mt-1" />
+                <div
+                  className="mt-1 w-full overflow-x-auto rounded-md px-1 pb-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  role="region"
+                  aria-label="Codice di verifica a sei cifre"
+                  tabIndex={0}
+                >
+                  <OTPInput length={6} value={otpVal} onChangeOTP={setOtpVal} />
+                </div>
                 <FieldDescription>Inserisci il codice ricevuto per completare l’accesso.</FieldDescription>
               </Field>
             </Specimen>

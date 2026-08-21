@@ -97,14 +97,14 @@ export default function ChartCatalogPage() {
       <div className="flex flex-col gap-12">
         {/* ── KPI Minimalist Cards ─────────────────────────────────── */}
         <section>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
             <Card className="border border-border/60 bg-card/40 backdrop-blur-md">
               <CardHeader className="p-4 pb-3">
-                <div className="flex items-center justify-between">
-                  <CardDescription className="text-[0.6875rem] font-accent uppercase tracking-wider text-muted-foreground">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <CardDescription className="font-accent text-xs uppercase tracking-wider text-muted-foreground">
                     Elementi attivi
                   </CardDescription>
-                  <Badge variant="outline" size="sm" className="font-mono text-[0.65rem]">
+                  <Badge variant="outline" size="sm" className="font-mono text-xs">
                     +14%
                   </Badge>
                 </div>
@@ -114,11 +114,11 @@ export default function ChartCatalogPage() {
 
             <Card className="border border-border/60 bg-card/40 backdrop-blur-md">
               <CardHeader className="p-4 pb-3">
-                <div className="flex items-center justify-between">
-                  <CardDescription className="text-[0.6875rem] font-accent uppercase tracking-wider text-muted-foreground">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <CardDescription className="font-accent text-xs uppercase tracking-wider text-muted-foreground">
                     Importi indicati
                   </CardDescription>
-                  <Badge variant="outline" size="sm" className="font-mono text-[0.65rem]">
+                  <Badge variant="outline" size="sm" className="font-mono text-xs">
                     Q3 2026
                   </Badge>
                 </div>
@@ -128,11 +128,11 @@ export default function ChartCatalogPage() {
 
             <Card className="border border-border/60 bg-card/40 backdrop-blur-md">
               <CardHeader className="p-4 pb-3">
-                <div className="flex items-center justify-between">
-                  <CardDescription className="text-[0.6875rem] font-accent uppercase tracking-wider text-muted-foreground">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <CardDescription className="font-accent text-xs uppercase tracking-wider text-muted-foreground">
                     Stato esempio
                   </CardDescription>
-                  <Badge variant="outline" size="sm" className="font-mono text-[0.65rem]">
+                  <Badge variant="outline" size="sm" className="font-mono text-xs">
                     94.8%
                   </Badge>
                 </div>
@@ -147,7 +147,7 @@ export default function ChartCatalogPage() {
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Grafico ad Area (Linee & Gradienti Neutri)</h2>
           <SpecimenGrid cols={1}>
             <Specimen title="Elementi completati e pianificati">
-              <ChartContainer config={areaChartConfig} className="h-72 w-full">
+              <ChartContainer config={areaChartConfig} className="h-72 min-w-0 max-w-full">
                 <AreaChart data={areaData} margin={{ top: 16, right: 16, left: -16, bottom: 0 }}>
                   <defs>
                     <linearGradient id="fillCompletati" x1="0" y1="0" x2="0" y2="1">
@@ -203,7 +203,7 @@ export default function ChartCatalogPage() {
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Grafici a Barre e Donut Neutro</h2>
           <SpecimenGrid cols={2}>
             <Specimen title="Distribuzione Costi per Categoria">
-              <ChartContainer config={barChartConfig} className="h-68 w-full">
+              <ChartContainer config={barChartConfig} className="h-68 min-w-0 max-w-full">
                 <BarChart data={barData} margin={{ top: 16, right: 16, left: -12, bottom: 0 }}>
                   <CartesianGrid vertical={false} stroke="var(--border)" strokeOpacity={0.25} strokeDasharray="3 3" />
                   <XAxis
@@ -231,7 +231,7 @@ export default function ChartCatalogPage() {
 
             <Specimen title="Stato Portafoglio Cantieri (Donut Neutro)">
               <div className="relative flex h-68 w-full items-center justify-center">
-                <ChartContainer config={pieChartConfig} className="h-full w-full">
+                <ChartContainer config={pieChartConfig} className="h-full min-w-0 max-w-full">
                   <PieChart>
                     <ChartTooltip content={<ChartTooltipContent hideLabel />} />
                     <Pie
@@ -256,7 +256,7 @@ export default function ChartCatalogPage() {
                   <span className="text-2xl font-semibold font-accent tracking-tight text-foreground">
                     {totalPieValue}
                   </span>
-                  <span className="text-[0.625rem] font-accent font-medium text-muted-foreground uppercase tracking-widest">
+                  <span className="font-accent text-xs font-medium uppercase tracking-widest text-muted-foreground">
                     Cantieri
                   </span>
                 </div>

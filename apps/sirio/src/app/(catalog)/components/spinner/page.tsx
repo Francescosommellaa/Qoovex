@@ -59,7 +59,7 @@ export default function SpinnerCatalogPage() {
                   </Badge>
                 </div>
 
-                <div className="flex items-center gap-2 pt-1">
+                <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
                   <Button size="sm" onClick={handleSimulateProcess}>
                     Simula caricamento file
                   </Button>
@@ -90,42 +90,42 @@ export default function SpinnerCatalogPage() {
             <Specimen title="Ring (Default Sweep)">
               <div className="flex flex-col items-center gap-2 py-2">
                 <Spinner variant="ring" size="lg" color="primary" />
-                <span className="text-[0.6875rem] font-mono text-muted-foreground">ring</span>
+                <span className="text-xs font-mono text-muted-foreground">ring</span>
               </div>
             </Specimen>
 
             <Specimen title="Track (Dual Arc Gauge)">
               <div className="flex flex-col items-center gap-2 py-2">
                 <Spinner variant="track" size="lg" color="primary" />
-                <span className="text-[0.6875rem] font-mono text-muted-foreground">track</span>
+                <span className="text-xs font-mono text-muted-foreground">track</span>
               </div>
             </Specimen>
 
             <Specimen title="Bars (iOS Radial)">
               <div className="flex flex-col items-center gap-2 py-2">
                 <Spinner variant="bars" size="lg" color="primary" />
-                <span className="text-[0.6875rem] font-mono text-muted-foreground">bars</span>
+                <span className="text-xs font-mono text-muted-foreground">bars</span>
               </div>
             </Specimen>
 
             <Specimen title="Orbit (Concentric Circles)">
               <div className="flex flex-col items-center gap-2 py-2">
                 <Spinner variant="orbit" size="lg" color="primary" />
-                <span className="text-[0.6875rem] font-mono text-muted-foreground">orbit</span>
+                <span className="text-xs font-mono text-muted-foreground">orbit</span>
               </div>
             </Specimen>
 
             <Specimen title="Pulse (Ambient Beacon)">
               <div className="flex flex-col items-center gap-2 py-2">
                 <Spinner variant="pulse" size="lg" color="primary" />
-                <span className="text-[0.6875rem] font-mono text-muted-foreground">pulse</span>
+                <span className="text-xs font-mono text-muted-foreground">pulse</span>
               </div>
             </Specimen>
 
             <Specimen title="Dots (Wave Bouncing)">
               <div className="flex flex-col items-center gap-2 py-2">
                 <Spinner variant="dots" size="lg" color="primary" />
-                <span className="text-[0.6875rem] font-mono text-muted-foreground">dots</span>
+                <span className="text-xs font-mono text-muted-foreground">dots</span>
               </div>
             </Specimen>
           </SpecimenGrid>
@@ -146,18 +146,18 @@ export default function SpinnerCatalogPage() {
             </Specimen>
 
             <Specimen title="Velocità di Animazione">
-              <div className="flex items-center justify-around py-2">
+              <div className="flex flex-wrap items-center justify-center gap-6 py-2 sm:justify-around">
                 <div className="flex flex-col items-center gap-1.5">
                   <Spinner speed="slow" size="lg" color="primary" />
-                  <span className="text-[0.65rem] font-mono text-muted-foreground">slow (1.5s)</span>
+                  <span className="text-xs font-mono text-muted-foreground">slow (1.5s)</span>
                 </div>
                 <div className="flex flex-col items-center gap-1.5">
                   <Spinner speed="normal" size="lg" color="primary" />
-                  <span className="text-[0.65rem] font-mono text-muted-foreground">normal (1.0s)</span>
+                  <span className="text-xs font-mono text-muted-foreground">normal (1.0s)</span>
                 </div>
                 <div className="flex flex-col items-center gap-1.5">
                   <Spinner speed="fast" size="lg" color="primary" />
-                  <span className="text-[0.65rem] font-mono text-muted-foreground">fast (0.6s)</span>
+                  <span className="text-xs font-mono text-muted-foreground">fast (0.6s)</span>
                 </div>
               </div>
             </Specimen>

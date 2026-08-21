@@ -13,15 +13,16 @@ export function Specimen({
   visualId?: string;
 }) {
   return (
-    <div className={cn("group flex flex-col gap-2", className)}>
+    <div className={cn("group flex min-w-0 flex-col gap-2", className)}>
       {title && <h3 className="text-sm font-medium text-foreground">{title}</h3>}
       <div
-        className="relative flex min-h-[150px] w-full items-center justify-center rounded-lg border bg-background p-6 shadow-xs overflow-hidden sm:p-10"
+        className="relative flex min-h-[150px] min-w-0 w-full items-center justify-center rounded-lg border bg-background p-4 shadow-xs sm:p-6 lg:p-10"
         data-visual-specimen={visualId}
       >
-        {/* Neutral background pattern or styling could go here, for now it's plain background */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-30" />
-        <div className="relative z-10 flex w-full flex-col items-center justify-center gap-4">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]" aria-hidden="true">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-30" />
+        </div>
+        <div className="relative z-10 flex min-w-0 w-full flex-col items-center justify-center gap-4">
           {children}
         </div>
       </div>
@@ -44,8 +45,8 @@ export function SpecimenGrid({
         "grid gap-4",
         {
           "grid-cols-1": cols === 1,
-          "grid-cols-1 sm:grid-cols-2": cols === 2,
-          "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3": cols === 3,
+          "grid-cols-1 lg:grid-cols-2": cols === 2,
+          "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3": cols === 3,
         },
         className
       )}

@@ -143,7 +143,7 @@ export default function CollapsibleCatalogPage() {
                           <span className="text-sm font-semibold font-accent tracking-tight text-foreground">
                             {item.question}
                           </span>
-                          <Badge variant="outline" size="sm" className="w-fit text-[0.65rem] font-mono">
+                          <Badge variant="outline" size="sm" className="w-fit font-mono text-xs">
                             {item.category}
                           </Badge>
                         </div>
@@ -179,8 +179,8 @@ export default function CollapsibleCatalogPage() {
             <Specimen title="Pannello Filtri Cantiere con Contatore Attivo">
               <Collapsible open={openFilters} onOpenChange={setOpenFilters} className="w-full">
                 <Card className="border border-border/80 bg-card/60 backdrop-blur-md">
-                  <CardHeader className="flex flex-row items-center justify-between p-4 pb-3">
-                    <div className="flex items-center gap-2">
+                  <CardHeader className="flex flex-col items-stretch gap-3 p-4 pb-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex min-w-0 flex-wrap items-center gap-2">
                       <IconFilter className="size-4 text-primary" />
                       <CardTitle className="text-sm font-semibold font-accent">
                         Filtri Avanzati Ricerca
@@ -192,7 +192,7 @@ export default function CollapsibleCatalogPage() {
 
                     <CollapsibleTrigger
                       render={
-                        <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs">
+                        <Button variant="ghost" size="sm" className="h-8 w-full gap-1.5 text-xs sm:w-auto">
                           <span>{openFilters ? "Nascondi Filtri" : "Mostra Filtri"}</span>
                           <IconChevronDown
                             className={`size-3.5 transition-transform duration-300 ${
@@ -256,8 +256,8 @@ export default function CollapsibleCatalogPage() {
           <SpecimenGrid cols={1}>
             <Specimen title="Cartella Documenti con Sezioni Espandibili">
               <Card className="border border-border/80 bg-card/60 backdrop-blur-md p-4 space-y-3">
-                <div className="flex items-center justify-between border-b border-border/60 pb-3">
-                  <div className="flex items-center gap-2">
+                <div className="flex flex-col items-start gap-3 border-b border-border/60 pb-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex min-w-0 items-center gap-2">
                     <IconFolderCheck className="size-4 text-success" />
                     <span className="text-sm font-semibold font-accent">
                       Documenti del lavoro Via Roma 42
@@ -289,13 +289,13 @@ export default function CollapsibleCatalogPage() {
                     />
                   </div>
                   <CollapsibleContent className="pt-2">
-                    <div className="ml-5 space-y-1.5 border-l-2 border-border/60 pl-3 text-xs text-muted-foreground">
-                      <div className="flex items-center justify-between rounded-md p-1.5 hover:bg-muted/30">
-                        <span>• Preventivo_aggiornato.pdf</span>
+                    <div className="space-y-1.5 border-l-2 border-border/60 pl-3 text-xs text-muted-foreground sm:ml-5">
+                      <div className="flex flex-col items-start gap-2 rounded-md p-1.5 hover:bg-muted/30 sm:flex-row sm:items-center sm:justify-between">
+                        <span className="min-w-0 break-all">• Preventivo_aggiornato.pdf</span>
                         <Badge variant="success" size="sm">Condiviso</Badge>
                       </div>
-                      <div className="flex items-center justify-between rounded-md p-1.5 hover:bg-muted/30">
-                        <span>• Foto_sopralluogo.jpg</span>
+                      <div className="flex flex-col items-start gap-2 rounded-md p-1.5 hover:bg-muted/30 sm:flex-row sm:items-center sm:justify-between">
+                        <span className="min-w-0 break-all">• Foto_sopralluogo.jpg</span>
                         <Badge variant="info" size="sm">Caricato</Badge>
                       </div>
                     </div>
