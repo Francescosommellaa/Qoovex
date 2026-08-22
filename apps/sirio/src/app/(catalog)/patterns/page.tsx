@@ -1,27 +1,35 @@
 import Link from "next/link";
 import { Badge } from "@qoovex/ui/components/badge";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@qoovex/ui/components/card";
+import { Separator } from "@qoovex/ui/components/separator";
 import { IconArrowRight } from "@tabler/icons-react";
 import { PageHeader } from "@/components/page-header";
 
 const patternDefinition = [
-  ["Quando usarlo", "Il contesto e il problema UX per cui la composizione è appropriata."],
-  ["Informazioni", "I contenuti necessari per comprendere stato, contesto e prossimo passo."],
-  ["Azioni", "La gerarchia tra azione primaria, alternative e azioni non disponibili."],
-  ["Stati", "Gli stati reali da rappresentare, inclusi attesa, errore, vuoto e completamento."],
-  ["Accessibilità", "Semantica, tastiera, focus e annunci necessari per usare il pattern."],
-  ["Errori da evitare", "Le composizioni ambigue o tecniche che il pattern non deve introdurre."],
+  { term: "Quando usarlo", description: "Il contesto e il problema UX per cui la composizione è appropriata." },
+  { term: "Informazioni", description: "I contenuti necessari per comprendere stato, contesto e prossimo passo." },
+  { term: "Azioni", description: "La gerarchia tra azione primaria, alternative e azioni non disponibili." },
+  { term: "Stati", description: "Gli stati reali da rappresentare, inclusi attesa, errore, vuoto e completamento." },
+  { term: "Accessibilità", description: "Semantica, tastiera, focus e annunci necessari per usare il pattern." },
+  { term: "Errori da evitare", description: "Le composizioni ambigue o tecniche che il pattern non deve introdurre." },
 ] as const;
 
 const patterns = [
-  { name: "Work Queue", href: "/patterns/work-queue", status: "Documentato" },
-  { name: "Timeline Event", href: "/patterns/timeline-event", status: "Documentato" },
-  { name: "Status Presentation", href: "/patterns/status-presentation", status: "Documentato" },
-  { name: "Form Validation", href: "/patterns/form-validation", status: "Documentato" },
-  { name: "Money", href: "/patterns/money", status: "Documentato" },
-  { name: "Proposal Review", href: "/patterns/proposal-review", status: "Documentato" },
-  { name: "Confirmation Review", status: "Previsto" },
-  { name: "Contextual Attachment", href: "/patterns/contextual-attachment", status: "Documentato" },
-  { name: "Invitation", href: "/patterns/invitation", status: "Documentato" },
+  { name: "Work Queue", href: "/patterns/work-queue", status: "Documentato" as const, desc: "Coda di lavorazioni con priorità e assegnazione" },
+  { name: "Timeline Event", href: "/patterns/timeline-event", status: "Documentato" as const, desc: "Eventi cronologici di avanzamento cantiere" },
+  { name: "Status Presentation", href: "/patterns/status-presentation", status: "Documentato" as const, desc: "Rappresentazione unificata dello stato operativo" },
+  { name: "Form Validation", href: "/patterns/form-validation", status: "Documentato" as const, desc: "Validazione contestuale e messaggi d'errore" },
+  { name: "Money", href: "/patterns/money", status: "Documentato" as const, desc: "Formattazione e input di importi monetari" },
+  { name: "Proposal Review", href: "/patterns/proposal-review", status: "Documentato" as const, desc: "Revisione e approvazione preventivi ed extra" },
+  { name: "Contextual Attachment", href: "/patterns/contextual-attachment", status: "Documentato" as const, desc: "Allegati tecnici vincolati a fasi e note" },
+  { name: "Invitation", href: "/patterns/invitation", status: "Documentato" as const, desc: "Invito collaboratori e clienti allo spazio cantiere" },
+  { name: "Confirmation Review", status: "Previsto" as const, desc: "Conferma guidata per operazioni irreversibili" },
 ] as const;
 
 export default function PatternsOverviewPage() {
@@ -33,51 +41,86 @@ export default function PatternsOverviewPage() {
       />
 
       <div className="flex flex-col gap-12">
+        {/* ── 1. Che cosa definisce un pattern ─────────── */}
         <section aria-labelledby="pattern-definition-title">
-          <div className="max-w-3xl">
+          <div className="mb-5 max-w-3xl">
             <h2 id="pattern-definition-title" className="text-2xl font-semibold tracking-tight">
               Che cosa definisce un pattern
             </h2>
-            <p className="mt-2 leading-7 text-muted-foreground">
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               Un pattern documenta le decisioni di composizione necessarie per una situazione ricorrente,
               senza duplicare l’API o gli esempi dei singoli componenti.
             </p>
           </div>
 
-          <dl className="mt-6 divide-y divide-border rounded-xl border bg-card px-4 sm:px-6">
-            {patternDefinition.map(([term, description]) => (
-              <div key={term} className="grid gap-1 py-4 sm:grid-cols-[12rem_1fr] sm:gap-6">
-                <dt className="font-semibold text-foreground">{term}</dt>
-                <dd className="leading-6 text-muted-foreground">{description}</dd>
-              </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {patternDefinition.map((p) => (
+              <Card key={p.term} size="sm">
+                <CardHeader>
+                  <CardTitle className="text-sm font-semibold">{p.term}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-xs leading-relaxed">
+                    {p.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
             ))}
-          </dl>
+          </div>
         </section>
 
+        <Separator />
+
+        {/* ── 2. Indice dei Pattern ────────────────────── */}
         <section aria-labelledby="pattern-index-title">
-          <div className="max-w-3xl">
+          <div className="mb-5 max-w-3xl">
             <h2 id="pattern-index-title" className="text-2xl font-semibold tracking-tight">
               Indice dei pattern
             </h2>
-            <p className="mt-2 leading-7 text-muted-foreground">
-              I pattern documentati sono disponibili come pagine dedicate. Gli altri restano indicizzati
-              senza anticipare regole o comportamenti non ancora verificati.
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              I pattern documentati sono disponibili come pagine dedicate con specimen interattivi.
             </p>
           </div>
 
-          <ul className="mt-6 divide-y divide-border rounded-xl border bg-card" aria-label="Indice dei pattern">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {patterns.map((pattern) => (
-              <li key={pattern.name} className="flex min-h-14 items-center justify-between gap-4 px-4 py-3 sm:px-6">
-                {"href" in pattern ? (
-                  <Link className="group inline-flex min-h-11 items-center gap-2 font-medium text-foreground underline-offset-4 hover:underline focus-visible:rounded-sm" href={pattern.href}>
-                    {pattern.name}
-                    <IconArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
-                  </Link>
-                ) : <span className="font-medium text-foreground">{pattern.name}</span>}
-                <Badge variant={pattern.status === "Documentato" ? "success" : "secondary"}>{pattern.status}</Badge>
-              </li>
+              "href" in pattern && pattern.href ? (
+                <Link
+                  key={pattern.name}
+                  href={pattern.href}
+                  className="group flex flex-col justify-between gap-3 rounded-xl border border-border bg-card p-4 transition-all hover:border-foreground/20 hover:shadow-xs"
+                >
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-sm font-semibold text-foreground group-hover:underline underline-offset-4">
+                        {pattern.name}
+                      </span>
+                      <IconArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground" />
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{pattern.desc}</p>
+                  </div>
+                  <Badge variant="success" size="sm" className="w-fit font-mono text-2xs">
+                    {pattern.status}
+                  </Badge>
+                </Link>
+              ) : (
+                <div
+                  key={pattern.name}
+                  className="flex flex-col justify-between gap-3 rounded-xl border border-dashed border-border/70 bg-muted/20 p-4"
+                >
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm font-semibold text-muted-foreground">
+                      {pattern.name}
+                    </span>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{pattern.desc}</p>
+                  </div>
+                  <Badge variant="secondary" size="sm" className="w-fit font-mono text-2xs">
+                    {pattern.status}
+                  </Badge>
+                </div>
+              )
             ))}
-          </ul>
+          </div>
         </section>
       </div>
     </div>

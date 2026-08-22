@@ -4,6 +4,19 @@
 @source "../src/**/*.{ts,tsx}";
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Interaction-state aliases normalize native, ARIA and Base UI selectors.
+ * They intentionally carry no visual declaration: components own their styling.
+ */
+@custom-variant qv-disabled (&:is(:disabled, [data-disabled], [aria-disabled="true"]));
+@custom-variant qv-readonly (&:is([readonly], [data-readonly], [aria-readonly="true"]));
+@custom-variant qv-selected (&:is([data-selected], [data-state="selected"], [aria-selected="true"], [data-slot="toggle"][data-pressed]));
+@custom-variant qv-checked (&:is(:checked, [data-checked], [aria-checked="true"]));
+@custom-variant qv-indeterminate (&:is(:indeterminate, [data-indeterminate], [aria-checked="mixed"]));
+@custom-variant qv-open (&:is([data-open], [data-panel-open], [data-popup-open], [aria-expanded="true"]));
+@custom-variant qv-invalid (&:is(:user-invalid, [data-invalid], [aria-invalid="true"]));
+@custom-variant qv-loading (&:is([data-loading="true"], [data-pending="true"], [aria-busy="true"]));
+
 @layer base {
   * { @apply border-border outline-ring/50; }
   html { color-scheme: light; scroll-behavior: smooth; scroll-padding-top: 6rem; }
@@ -12,7 +25,58 @@
   a, button, input, select { -webkit-tap-highlight-color: transparent; }
   a { text-decoration-skip-ink: auto; text-underline-position: under; }
   img { -webkit-user-drag: none; user-select: none; }
-  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+}
+
+/* ARRAY ships at 400/600/700 only; never synthesize an unavailable weight. */
+.font-accent {
+  font-synthesis-weight: none;
+}
+
+/*
+ * Icon sizing is semantic and intentionally does not wrap Tabler. These
+ * classes own only the SVG box; alignment, color and accessible naming stay
+ * with the component that knows the icon's role.
+ */
+.qv-icon-compact {
+  width: var(--icon-compact);
+  height: var(--icon-compact);
+}
+
+.qv-icon-default {
+  width: var(--icon);
+  height: var(--icon);
+}
+
+.qv-icon-emphasized {
+  width: var(--icon-emphasized);
+  height: var(--icon-emphasized);
+}
+
+.qv-icon-illustrative {
+  width: var(--icon-illustrative);
+  height: var(--icon-illustrative);
+}
+
+/*
+ * Canonical focus owner. This rule is intentionally unlayered so local Tailwind
+ * outline/ring utilities cannot replace the shared geometry. Existing component
+ * shadows remain; only Tailwind ring channels are neutralized while focus is visible.
+ */
+:is(
+  :focus-visible,
+  [data-focus-owner="composite"]:has([data-focus-target="composite"]:focus-visible)
+) {
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-inset-ring-shadow: 0 0 #0000;
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* A composite owns the visual focus only for descendants that delegate it explicitly. */
+[data-focus-owner="composite"] [data-focus-target="composite"]:focus-visible {
+  outline: none;
+  outline-offset: 0;
 }
 
 [data-selection="none"],
@@ -26,7 +90,14 @@
   color: var(--selection-foreground);
 }
 
-@media (hover: none), (pointer: coarse) {
+/*
+ * Pointer/touch target contract.
+ *
+ * `pointer` describes the primary pointing device; `any-pointer` keeps the
+ * minimum target usable on hybrid hardware without disabling fine-pointer
+ * hover. Inline links remain the intentional prose exception.
+ */
+@media (hover: none), (pointer: coarse), (any-pointer: coarse) {
   .qv-touch-target:not(.qv-touch-target-inline) {
     min-width: var(--touch-target-min);
     min-height: var(--touch-target-min);
@@ -34,6 +105,23 @@
 
   .qv-touch-target-field {
     min-height: var(--touch-target-min);
+  }
+
+  /*
+   * Compact controls keep their visual geometry and expose a centered 44px
+   * hit area. Consumers must reserve an equally large cell so sibling targets
+   * do not overlap; this class is not safe inside clipping containers.
+   */
+  .qv-touch-target-compact::after {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
+    content: "";
+    pointer-events: auto;
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -259,7 +347,7 @@
   }
 
   /* Preserve Base UI lifecycle while making spatial surface changes immediate. */
-  :where(
+  :is(
     .animate-in,
     .animate-out,
     [data-open][class*="animate"],
@@ -269,7 +357,7 @@
     animation-iteration-count: 1 !important;
   }
 
-  :where(
+  :is(
     [data-open][class*="transition"],
     [data-closed][class*="transition"],
     [data-starting-style][class*="transition"],
@@ -306,7 +394,12 @@
 
 
 @media (forced-colors: active) {
-  :focus-visible { outline: 2px solid CanvasText; }
+  :where(
+    :focus-visible,
+    [data-focus-owner="composite"]:has([data-focus-target="composite"]:focus-visible)
+  ) {
+    outline-color: Highlight;
+  }
 
   .tabs__hover-indicator,
   .dropdown-menu__hover-indicator,

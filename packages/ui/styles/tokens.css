@@ -62,7 +62,11 @@
   --safe-area-right: env(safe-area-inset-right, 0px);
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --safe-area-left: env(safe-area-inset-left, 0px);
+  /* Icon roles: compact text -> default control -> emphasis -> illustrative state. */
+  --icon-compact: 0.875rem;
   --icon: 1rem;
+  --icon-emphasized: 1.25rem;
+  --icon-illustrative: 1.75rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -74,6 +78,11 @@
   --text-sm: 0.875rem;
   --leading-tight: 1.25;
   --z-sticky: 40;
+  /* Focus geometry is immediate and shared by direct controls and composite owners. */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--ring);
+  /* Motion roles: immediate perception -> local feedback -> persistent state -> spatial surface. */
   --motion-duration-instant: 100ms;
   --motion-duration-feedback: 160ms;
   --motion-duration-state: 200ms;

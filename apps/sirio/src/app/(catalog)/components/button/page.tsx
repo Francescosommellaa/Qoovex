@@ -76,7 +76,7 @@ export default function ButtonPage() {
                   onClick={() => setStarred(!starred)}
                   aria-label={starred ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
                   aria-pressed={starred}
-                  className={starred ? "text-warning-emphasis border-warning/40 bg-warning/10" : ""}
+                  className={starred ? "text-warning-emphasis border-warning/40 bg-warning-surface" : ""}
                 >
                   {starred ? (
                     <IconStarFilled aria-hidden="true" className="size-4 animate-in zoom-in-75 text-warning-emphasis" />

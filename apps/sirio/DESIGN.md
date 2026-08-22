@@ -25,14 +25,14 @@ typography:
     letterSpacing: "-0.025em"
   title:
     fontFamily: "General Sans, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1.5rem"
+    fontSize: "1.25rem"
     fontWeight: 600
-    lineHeight: 1.333
-    letterSpacing: "-0.025em"
+    lineHeight: 1.4
+    letterSpacing: "-0.02em"
   body:
     fontFamily: "General Sans, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1rem"
-    fontWeight: 400
+    fontWeight: 600
     lineHeight: 1.75
     letterSpacing: "normal"
   label:
@@ -40,7 +40,7 @@ typography:
     fontSize: "0.75rem"
     fontWeight: 400
     lineHeight: 1.333
-    letterSpacing: "0.1em"
+    letterSpacing: "0.08em"
 rounded:
   sm: "0.25rem"
   md: "0.375rem"
@@ -131,9 +131,10 @@ Sirio usa la palette Qoovex senza reinterpretarla: Calce/Inchiostro per struttur
 
 - **Display** (600, `2.25rem`, 1.111): copertine e specimen tipografici di massimo impatto.
 - **Headline** (600, `1.875rem`, 1.2): titolo principale della pagina catalogo.
-- **Title** (600, `1.5rem`, 1.333): gruppi di token e sezioni di componenti.
+- **Title** (600, `1.25rem`, 1.4): gruppi di token e sezioni di componenti.
 - **Body** (400, `1rem`, 1.75): spiegazioni e campioni leggibili.
-- **Label** (400, `0.75rem`, tracking `0.1em`): Array per nomi tecnici, codici e metadati brevi.
+- **Compact / control** (500, `0.875rem`, 1.429): controlli e annotazioni operative in General Sans.
+- **Label / metadata** (600, `0.75rem`, 1.333, tracking `0.08em`): Array per nomi tecnici, codici e metadati brevi.
 
 ### Named Rules
 
@@ -173,7 +174,7 @@ La sidebar può diventare una colonna iconica senza cambiare forma dei controlli
 
 - **Shape:** `0.5rem`, altezza base `2rem`, varianti compatte per il catalogo.
 - **Primary:** Inchiostro su Calce inversa; testo medio e icona Tabler da `1rem`.
-- **Hover / Focus:** variazione tonale, scala lieve e ring leggibile; ogni stato compare nello specimen.
+- **Hover / Focus:** variazione tonale e scala lieve per il pointer; focus usa l’outline condiviso immediato e compare nello specimen.
 - **Secondary / Ghost / Destructive:** dimostrati separatamente, con semantica e gerarchia invarianti.
 
 ### Chips
@@ -191,8 +192,16 @@ La sidebar può diventare una colonna iconica senza cambiare forma dei controlli
 ### Inputs / Fields
 
 - **Style:** altezza `2.25rem`, bordo input, fondo trasparente, raggio `0.5rem`.
-- **Focus:** bordo ring più ring sottile; lo specimen include label e messaggio.
+- **Focus:** bordo semantico opzionale più outline condiviso da `2px`/`2px`; lo specimen include label e messaggio.
 - **Error / Disabled:** stati visibili e descritti, senza affidarsi soltanto al colore.
+
+### Pointer + Touch proof
+
+La foundation dedicata misura separatamente controllo visuale, hit area e cella allocata. I target compatti restano centrati in celle da `44px` senza sovrapposizione; hover e press vengono prodotti dal browser, non da toggle dimostrativi. La stessa proof deve restare usabile con pointer fine, coarse, hardware ibrido, tastiera e reduced motion, mantenendo invariata la geometria di focus e activation.
+
+### Icon proof
+
+La pagina Icone mostra la scala Tabler condivisa `14/16/20/28px` con box misurabili, allineamento su testo `xs/sm/base`, icon-only control e leading multilinea. Decorative, informative standalone e status sono esempi separati; `currentColor`, stroke standard, tema e forced colors restano osservabili. La proof Motion anima soltanto il chevron state-driven e rende visibili rest, interaction, transition e settled; reduced motion usa replacement istantaneo con stato e copy equivalenti.
 
 ### Navigation
 

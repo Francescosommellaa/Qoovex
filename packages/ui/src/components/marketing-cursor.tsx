@@ -2,8 +2,9 @@
 
 import * as React from "react";
 
+import { PREFERS_REDUCED_MOTION_QUERY } from "#lib/motion";
+
 const finePointerQuery = "(hover: hover) and (pointer: fine)";
-const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
 const forcedColorsQuery = "(forced-colors: active)";
 const interactiveSelector =
   'a[href], button, summary, [role="button"], [data-cursor-label]';
@@ -134,7 +135,7 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
 
     const root = document.documentElement;
     const finePointer = window.matchMedia(finePointerQuery);
-    const reducedMotion = window.matchMedia(reducedMotionQuery);
+    const reducedMotion = window.matchMedia(PREFERS_REDUCED_MOTION_QUERY);
     const forcedColors = window.matchMedia(forcedColorsQuery);
     const configuredPathnames = pathnamesKey ? pathnamesKey.split("\n") : null;
     const pointer = { x: -80, y: -80 };

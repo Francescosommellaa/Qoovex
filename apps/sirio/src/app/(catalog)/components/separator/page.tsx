@@ -37,17 +37,17 @@ export default function SeparatorCatalogPage() {
 
             <Specimen title="Verticale in Toolbar (Vertical)">
               <div className="flex items-center gap-2 rounded-lg border border-border/80 bg-card p-2">
-                <Button variant="ghost" size="icon-sm">
+                <Button variant="ghost" size="icon-sm" aria-label="Copia documento">
                   <IconCopy className="size-4" />
                 </Button>
-                <Button variant="ghost" size="icon-sm">
+                <Button variant="ghost" size="icon-sm" aria-label="Condividi link">
                   <IconShare className="size-4" />
                 </Button>
                 <Separator orientation="vertical" className="h-6" />
-                <Button variant="ghost" size="icon-sm">
+                <Button variant="ghost" size="icon-sm" aria-label="Scarica allegato">
                   <IconDownload className="size-4" />
                 </Button>
-                <Button variant="ghost" size="icon-sm" className="text-destructive">
+                <Button variant="ghost" size="icon-sm" className="text-destructive" aria-label="Elimina elemento">
                   <IconTrash className="size-4" />
                 </Button>
               </div>

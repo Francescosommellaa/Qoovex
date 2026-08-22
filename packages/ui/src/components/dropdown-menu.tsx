@@ -286,7 +286,7 @@ function DropdownMenuCheckboxItem({
         data-slot="dropdown-menu-checkbox-item-indicator"
       >
         <MenuPrimitive.CheckboxItemIndicator>
-          <IconCheck className="size-4" />
+          <IconCheck aria-hidden="true" className="size-4" />
         </MenuPrimitive.CheckboxItemIndicator>
       </span>
       {children}
@@ -342,7 +342,7 @@ function DropdownMenuRadioItem({
         data-slot="dropdown-menu-radio-item-indicator"
       >
         <MenuPrimitive.RadioItemIndicator>
-          <IconCheck className="size-4" />
+          <IconCheck aria-hidden="true" className="size-4" />
         </MenuPrimitive.RadioItemIndicator>
       </span>
       {children}
@@ -390,7 +390,7 @@ function DropdownMenuShortcut({
     <span
       data-slot="dropdown-menu-shortcut"
       className={cn(
-        "ml-auto hidden md:inline-block font-mono text-[0.6875rem] tracking-wider text-muted-foreground/70 font-medium select-none truncate max-w-[5rem]",
+        "ml-auto hidden md:inline-block font-mono text-xs tracking-wider text-muted-foreground/70 font-medium select-none truncate max-w-[5rem]",
         className
       )}
       {...props}

@@ -8,45 +8,43 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuGroup,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
   DropdownMenuCheckboxItem,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from "@qoovex/ui/components/dropdown-menu";
 import { Button } from "@qoovex/ui/components/button";
 import {
-  IconDotsVertical,
+  IconBuildingStore,
   IconUser,
   IconSettings,
-  IconLogout,
-  IconBuildingStore,
-  IconShare,
+  IconTrash,
   IconDownload,
+  IconShare,
+  IconFilter,
+  IconUserCheck,
   IconFileTypePdf,
   IconFileTypeCsv,
   IconFileTypeXls,
-  IconTrash,
-  IconFilter,
-  IconUserCheck,
 } from "@tabler/icons-react";
 
-export default function DropdownMenuPage() {
+export default function DropdownMenuCatalogPage() {
   const [showInternal, setShowInternal] = useState(true);
-  const [showShared, setShowShared] = useState(true);
+  const [showShared, setShowShared] = useState(false);
   const [role, setRole] = useState("company");
 
   return (
     <div className="mx-auto w-full max-w-6xl">
       <PageHeader
         title="Dropdown Menu"
-        description="Menu contestuale a comparsa con supporto ad icone, sottomenu nidificati, checkbox, radio e scorciatoie da tastiera."
-        importPath="import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSub, ... } from '@qoovex/ui/components/dropdown-menu'"
+        description="Menu a comparsa per raggruppare azioni secondarie, sottomenu di esportazione e filtri a discesa con supporto a scorciatoie e navigazione a tastiera."
+        importPath="import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@qoovex/ui/components/dropdown-menu'"
       />
 
       <div className="flex flex-col gap-12">
@@ -56,10 +54,14 @@ export default function DropdownMenuPage() {
           <SpecimenGrid cols={2}>
             <Specimen title="Menu Azioni Cantiere con Scorciatoie" visualId="dropdown-open">
               <DropdownMenu>
-                <DropdownMenuTrigger render={<Button variant="outline" />}>
-                  <IconBuildingStore />
-                  <span>Azioni Cantiere</span>
-                </DropdownMenuTrigger>
+                <DropdownMenuTrigger
+                  render={
+                    <Button variant="outline">
+                      <IconBuildingStore />
+                      <span>Azioni Cantiere</span>
+                    </Button>
+                  }
+                />
                 <DropdownMenuContent className="w-56">
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>JOB-SITE #8942-2026</DropdownMenuLabel>
@@ -89,10 +91,14 @@ export default function DropdownMenuPage() {
 
             <Specimen title="Sottomenu Nidificato (Esporta Dati)">
               <DropdownMenu>
-                <DropdownMenuTrigger render={<Button variant="secondary" />}>
-                  <IconDownload />
-                  <span>Esporta Report</span>
-                </DropdownMenuTrigger>
+                <DropdownMenuTrigger
+                  render={
+                    <Button variant="secondary">
+                      <IconDownload />
+                      <span>Esporta Report</span>
+                    </Button>
+                  }
+                />
                 <DropdownMenuContent className="w-56">
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>Formato di Export</DropdownMenuLabel>
@@ -134,10 +140,14 @@ export default function DropdownMenuPage() {
           <SpecimenGrid cols={2}>
             <Specimen title="Filtri Checkbox (Visibilità Contenuti)">
               <DropdownMenu>
-                <DropdownMenuTrigger render={<Button variant="outline" />}>
-                  <IconFilter />
-                  <span>Filtra Elementi</span>
-                </DropdownMenuTrigger>
+                <DropdownMenuTrigger
+                  render={
+                    <Button variant="outline">
+                      <IconFilter />
+                      <span>Filtra Elementi</span>
+                    </Button>
+                  }
+                />
                 <DropdownMenuContent className="w-60">
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>Filtri Cronologia</DropdownMenuLabel>
@@ -161,10 +171,14 @@ export default function DropdownMenuPage() {
 
             <Specimen title="Selezione Ruolo (Radio Group)">
               <DropdownMenu>
-                <DropdownMenuTrigger render={<Button variant="outline" />}>
-                  <IconUserCheck />
-                  <span>Ruolo Attivo</span>
-                </DropdownMenuTrigger>
+                <DropdownMenuTrigger
+                  render={
+                    <Button variant="outline">
+                      <IconUserCheck />
+                      <span>Ruolo Attivo</span>
+                    </Button>
+                  }
+                />
                 <DropdownMenuContent className="w-56">
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>Seleziona Ruolo</DropdownMenuLabel>

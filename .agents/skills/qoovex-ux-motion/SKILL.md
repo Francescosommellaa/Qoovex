@@ -5,7 +5,7 @@ description: Use when planning, implementing, reviewing, or debugging Qoovex int
 
 # Qoovex UX Motion
 
-Progetta interaction design, motion UX e qualità comportamentale per Qoovex. Questa skill non è una libreria di animazioni e non rende Motion obbligatorio.
+Progetta interaction design, motion UX e qualità comportamentale per Qoovex. Motion è una tecnologia first-class per i componenti interattivi quando aumenta qualità percepibile o controllo del lifecycle; non è un requisito universale né una licenza per animare decorativamente.
 
 ## Autorità e ruolo
 
@@ -49,11 +49,11 @@ Qoovex protocol
 
 ## Baseline da verificare
 
-Il repository usa Base UI come behavioral foundation condivisa. `@qoovex/ui` dichiara il package moderno `motion`, ma la sua sola presenza non giustifica un import runtime. Non introdurre `framer-motion` come nuova dipendenza diretta. Prima di affidarti alla baseline, verifica manifest, import, primitive, CSS, token e consumer correnti.
+Il repository usa Base UI come behavioral foundation condivisa e il package moderno `motion` tramite `motion/react`. `packages/ui/src/lib/motion.ts` proietta i token CSS canonici in transizioni riutilizzabili senza duplicarne i valori numerici. La sola presenza del package non giustifica un effetto, ma il costo di un import non è una ragione ideologica per rifiutare Motion quando migliora il comportamento. Non introdurre `framer-motion` come nuova dipendenza diretta. Prima di affidarti alla baseline, verifica manifest, import, primitive, CSS, token e consumer correnti.
 
 ## Regola fondamentale
 
-Ammetti motion soltanto quando migliora concretamente almeno uno di questi aspetti:
+Usa motion quando migliora concretamente almeno uno di questi aspetti:
 
 - feedback;
 - causalità;
@@ -75,7 +75,7 @@ Se non sai indicare il beneficio UX verificabile, non animare. La disponibilità
 - Identifica l'azione primaria e la risposta attesa dall'utente.
 - Verifica che il feedback sia comprensibile anche senza motion.
 - Formula in una frase quale problema di feedback, causalità, continuità o orientamento risolverebbe il movimento.
-- Se il comportamento statico è già chiaro e immediato, preferiscilo.
+- Se il comportamento statico è già chiaro e immediato, verifica comunque se precisione, continuità, interruption o lifecycle traggono un beneficio percepibile da Motion; scegli CSS soltanto quando quel controllo aggiuntivo non serve.
 
 ### Input
 
@@ -96,27 +96,36 @@ Non inventare stati, optimistic update o capability che il flusso non supporta.
 
 Verifica quando pertinenti: enter, exit, cambio di stato, cambio di layout, interruzione, input rapido ripetuto, inversione, unmount, navigazione e trasferimento del focus.
 
+Per ogni componente interattivo valuta esplicitamente prima dell'implementazione:
+
+1. quali elementi meritano Motion e quale beneficio concreto produce;
+2. il lifecycle `rest → hover/focus → press → transition → settled`;
+3. interruzione e reversal dalla posizione corrente;
+4. rapid repeated interaction;
+5. layout animation o shared-element continuity, se pertinenti;
+6. reduced motion in CSS e JavaScript;
+7. mouse, touch/coarse pointer e tastiera;
+8. costo runtime e bundle nel placement reale.
+
 ## Scelta della tecnologia
 
-Scegli il livello minimo sufficiente, in questo ordine.
+La scelta separa responsabilità; non è una scala in cui Motion arriva soltanto dopo il fallimento di CSS.
 
-### Nessuna animazione
+### Base UI: comportamento e stato reale
 
-Usala quando motion non aggiunge comprensione, feedback o continuità. È una scelta progettuale valida.
+Usa comportamento e stati esposti dalle primitive Base UI. Non ricostruire manualmente focus management, keyboard navigation, overlay semantics, open/closed behavior, dismissal, ARIA o interaction state quando la primitive li fornisce già. Motion segue la state machine reale tramite `render`, attributi o stato controllato della primitive; non la sostituisce.
 
-### CSS, Tailwind o primitive esistenti
+### CSS e Tailwind: presentazione statica e transizioni banali
 
-Preferiscili per transizioni semplici, locali, state-driven e facilmente interrompibili. Riusa ciò che il repository possiede già; non creare una seconda foundation.
+Usali per styling statico e transizioni visuali locali davvero banali, con proprietà esplicite e interruzione nativa sufficiente. Nessuna animazione resta corretta quando non aggiunge feedback, comprensione, continuità o controllo.
 
-### Base UI
+### Motion: interaction e lifecycle controllati
 
-Usa comportamento e stati esposti dalle primitive Base UI. Non ricostruire manualmente focus management, keyboard navigation, overlay semantics, open/closed behavior, dismissal, ARIA o interaction state quando la primitive li fornisce già. Il movimento deve seguire lo stato reale della primitive, non sostituirlo.
+Usa `motion/react` per interaction feedback, state transition, spatial continuity, enter/exit, layout animation, gesture, indicator movement, interruption/reversal e microinterazioni che beneficiano di variants state-driven, velocity continuity o controllo dichiarativo del lifecycle. Quando questo produce una differenza percepibile in precisione, continuità, fluidità, interruption handling o controllo, preferisci Motion anche se una transizione CSS approssimativa sarebbe possibile.
 
-### Motion
+Il benchmark interno è lo `Switch` condiviso: stato Base UI reale, Motion integrato tramite `render` senza alterare semantica o DOM, variants state-driven, `whileTap`, transizioni feedback/state distinte, interruzione naturale e reduced motion esplicito. Valuta lo stesso livello di progettazione per ogni componente; non copiare meccanicamente la sua implementazione.
 
-Valutalo soltanto quando esiste una necessità reale di gesture, presence, layout animation, shared-layout continuity, spring motivata, sequencing, animazione complessa guidata dallo stato, gesture-linked interaction o orchestrazione interrompibile difficile da esprimere correttamente con CSS.
-
-Un eventuale import futuro deve usare il package moderno `motion` già coerente con il repository, non una nuova dipendenza diretta da `framer-motion`. Questa skill non autorizza automaticamente l'import, un provider o l'adozione di Motion in primitive fondamentali.
+Riusa `@qoovex/ui/lib/motion` per durate, easing e query reduced-motion canonici. Non duplicare mapping numerici nei componenti, non creare spring globali arbitrarie e non introdurre una dipendenza diretta da `framer-motion`. Un `MotionConfig` globale richiede una decisione separata che provi compatibilità e reduced motion in Web, Workspace e Sirio.
 
 ## Carattere Qoovex
 

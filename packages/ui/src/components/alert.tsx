@@ -4,15 +4,15 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "#lib/utils"
 
 const alertVariants = cva(
-  "relative flex w-full gap-3 rounded-lg border p-4 text-sm text-foreground transition-colors has-data-[slot=alert-action]:pr-12 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:translate-y-0.5",
+  "relative flex w-full gap-3 rounded-lg border p-4 text-sm text-foreground transition-colors has-data-[slot=alert-action]:pr-12 [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:translate-y-0.5",
   {
     variants: {
       variant: {
-        default: "border-border bg-card text-card-foreground [&_svg]:text-foreground",
-        info: "border-info/30 bg-info/10 text-foreground [&_svg]:text-info",
-        success: "border-success/30 bg-success/10 text-foreground [&_svg]:text-success",
-        warning: "border-warning/30 bg-warning/10 text-foreground [&_svg]:text-warning-emphasis",
-        destructive: "border-destructive/30 bg-destructive/10 text-foreground [&_svg]:text-destructive",
+        default: "border-border bg-card text-card-foreground [&>svg]:text-foreground",
+        info: "border-info/30 bg-info/10 text-foreground [&>svg]:text-info",
+        success: "border-success/30 bg-success/10 text-foreground [&>svg]:text-success",
+        warning: "border-warning/30 bg-warning/10 text-foreground [&>svg]:text-warning-emphasis",
+        destructive: "border-destructive/30 bg-destructive/10 text-foreground [&>svg]:text-destructive",
       },
     },
     defaultVariants: {

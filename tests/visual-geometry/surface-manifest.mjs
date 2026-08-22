@@ -178,6 +178,11 @@ const nonCriticalSirio = [
   "/components/topbar",
   "/components/work-queue-item",
   "/foundations/colors",
+  "/foundations/focus",
+  "/foundations/icons",
+  "/foundations/interaction-states",
+  "/foundations/motion",
+  "/foundations/pointer-touch",
   "/foundations/typography",
 ];
 

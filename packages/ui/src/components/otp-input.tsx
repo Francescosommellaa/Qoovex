@@ -105,19 +105,19 @@ function OtpInput({
       {status !== "default" ? (
         <div
           className={cn(
-            "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium font-accent animate-in fade-in duration-200",
+            "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-semibold font-accent animate-in fade-in duration-200",
             isSuccess && "text-success bg-success/10 border border-success/20",
             isError && "text-destructive bg-destructive/10 border border-destructive/20"
           )}
         >
           {isSuccess ? (
             <>
-              <IconCheck className="size-3.5 stroke-[2.5]" />
+              <IconCheck aria-hidden="true" className="size-3.5 stroke-[2.5]" />
               <span>Codice verificato</span>
             </>
           ) : (
             <>
-              <IconAlertCircle className="size-3.5 stroke-[2.5]" />
+              <IconAlertCircle aria-hidden="true" className="size-3.5 stroke-[2.5]" />
               <span>Codice errato</span>
             </>
           )}

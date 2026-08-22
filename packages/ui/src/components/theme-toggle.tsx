@@ -18,6 +18,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "#components/dropdown-menu";
+import { PREFERS_REDUCED_MOTION_QUERY } from "#lib/motion";
 
 type ThemeChoice = "light" | "dark" | "system";
 
@@ -44,7 +45,7 @@ export function ThemeToggle() {
         ? triggerBounds.top + triggerBounds.height / 2
         : window.innerHeight / 2;
       const transitionDocument = document as ViewTransitionDocument;
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const reducedMotion = window.matchMedia(PREFERS_REDUCED_MOTION_QUERY).matches;
 
       root.style.setProperty("--x", `${x}px`);
       root.style.setProperty("--y", `${y}px`);

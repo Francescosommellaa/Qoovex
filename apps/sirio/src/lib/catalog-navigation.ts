@@ -1,5 +1,6 @@
 import {
   IconAdjustments,
+  IconActivityHeartbeat,
   IconAlertCircle,
   IconArrowsExchange,
   IconBoxPadding,
@@ -12,6 +13,7 @@ import {
   IconFolderOff,
   IconForms,
   IconInfoSquare,
+  IconIcons,
   IconLayoutCards,
   IconLayoutNavbar,
   IconLayoutSidebar,
@@ -40,7 +42,12 @@ export const catalogNavigationGroups = [
     href: "/foundations/colors",
     items: [
       { name: "Colori", href: "/foundations/colors", icon: IconPalette },
+      { name: "Interaction states", href: "/foundations/interaction-states", icon: IconClick },
+      { name: "Focus", href: "/foundations/focus", icon: IconSquare },
+      { name: "Pointer + Touch", href: "/foundations/pointer-touch", icon: IconClick },
+      { name: "Motion", href: "/foundations/motion", icon: IconActivityHeartbeat },
       { name: "Tipografia", href: "/foundations/typography", icon: IconTypography },
+      { name: "Icone", href: "/foundations/icons", icon: IconIcons },
       { name: "Spaziatura e Raggio", href: "/foundations/spacing-and-radius", icon: IconRulerMeasure },
     ],
   },

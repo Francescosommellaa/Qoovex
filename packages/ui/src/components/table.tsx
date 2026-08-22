@@ -246,11 +246,11 @@ function TableHeadSort({
       <div className="flex items-center gap-1.5">
         <span>{children}</span>
         {sortDirection === "asc" ? (
-          <IconChevronUp className="size-3.5 text-primary" />
+          <IconChevronUp aria-hidden="true" className="size-3.5 text-primary" />
         ) : sortDirection === "desc" ? (
-          <IconChevronDown className="size-3.5 text-primary" />
+          <IconChevronDown aria-hidden="true" className="size-3.5 text-primary" />
         ) : (
-          <IconSelector className="size-3.5 text-muted-foreground/50 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <IconSelector aria-hidden="true" className="size-3.5 text-muted-foreground/50 opacity-0 group-hover:opacity-100 transition-opacity" />
         )}
       </div>
     </th>
@@ -327,23 +327,25 @@ function TablePagination({
       </span>
       <div className="flex items-center gap-1.5">
         <Button
+          aria-label="Pagina precedente"
           variant="outline"
           size="icon-xs"
           disabled={pageIndex <= 1}
           onClick={() => onPageChange?.(pageIndex - 1)}
         >
-          <IconChevronLeft className="size-3.5" />
+          <IconChevronLeft aria-hidden="true" className="size-3.5" />
         </Button>
         <span className="px-2">
           Pagina <strong className="text-foreground">{pageIndex}</strong> di {pageCount}
         </span>
         <Button
+          aria-label="Pagina successiva"
           variant="outline"
           size="icon-xs"
           disabled={pageIndex >= pageCount}
           onClick={() => onPageChange?.(pageIndex + 1)}
         >
-          <IconChevronRight className="size-3.5" />
+          <IconChevronRight aria-hidden="true" className="size-3.5" />
         </Button>
       </div>
     </div>

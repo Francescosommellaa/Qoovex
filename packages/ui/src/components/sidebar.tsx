@@ -1009,7 +1009,7 @@ function AdaptiveSidebar({
               onClick={search.onClick}
               className="group-data-[collapsible=icon]:hidden shrink-0"
             >
-              <IconSearch className="size-4 text-muted-foreground hover:text-foreground transition-colors" />
+              <IconSearch aria-hidden="true" className="size-4 text-muted-foreground hover:text-foreground transition-colors" />
             </Button>
           )}
         </SidebarHeader>
@@ -1042,7 +1042,7 @@ function AdaptiveSidebar({
                           />
                         }
                       >
-                        {ItemIcon && <ItemIcon />}
+                        {ItemIcon && <ItemIcon aria-hidden="true" />}
                         <span>{item.name}</span>
                         {item.badge !== undefined && (
                           <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
@@ -1077,7 +1077,7 @@ function AdaptiveSidebar({
                 )}
               </div>
               {footer.account.role && (
-                <Badge variant="outline" className="text-[0.65rem] shrink-0">
+                <Badge variant="outline" className="shrink-0">
                   {footer.account.role}
                 </Badge>
               )}

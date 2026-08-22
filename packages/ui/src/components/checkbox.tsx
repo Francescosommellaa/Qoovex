@@ -55,7 +55,7 @@ function Checkbox({
         data-slot="checkbox-indicator"
         className="grid place-content-center text-current transition-none"
       >
-        {indeterminate ? <IconMinus /> : <IconCheck />}
+        {indeterminate ? <IconMinus aria-hidden="true" /> : <IconCheck aria-hidden="true" />}
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   )

@@ -1,5 +1,6 @@
 const generalSansUrl =
   "https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap";
+// Fontshare exposes Array at 400/600/700. A request for 500 is intentionally omitted.
 const arrayUrl = "https://api.fontshare.com/v2/css?f[]=array@400,600,700&display=swap";
 
 /** Loads the two canonical Qoovex font families once in each application document. */
