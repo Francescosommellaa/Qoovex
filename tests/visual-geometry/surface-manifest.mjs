@@ -183,6 +183,8 @@ const nonCriticalSirio = [
   "/foundations/interaction-states",
   "/foundations/motion",
   "/foundations/pointer-touch",
+  "/foundations/responsive",
+  "/foundations/surfaces",
   "/foundations/typography",
 ];
 

@@ -52,6 +52,10 @@ La CI non può osservare magicamente una skill che l'agent runtime non espone co
 
 Non sostituire questi gate con resize manuale o user-agent sniffing. Touch e shortcut derivano dalle capability di input; i fixed surface rispettano safe area e viewport dinamica; il minimo touch condiviso e 44 px. La CI indipendente `mobile-responsive` esegue doctor prima di Playwright e non muta database persistenti, auth, Blob o target remoti.
 
+## UI composition and geometry enforcement
+
+Per ogni modifica runtime UI, attribuire prima ogni responsabilita geometrica a un solo owner e applicare `docs/05_UI_BRAND_AND_SURFACES.md`: parent per spacing esterno, page/shell per padding e width, primitive per geometria interna, surface reali per viewport/safe-area/scroll/layering. Non introdurre compensazioni `!p-*`, `!m-*`, `-mx-*`, overflow clipping, viewport units, positioning o z-index senza owner esplicito; correggere la foundation o dichiarare un'eccezione intenzionale. Questo enforcement non rende obbligatoria una review UI per task esclusivamente documentali senza modifiche runtime.
+
 ## Impeccable obbligatorio per UI/UX
 
 Impeccable è parte obbligatoria del workflow quando una task crea, modifica, corregge, revisiona o rifattorizza:

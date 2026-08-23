@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { PageHeader } from "@/components/page-header";
-import { Specimen, SpecimenGrid } from "@/components/specimen";
+import { Specimen, SpecimenGrid, SpecimenSection } from "@/components/specimen";
 import { Button } from "@qoovex/ui/components/button";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@qoovex/ui/components/tooltip";
 import {
@@ -148,10 +148,9 @@ export default function ButtonPage() {
         </section>
 
         {/* ── Sezione 3: Varianti Semantiche & Distinzione Link vs Ghost ────────────────────────────── */}
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight">Varianti & Distinzione Ghost vs Link</h2>
+        <SpecimenSection region="variants" title="Varianti & Distinzione Ghost vs Link">
           <SpecimenGrid cols={3}>
-            <Specimen title="Default (Primario)" visualId="button-default">
+            <Specimen title="Default (Primario)" stateId="default" visualId="button-default">
               <Button>Pulsante primario</Button>
             </Specimen>
 
@@ -175,11 +174,11 @@ export default function ButtonPage() {
               <Button variant="destructive">Pulsante distruttivo</Button>
             </Specimen>
 
-            <Specimen title="Disabled" visualId="button-disabled">
+            <Specimen title="Disabled" stateId="disabled" visualId="button-disabled">
               <Button disabled>Operazione non disponibile</Button>
             </Specimen>
           </SpecimenGrid>
-        </section>
+        </SpecimenSection>
 
         {/* ── Sezione 4: Micro-Interazioni e Loading ────────────────────────────── */}
         <section>

@@ -58,6 +58,65 @@
 }
 
 /*
+ * Surface roles are deliberate bundles, not a surface x shadow matrix.
+ * Every role keeps a 1px border channel so changing plane never changes box
+ * geometry. These classes intentionally own no position or z-index.
+ */
+.qv-surface-base,
+.qv-surface-contained,
+.qv-surface-raised,
+.qv-surface-floating,
+.qv-surface-modal {
+  border: 1px solid transparent;
+}
+
+.qv-surface-base {
+  border-color: transparent;
+  color: var(--foreground);
+  background-color: var(--background);
+  box-shadow: none;
+}
+
+.qv-surface-contained {
+  border-color: var(--border);
+  color: var(--card-foreground);
+  background-color: var(--card);
+  box-shadow: none;
+}
+
+.qv-surface-raised {
+  border-color: var(--border);
+  color: var(--card-foreground);
+  background-color: var(--card);
+  box-shadow: var(--elevation-raised);
+}
+
+.qv-surface-floating {
+  border-color: color-mix(in oklch, var(--foreground) 18%, var(--border));
+  color: var(--popover-foreground);
+  background-color: var(--popover);
+  box-shadow: var(--elevation-floating);
+}
+
+.qv-surface-modal {
+  border-color: color-mix(in oklch, var(--foreground) 18%, var(--border));
+  color: var(--card-foreground);
+  background-color: var(--card);
+  box-shadow: var(--elevation-modal);
+}
+
+.qv-backdrop-modal {
+  background: var(--backdrop-modal);
+  backdrop-filter: blur(var(--backdrop-blur));
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .qv-backdrop-modal {
+    backdrop-filter: none;
+  }
+}
+
+/*
  * Canonical focus owner. This rule is intentionally unlayered so local Tailwind
  * outline/ring utilities cannot replace the shared geometry. Existing component
  * shadows remain; only Tailwind ring channels are neutralized while focus is visible.
@@ -394,6 +453,21 @@
 
 
 @media (forced-colors: active) {
+  :where(
+    .qv-surface-contained,
+    .qv-surface-raised,
+    .qv-surface-floating,
+    .qv-surface-modal
+  ) {
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+
+  .qv-backdrop-modal {
+    background: color-mix(in srgb, Canvas 75%, transparent);
+    backdrop-filter: none;
+  }
+
   :where(
     :focus-visible,
     [data-focus-owner="composite"]:has([data-focus-target="composite"]:focus-visible)

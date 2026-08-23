@@ -46,6 +46,7 @@
   --ff-accent: 'Array', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --radius: 0.5rem;
   --shadow-2xs: 0 1px 2px 0 hsl(0 0% 0% / 0.09);
+  /* Compatibility alias: 2xs and xs have never represented distinct planes. */
   --shadow-xs: 0 1px 2px 0 hsl(0 0% 0% / 0.09);
   --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 1px 2px -1px hsl(0 0% 0% / 0.18);
   --shadow: 0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 1px 2px -1px hsl(0 0% 0% / 0.18);
@@ -53,6 +54,12 @@
   --shadow-lg: 0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 4px 6px -1px hsl(0 0% 0% / 0.18);
   --shadow-xl: 0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 8px 10px -1px hsl(0 0% 0% / 0.18);
   --shadow-2xl: 0 1px 2px 0 hsl(0 0% 0% / 0.45);
+  /* Semantic depth roles. Stacking remains an independent component concern. */
+  --elevation-raised: var(--shadow-sm);
+  --elevation-floating: var(--shadow-md);
+  --elevation-modal: var(--shadow-xl);
+  --backdrop-modal: oklch(0 0 0 / 0.5);
+  --backdrop-blur: 0.25rem;
   --tracking-normal: 0em;
   --spacing: 0.25rem;
   --control: 2rem;

@@ -1,6 +1,6 @@
 {
   "project": "Qoovex",
-  "updated_at": "2026-08-21",
+  "updated_at": "2026-08-23",
   "state_taxonomy": [
     "verified_current_state",
     "implemented_decision",
@@ -99,6 +99,29 @@
       "status": "implemented_decision",
       "definition_of_done": "A repository-changing task is complete only after a focused regression when applicable, all cumulative gates required by the real blast radius pass on the final diff, and required PR checks pass on the same final SHA when PR or push is in scope.",
       "failure_policy": "A pertinent failure remains in the current task until its root cause and regression are fixed; tests must not be skipped, weakened or disabled to obtain green status. An external or unattestable blocker must be reported as hard_stop with exact evidence.",
+      "context_continuity_rule": {
+        "status": "implemented_decision",
+        "canonical_source": "docs/HowToUse.md",
+        "work_block": "Consecutive tasks in one persistent session, on the same domain or responsibility, while relevant canonical sources and decisions remain unchanged.",
+        "preflight": "Full canonical preflight is required at the start of each work block and repeats when its trust conditions or sensitive boundary change.",
+        "micro_task": "Reuse verified context but inspect current involved files, impacted consumers, pertinent tests, diff and Git state; reread a previously touched file before modifying it.",
+        "foundation_policy": "Reuse approved foundation contracts and solutions within the block; correct a failing contract at its source or report the conflict, never add a local workaround.",
+        "specialist_gate_applicability": {
+          "status": "implemented_decision",
+          "canonical_source": "docs/HowToUse.md",
+          "rule": "Classify each specialist gate from the real blast radius before execution; execute only applicable gates and retain all required controls.",
+          "not_applicable": "Formal operational classification with a short deterministic reason when a technical schema requires a field; it is not evidence of a specialist review.",
+          "mcp_schema": "No repository-owned MCP or configuration schema was found for the observed write-gate behavior; an external provider must support not_applicable in its own schema rather than requiring a simulated review."
+        },
+        "blast_radius_verification_rule": {
+          "status": "implemented_decision",
+          "canonical_source": "docs/HowToUse.md",
+          "workflow": "diff -> real responsibilities and reachable consumers -> applicable gates -> minimum sufficient verification -> reuse prior green evidence with unchanged inputs -> broader work-block or release gate only when required.",
+          "evidence_reuse": "Green evidence is reusable within a work block only while its inputs, relevant transitive dependencies, shared foundations and blast radius remain unchanged and reliable.",
+          "broad_scope": "Global tokens, base CSS, theme, public shared UI APIs, widely used primitives and test or gate infrastructure derive broad coverage from real dependency reachability.",
+          "ci_release": "Agent-local minimum sufficient verification does not change required CI or release checks."
+        }
+      },
       "gate_source": "docs/07_QUALITY_AND_RELEASE.md",
       "evidence_rules": [
         "a changed input invalidates earlier test evidence",

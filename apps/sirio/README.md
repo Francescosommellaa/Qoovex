@@ -15,6 +15,8 @@ I marchi provengono dagli SVG canonici di `@qoovex/brand-resources`. Provenienza
 - `/foundations/pointer-touch`: capability reali, target effettivi, hit-area compatte, collisioni e lifecycle press/cancel;
 - `/foundations/typography`: gerarchia canonica, pesi Fontshare reali, numeri, wrapping, overflow e fallback;
 - `/foundations/icons`: scala Tabler, allineamento misurabile, semantica accessibile, loader e lifecycle Motion;
+- `/foundations/surfaces`: tono, bordo, elevation, backdrop, forced-colors e lifecycle Motion dei piani percettivi;
+- `/foundations/responsive`: matrice QA, reflow, safe area e composizione container-driven senza fork del componente;
 - `/components/*`: primitive condivise e relativi stati;
 - `/patterns`: overview delle composizioni operative canoniche, distinta dalla documentazione dei componenti;
 - `/patterns/work-queue`: pattern canonico per code operative, gruppi, item ed empty state;
@@ -49,6 +51,14 @@ La foundation pointer/touch e provata in `/foundations/pointer-touch`: separa vi
 La foundation typography e provata in `/foundations/typography`: mostra i sei ruoli condivisi, General Sans e l'uso raro di Array, tutti i pesi realmente caricati, cifre proporzionali/tabulari, stringhe ostili, wrap, truncation intenzionale recuperabile e fallback di sistema. La proof non anima metriche tipografiche e non duplica token o loader.
 
 La foundation iconografica e provata in `/foundations/icons`: usa le API Tabler native senza wrapper, misura i ruoli 14/16/20/28px, distingue icon+text, icon-only e leading multilinea, rende espliciti decorative/informative/status, e verifica `currentColor`, forced colors, loader reduced-motion e reversal del chevron Motion. Il glyph non possiede hit area o focus.
+
+La foundation surface/elevation e provata in `/foundations/surfaces`: distingue base, contained, raised, floating e modal come combinazioni deliberate di tono, bordo e profondita, mantenendo lo stacking fuori dal contratto. Include casi quasi-isocromatici, popup sopra Card, superficie scura, nesting, backdrop, forced colors senza shadow e una proof Motion interrompibile che usa transform/opacity mentre reduced motion applica subito la gerarchia finale.
+
+## Standard specimen dei componenti
+
+Le pagine `/components/*` estendono `src/components/specimen.tsx`; non costruiscono un catalogo parallelo. Ogni pagina parte da un overview reale nel `PageHeader` e mostra, quando l'API pubblica li possiede, varianti, size e stati persistenti supportati. La matrice resta piccola: default, stati di disponibilita o selezione pertinenti, interaction state rilevanti e una o due combinazioni ad alto rischio. Content stress, responsive/container proof, light/dark, forced colors e Motion sono condizionali al comportamento reale del componente.
+
+`SpecimenSection` nomina semanticamente la regione tramite `data-specimen-region` e un heading accessibile. `Specimen.stateId` identifica soltanto configurazioni deterministiche reali; `visualId` resta l'identificatore stabile ed esclusivo per i target Visual Geometry. Non usare `stateId` per simulare hover, pressed o focus: Playwright deve produrli con pointer e tastiera reali. Per i componenti animati, `motion-final` contiene gli stati settled deterministici; `motion-lifecycle` prova enter, hover, press, release/cancel, reversal, input rapido e reduced motion. Uno snapshot con animazioni disabilitate prova geometria e stato finale, non la qualita del lifecycle Motion.
 
 ## Comandi
 

@@ -161,9 +161,11 @@ La palette nasce dal contrasto adattivo tra **Calce** e **Inchiostro**. **Nebbia
 
 ## Layout
 
-Workspace usa una shell operativa a viewport pieno: sidebar persistente e ridimensionabile su desktop, topbar fissa e solo contenuto centrale scorrevole. La pagina interna è centrata fino a una larghezza massima ampia e mantiene un ritmo base di 4px, con gap ricorrenti da 12, 16 e 24px.
+Workspace usa una shell operativa a viewport pieno: `WorkspaceShell`/`WorkspaceSidebarProvider` possiedono viewport, clipping della shell e sidebar persistente/ridimensionabile; `WorkspaceTopbar` e sticky nello stesso frame; il solo `main` centrale possiede scroll pagina e page padding progressivo 12/16/24px. `WorkspacePage` possiede max-width, centering e ritmo verticale; una view normale non duplica questi owner con padding, `h-dvh`, scroll o larghezze viewport.
 
 Il contenuto parte da una singola colonna leggibile e aggiunge colonne soltanto quando lo spazio consente di mantenere gerarchia e azioni chiare. Sotto il breakpoint desktop la sidebar diventa un drawer; i pannelli affiancati tornano a impilarsi e le modali diventano fogli ancorati al fondo. Il padding del contenuto cresce progressivamente da 12px a 24px.
+
+Drawer/sidebar mobile, dialog e altre surface fixed usano viewport e `--safe-area-*` una sola volta, mantengono content padding interno e possono possedere scroll locale bounded. Full-bleed, sticky locale, scroll annidato, overflow clipping o override di padding/radius della foundation richiedono un owner esplicito nella composizione: una view non li simula con compensazioni `-mx-*`, `!p-*` o `!m-*`. Per il contratto generale e le eccezioni della primitive vedere `docs/05_UI_BRAND_AND_SURFACES.md` e `packages/ui/DESIGN.md`.
 
 **The Next Step Rule.** Ogni composizione deve rendere evidente il prossimo passo senza affidarsi a memoria, hover o conoscenza del sistema.
 

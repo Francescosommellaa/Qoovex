@@ -148,17 +148,22 @@ Sirio usa una shell a piena altezza viewport: sidebar adattiva e collassabile, t
 
 Le griglie partono da due colonne per campioni compatti e crescono fino a cinque colonne sui viewport ampi. Le pagine mantengono `3rem` tra gruppi principali, `2rem` tra header e contenuto e `1rem` tra campioni correlati. Su mobile la sidebar passa off-canvas e i controlli della topbar si riducono senza perdere breadcrumb, ricerca o tema.
 
+La proof responsive usa la matrice `320 / 390 / 768 / 1024 / 1440` come verifica, non come scala di breakpoint. Lo specimen mantiene un solo DOM e dimostra che una container query locale reagisce allo spazio del proprio host: un container stretto resta compatto anche dentro una viewport larga. Browser resize e reflow non animano il layout; safe area e viewport height seguono il contratto condiviso di `@qoovex/ui`.
+
 **The Compare Without Crowding Rule.** La densità può aumentare per facilitare il confronto, ma ogni specimen mantiene etichetta, valore e area visiva distinguibili.
 
 ## Elevation & Depth
 
-La profondità resta stratificata e contenuta. La shell usa bordi e superfici tonali; specimen e campioni ricevono ombre minime; menu, select, tooltip e dialog usano ombre più chiare soltanto perché si sovrappongono al piano di lavoro. La topbar usa trasparenza e blur per restare separata durante lo scroll.
+La profondità segue gli stessi cinque ruoli condivisi: base per il canvas, contained per specimen statici, raised per interaction reale, floating per popup e modal per interruzioni contestuali. Sirio non inventa una scala locale e non usa le shadow per spiegare una gerarchia che tono e bordo non sostengono.
 
 ### Shadow Vocabulary
 
-- **Specimen** (`0 1px 2px 0 hsl(0 0% 0% / 0.09)`): swatch, card e controlli a riposo.
-- **Floating Control** (`0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 2px 4px -1px hsl(0 0% 0% / 0.18)`): menu, tooltip e select.
-- **Modal** (`0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 8px 10px -1px hsl(0 0% 0% / 0.18)`): dialog e pannelli temporanei sopra la shell.
+- **Contained**: `card` + bordo, nessuna shadow.
+- **Raised**: `--elevation-raised` soltanto quando la superficie lascia realmente il piano base.
+- **Floating**: `popover`, bordo più netto e `--elevation-floating`.
+- **Modal**: `card`, bordo più netto, `--elevation-modal` e backdrop.
+
+`shadow-2xs` e `shadow-xs` sono alias legacy identici, non due livelli. In forced colors tutte le shadow scompaiono e il bordo di sistema mantiene la gerarchia; in dark mode tono e bordo restano essenziali perché una shadow nera può essere poco visibile. Motion anima presenza, transform e opacity del cambio di piano, non una successione costosa di box-shadow.
 
 **The Workbench Stays Flat Rule.** Il piano di catalogo non galleggia; soltanto gli elementi temporaneamente sovrapposti ricevono profondità evidente.
 
@@ -210,6 +215,12 @@ La sidebar raggruppa Foundations e Componenti UI, usa Tabler da `1rem`, indicato
 ### Token Specimen
 
 Ogni campione abbina risultato visivo, nome leggibile e variabile tecnica. Gli swatch usano altezza `5rem`, raggio `0.375rem`, bordo e ombra minima; le griglie si adattano senza troncare il significato del token.
+
+### Component State Specimen
+
+Ogni pagina componente usa lo stesso `Specimen` e organizza le prove con `SpecimenSection`. L'overview e sempre reale; varianti, size e stati vengono mostrati soltanto se appartengono all'API del componente. La matrice privilegia default, stati persistenti supportati, interaction rilevanti e poche combinazioni ad alto rischio. Content stress, responsive, temi/forced colors e Motion sono aggiunti solo quando il comportamento li rende significativi.
+
+`visualId` resta il target stabile di Visual Geometry; `stateId` nomina una configurazione deterministica reale senza modificare l'API di `@qoovex/ui`. Hover, focus-visible e pressed nascono da browser input, non da stato React dimostrativo. Nei componenti Motion-first gli stati finali settled e il lifecycle interattivo sono regioni distinte: gli snapshot con animazioni disabilitate non sostituiscono press/cancel, reversal, rapid input o reduced-motion reali.
 
 ## Do's and Don'ts
 

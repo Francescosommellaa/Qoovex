@@ -35,6 +35,18 @@ Le icone decorative usano `aria-hidden="true"`; il nome di un'azione icon-only a
 
 Motion segue il lifecycle reale: disclosure/open, continuita direzionale, replacement di conferma e loading possono usare `motion/react` quando interruption e reversal migliorano. Rapid input retargetta dalla posizione corrente; nessuna trasformazione cambia hit area o focus geometry. Reduced motion usa replacement o stato istantaneo e conserva copy/ARIA. Spinner e loader sono `aria-hidden` quando il parent comunica `aria-busy`/status e fermano il movimento continuo in reduced motion senza rimuovere il feedback comprensibile.
 
+## Contratto surface ed elevation
+
+Qoovex distingue `surface` (tono/background), `elevation` (separazione percettiva) e `stacking` (ordine tecnico). I ruoli condivisi sono pochi e deliberatamente accoppiati: `qv-surface-base` usa `background` senza ombra; `qv-surface-contained` usa `card` + bordo senza ombra; `qv-surface-raised` aggiunge `--elevation-raised`; `qv-surface-floating` usa `popover`, bordo più netto e `--elevation-floating`; `qv-surface-modal` usa `card`, bordo più netto e `--elevation-modal`. Nessuna classe assegna `position` o `z-index`, e non esiste una matrice libera surface × shadow.
+
+`shadow-2xs` e `shadow-xs` hanno lo stesso valore dalla loro introduzione: restano alias di compatibilità, non due livelli percettivi. I nuovi consumer non scelgono fra i due per simulare profondità. Le superfici statiche devono essere leggibili tramite shape, tono, bordo e spacing; un lift è riservato a interazione reale o sovrapposizione.
+
+`qv-backdrop-modal` usa `--backdrop-modal` e un blur minimo tokenizzato. Il dimming comunica il cambio di contesto anche senza blur; reduced transparency lo rimuove. In forced colors le ombre vengono eliminate esplicitamente, i piani importanti mantengono un bordo `CanvasText` e il backdrop usa colori di sistema senza bloccare l'adattamento del browser.
+
+Ogni modal root usa un solo backdrop. Popup e menu annidati diventano floating sopra il modal senza accumulare dimming; un secondo modal reale conserva il proprio portal e lifecycle, mentre l'ordine numerico dei layer resta fuori P007 e appartiene al futuro contratto stacking.
+
+Motion può accompagnare un cambio reale di piano con transform e opacity usando la durata `surface`, mentre tono, bordo e shadow restano segnali statici del livello raggiunto. Non si anima una sequenza di box-shadow pesanti come effetto principale. Rapid open/close e reversal retargettano dalla posizione corrente; reduced motion applica immediatamente la gerarchia finale senza movimento spaziale.
+
 Il package contiene primitive presentazionali, `PasswordInput`, `OtpInput`, `ThemeProvider`, `ThemeToggle`, `FloatingNavigation`, `MarketingCursor`, `BrandMark`, `cn` e `useIsMobile`. I controlli password e OTP gestiscono soltanto presentazione, accessibilita e valore form: non contengono auth, Prisma, ruoli, permessi, servizi o copy normativo.
 
 `MarketingCursor` e un enhancement opt-in per le sole superfici marketing. Mantiene il punto di precisione, aggiunge un alone elastico e accetta micro-label dichiarative con `data-cursor-label`. Non viene attivato su touch, penna, reduced motion o forced colors e ripristina il cursore nativo su campi e contenuti editabili.
@@ -109,7 +121,11 @@ Hover e enhancement hover richiedono `(hover: hover) and (pointer: fine)`. `any-
 
 Motion e first-class per hover/tap/cancel quando variants e lifecycle controllato migliorano davvero feedback, interruption o gesture. Non sostituisce l'activation e non trasforma il box che possiede la hit area: l'eventuale trasformazione appartiene a un child visuale. Reduced motion mantiene feedback immediato tramite colore, opacity o stato statico. `touch-action: none` non e una regola foundation e resta vietato globalmente; un futuro controllo pan/drag deve dichiarare l'asse di scroll che conserva e non bloccare pinch zoom senza necessita.
 
-`useIsMobile` indica esclusivamente il breakpoint di layout responsive usato dalla Sidebar. Non descrive touch, hover o pointer capability e non deve governare interaction behavior. Gli overlay e le navigazioni fixed usano `dvh` e i token `--safe-area-*`, definiti con `env(safe-area-inset-*)`; i layout root delle app dichiarano `viewport-fit=cover`.
+La matrice `320 / 390 / 768 / 1024 / 1440` e una matrice di prova, non una scala di breakpoint. I componenti partono da layout intrinseco e wrapping; container query per decisioni dipendenti dallo spazio del componente, media query per viewport/shell e JavaScript soltanto per comportamento non esprimibile in CSS. Stesso componente, DOM, semantica, ordine di focus e feature availability restano il default. Il contenuto normale non crea overflow di pagina; scroll orizzontale e ammesso localmente soltanto per contenuti realmente bidimensionali.
+
+`useIsMobile` indica esclusivamente il breakpoint comportamentale usato dalla Sidebar per scegliere disclosure persistente o Dialog Base UI. Osserva `matchMedia`, non descrive device, touch, hover o pointer capability e non deve governare styling o interaction behavior generico. `dvh` segue viewport dinamiche e tastiera software; `svh` stabilizza shell che non devono saltare con il browser chrome; `lvh` non e un default. Overlay e navigazioni fixed consumano i token `--safe-area-*`, definiti una sola volta con `env(safe-area-inset-*)`; i layout root dichiarano `viewport-fit=cover`.
+
+Il normale browser resize non anima il relayout. Motion e ammesso per transizioni discrete avviate dall'utente quando migliora la continuita, senza nascondere feature o divergere in reduced motion.
 
 Il contratto completo e in `config/mobile-experience.json`. Verifica locale: `pnpm mobile:doctor` per audit deterministico e `pnpm mobile:test` per geometria, input, tastiera, orientation, zoom-equivalent e reduced motion nel browser reale.
 

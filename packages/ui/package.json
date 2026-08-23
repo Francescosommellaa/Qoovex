@@ -17,7 +17,7 @@
   },
   "scripts": {
     "type-check": "tsc --noEmit",
-    "test": "node --test src/components/fontshare-fonts.test.mjs src/components/icon-system.test.mjs src/lib/motion.test.mjs && node scripts/verify-foundation.mjs && node scripts/verify-semantic-contrast.mjs"
+    "test": "node --test src/components/fontshare-fonts.test.mjs src/components/icon-system.test.mjs src/components/responsive-system.test.mjs src/components/surface-system.test.mjs src/lib/motion.test.mjs && node scripts/verify-foundation.mjs && node scripts/verify-semantic-contrast.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",

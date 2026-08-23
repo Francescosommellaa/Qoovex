@@ -199,24 +199,56 @@ Con reduced motion, rotazione e movimento spaziale non essenziali diventano repl
 
 La foundation parte da un'unità di `0.25rem` e definisce passi fino a `1.5rem`. I controlli base sono compatti: `2rem` per button e select, `2.25rem` per input, `2.5rem` per controlli grandi. Le primitive non impongono una griglia applicativa; forniscono gap, padding e contenitori coerenti che i consumer possono comporre.
 
-Le shell condivise usano topbar da `3.5rem`, sidebar adattiva e breakpoint responsive derivati da Tailwind. Su mobile dialog e navigazione diventano superfici dal basso o off-canvas; target, ordine DOM e focus restano coerenti. I layout di dominio e le larghezze di pagina appartengono alle applicazioni.
+### Responsive component contract
+
+La matrice `320 / 390 / 768 / 1024 / 1440` misura la foundation; non definisce cinque breakpoint. Un componente parte da layout intrinseco, `min-width: 0`, wrapping flex/grid e stringhe divisibili soltanto dove necessario. Usa una container query quando la decisione dipende dallo spazio assegnato al componente; usa una media query viewport soltanto per shell, superfici fixed o cambiamenti che appartengono davvero alla viewport. `matchMedia` e JavaScript sono riservati al comportamento che CSS non può possedere, mai alla sola presentazione o alla capability di input.
+
+Il default preserva lo stesso componente, DOM, ordine di focus, semantica e feature availability. Un adattamento può ricomporre o avvolgere contenuto, non rimuovere azioni essenziali. Il contenuto normale non produce overflow orizzontale di pagina; tabelle, timeline o canvas realmente bidimensionali possiedono invece uno scroll container locale accessibile. `nowrap`, truncate e larghezze fisse richiedono un vincolo esplicito e un valore importante resta recuperabile.
+
+Le shell condivise usano topbar da `3.5rem`, sidebar adattiva e breakpoint responsive derivati da Tailwind. Su viewport stretti dialog e navigazione possono diventare superfici dal basso o off-canvas quando cambia il comportamento, mantenendo target, focus e feature. I layout di dominio e le larghezze di pagina appartengono alle applicazioni. `useIsMobile` osserva il breakpoint della Sidebar con `matchMedia` perché sceglie tra disclosure persistente e Dialog Base UI; non descrive device, touch o hover e non è un hook di layout generico.
+
+`dvh` appartiene alle shell che devono seguire la viewport dinamica e alle altezze massime di overlay esposti alla tastiera software. `svh` è appropriato per una shell che deve restare stabile mentre il browser chrome cambia; `lvh` richiede un caso immersivo esplicito e non è il default. Contenuti ordinari restano intrinsic/min-height. Fixed, sticky e overlay consumano esclusivamente `--safe-area-*`; le app non ridefiniscono un secondo sistema di inset.
+
+Il relayout durante un normale resize non viene animato. Motion può accompagnare una transizione discreta avviata dall'utente quando migliora continuità, ma non nasconde feature, non modifica la geometria disponibile e mantiene un esito equivalente con reduced motion.
+
+### Primitive geometry ownership
+
+Le primitive shared possiedono soltanto la propria geometria intrinseca: padding, gap, radius, minimi touch, overflow necessario al contenuto e width fissa quando e parte del controllo. Non possiedono margin esterno, page padding o page max-width; collection e page composition possiedono invece spacing tra sibling, larghezza e centering. Una customizzazione consumer che annulla sistematicamente questi contratti e un difetto API/foundation, non un pattern di composizione.
+
+Dialog, drawer, sidebar mobile, menu e popover sono eccezioni soltanto quando sono vere surface bounded o viewport-level: la primitive possiede allora portal, positioning, dimensione massima, scroll locale e safe-area pertinente; il contenuto conserva padding interno. `overflow-hidden` e `p-0` restano ammessi per una variant intrinseca come media, dopo verifica di focus, shadow e popup. Fixed/sticky/absolute e z-index esistono soltanto per superficie, scroll owner o containing block dichiarati; Motion trasforma un child visuale e non il box che possiede layout o hit area.
 
 **The Primitive Not Page Rule.** `@qoovex/ui` definisce comportamento e ritmo interno dei componenti, non la composizione di una pagina di prodotto.
 
 ## Elevation & Depth
 
-La profondità è stratificata e contenuta. Bordo e superficie tonale sono il default; ombre da 2xs a sm distinguono controlli e card interattive; md e superiori sono riservate a popover, tooltip, navigazione flottante e dialog. Backdrop blur entra soltanto su superfici sovrapposte.
+La profondità separa tre canali indipendenti: `surface` descrive il tono, `elevation` la distanza percettiva e `stacking` l'ordine tecnico. I ruoli `qv-surface-*` fissano soltanto le combinazioni condivise approvate e non possiedono `position` o `z-index`.
+
+### Plane Vocabulary
+
+- **Base** (`qv-surface-base`): canvas `background`, bordo trasparente e nessuna ombra. Non è un pannello.
+- **Contained** (`qv-surface-contained`): tono `card`, bordo `border` e nessuna ombra. È il default per pannelli, Card statiche e gruppi leggibili senza lift.
+- **Raised** (`qv-surface-raised`): tono `card`, bordo e `--elevation-raised` / `shadow-sm`. Appartiene a una superficie realmente interattiva o temporaneamente sollevata; non sostituisce affordance, copy o stato.
+- **Floating** (`qv-surface-floating`): tono `popover`, bordo più netto e `--elevation-floating` / `shadow-md`. È riservato a popup, menu, select, tooltip e navigazioni che coprono contenuto.
+- **Modal** (`qv-surface-modal`): tono `card`, bordo più netto e `--elevation-modal` / `shadow-xl`, insieme al backdrop quando interrompe il contesto. Non è una Card più decorata.
+
+Ogni ruolo mantiene un canale border da `1px`, anche quando trasparente, così un cambio di piano non modifica la box geometry. I temi condividono gli stessi ruoli: in dark mode tono e bordo assicurano la separazione anche quando l'ombra nera è poco visibile.
 
 ### Shadow Vocabulary
 
-- **2XS / XS** (`0 1px 2px 0 hsl(0 0% 0% / 0.09)`): button, badge, card e swatch a riposo.
-- **SM / Default** (`0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 1px 2px -1px hsl(0 0% 0% / 0.18)`): stato interattivo leggermente sollevato.
-- **MD** (`0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 2px 4px -1px hsl(0 0% 0% / 0.18)`): menu, select, tooltip e navigazione.
-- **XL / 2XL** (`0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 8px 10px -1px hsl(0 0% 0% / 0.18)`): dialog e overlay ad alta separazione.
+- **2XS / XS**: alias visuali identici introdotti insieme e mantenuti soltanto per compatibilità. Non rappresentano due livelli e non ricevono nuove responsabilità semantiche.
+- **Raised** (`--elevation-raised` → `shadow-sm`): feedback di una superficie realmente sollevata.
+- **Floating** (`--elevation-floating` → `shadow-md`): separazione di una superficie che copre il piano sottostante.
+- **Modal** (`--elevation-modal` → `shadow-xl`): separazione forte insieme a backdrop, tono e bordo. `shadow-2xl` resta legacy/component-specific fino ai prompt overlay dedicati.
 
 **The Flat at Rest Rule.** Una primitiva è leggibile tramite forma, bordo e tono prima di ricevere un'ombra.
 
 **The Overlay Earns Depth Rule.** Ombra forte e blur sono ammessi quando un elemento occupa davvero un piano superiore.
+
+**The Backdrop Is Context Rule.** `qv-backdrop-modal` usa dimming e blur minimo come enhancement; blur non è mai l'unico segnale del piano. Reduced transparency rimuove il blur. In forced colors le ombre spariscono, i confini usano `CanvasText` e il backdrop usa colori di sistema senza `forced-color-adjust: none`.
+
+Un modal root possiede un solo backdrop contestuale. Un menu o popup annidato nel modal guadagna il ruolo floating ma non aggiunge un secondo dimming; un secondo modal reale mantiene invece il proprio lifecycle/portal e sarà governato insieme allo stacking nei task overlay dedicati. P007 non assegna numeri z-index.
+
+**The Plane Motion Rule.** Il cambio di piano anima principalmente transform e opacity con la transizione `surface`; shadow e border possono cambiare come stato ma non vengono interpolati come effetto principale. Rapid open/close retargetta dalla posizione corrente. Reduced motion elimina lo spostamento spaziale e conserva immediatamente tono, bordo, backdrop e stato.
 
 ## Shapes
 

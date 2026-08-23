@@ -13,6 +13,39 @@ async function tabTo(page: Page, target: Locator, maximumTabs = 80) {
   await expect(target).toBeFocused();
 }
 
+test("Sirio specimen keeps stable proof identifiers while browser input owns transient states", async ({ browser }) => {
+  const context = await createInputContext(browser, { width: 1024, height: 768, touch: false });
+  const page = await context.newPage();
+  const assertNoRuntimeErrors = trackRuntimeErrors(page, "Sirio specimen standard");
+  await page.goto(`${mobileUrls.sirio}/components/button`);
+
+  const variants = page.locator('[data-specimen-region="variants"]');
+  await expect(variants).toHaveAccessibleName("Varianti & Distinzione Ghost vs Link");
+
+  const defaultSpecimen = variants.locator('[data-specimen-state="default"]');
+  await expect(defaultSpecimen.locator('[data-visual-specimen="button-default"]')).toBeVisible();
+  const button = defaultSpecimen.getByRole("button", { name: "Pulsante primario" });
+  await button.scrollIntoViewIfNeeded();
+
+  await button.hover();
+  await expect.poll(() => button.evaluate((element) => element.matches(":hover"))).toBe(true);
+  const box = await button.boundingBox();
+  expect(box).not.toBeNull();
+  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+  await page.mouse.down();
+  await expect.poll(() => button.evaluate((element) => element.matches(":active"))).toBe(true);
+  await expect(defaultSpecimen).toHaveAttribute("data-specimen-state", "default");
+  await page.mouse.up();
+  await expect.poll(() => button.evaluate((element) => element.matches(":active"))).toBe(false);
+
+  await page.mouse.click(8, 8);
+  await tabTo(page, button);
+  await expect.poll(() => button.evaluate((element) => element.matches(":focus-visible"))).toBe(true);
+  await expect(defaultSpecimen).toHaveAttribute("data-specimen-state", "default");
+  assertNoRuntimeErrors();
+  await context.close();
+});
+
 test("coarse-pointer shared buttons expose at least a 44px effective target", async ({ browser }) => {
   const context = await createInputContext(browser, { width: 390, height: 844, touch: true });
   const page = await context.newPage();
