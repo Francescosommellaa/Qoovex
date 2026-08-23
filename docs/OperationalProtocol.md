@@ -4,6 +4,10 @@ Questo indice rimanda alle fonti canoniche `06_OPERATIONS_AND_ENVIRONMENT.md`, `
 
 Codice, schema, migration e manifest sono la fonte di `verified_current_state`. Una `approved_product_direction` e una specifica `conceptual_not_implemented` non autorizzano operazioni runtime, schema, provider, retention, frequenze, permessi, route o UI.
 
+## Unita di lavoro persistente
+
+Una `task` conserva il proprio requisito, blast radius, regressione e gate. Un `micro-task` e una task consecutiva che resta nello stesso `work block`: il `work block`, la selezione applicability-aware, la Blast-Radius Verification Rule, il riuso dell'evidenza verde e `not_applicable` sono definiti dal contratto canonico in `HowToUse.md`. Il preflight completo e obbligatorio all'avvio del blocco e si ripete soltanto alle condizioni definite in quella fonte; ogni micro-task ispeziona comunque file, consumer, test, diff e stato Git correnti prima di modificare.
+
 ## Task documentale canonico
 
 Un task esclusivamente documentale:

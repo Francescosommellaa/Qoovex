@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { Specimen, SpecimenGrid } from "@/components/specimen";
 import { Checkbox } from "@qoovex/ui/components/checkbox";
@@ -208,7 +209,13 @@ export default function ControlsCatalogPage() {
         <section aria-labelledby="physical-switch-title">
           <div className="mb-4">
             <h2 id="physical-switch-title" className="text-2xl font-semibold tracking-tight">Qoovex Physical Switch</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Physical response + continuous state travel.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Physical response + continuous state travel.{" "}
+              <Link href="/foundations/motion" data-link="quiet">
+                Apri il contratto motion
+              </Link>
+              .
+            </p>
           </div>
           <SpecimenGrid cols={2}>
             <Specimen title="Interactive default">

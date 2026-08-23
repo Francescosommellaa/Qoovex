@@ -43,7 +43,7 @@ export default function FloatingNavigationPage() {
           </h2>
           <SpecimenGrid cols={1}>
             <Specimen title="Header con link, risorse dropdown, e CTA">
-              <div className="relative h-[5rem] w-full overflow-hidden rounded-2xl border bg-muted/30">
+              <div className="relative h-20 w-full overflow-hidden rounded-2xl border bg-muted/30">
                 <FloatingNavigation
                   activeHref="#"
                   brand={(compact) => <BrandMark compact={compact} variant="sirio" />}

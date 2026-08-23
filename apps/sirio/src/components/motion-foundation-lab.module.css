@@ -1,0 +1,410 @@
+/* ── Motion Foundation Lab Shell ────────────────────────────── */
+
+.lab {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--card);
+}
+
+/* ── Toolbar: Controls & Mode ───────────────────────────────── */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+}
+
+.modeControl {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.segmented {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: var(--radius-lg);
+  background: var(--muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── Status Row: State Telemetry & Phase Pills ──────────────── */
+
+.statusRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding-block: 0.75rem;
+  border-block: 1px solid var(--border);
+  font-size: var(--text-xs);
+  color: var(--muted-foreground);
+}
+
+.statusInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+}
+
+.phasePills {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.phasePills li {
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  transition-property: color, background-color;
+  transition-duration: var(--motion-duration-feedback);
+  transition-timing-function: var(--ease-standard);
+}
+
+.phasePills li[data-visited] {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.phasePills li[aria-current="step"] {
+  background: var(--foreground);
+  color: var(--background);
+  font-weight: 600;
+}
+
+/* ── Specimen Grid ─────────────────────────────────────────── */
+
+.specimenGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .specimenGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.specimen {
+  display: grid;
+  grid-template-rows: auto minmax(7.5rem, 1fr) auto;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+}
+
+.specimenHeader {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.specimenHeader > div {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.badgeLabel {
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  color: var(--muted-foreground);
+  font-family: var(--ff-accent);
+  font-size: var(--text-xs);
+}
+
+.caption {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+/* ── Specimen Stages ───────────────────────────────────────── */
+
+.stage,
+.surfaceStage {
+  display: grid;
+  place-items: center;
+  min-height: 7.5rem;
+  border-radius: var(--radius-md);
+  background: var(--muted);
+  overflow: clip;
+}
+
+/* ── 1. Instant ────────────────────────────────────────────── */
+
+.instantSignal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  opacity: 0.45;
+  transition-property: opacity, color;
+  transition-duration: var(--motion-duration-instant);
+  transition-timing-function: var(--ease-standard);
+}
+
+.instantDot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 999px;
+  background: var(--muted-foreground);
+  transition-property: background-color;
+  transition-duration: var(--motion-duration-instant);
+  transition-timing-function: var(--ease-standard);
+}
+
+.lab[data-active="true"] .instantSignal {
+  opacity: 1;
+  color: var(--foreground);
+  border-color: var(--foreground);
+}
+
+.lab[data-active="true"] .instantDot {
+  background: var(--foreground);
+}
+
+/* ── 2. Feedback ───────────────────────────────────────────── */
+
+.feedbackSignal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-target-min);
+  padding: 0.625rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transform: scale(0.97);
+  transition-property: transform, color, background-color, border-color;
+  transition-duration:
+    var(--motion-duration-feedback),
+    var(--motion-duration-feedback),
+    var(--motion-duration-feedback),
+    var(--motion-duration-feedback);
+  transition-timing-function:
+    var(--ease-standard),
+    var(--ease-standard),
+    var(--ease-standard),
+    var(--ease-standard);
+}
+
+.lab[data-active="true"] .feedbackSignal {
+  border-color: var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
+  transform: scale(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .feedbackSignal:hover {
+    border-color: var(--foreground);
+    color: var(--foreground);
+    transform: scale(1);
+  }
+
+  .lab[data-active="true"] .feedbackSignal:hover {
+    color: var(--background);
+  }
+}
+
+/* ── 3. State ──────────────────────────────────────────────── */
+
+.stateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.track {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(100%, 12rem);
+  min-height: var(--touch-target-min);
+  padding: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--background);
+  color: inherit;
+  font: inherit;
+  appearance: none;
+  cursor: pointer;
+}
+
+.indicator {
+  grid-column: 1;
+  border-radius: 999px;
+  background: var(--foreground);
+  transform: translateX(0);
+  transition-property: transform, background-color, color;
+  transition-duration:
+    var(--motion-duration-state),
+    var(--motion-duration-feedback),
+    var(--motion-duration-feedback);
+  transition-timing-function:
+    var(--ease-standard),
+    var(--ease-standard),
+    var(--ease-standard);
+}
+
+.lab[data-active="true"] .indicator {
+  transform: translateX(100%);
+}
+
+/* ── 4. Surface ────────────────────────────────────────────── */
+
+.surfaceStage {
+  position: relative;
+  padding: 0.75rem;
+}
+
+.surface {
+  position: absolute;
+  inset: 0.75rem;
+  display: grid;
+  align-content: center;
+  gap: 0.25rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  box-shadow: var(--shadow-xs);
+  opacity: 0;
+  transform: translateY(0.5rem) scale(0.97);
+  transition-property: transform, opacity;
+  transition-duration:
+    var(--motion-duration-surface),
+    var(--motion-duration-surface);
+  transition-timing-function:
+    var(--ease-emphasized),
+    var(--ease-emphasized);
+}
+
+.surface[data-open="true"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.unmounted {
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
+}
+
+/* ── Reduced Motion Mode (Local Override) ───────────────────── */
+
+.lab[data-motion-mode="reduced"] .feedbackSignal {
+  transform: none;
+  transition-property: color, background-color, border-color;
+  transition-duration:
+    var(--motion-duration-feedback),
+    var(--motion-duration-feedback),
+    var(--motion-duration-feedback);
+  transition-timing-function:
+    var(--ease-standard),
+    var(--ease-standard),
+    var(--ease-standard);
+}
+
+.lab[data-motion-mode="reduced"] .indicator {
+  transform: none;
+  transition-property: background-color, color;
+  transition-duration:
+    var(--motion-duration-feedback),
+    var(--motion-duration-feedback);
+  transition-timing-function:
+    var(--ease-standard),
+    var(--ease-standard);
+}
+
+.lab[data-motion-mode="reduced"][data-active="true"] .indicator {
+  grid-column: 2;
+}
+
+.lab[data-motion-mode="reduced"] .surface {
+  transform: none;
+  transition-property: opacity;
+  transition-duration: var(--motion-duration-feedback);
+  transition-timing-function: var(--ease-standard);
+}
+
+/* ── Reset Mode ────────────────────────────────────────────── */
+
+.lab[data-resetting="true"] .instantSignal,
+.lab[data-resetting="true"] .feedbackSignal,
+.lab[data-resetting="true"] .indicator,
+.lab[data-resetting="true"] .surface {
+  transition-duration: 0s !important;
+}
+
+/* ── System Reduced Motion ─────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .lab[data-motion-mode="system"] .feedbackSignal {
+    transform: none;
+    transition-property: color, background-color, border-color;
+    transition-duration:
+      var(--motion-duration-feedback),
+      var(--motion-duration-feedback),
+      var(--motion-duration-feedback);
+    transition-timing-function:
+      var(--ease-standard),
+      var(--ease-standard),
+      var(--ease-standard);
+  }
+
+  .lab[data-motion-mode="system"] .indicator {
+    transform: none;
+    transition-property: background-color, color;
+    transition-duration:
+      var(--motion-duration-feedback),
+      var(--motion-duration-feedback);
+    transition-timing-function:
+      var(--ease-standard),
+      var(--ease-standard);
+  }
+
+  .lab[data-motion-mode="system"][data-active="true"] .indicator {
+    grid-column: 2;
+  }
+
+  .lab[data-motion-mode="system"] .surface {
+    transform: none;
+    transition-property: opacity;
+    transition-duration: var(--motion-duration-feedback);
+    transition-timing-function: var(--ease-standard);
+  }
+}

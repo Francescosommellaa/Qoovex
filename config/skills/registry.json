@@ -29,7 +29,7 @@
       "source": "repository",
       "version": "1",
       "localPath": ".agents/skills/qoovex-ux-motion/SKILL.md",
-      "gitBlobSha": "4714fd9da8897356040b668b5157cde99925c410",
+      "gitBlobSha": "d1037253c00f66cdc95968d881ab596b108577c0",
       "role": "interaction-motion-specialist",
       "triggers": ["motion", "interaction"],
       "primaryResponsibilities": ["interaction-motion"],

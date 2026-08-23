@@ -41,7 +41,7 @@ export default function CardCatalogPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <Avatar size="default">
-                      <AvatarFallback className="bg-primary/10 text-primary font-accent font-semibold">
+                      <AvatarFallback className="bg-muted text-foreground font-accent font-semibold">
                         RM
                       </AvatarFallback>
                     </Avatar>
@@ -51,7 +51,7 @@ export default function CardCatalogPage() {
                     </CardHeader>
                   </div>
                   <CardAction>
-                    <Badge variant="default" className="font-accent text-[0.6875rem]">ACTIVE</Badge>
+                    <Badge variant="default" className="font-accent text-2xs">ACTIVE</Badge>
                   </CardAction>
                 </div>
 
@@ -89,14 +89,14 @@ export default function CardCatalogPage() {
                       € 124.500,00
                     </CardTitle>
                   </CardHeader>
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-success/10 text-success">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-success-surface text-success">
                     <IconReceipt2 className="h-5 w-5" />
                   </div>
                 </div>
 
                 <CardContent className="pt-2">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Badge variant="secondary" className="gap-1 bg-success/10 text-success font-accent text-[0.6875rem]">
+                    <Badge variant="secondary" className="gap-1 bg-success-surface text-success font-accent text-2xs">
                       <IconTrendingUp className="h-3 w-3" /> Aggiornato
                     </Badge>
                     <span>rispetto alla proposta precedente</span>

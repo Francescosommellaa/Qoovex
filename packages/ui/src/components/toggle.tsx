@@ -17,7 +17,7 @@ import {
 /* ─── Toggle ──────────────────────────────────────────────────────────────── */
 
 const toggleVariants = cva(
-  "group/toggle relative z-10 inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent font-medium outline-none select-none transition-all duration-200 ease-out focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/30 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/toggle relative z-10 inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent font-medium outline-none select-none transition-[color,background-color,border-color,box-shadow,transform,opacity] duration-200 ease-out focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/30 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {

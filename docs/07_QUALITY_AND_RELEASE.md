@@ -17,7 +17,7 @@ Le suite devono includere due Aziende, Owner/Collaborator/cliente, inviti/replay
 
 ## Matrice di chiusura per task
 
-`implemented_decision`: ogni task deve dichiarare il proprio blast radius, eseguire prima la regressione focalizzata e poi i gate applicabili sul diff finale. La matrice e cumulativa: una modifica che attraversa piu superfici eredita tutti i relativi gate.
+`implemented_decision`: `HowToUse.md` definisce la Blast-Radius Verification Rule. Ogni task deve dichiarare il proprio blast radius, eseguire prima la regressione focalizzata e poi i gate applicabili sul diff finale. La matrice e cumulativa: una modifica che attraversa piu superfici eredita tutti i relativi gate.
 
 | Impatto reale | Prove minime obbligatorie |
 | --- | --- |
@@ -29,7 +29,7 @@ Le suite devono includere due Aziende, Owner/Collaborator/cliente, inviti/replay
 | Dipendenze o lockfile | installazione frozen, audit, build e gate dei consumer impattati |
 | Skill, registry o routing agent | `pnpm skills:doctor`, `pnpm skills:test`, `pnpm skills:canary` e i gate prodotto eventualmente impattati |
 
-Il comando piu stretto serve a trovare rapidamente il difetto; non sostituisce il gate cumulativo. Se un comando richiede database, Blob, segreti o browser non attestabili localmente, non va puntato a target remoti: il required check CI corrispondente deve passare sullo SHA finale oppure la task resta in `hard_stop` per quella prova.
+Nel micro-task, il comando piu stretto che prova completamente il diff e preferibile e l'evidenza verde con input invariati e riusabile; una modifica agli input, alle dependency transitive rilevanti, alle foundation shared o al perimetro invalida il riuso. Questo non riduce la matrice cumulativa: per contratti shared/broad, chiusura di work block importante, PR/release o assenza di una prova mirata sufficiente, eseguire il gate aggregato pertinente. I required check CI e release restano invariati. Se un comando richiesto richiede database, Blob, segreti o browser non attestabili localmente, non va puntato a target remoti: il required check CI corrispondente deve passare sullo SHA finale oppure la task resta in `hard_stop` per quella prova.
 
 ### Gestione delle failure
 

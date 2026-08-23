@@ -1,0 +1,73 @@
+.container {
+  min-width: 0;
+  container-name: qoovex-responsive-proof;
+  container-type: inline-size;
+}
+
+.composition {
+  display: grid;
+  min-width: 0;
+  gap: 1rem;
+}
+
+.summary,
+.copy {
+  min-width: 0;
+}
+
+.summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.title {
+  text-wrap: balance;
+}
+
+.longValue {
+  overflow-wrap: anywhere;
+}
+
+.metadata,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.metadata {
+  margin-top: 0.75rem;
+}
+
+.actions > * {
+  min-width: 0;
+  flex: 1 1 10rem;
+}
+
+/*
+ * Local, content-owned threshold: title, metadata and both actions fit without
+ * truncation from 34rem of component space. It is not a Qoovex viewport breakpoint.
+ */
+@container qoovex-responsive-proof (min-width: 34rem) {
+  .composition {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .actions {
+    justify-content: flex-end;
+  }
+
+  .actions > * {
+    flex: 0 0 auto;
+  }
+}
+
+.safeAreaStage {
+  padding-top: max(1rem, var(--safe-area-top));
+  padding-right: max(1rem, var(--safe-area-right));
+  padding-bottom: max(1rem, var(--safe-area-bottom));
+  padding-left: max(1rem, var(--safe-area-left));
+}

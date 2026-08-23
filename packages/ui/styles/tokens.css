@@ -46,6 +46,7 @@
   --ff-accent: 'Array', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --radius: 0.5rem;
   --shadow-2xs: 0 1px 2px 0 hsl(0 0% 0% / 0.09);
+  /* Compatibility alias: 2xs and xs have never represented distinct planes. */
   --shadow-xs: 0 1px 2px 0 hsl(0 0% 0% / 0.09);
   --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 1px 2px -1px hsl(0 0% 0% / 0.18);
   --shadow: 0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 1px 2px -1px hsl(0 0% 0% / 0.18);
@@ -53,6 +54,12 @@
   --shadow-lg: 0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 4px 6px -1px hsl(0 0% 0% / 0.18);
   --shadow-xl: 0 1px 2px 0 hsl(0 0% 0% / 0.18), 0 8px 10px -1px hsl(0 0% 0% / 0.18);
   --shadow-2xl: 0 1px 2px 0 hsl(0 0% 0% / 0.45);
+  /* Semantic depth roles. Stacking remains an independent component concern. */
+  --elevation-raised: var(--shadow-sm);
+  --elevation-floating: var(--shadow-md);
+  --elevation-modal: var(--shadow-xl);
+  --backdrop-modal: oklch(0 0 0 / 0.5);
+  --backdrop-blur: 0.25rem;
   --tracking-normal: 0em;
   --spacing: 0.25rem;
   --control: 2rem;
@@ -62,7 +69,11 @@
   --safe-area-right: env(safe-area-inset-right, 0px);
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --safe-area-left: env(safe-area-inset-left, 0px);
+  /* Icon roles: compact text -> default control -> emphasis -> illustrative state. */
+  --icon-compact: 0.875rem;
   --icon: 1rem;
+  --icon-emphasized: 1.25rem;
+  --icon-illustrative: 1.75rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -74,6 +85,11 @@
   --text-sm: 0.875rem;
   --leading-tight: 1.25;
   --z-sticky: 40;
+  /* Focus geometry is immediate and shared by direct controls and composite owners. */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--ring);
+  /* Motion roles: immediate perception -> local feedback -> persistent state -> spatial surface. */
   --motion-duration-instant: 100ms;
   --motion-duration-feedback: 160ms;
   --motion-duration-state: 200ms;
@@ -155,12 +171,16 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-surface: var(--destructive-surface);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-info-surface: var(--info-surface);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
+  --color-success-surface: var(--success-surface);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-warning-surface: var(--warning-surface);
   --color-warning-emphasis: var(--warning-emphasis);
   --color-border: var(--border);
   --color-input: var(--input);

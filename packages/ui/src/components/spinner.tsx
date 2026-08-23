@@ -110,7 +110,7 @@ function Spinner({
     if (isDeterminate) {
       return (
         <div className="relative flex size-full items-center justify-center">
-          <svg className="size-full -rotate-90" viewBox="0 0 24 24" fill="none">
+          <svg aria-hidden="true" className="size-full -rotate-90" viewBox="0 0 24 24" fill="none">
             <circle
               cx="12"
               cy="12"
@@ -145,7 +145,8 @@ function Spinner({
       case "bars":
         return (
           <svg
-            className={cn("size-full animate-spin", spinnerVariants({ speed }))}
+            aria-hidden="true"
+            className={cn("size-full animate-spin motion-reduce:animate-none", spinnerVariants({ speed }))}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -169,7 +170,8 @@ function Spinner({
       case "track":
         return (
           <svg
-            className={cn("size-full animate-spin", spinnerVariants({ speed }))}
+            aria-hidden="true"
+            className={cn("size-full animate-spin motion-reduce:animate-none", spinnerVariants({ speed }))}
             viewBox="0 0 24 24"
             fill="none"
           >
@@ -193,16 +195,17 @@ function Spinner({
       case "dots":
         return (
           <span className="inline-flex items-center gap-1">
-            <span className="size-1.5 rounded-full bg-current animate-bounce [animation-delay:-0.32s]" />
-            <span className="size-1.5 rounded-full bg-current animate-bounce [animation-delay:-0.16s]" />
-            <span className="size-1.5 rounded-full bg-current animate-bounce" />
+            <span className="size-1.5 rounded-full bg-current animate-pulse motion-reduce:animate-none [animation-delay:-0.32s]" />
+            <span className="size-1.5 rounded-full bg-current animate-pulse motion-reduce:animate-none [animation-delay:-0.16s]" />
+            <span className="size-1.5 rounded-full bg-current animate-pulse motion-reduce:animate-none" />
           </span>
         )
 
       case "orbit":
         return (
           <svg
-            className={cn("size-full animate-spin", spinnerVariants({ speed }))}
+            aria-hidden="true"
+            className={cn("size-full animate-spin motion-reduce:animate-none", spinnerVariants({ speed }))}
             viewBox="0 0 24 24"
             fill="none"
           >
@@ -223,7 +226,7 @@ function Spinner({
       case "pulse":
         return (
           <span className="relative flex size-full items-center justify-center">
-            <span className="absolute size-full rounded-full bg-current opacity-30 animate-ping" />
+            <span className="absolute size-full rounded-full bg-current opacity-30 animate-ping motion-reduce:animate-none" />
             <span className="size-2/3 rounded-full bg-current" />
           </span>
         )
@@ -232,7 +235,8 @@ function Spinner({
       default:
         return (
           <svg
-            className={cn("size-full animate-spin", spinnerVariants({ speed }))}
+            aria-hidden="true"
+            className={cn("size-full animate-spin motion-reduce:animate-none", spinnerVariants({ speed }))}
             viewBox="0 0 24 24"
             fill="none"
           >
@@ -276,7 +280,7 @@ function Spinner({
       <span
         data-slot="spinner-container"
         className={cn(
-          "inline-flex items-center gap-2 text-muted-foreground text-xs font-medium font-accent transition-all duration-300",
+          "inline-flex items-center gap-2 text-muted-foreground text-xs font-semibold font-accent transition-all duration-300",
           labelPosition === "bottom" && "flex-col gap-1.5 text-center",
           className
         )}

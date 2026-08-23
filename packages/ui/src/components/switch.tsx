@@ -3,26 +3,35 @@
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
 import { cva, type VariantProps } from "class-variance-authority"
 import { motion, useReducedMotion, type Transition, type Variants } from "motion/react"
-import type { ComponentProps } from "react"
+import * as React from "react"
 
+import { resolveMotionTransition } from "#lib/motion"
 import { cn } from "#lib/utils"
 
-/**
- * Motion consumes seconds and Bezier arrays rather than CSS custom properties.
- * This component-local mapping mirrors the canonical CSS tokens in tokens.css.
- */
-const switchMotion = {
-  feedback: {
-    duration: 0.16,
-    ease: [0.2, 0, 0, 1],
-  },
-  state: {
-    duration: 0.2,
-    ease: [0.2, 0, 0, 1],
-  },
-} as const satisfies Record<"feedback" | "state", Transition>
+type SwitchMotion = Record<"feedback" | "state", Transition>
 
-function getThumbMotionVariants(reducedMotion: boolean): Variants {
+const immediateSwitchMotion: SwitchMotion = {
+  feedback: { duration: 0 },
+  state: { duration: 0 },
+}
+
+function readSwitchMotion(): SwitchMotion {
+  if (typeof window === "undefined") {
+    return immediateSwitchMotion
+  }
+
+  const styles = window.getComputedStyle(document.documentElement)
+
+  return {
+    feedback: resolveMotionTransition(styles, "feedback"),
+    state: resolveMotionTransition(styles, "state"),
+  }
+}
+
+function getThumbMotionVariants(
+  reducedMotion: boolean,
+  switchMotion: SwitchMotion
+): Variants {
   const transition: Transition = reducedMotion
     ? { duration: 0 }
     : switchMotion.state
@@ -51,7 +60,7 @@ function getThumbMotionVariants(reducedMotion: boolean): Variants {
 }
 
 const switchVariants = cva(
-  "peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent outline-none transition-[background-color] [transition-duration:var(--motion-duration-state)] [transition-timing-function:var(--ease-standard)] motion-reduce:transition-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-disabled:cursor-not-allowed data-disabled:opacity-50 data-unchecked:bg-input dark:data-unchecked:bg-input/80",
+  "peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent outline-none transition-[background-color] [transition-duration:var(--motion-duration-state)] [transition-timing-function:var(--ease-standard)] after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-disabled:cursor-not-allowed data-disabled:opacity-50 data-unchecked:bg-input dark:data-unchecked:bg-input/80",
   {
     variants: {
       size: {
@@ -90,7 +99,15 @@ function Switch({
   ...props
 }: SwitchProps) {
   const reducedMotion = useReducedMotion()
-  const thumbMotionVariants = getThumbMotionVariants(Boolean(reducedMotion))
+  const [resolvedSwitchMotion] = React.useState(readSwitchMotion)
+  const switchMotion = reducedMotion
+    ? immediateSwitchMotion
+    : resolvedSwitchMotion
+
+  const thumbMotionVariants = React.useMemo(
+    () => getThumbMotionVariants(Boolean(reducedMotion), switchMotion),
+    [reducedMotion, switchMotion]
+  )
 
   return (
     <SwitchPrimitive.Root
@@ -98,7 +115,7 @@ function Switch({
       className={cn(switchVariants({ size, color }), className)}
       {...props}
       render={(rootProps, state) => {
-        const motionRootProps = rootProps as ComponentProps<typeof motion.span>
+        const motionRootProps = rootProps as React.ComponentProps<typeof motion.span>
 
         return (
           <motion.span

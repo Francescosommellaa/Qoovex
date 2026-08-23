@@ -15,42 +15,51 @@ import {
   DialogIcon,
 } from "@qoovex/ui/components/dialog";
 import { Button } from "@qoovex/ui/components/button";
-import { Field, FieldLabel, FieldDescription } from "@qoovex/ui/components/field";
 import { Input } from "@qoovex/ui/components/input";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@qoovex/ui/components/select";
-import { Badge } from "@qoovex/ui/components/badge";
+import { Field, FieldLabel, FieldDescription } from "@qoovex/ui/components/field";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@qoovex/ui/components/select";
 import {
   IconBuildingStore,
-  IconAlertTriangle,
   IconPlus,
   IconTrash,
+  IconAlertTriangle,
   IconInfoCircle,
   IconFileText,
   IconPhoto,
 } from "@tabler/icons-react";
 
-export default function DialogPage() {
+export default function DialogCatalogPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <div className="mx-auto w-full max-w-6xl">
       <PageHeader
-        title="Dialog & Modali Semantiche"
-        description="Varianti funzionali di modale (Form, Destructive, Alert e Media Preview) con comportamento adattivo nativo (Tendina dal basso su Mobile, Modal centrato su Desktop)."
-        importPath="import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose, DialogIcon } from '@qoovex/ui/components/dialog'"
+        title="Dialog (Finestra Modale)"
+        description="Pannello sovrapposto per flussi mirati, conferme distruttive e anteprime multimediali con focus trapping, animazione elastica a molla e transizione mobile-first."
+        importPath="import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@qoovex/ui/components/dialog'"
       />
 
       <div className="flex flex-col gap-12">
-        {/* ── Sezione 1: Varianti Semantiche di Modale ────────────────────────────── */}
+        {/* ── Sezione 1: Varianti Semantiche e Funzionali ────────────────────── */}
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Varianti Semantiche e Funzionali</h2>
           <SpecimenGrid cols={2}>
             <Specimen title="Form Modale (Default)" visualId="dialog-open">
               <Dialog>
-                <DialogTrigger render={<Button className="w-full" />}>
-                  <IconPlus />
-                  <span>Nuovo Cantiere</span>
-                </DialogTrigger>
+                <DialogTrigger
+                  render={
+                    <Button className="w-full">
+                      <IconPlus />
+                      <span>Nuovo Cantiere</span>
+                    </Button>
+                  }
+                />
                 <DialogContent>
                   <DialogHeader>
                     <DialogIcon variant="info">
@@ -90,9 +99,13 @@ export default function DialogPage() {
                   </div>
 
                   <DialogFooter>
-                    <DialogClose render={<Button variant="outline" />}>
-                      Annulla
-                    </DialogClose>
+                    <DialogClose
+                      render={
+                        <Button variant="outline">
+                          Annulla
+                        </Button>
+                      }
+                    />
                     <Button
                       loading={isSubmitting}
                       onClick={() => {
@@ -109,10 +122,14 @@ export default function DialogPage() {
 
             <Specimen title="Modale Conferma Distruttiva (variant=destructive)">
               <Dialog>
-                <DialogTrigger render={<Button variant="destructive" className="w-full" />}>
-                  <IconTrash />
-                  <span>Elimina Cantiere</span>
-                </DialogTrigger>
+                <DialogTrigger
+                  render={
+                    <Button variant="destructive" className="w-full">
+                      <IconTrash />
+                      <span>Elimina Cantiere</span>
+                    </Button>
+                  }
+                />
                 <DialogContent variant="destructive" size="sm">
                   <DialogHeader>
                     <DialogIcon variant="destructive">
@@ -125,9 +142,13 @@ export default function DialogPage() {
                   </DialogHeader>
 
                   <DialogFooter className="mt-2">
-                    <DialogClose render={<Button variant="outline" />}>
-                      Annulla
-                    </DialogClose>
+                    <DialogClose
+                      render={
+                        <Button variant="outline">
+                          Annulla
+                        </Button>
+                      }
+                    />
                     <Button variant="destructive">
                       Conferma ed Elimina
                     </Button>
@@ -138,10 +159,14 @@ export default function DialogPage() {
 
             <Specimen title="Alert Conferma Centrato (variant=alert)">
               <Dialog>
-                <DialogTrigger render={<Button variant="secondary" className="w-full" />}>
-                  <IconInfoCircle />
-                  <span>Conferma Accordo</span>
-                </DialogTrigger>
+                <DialogTrigger
+                  render={
+                    <Button variant="secondary" className="w-full">
+                      <IconInfoCircle />
+                      <span>Conferma Accordo</span>
+                    </Button>
+                  }
+                />
                 <DialogContent variant="alert" size="sm">
                   <DialogHeader>
                     <DialogIcon variant="warning">
@@ -154,9 +179,13 @@ export default function DialogPage() {
                   </DialogHeader>
 
                   <DialogFooter className="mt-2">
-                    <DialogClose render={<Button variant="outline" />}>
-                      Torna Indietro
-                    </DialogClose>
+                    <DialogClose
+                      render={
+                        <Button variant="outline">
+                          Torna Indietro
+                        </Button>
+                      }
+                    />
                     <Button variant="default">
                       Conferma Accordo
                     </Button>
@@ -167,10 +196,14 @@ export default function DialogPage() {
 
             <Specimen title="Media / Document Preview (variant=media)">
               <Dialog>
-                <DialogTrigger render={<Button variant="outline" className="w-full" />}>
-                  <IconPhoto />
-                  <span>Anteprima Documento</span>
-                </DialogTrigger>
+                <DialogTrigger
+                  render={
+                    <Button variant="outline" className="w-full">
+                      <IconPhoto />
+                      <span>Anteprima Documento</span>
+                    </Button>
+                  }
+                />
                 <DialogContent variant="media" size="lg">
                   <div className="p-6 bg-card border-b">
                     <DialogHeader>
@@ -178,16 +211,20 @@ export default function DialogPage() {
                       <DialogDescription>Documentazione allegata al cantiere JOB-SITE #8942.</DialogDescription>
                     </DialogHeader>
                   </div>
-                  <div className="p-8 bg-muted/30 flex items-center justify-center min-h-[240px]">
+                  <div className="p-8 bg-muted/30 flex items-center justify-center min-h-60">
                     <div className="flex flex-col items-center gap-2 text-muted-foreground">
                       <IconFileText className="h-12 w-12 stroke-1" />
                       <span className="text-xs font-accent">planimetria_impianto_v2.pdf</span>
                     </div>
                   </div>
                   <div className="p-4 bg-card border-t flex justify-end gap-2">
-                    <DialogClose render={<Button variant="outline" />}>
-                      Chiudi Anteprima
-                    </DialogClose>
+                    <DialogClose
+                      render={
+                        <Button variant="outline">
+                          Chiudi Anteprima
+                        </Button>
+                      }
+                    />
                   </div>
                 </DialogContent>
               </Dialog>

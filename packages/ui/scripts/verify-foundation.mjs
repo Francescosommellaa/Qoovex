@@ -32,6 +32,11 @@ const tokens = read("packages/ui/styles/tokens.css");
 for (const value of ["prefers-reduced-motion", "@custom-variant dark", "data-link=", "scrollbar-width: thin"]) assert(base.includes(value), `base.css non contiene ${value}`);
 for (const value of ["--info", "--success", "--warning", "--warning-emphasis", "--destructive", "--sidebar", "oklch("]) assert(tokens.includes(value), `tokens.css non contiene ${value}`);
 assert(tokens.includes("--font-sans: var(--ff-sans);") && tokens.includes("--font-accent: var(--ff-accent);"), "tokens.css deve esporre i token --font-sans e --font-accent.");
+for (const value of ["--focus-ring-width: 2px", "--focus-ring-offset: 2px", "--focus-ring-color: var(--ring)"]) assert(tokens.includes(value), `Token focus canonico mancante: ${value}`);
+for (const value of [':focus-visible', 'data-focus-owner="composite"', 'data-focus-target="composite"', "outline: var(--focus-ring-width) solid var(--focus-ring-color)", "outline-color: Highlight"]) assert(base.includes(value), `Contratto focus canonico mancante: ${value}`);
+for (const value of ["--touch-target-min: 2.75rem", "(any-pointer: coarse)", ".qv-touch-target-compact::after", ".qv-touch-target-inline", "width: var(--touch-target-min)", "height: var(--touch-target-min)"]) assert(`${tokens}\n${base}`.includes(value), `Contratto pointer/touch canonico mancante: ${value}`);
+for (const value of ["--icon-compact: 0.875rem", "--icon: 1rem", "--icon-emphasized: 1.25rem", "--icon-illustrative: 1.75rem", ".qv-icon-compact", ".qv-icon-default", ".qv-icon-emphasized", ".qv-icon-illustrative"]) assert(`${tokens}\n${base}`.includes(value), `Contratto iconografico canonico mancante: ${value}`);
+for (const value of ["--elevation-raised: var(--shadow-sm)", "--elevation-floating: var(--shadow-md)", "--elevation-modal: var(--shadow-xl)", "--backdrop-modal", ".qv-surface-base", ".qv-surface-contained", ".qv-surface-raised", ".qv-surface-floating", ".qv-surface-modal", ".qv-backdrop-modal"]) assert(`${tokens}\n${base}`.includes(value), `Contratto surface/elevation canonico mancante: ${value}`);
 
 const workspaceOrganization = read("apps/workspace/src/app/job-sites/[jobSiteId]/page.tsx");
 const workspaceClient = read("apps/workspace/src/app/client/job-sites/[jobSiteId]/page.tsx");

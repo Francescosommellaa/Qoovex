@@ -144,7 +144,7 @@ export function InvitationAcceptancePageView({
         <Alert className="mt-4" variant="info"><IconClock /><AlertDescription>Il link scade il {new Intl.DateTimeFormat("it-IT", { dateStyle: "medium", timeStyle: "short" }).format(new Date(expiresAt))}.</AlertDescription></Alert>
         {error ? <Alert className="mt-4" variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
         <div className={cn(styles.actions, "mt-5")}>
-          <Button className="h-11 active:scale-[0.985]" disabled={loading} onClick={accept} type="button">
+          <Button className="h-11" disabled={loading} onClick={accept} type="button">
             {loading ? <><Spinner /> Accettazione in corso</> : <>Accetta e continua <IconArrowRight data-icon="inline-end" /></>}
           </Button>
           <Button className="h-11" disabled={loading} onClick={() => void decline()} type="button" variant="outline">Rifiuta invito</Button>

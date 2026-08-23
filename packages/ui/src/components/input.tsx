@@ -33,8 +33,9 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
     <InputPrimitive
       type={type}
       data-slot="input"
+      data-focus-target="composite"
       className={cn(
-        "qv-touch-target-field h-9 w-full min-w-0 rounded-lg border border-input bg-transparent px-3 py-1.5 text-base sm:text-sm transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/30 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/30 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
+        "qv-touch-target-field h-9 w-full min-w-0 rounded-lg border border-input bg-transparent px-3 py-1.5 text-base sm:text-sm transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/30 qv-readonly:cursor-text qv-readonly:bg-muted/30 qv-readonly:text-foreground qv-readonly:opacity-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/30 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
         // Eliminazione freccette native spinner e X di cancellazione browser per evitare sovrapposizioni
         "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none",
         className
@@ -48,8 +49,9 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="input-group"
+      data-focus-owner="composite"
       className={cn(
-        "relative flex w-full items-center rounded-lg border border-input bg-transparent text-sm transition-colors focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/30 dark:bg-input/30",
+        "relative flex w-full items-center rounded-lg border border-input bg-transparent text-sm transition-colors focus-within:border-ring dark:bg-input/30",
         className
       )}
       {...props}
@@ -80,12 +82,14 @@ function InputAddon({
 function InputIcon({
   className,
   position = "left",
+  "aria-hidden": ariaHidden = true,
   ...props
 }: React.ComponentProps<"div"> & { position?: "left" | "right" }) {
   return (
     <div
       data-slot="input-icon"
       data-position={position}
+      aria-hidden={ariaHidden}
       className={cn(
         "absolute top-1/2 -translate-y-1/2 text-muted-foreground flex items-center justify-center pointer-events-none shrink-0 [&_svg]:size-4",
         position === "left" ? "left-3" : "right-3",
@@ -218,7 +222,7 @@ function PhoneInput({
           <DropdownMenuGroup>
             <DropdownMenuLabel>Prefisso Paese</DropdownMenuLabel>
             <div className="relative mb-2 px-1">
-              <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
+              <IconSearch aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Cerca paese o prefisso..."
@@ -560,7 +564,7 @@ function DatePickerInput({
               return (
                 <DropdownMenuItem
                   key={day}
-                  className="flex size-8 items-center justify-center rounded-lg p-0 text-xs font-medium font-accent justify-center"
+                  className="flex size-8 items-center justify-center rounded-lg p-0 text-xs font-semibold font-accent justify-center"
                   onClick={() => handleSelectDay(day)}
                 >
                   {day}
@@ -617,7 +621,7 @@ function TimePickerInput({
                 <DropdownMenuItem
                   key={h}
                   className={cn(
-                    "px-2 py-1 text-xs font-accent font-medium rounded-md",
+                    "px-2 py-1 text-xs font-accent font-semibold rounded-md",
                     h === selectedHour && "bg-accent font-bold text-accent-foreground"
                   )}
                   onClick={() => onChangeTime?.(`${h}:${selectedMinute || "00"}`)}
@@ -633,7 +637,7 @@ function TimePickerInput({
                 <DropdownMenuItem
                   key={m}
                   className={cn(
-                    "px-2 py-1 text-xs font-accent font-medium rounded-md",
+                    "px-2 py-1 text-xs font-accent font-semibold rounded-md",
                     m === selectedMinute && "bg-accent font-bold text-accent-foreground"
                   )}
                   onClick={() => onChangeTime?.(`${selectedHour || "09"}:${m}`)}

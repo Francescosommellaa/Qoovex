@@ -2,7 +2,7 @@
 
 import { IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
-import { Button } from "@qoovex/ui/components/button";
+import { Button, buttonVariants } from "@qoovex/ui/components/button";
 import Link from "next/link";
 
 export default function GlobalError({
@@ -29,7 +29,7 @@ export default function GlobalError({
             <IconRefresh aria-hidden="true" />
             Riprova
           </Button>
-          <Button render={<Link href="/" />}>Home</Button>
+          <Link className={buttonVariants()} href="/">Home</Link>
         </div>
       </div>
     </main>

@@ -52,6 +52,10 @@ La CI non può osservare magicamente una skill che l'agent runtime non espone co
 
 Non sostituire questi gate con resize manuale o user-agent sniffing. Touch e shortcut derivano dalle capability di input; i fixed surface rispettano safe area e viewport dinamica; il minimo touch condiviso e 44 px. La CI indipendente `mobile-responsive` esegue doctor prima di Playwright e non muta database persistenti, auth, Blob o target remoti.
 
+## UI composition and geometry enforcement
+
+Per ogni modifica runtime UI, attribuire prima ogni responsabilita geometrica a un solo owner e applicare `docs/05_UI_BRAND_AND_SURFACES.md`: parent per spacing esterno, page/shell per padding e width, primitive per geometria interna, surface reali per viewport/safe-area/scroll/layering. Non introdurre compensazioni `!p-*`, `!m-*`, `-mx-*`, overflow clipping, viewport units, positioning o z-index senza owner esplicito; correggere la foundation o dichiarare un'eccezione intenzionale. Questo enforcement non rende obbligatoria una review UI per task esclusivamente documentali senza modifiche runtime.
+
 ## Impeccable obbligatorio per UI/UX
 
 Impeccable è parte obbligatoria del workflow quando una task crea, modifica, corregge, revisiona o rifattorizza:
@@ -69,7 +73,7 @@ Impeccable resta la disciplina generale per audit e critique UI, qualità visual
 
 Il routing specialistico si attiva per task che toccano componenti o layout UI, UX, responsive, accessibilità, navigazione, feedback o stati visuali e asincroni (`loading`, empty, error), form control e stati interattivi (hover, press/tap, focus), dialog, drawer, popover, tooltip, menu, transizioni di stato o layout, gesture, motion, animazioni e microinterazioni. Non è richiesto per task esclusivamente database, Prisma, migration, backend, CI/deploy, auth server-side, storage o documentazione non UI, salvo che modifichino anche una superficie o interazione UI.
 
-`qoovex-ux-motion` decide se non animare, usare CSS/Tailwind, affidarsi agli stati e al comportamento Base UI oppure valutare Motion soltanto quando realmente giustificato. Base UI resta la behavioral foundation. La skill è subordinata alla richiesta corrente, alle regole business/legal, allo stato runtime verificato, alle fonti canoniche e all'`OperationalProtocol`, ai confini architetturali/package e al design system reale; non autorizza redesign, dipendenze, provider, cambi architetturali, nuove primitive o token, né modifiche a database, auth, permessi, privacy o capability non implementate. Se necessari, questi cambiamenti devono essere segnalati separatamente.
+`qoovex-ux-motion` separa le responsabilità tra Base UI, CSS/Tailwind e `motion/react`: Base UI resta la behavioral foundation, mentre Motion è first-class e preferenziale nei componenti interattivi quando aumenta precisione, continuità, fluidità, interruption handling o controllo del lifecycle. Nessuna animazione e CSS restano esiti validi quando quel beneficio non esiste. La skill è subordinata alla richiesta corrente, alle regole business/legal, allo stato runtime verificato, alle fonti canoniche e all'`OperationalProtocol`, ai confini architetturali/package e al design system reale; non autorizza redesign, dipendenze, provider, cambi architetturali, nuove primitive o token, né modifiche a database, auth, permessi, privacy o capability non implementate. Se necessari, questi cambiamenti devono essere segnalati separatamente.
 
 Se l'hook automatico non è disponibile o non risolve la superficie corretta, una task UI non può essere dichiarata completata senza eseguire nel context corretto il detector/review Impeccable manuale appropriato. Se anche la skill, il context o il workflow manuale richiesti non sono disponibili, dichiaralo come `hard_stop`: non sostituirli silenziosamente e non dichiarare conclusa la review.
 

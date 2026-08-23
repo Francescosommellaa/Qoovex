@@ -46,7 +46,7 @@ export function OrganizationSetupForm() {
         <FieldDescription>Usa la denominazione con cui il team riconosce l’Azienda nel lavoro quotidiano.</FieldDescription>
       </Field>
       {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
-      <Button className="h-11 w-full active:scale-[0.985]" disabled={loading} type="submit">
+      <Button className="h-11 w-full" disabled={loading} type="submit">
         {loading ? <><Spinner /> Creazione in corso</> : <>Crea la tua azienda <IconArrowRight data-icon="inline-end" /></>}
       </Button>
     </form>

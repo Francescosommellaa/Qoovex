@@ -133,7 +133,7 @@ export default function CollapsibleCatalogPage() {
                         <div
                           className={`flex size-8 shrink-0 items-center justify-center rounded-lg border transition-colors ${
                             isOpen
-                              ? "border-primary/30 bg-primary/10 text-primary"
+                              ? "border-border bg-muted text-foreground"
                               : "border-border/60 bg-muted/40 text-muted-foreground group-hover:text-foreground"
                           }`}
                         >

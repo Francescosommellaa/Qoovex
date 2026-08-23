@@ -174,7 +174,7 @@ export function SignUpPageView({
               <FieldDescription>Usa l’indirizzo sul quale vuoi ricevere il codice di verifica.</FieldDescription>
             </Field>
             {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
-            <Button className="h-11 w-full active:scale-[0.985]" disabled={loading} type="submit">
+            <Button className="h-11 w-full" disabled={loading} type="submit">
               {loading ? <><Spinner /> Invio in corso</> : <>Invia codice <IconArrowRight data-icon="inline-end" /></>}
             </Button>
           </form>
@@ -193,7 +193,7 @@ export function SignUpPageView({
             </Field>
             {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
             <div className={styles.formActions}>
-              <Button className="h-11 active:scale-[0.985]" disabled={loading} type="submit">
+              <Button className="h-11" disabled={loading} type="submit">
                 {loading ? <><Spinner /> Verifica in corso</> : <>Verifica email <IconArrowRight data-icon="inline-end" /></>}
               </Button>
               <Button disabled={loading} onClick={resendCode} type="button" variant="outline"><IconRefresh /> Reinvia codice</Button>
@@ -242,7 +242,7 @@ export function SignUpPageView({
               </Field>
             </FieldGroup>
             {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
-            <Button className="h-11 w-full active:scale-[0.985]" disabled={loading} type="submit">
+            <Button className="h-11 w-full" disabled={loading} type="submit">
               {loading ? <><Spinner /> Creazione in corso</> : <>Crea account <IconArrowRight data-icon="inline-end" /></>}
             </Button>
           </form>
