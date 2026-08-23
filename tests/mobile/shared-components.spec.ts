@@ -13,20 +13,25 @@ async function tabTo(page: Page, target: Locator, maximumTabs = 80) {
   await expect(target).toBeFocused();
 }
 
-test("Sirio specimen keeps stable proof identifiers while browser input owns transient states", async ({ browser }) => {
+test("Button keeps stable geometry while browser input drives hover, press, cancel, and rapid activation", async ({ browser }) => {
   const context = await createInputContext(browser, { width: 1024, height: 768, touch: false });
   const page = await context.newPage();
   const assertNoRuntimeErrors = trackRuntimeErrors(page, "Sirio specimen standard");
   await page.goto(`${mobileUrls.sirio}/components/button`);
 
   const variants = page.locator('[data-specimen-region="variants"]');
-  await expect(variants).toHaveAccessibleName("Varianti & Distinzione Ghost vs Link");
+  await expect(variants).toHaveAccessibleName("Varianti pubbliche");
 
   const defaultSpecimen = variants.locator('[data-specimen-state="default"]');
   await expect(defaultSpecimen.locator('[data-visual-specimen="button-default"]')).toBeVisible();
-  const button = defaultSpecimen.getByRole("button", { name: "Pulsante primario" });
+  const button = defaultSpecimen.getByRole("button", { name: "Crea cantiere" });
+  const motionContent = button.locator('[data-slot="button-motion-content"]');
   await button.scrollIntoViewIfNeeded();
 
+  const initialGeometry = await button.evaluate((element) => ({
+    height: (element as HTMLElement).offsetHeight,
+    width: (element as HTMLElement).offsetWidth,
+  }));
   await button.hover();
   await expect.poll(() => button.evaluate((element) => element.matches(":hover"))).toBe(true);
   const box = await button.boundingBox();
@@ -34,9 +39,26 @@ test("Sirio specimen keeps stable proof identifiers while browser input owns tra
   await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
   await page.mouse.down();
   await expect.poll(() => button.evaluate((element) => element.matches(":active"))).toBe(true);
+  await expect.poll(async () => motionContent.evaluate((element) => {
+    const transform = getComputedStyle(element).transform;
+    return transform === "none" ? 1 : new DOMMatrix(transform).a;
+  })).toBeLessThan(0.995);
+  await expect(button).toHaveCSS("transform", "none");
   await expect(defaultSpecimen).toHaveAttribute("data-specimen-state", "default");
+  await page.mouse.move(box!.x + box!.width + 24, box!.y + box!.height + 24);
+  await expect.poll(async () => motionContent.evaluate((element) => {
+    const transform = getComputedStyle(element).transform;
+    return transform === "none" ? 1 : new DOMMatrix(transform).a;
+  })).toBeGreaterThanOrEqual(0.995);
   await page.mouse.up();
   await expect.poll(() => button.evaluate((element) => element.matches(":active"))).toBe(false);
+
+  await button.click({ clickCount: 3, delay: 20 });
+  await expect(page.locator('[data-button-activation-count]')).toHaveText("3");
+  expect(await button.evaluate((element) => ({
+    height: (element as HTMLElement).offsetHeight,
+    width: (element as HTMLElement).offsetWidth,
+  }))).toEqual(initialGeometry);
 
   await page.mouse.click(8, 8);
   await tabTo(page, button);
@@ -46,15 +68,85 @@ test("Sirio specimen keeps stable proof identifiers while browser input owns tra
   await context.close();
 });
 
-test("coarse-pointer shared buttons expose at least a 44px effective target", async ({ browser }) => {
+test("Button loading preserves focus and geometry while preventing repeated activation", async ({ browser }) => {
+  const context = await createInputContext(browser, { width: 1024, height: 768, touch: false });
+  const page = await context.newPage();
+  const assertNoRuntimeErrors = trackRuntimeErrors(page, "Button loading lifecycle");
+  await page.goto(`${mobileUrls.sirio}/components/button`);
+
+  const button = page.locator('[data-button-proof="loading-lifecycle"]');
+  const initialBox = await button.boundingBox();
+  expect(initialBox).not.toBeNull();
+  await button.focus();
+  await page.keyboard.press("Enter");
+  await expect(button).toHaveAttribute("aria-busy", "true");
+  await expect(button).toHaveAttribute("aria-disabled", "true");
+  await expect(button).toBeFocused();
+  await page.keyboard.press("Enter");
+  await page.keyboard.press("Space");
+  await expect(page.locator('[data-button-submit-count]')).toHaveText("1");
+  const loadingBox = await button.boundingBox();
+  expect(loadingBox).not.toBeNull();
+  expect({ width: loadingBox!.width, height: loadingBox!.height }).toEqual({
+    width: initialBox!.width,
+    height: initialBox!.height,
+  });
+  await expect(button.locator('[data-slot="button-loader"]')).toBeVisible();
+  await expect(button).not.toHaveAttribute("aria-busy", "true", { timeout: 2500 });
+  await expect(button).toBeFocused();
+  assertNoRuntimeErrors();
+  await context.close();
+});
+
+test("coarse-pointer text Buttons expose a 44px target without sticky hover", async ({ browser }) => {
   const context = await createInputContext(browser, { width: 390, height: 844, touch: true });
   const page = await context.newPage();
   const assertNoRuntimeErrors = trackRuntimeErrors(page, "shared touch targets");
   await page.goto(`${mobileUrls.sirio}/components/button`);
   assertNoRuntimeErrors();
-  for (const name of ["Condividi XS", "Condividi SM", "Condividi Default", "Condividi LG"]) {
+  for (const name of ["Compatto XS", "Compatto SM", "Misura standard", "Azione ampia"]) {
     await expectTouchTarget(page.getByRole("button", { name }), name);
   }
+  const compact = page.getByRole("button", { name: "Compatto XS" });
+  const initialVisual = await compact.evaluate((element) => ({
+    backgroundColor: getComputedStyle(element).backgroundColor,
+    transform: getComputedStyle(element.querySelector('[data-slot="button-motion-content"]')!).transform,
+  }));
+  await compact.tap();
+  await expect.poll(() => compact.evaluate((element) => ({
+    backgroundColor: getComputedStyle(element).backgroundColor,
+    transform: getComputedStyle(element.querySelector('[data-slot="button-motion-content"]')!).transform,
+  }))).toEqual(initialVisual);
+  await context.close();
+});
+
+test("Button keyboard and reduced-motion feedback preserve native activation and immediate focus", async ({ browser }) => {
+  const context = await createInputContext(browser, {
+    width: 320,
+    height: 720,
+    touch: false,
+    reducedMotion: "reduce",
+  });
+  const page = await context.newPage();
+  const assertNoRuntimeErrors = trackRuntimeErrors(page, "Button keyboard reduced motion");
+  await page.emulateMedia({ forcedColors: "active", reducedMotion: "reduce" });
+  await page.goto(`${mobileUrls.sirio}/components/button`);
+
+  const button = page.locator('[data-button-proof="keyboard"]');
+  await tabTo(page, button);
+  await expect.poll(() => button.evaluate((element) => element.matches(":focus-visible"))).toBe(true);
+  await page.keyboard.press("Enter");
+  await page.keyboard.press("Space");
+  await expect(page.locator('[data-button-keyboard-count]')).toHaveText("2");
+  await button.hover();
+  const box = await button.boundingBox();
+  expect(box).not.toBeNull();
+  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+  await page.mouse.down();
+  await expect(button.locator('[data-slot="button-motion-content"]')).toHaveCSS("transform", "none");
+  await page.mouse.up();
+  await expectNoDocumentOverflow(page, "Button 320px reduced-motion proof");
+  assertNoRuntimeErrors();
   await context.close();
 });
 
@@ -104,7 +196,9 @@ test("motion foundation exposes every canonical role, phase, easing, and control
 
   await expect(page.getByRole("link", { name: "Motion", exact: true })).toBeVisible();
   await expect(page.locator('[data-visual-specimen="motion-roles"]')).toHaveCount(4);
-  await expect(page.locator('[data-motion-demo]')).toHaveCount(7);
+  for (const role of ["instant", "feedback", "state", "surface"]) {
+    await expect(page.locator(`[data-motion-demo="${role}"]`)).toHaveCount(1);
+  }
   await expect(page.locator('[data-motion-phase-step]')).toHaveCount(4);
   await expect(page.locator('[data-motion-easing="standard"]')).toHaveCSS(
     "transition-timing-function",
@@ -333,15 +427,9 @@ test("interaction state foundation composes real primitive states without semant
   const loading = page.locator('[data-state-proof="loading"]');
   await expect(loading).toBeDisabled();
   await expect(loading).toHaveAttribute("aria-busy", "true");
-  expect(
-    await loading.evaluate((element) => {
-      let activationCount = 0;
-      element.addEventListener("click", () => activationCount += 1);
-      (element as HTMLButtonElement).click();
-      (element as HTMLButtonElement).click();
-      return activationCount;
-    }),
-  ).toBe(0);
+  await expect(loading).toHaveAttribute("aria-disabled", "true");
+  await loading.focus();
+  await expect(loading).toBeFocused();
 
   const disclosure = page.locator('[data-state-proof="open"]');
   await disclosure.evaluate((element: HTMLElement) => {

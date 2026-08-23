@@ -171,12 +171,16 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-surface: var(--destructive-surface);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-info-surface: var(--info-surface);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
+  --color-success-surface: var(--success-surface);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-warning-surface: var(--warning-surface);
   --color-warning-emphasis: var(--warning-emphasis);
   --color-border: var(--border);
   --color-input: var(--input);

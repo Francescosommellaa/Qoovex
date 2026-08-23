@@ -197,7 +197,7 @@ export default function InteractionStatesFoundationPage() {
           <div
             data-interaction-state-foundation
             data-visual-specimen="interaction-state-matrix"
-            className="flex flex-col gap-8"
+            className="flex flex-col gap-8 bg-card"
           >
             {/* Sottosezione A: Feedback Transiente */}
             <div>

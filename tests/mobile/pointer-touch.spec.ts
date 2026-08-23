@@ -104,9 +104,9 @@ test("fine pointer hover, cancel, repeated input, and keyboard activation settle
   const visual = pressLab.locator("[data-pointer-visual]");
   await pressLab.scrollIntoViewIfNeeded();
 
-  const restingColor = await visual.evaluate((element) => getComputedStyle(element).backgroundColor);
+  const restingOpacity = await visual.evaluate((element) => getComputedStyle(element).opacity);
   await pressLab.hover();
-  await expect.poll(() => visual.evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe(restingColor);
+  await expect.poll(() => visual.evaluate((element) => getComputedStyle(element).opacity)).not.toBe(restingOpacity);
 
   const before = await pressLab.boundingBox();
   expect(before).not.toBeNull();

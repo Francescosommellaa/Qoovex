@@ -114,7 +114,7 @@ export function SignInPageView({
 
           {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
 
-          <Button className="h-11 w-full active:scale-[0.985]" disabled={loading || devLoading} type="submit">
+          <Button className="h-11 w-full" disabled={loading || devLoading} type="submit">
             {loading ? <><Spinner /> Accesso in corso</> : <>Accedi <IconArrowRight data-icon="inline-end" /></>}
           </Button>
         </form>

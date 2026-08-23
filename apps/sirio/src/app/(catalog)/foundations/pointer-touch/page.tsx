@@ -198,7 +198,7 @@ export default function PointerTouchFoundationPage() {
               variant="ghost"
             >
               <span
-                className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground transition-[color,background-color,transform] [transition-duration:var(--motion-duration-feedback)] group-hover/pointer-proof:bg-primary/85 group-active/pointer-proof:scale-90 motion-reduce:transform-none"
+                className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground transition-[color,background-color,opacity,transform] [transition-duration:var(--motion-duration-feedback)] group-hover/pointer-proof:opacity-85 group-active/pointer-proof:scale-90 motion-reduce:transform-none"
                 data-pointer-visual
               >
                 <IconClick className="size-3.5" />

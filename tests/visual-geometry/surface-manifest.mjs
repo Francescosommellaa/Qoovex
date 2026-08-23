@@ -79,11 +79,11 @@ const surface = (id, app, route, target, options = {}) =>
 
 export const VISUAL_SURFACES = Object.freeze([
   surface("sirio-foundation-spacing-light", "sirio", "/foundations/spacing-and-radius", "spacing-scale", {
-    geometry: [exactOverflow("spacing-scale"), exactScalar("spacing-scale", undefined, "paddingLeft", 24), exactScalar("spacing-scale", undefined, "gap", 24), exactScalar("spacing-scale", undefined, "borderRadius", 8)],
+    geometry: [exactOverflow("spacing-scale"), exactScalar("spacing-scale", undefined, "paddingLeft", 24), exactScalar("spacing-scale", undefined, "gap", 12), exactScalar("spacing-scale", undefined, "borderRadius", 8)],
   }),
   surface("sirio-foundation-spacing-dark", "sirio", "/foundations/spacing-and-radius", "spacing-scale", {
     theme: "dark",
-    geometry: [exactOverflow("spacing-scale"), exactScalar("spacing-scale", undefined, "paddingLeft", 24), exactScalar("spacing-scale", undefined, "gap", 24), exactScalar("spacing-scale", undefined, "borderRadius", 8)],
+    geometry: [exactOverflow("spacing-scale"), exactScalar("spacing-scale", undefined, "paddingLeft", 24), exactScalar("spacing-scale", undefined, "gap", 12), exactScalar("spacing-scale", undefined, "borderRadius", 8)],
   }),
   surface("sirio-button-default", "sirio", "/components/button", "button-default", {
     geometry: [exactOverflow("button-default"), exactScalar("button", '[data-slot="button"]', "height", 32), exactScalar("button", '[data-slot="button"]', "paddingLeft", 12), exactScalar("button", '[data-slot="button"]', "paddingRight", 12), exactScalar("button", '[data-slot="button"]', "borderRadius", 8)],

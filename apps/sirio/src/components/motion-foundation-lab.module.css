@@ -199,6 +199,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: var(--touch-target-min);
   padding: 0.625rem 1.25rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -253,11 +254,14 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   width: min(100%, 12rem);
-  height: 2.25rem;
+  min-height: var(--touch-target-min);
   padding: 0.25rem;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--background);
+  color: inherit;
+  font: inherit;
+  appearance: none;
   cursor: pointer;
 }
 

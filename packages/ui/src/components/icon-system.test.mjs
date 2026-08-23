@@ -6,7 +6,8 @@ const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 const tokens = read("../../styles/tokens.css");
 const base = read("../../styles/base.css");
 const packageJson = JSON.parse(read("../../package.json"));
-const button = read("./button.tsx");
+const buttonClient = read("./button/button-client.tsx");
+const buttonVariants = read("./button/button-variants.ts");
 const alert = read("./alert.tsx");
 const table = read("./table.tsx");
 const spinner = read("./spinner.tsx");
@@ -32,8 +33,8 @@ test("the icon scale is semantic and Tabler remains the only functional icon dep
 });
 
 test("generic descendant selectors do not apply semantic motion or optical offsets", () => {
-  assert.doesNotMatch(button, /group-hover\/button:\[&_svg/);
-  assert.doesNotMatch(button, /\[&_svg\]:transition-transform/);
+  assert.doesNotMatch(buttonVariants, /group-hover\/button:\[&_svg/);
+  assert.doesNotMatch(buttonVariants, /\[&_svg\]:transition-transform/);
   assert.match(alert, /\[&>svg\]:translate-y-0\.5/);
   assert.doesNotMatch(alert, /\[&_svg\]:translate-y/);
 });
@@ -42,6 +43,6 @@ test("icon-only pagination and loaders keep semantics on their owner", () => {
   assert.match(table, /aria-label="Pagina precedente"/);
   assert.match(table, /aria-label="Pagina successiva"/);
   assert.match(table, /IconChevronLeft aria-hidden="true"/);
-  assert.match(button, /IconLoader2 aria-hidden="true" className="animate-spin motion-reduce:animate-none"/);
+  assert.match(buttonClient, /IconLoader2[\s\S]*aria-hidden="true"[\s\S]*animate-spin motion-reduce:animate-none/);
   assert.match(spinner, /aria-hidden="true"[\s\S]*motion-reduce:animate-none/);
 });

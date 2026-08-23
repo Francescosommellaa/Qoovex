@@ -40,6 +40,8 @@ test("SpecimenSection exposes semantic, labelled proof regions", () => {
 
 test("a component page composes the shared specimen contract without changing component APIs", () => {
   assert.match(buttonPageSource, /SpecimenSection region="variants"/);
+  assert.match(buttonPageSource, /SpecimenSection[\s\S]*region="sizes"/);
+  assert.match(buttonPageSource, /SpecimenSection[\s\S]*region="motion-lifecycle"/);
   assert.match(buttonPageSource, /stateId="default" visualId="button-default"/);
   assert.match(buttonPageSource, /stateId="disabled" visualId="button-disabled"/);
 });

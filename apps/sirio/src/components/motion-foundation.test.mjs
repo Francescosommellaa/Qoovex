@@ -29,6 +29,8 @@ test("Sirio proves the four semantic roles without a second Motion implementatio
   assert.match(component, /event\.propertyName === "transform"/)
   assert.match(component, /aria-live="polite"/)
   assert.match(component, /aria-pressed=\{active\}/)
+  assert.match(component, /<button[\s\S]*?aria-label="Inverti"[\s\S]*?data-motion-track/)
+  assert.doesNotMatch(component, /role="button"/)
   assert.match(controlsPage, /href="\/foundations\/motion"/)
 })
 
@@ -43,4 +45,9 @@ test("the CSS proof keeps non-spatial feedback in reduced motion and gates hover
   assert.match(styles, /transition-property:\s*background-color,\s*color/)
   assert.match(styles, /hover:\s*hover/)
   assert.match(styles, /pointer:\s*fine/)
+})
+
+test("custom motion controls preserve the shared coarse-pointer target", () => {
+  assert.match(styles, /\.feedbackSignal\s*\{[\s\S]*?min-height:\s*var\(--touch-target-min\)/)
+  assert.match(styles, /\.track\s*\{[\s\S]*?min-height:\s*var\(--touch-target-min\)/)
 })

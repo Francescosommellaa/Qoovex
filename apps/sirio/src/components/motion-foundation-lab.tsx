@@ -227,10 +227,10 @@ export function MotionFoundationLab() {
             type="button"
             variant="default"
           >
-            {active ? "Disattiva stato" : "Attiva stato"}
+            {active ? "Ferma" : "Avvia"}
           </Button>
           <Button onClick={runRapidInput} size="sm" type="button" variant="outline">
-            Test retargeting ×3
+            Input rapido ×3
           </Button>
           <Button onClick={reset} size="sm" type="button" variant="ghost">
             Reset
@@ -323,21 +323,21 @@ export function MotionFoundationLab() {
           </header>
           <div className={styles.stage}>
             <div className={styles.stateContainer}>
-              <div
+              <button
+                aria-label="Inverti"
+                aria-pressed={active}
                 className={styles.track}
                 data-motion-track
                 data-settled={phase === "settled"}
                 onClick={invertState}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === "Enter" && invertState()}
+                type="button"
               >
                 <span
                   className={styles.indicator}
                   data-motion-indicator
                   onTransitionEnd={settleFromState}
                 />
-              </div>
+              </button>
               <div className="flex items-center gap-2">
                 <Switch
                   aria-label="Switch condiviso Motion"

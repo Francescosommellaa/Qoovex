@@ -140,6 +140,15 @@ import { useIsMobile } from "@qoovex/ui/hooks/use-mobile";
 import { cn } from "@qoovex/ui/lib/utils";
 ```
 
+### Public Entry Point Rule
+
+- ogni componente espone un solo import path pubblico canonico;
+- gli internals restano fuori dall'export map e nessun consumer li importa;
+- non esiste un barrel globale del package;
+- un facade sottile e ammesso quando stabilizza l'API pubblica sopra responsabilita multi-file reali;
+- un componente multi-file mantiene il facade in `components/<nome>.tsx` e colloca gli internals in `components/<nome>/`, con il relativo subpath escluso dall'export map;
+- lo split segue un responsibility boundary concreto; se un singolo file resta chiaro, si preferisce il singolo file.
+
 Ogni app importa una sola volta:
 
 ```css
@@ -147,7 +156,7 @@ Ogni app importa una sola volta:
 @source "../**/*.{ts,tsx}";
 ```
 
-`Button` e riservato alle azioni. Link e navigazione usano `<a>` o `Link` reali, eventualmente con `buttonVariants` per l'aspetto.
+`Button` e riservato alle azioni. Link e navigazione usano `<a>` o `Link` reali, eventualmente con `buttonVariants` per l'aspetto. Il facade mantiene `buttonVariants` server-safe mentre l’implementazione interattiva usa Base UI e `motion/react`; loading conserva label, geometria e focus, blocca activation ripetute e comunica `aria-busy`.
 
 ## Confini
 

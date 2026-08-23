@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { Button } from "@qoovex/ui/components/button";
+import { Button, buttonVariants } from "@qoovex/ui/components/button";
 import { Checkbox } from "@qoovex/ui/components/checkbox";
 import {
   Collapsible,
@@ -141,14 +141,13 @@ export default function FocusFoundationPage() {
             data-visual-specimen="focus-system"
           >
             <ProofCell label="Link (variant=link)">
-              <Button
-                variant="link"
-                render={
-                  <a data-focus-proof="link" href="#focus-transfer">
-                    Contratto focus
-                  </a>
-                }
-              />
+              <a
+                className={buttonVariants({ variant: "link" })}
+                data-focus-proof="link"
+                href="#focus-transfer"
+              >
+                Contratto focus
+              </a>
             </ProofCell>
 
             <ProofCell label="Button">
@@ -433,15 +432,12 @@ export default function FocusFoundationPage() {
                       <span className="text-xs font-medium text-foreground">01. Tracciamento muri divisori</span>
                       <span className="text-xs text-muted-foreground">Fase strutturale attiva</span>
                     </div>
-                    <Button
-                      variant="link"
-                      size="sm"
-                      render={
-                        <a href="#focus-obscured-title">
-                          Primo target
-                        </a>
-                      }
-                    />
+                    <a
+                      className={buttonVariants({ size: "sm", variant: "link" })}
+                      href="#focus-obscured-title"
+                    >
+                      Primo target
+                    </a>
                   </div>
 
                   <div className="rounded-lg border border-border/60 bg-muted/10 p-3">

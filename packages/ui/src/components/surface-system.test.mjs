@@ -38,6 +38,12 @@ test("surface roles bind the approved tone, border and elevation combinations", 
   assert.doesNotMatch(declarations, /z-index|position:/);
 });
 
+test("semantic surface colors are available to Tailwind utilities", () => {
+  for (const role of ["destructive", "info", "success", "warning"]) {
+    assert.match(tokens, new RegExp(`--color-${role}-surface: var\\(--${role}-surface\\);`));
+  }
+});
+
 test("modal backdrop and forced-colors preserve separation without shadow", () => {
   assert.equal(tokenValue("--backdrop-modal"), "oklch(0 0 0 / 0.5)");
   assert.match(base, /\.qv-backdrop-modal\s*\{[\s\S]*?backdrop-filter: blur\(var\(--backdrop-blur\)\)/);

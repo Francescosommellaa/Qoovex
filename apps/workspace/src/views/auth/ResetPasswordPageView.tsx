@@ -130,7 +130,7 @@ export function ResetPasswordPageView({ callbackUrl }: { callbackUrl: string }) 
               <FieldDescription>Invieremo le istruzioni solo se l’indirizzo è associato a un account con password.</FieldDescription>
             </Field>
             {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
-            <Button className="h-11 w-full active:scale-[0.985]" disabled={loading} type="submit">
+            <Button className="h-11 w-full" disabled={loading} type="submit">
               {loading ? <><Spinner /> Invio in corso</> : <>Invia codice di reset <IconArrowRight data-icon="inline-end" /></>}
             </Button>
           </form>
@@ -177,7 +177,7 @@ export function ResetPasswordPageView({ callbackUrl }: { callbackUrl: string }) 
             </FieldGroup>
             {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
             <div className={styles.formActions}>
-              <Button className="h-11 active:scale-[0.985]" disabled={loading} type="submit">
+              <Button className="h-11" disabled={loading} type="submit">
                 {loading ? <><Spinner /> Aggiornamento in corso</> : <>Aggiorna password <IconArrowRight data-icon="inline-end" /></>}
               </Button>
               <Button disabled={loading} onClick={resendCode} type="button" variant="outline"><IconRefresh /> Reinvia codice</Button>

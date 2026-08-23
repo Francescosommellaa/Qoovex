@@ -290,8 +290,9 @@ Ogni componente interattivo valuta elementi animati, lifecycle completo, rapid i
 
 - **Shape:** raggio `0.5rem`, altezza base `2rem`, peso medio e gap interno `0.375rem`.
 - **Primary:** background Inchiostro, testo Calce e ombra 2xs.
-- **Hover / Focus:** tono al novanta per cento e scala lieve per il feedback pointer; focus usa l’outline condiviso immediato.
-- **Outline / Secondary / Ghost / Destructive / Link:** mantengono lo stesso ritmo e cambiano soltanto gerarchia, superficie e semantica.
+- **Interaction:** Base UI mantiene il vero `<button>` e l’activation nativa; Motion anima soltanto il contenuto visuale con timing `feedback`, così hit area e layout non cambiano. Pointer leave/cancel, inversione e input rapido retargettano senza coda; focus usa l’outline condiviso immediato.
+- **Outline / Secondary / Ghost / Destructive / Link:** mantengono lo stesso ritmo ma ricevono ampiezza Motion coerente con la propria gerarchia. `link` non scala e resta un’azione, mai navigazione.
+- **Loading:** `aria-busy` e blocco Base UI impediscono nuove activation; `focusableWhenDisabled` conserva il focus soltanto durante il busy lifecycle. Il label resta nel layout, lo spinner è decorativo e reduced motion lo mantiene visibile senza rotazione.
 
 ### Chips
 
