@@ -117,7 +117,9 @@ test("ToggleButton coordinates stateful copy, physical press, parent updates, an
   const controlled = page.locator('[data-toggle-button-proof="controlled"]');
   const controlledPhysical = controlled.locator('[data-slot="toggle-button-interaction-surface"]');
   await expect(controlled).toHaveAccessibleName("Fissa elemento");
+  await controlled.focus();
   await page.locator('[data-toggle-button-parent-control]').click();
+  await expect(page.locator('[data-toggle-button-render-blur-count]')).toHaveText("1");
   await expect(controlled).toHaveAttribute("aria-pressed", "true");
   await expect(controlled).toHaveAccessibleName("Elemento fissato");
   await expect.poll(() => controlledPhysical.evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).a)).toBeCloseTo(1, 2);

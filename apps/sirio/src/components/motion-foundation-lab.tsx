@@ -126,6 +126,15 @@ export function MotionFoundationLab() {
     }, 600);
   }, []);
 
+  React.useEffect(() => {
+    if (!effectiveReduced || phase !== "transition") return;
+
+    phaseFrameRef.current = requestAnimationFrame(triggerSettle);
+    return () => {
+      if (phaseFrameRef.current !== null) cancelAnimationFrame(phaseFrameRef.current);
+    };
+  }, [effectiveReduced, phase, triggerSettle]);
+
   const setRealState = React.useCallback(
     (nextActive: boolean) => {
       cancelPendingInput();

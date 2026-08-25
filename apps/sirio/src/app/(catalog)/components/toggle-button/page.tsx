@@ -25,6 +25,7 @@ const onContent = (
 export default function ToggleButtonPage() {
   const [livePressed, setLivePressed] = useState(false)
   const [parentPressed, setParentPressed] = useState(false)
+  const [renderBlurCount, setRenderBlurCount] = useState(0)
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-12">
@@ -73,9 +74,11 @@ export default function ToggleButtonPage() {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <ToggleButton
               data-toggle-button-proof="controlled"
+              onBlur={() => setRenderBlurCount((count) => count + 1)}
               onPressedChange={setParentPressed}
               pressed={parentPressed}
               pressedContent={onContent}
+              render={(rootProps) => <button {...rootProps} />}
             >
               {offContent}
             </ToggleButton>
@@ -88,6 +91,9 @@ export default function ToggleButtonPage() {
             >
               Imposta dal parent
             </Button>
+            <output className="sr-only" data-toggle-button-render-blur-count>
+              {renderBlurCount}
+            </output>
           </div>
         </Specimen>
       </SpecimenSection>

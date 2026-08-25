@@ -44,6 +44,8 @@ test("Button interaction uses anisotropic squash without duplicate animation con
   assert.doesNotMatch(implementation, /useAnimationControls/)
   assert.match(implementation, /onTapCancel/)
   assert.match(implementation, /onPointerLeave/)
+  assert.match(implementation, /event\.pointerType !== "touch"/)
+  assert.doesNotMatch(implementation, /onHoverStart=/)
   assert.doesNotMatch(variants, /outline-none/)
 })
 

@@ -25,6 +25,27 @@ test("persistent pressed state and transient physical press use separate layers"
   assert.doesNotMatch(motion, /pressedState[^\n]*scaleY:\s*0\.9/)
 })
 
+test("composed render handlers are invoked once even when root props are spread", () => {
+  assert.match(implementation, /function callDistinctHandlers/)
+  assert.match(implementation, /called\.has\(handler\)/)
+  for (const handler of [
+    "onBlur",
+    "onKeyDown",
+    "onKeyUp",
+    "onPointerCancel",
+    "onPointerDown",
+    "onPointerEnter",
+    "onPointerLeave",
+    "onPointerUp",
+  ]) {
+    assert.match(
+      implementation,
+      new RegExp(`callDistinctHandlers\\(event, elementProps\\.${handler}, rootProps\\.${handler}\\)`),
+    )
+  }
+  assert.doesNotMatch(implementation, /elementProps\.onBlur\?\.\(event\)[\s\S]*rootProps\.onBlur\?\.\(event\)/)
+})
+
 test("stateful copy shares intrinsic geometry and keeps only the active layer accessible", () => {
   assert.match(implementation, /pressedContent\?: React\.ReactNode/)
   assert.match(implementation, /inline-grid min-w-0 items-center justify-items-center/)

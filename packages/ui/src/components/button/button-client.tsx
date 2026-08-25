@@ -112,12 +112,6 @@ function Button({
               {...motionRootProps}
               animate={state.disabled ? "rest" : interaction.visualPhase}
               initial={false}
-              onHoverStart={state.disabled ? undefined : (event) => {
-                interaction.beginHover(event.buttons)
-              }}
-              onHoverEnd={state.disabled ? undefined : () => {
-                interaction.reset()
-              }}
               onTapStart={state.disabled ? undefined : interaction.beginPress}
               onTap={state.disabled ? undefined : interaction.settle}
               onTapCancel={state.disabled ? undefined : interaction.settle}
@@ -141,7 +135,7 @@ function Button({
               }}
               onPointerEnter={(event) => {
                 motionRootProps.onPointerEnter?.(event)
-                if (!state.disabled && (event.buttons & 1) === 1) {
+                if (!state.disabled && event.pointerType !== "touch") {
                   interaction.beginHover(event.buttons)
                 }
               }}

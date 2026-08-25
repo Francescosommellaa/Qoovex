@@ -94,7 +94,20 @@ export function SurfaceElevationProof() {
           type="button"
           variant="outline"
         >
-          {open ? "Riporta al piano base" : "Apri il piano flottante"}
+          <span className="inline-grid items-center justify-items-center">
+            <span
+              aria-hidden={open}
+              className={open ? "invisible col-start-1 row-start-1" : "col-start-1 row-start-1"}
+            >
+              Apri il piano flottante
+            </span>
+            <span
+              aria-hidden={!open}
+              className={open ? "col-start-1 row-start-1" : "invisible col-start-1 row-start-1"}
+            >
+              Riporta al piano base
+            </span>
+          </span>
         </Button>
 
         <div className="flex flex-wrap gap-1.5" aria-label="Fasi del lifecycle surface">

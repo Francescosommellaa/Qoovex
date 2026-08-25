@@ -39,6 +39,18 @@ type IconToggleButtonProps = ToggleButtonBaseProps & AccessibleName & {
   pressedContent?: React.ReactNode
 }
 
+type EventHandler<Event> = ((event: Event) => void) | undefined
+
+function callDistinctHandlers<Event>(event: Event, ...handlers: EventHandler<Event>[]) {
+  const called = new Set<EventHandler<Event>>()
+
+  for (const handler of handlers) {
+    if (!handler || called.has(handler)) continue
+    called.add(handler)
+    handler(event)
+  }
+}
+
 export type ToggleButtonProps = TextToggleButtonProps | IconToggleButtonProps
 
 function isIconSize(size: ToggleButtonProps["size"]): size is IconSize {
@@ -124,44 +136,36 @@ function ToggleButton({
           {
             ...rootProps,
             onBlur: (event: React.FocusEvent<HTMLButtonElement>) => {
-              elementProps.onBlur?.(event)
-              rootProps.onBlur?.(event)
+              callDistinctHandlers(event, elementProps.onBlur, rootProps.onBlur)
               interaction.reset()
             },
             onKeyDown: (event: React.KeyboardEvent<HTMLButtonElement>) => {
-              elementProps.onKeyDown?.(event)
-              rootProps.onKeyDown?.(event)
+              callDistinctHandlers(event, elementProps.onKeyDown, rootProps.onKeyDown)
               if (state.disabled || event.defaultPrevented || event.repeat || (event.key !== "Enter" && event.key !== " ")) return
               interaction.beginPress()
             },
             onKeyUp: (event: React.KeyboardEvent<HTMLButtonElement>) => {
-              elementProps.onKeyUp?.(event)
-              rootProps.onKeyUp?.(event)
+              callDistinctHandlers(event, elementProps.onKeyUp, rootProps.onKeyUp)
               if (event.key === "Enter" || event.key === " ") interaction.settle()
             },
             onPointerCancel: (event: React.PointerEvent<HTMLButtonElement>) => {
-              elementProps.onPointerCancel?.(event)
-              rootProps.onPointerCancel?.(event)
+              callDistinctHandlers(event, elementProps.onPointerCancel, rootProps.onPointerCancel)
               if (!state.disabled) interaction.reset()
             },
             onPointerDown: (event: React.PointerEvent<HTMLButtonElement>) => {
-              elementProps.onPointerDown?.(event)
-              rootProps.onPointerDown?.(event)
+              callDistinctHandlers(event, elementProps.onPointerDown, rootProps.onPointerDown)
               if (!state.disabled && event.button === 0) interaction.beginPress()
             },
             onPointerEnter: (event: React.PointerEvent<HTMLButtonElement>) => {
-              elementProps.onPointerEnter?.(event)
-              rootProps.onPointerEnter?.(event)
+              callDistinctHandlers(event, elementProps.onPointerEnter, rootProps.onPointerEnter)
               if (!state.disabled && event.pointerType !== "touch") interaction.beginHover(event.buttons)
             },
             onPointerLeave: (event: React.PointerEvent<HTMLButtonElement>) => {
-              elementProps.onPointerLeave?.(event)
-              rootProps.onPointerLeave?.(event)
+              callDistinctHandlers(event, elementProps.onPointerLeave, rootProps.onPointerLeave)
               if (!state.disabled) interaction.reset()
             },
             onPointerUp: (event: React.PointerEvent<HTMLButtonElement>) => {
-              elementProps.onPointerUp?.(event)
-              rootProps.onPointerUp?.(event)
+              callDistinctHandlers(event, elementProps.onPointerUp, rootProps.onPointerUp)
               if (!state.disabled) interaction.settle()
             },
           },
