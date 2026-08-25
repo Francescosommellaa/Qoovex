@@ -2,7 +2,7 @@ import Link from "next/link";
 import { IconMail, IconUserPlus, IconUsers } from "@tabler/icons-react";
 import { Avatar, AvatarFallback } from "@qoovex/ui/components/avatar";
 import { Badge } from "@qoovex/ui/components/badge";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
 import type { OrganizationRole } from "@qoovex/types";
@@ -51,7 +51,7 @@ export function PeopleSettingsView({ members, invitations, canManage }: { member
         title="Utenti e inviti"
         description="Qui trovi soltanto gli account che possono entrare in Qoovex, il ruolo assegnato e gli inviti in attesa."
         action={canManage ? (
-          <Link className={`${buttonVariants()} h-10 w-full sm:h-8 sm:w-auto`} data-link="plain" href="/settings/people/invite">
+          <Link className={`${linkVariants({ variant: "primary" })} h-10 w-full sm:h-8 sm:w-auto`} data-link="plain" href="/settings/people/invite">
             <IconUserPlus aria-hidden="true" />
             Invita utente
           </Link>
@@ -75,7 +75,7 @@ export function PeopleSettingsView({ members, invitations, canManage }: { member
                 </EmptyHeader>
                 {canManage ? (
                   <EmptyContent>
-                    <Link className={buttonVariants()} data-link="plain" href="/settings/people/invite">
+                    <Link className={linkVariants({ variant: "primary" })} data-link="plain" href="/settings/people/invite">
                       <IconUserPlus aria-hidden="true" />
                       Invita utente
                     </Link>

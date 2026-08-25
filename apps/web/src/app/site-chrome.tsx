@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { IconArrowRight, IconInfoCircle } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { FloatingNavigation, type FloatingNavigationSection } from "@qoovex/ui/components/floating-navigation";
 import { cn } from "@qoovex/ui/lib/utils";
 import { BrandMark } from "@/components/brand-mark";
@@ -34,7 +34,7 @@ function HeaderAction() {
   return (
     <div className="flex items-center gap-1 sm:gap-2">
       <a
-        className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+        className={cn(linkVariants({ variant: "ghost", size: "sm" }))}
         href={signInUrl}
       >
         {signInLabel}
@@ -78,7 +78,8 @@ export function SiteFooter() {
               certifica conformità e non sostituisce il giudizio di professionisti e tecnici.
             </p>
             <a
-              className={cn(buttonVariants({ variant: "link" }), "h-auto w-fit p-0 justify-start mt-4 text-sm font-normal text-muted-foreground hover:text-foreground")}
+              className="mt-4 w-fit text-sm text-muted-foreground"
+              data-link="quiet"
               href={contactHref}
             >
               {contactEmail}
@@ -93,7 +94,8 @@ export function SiteFooter() {
               <p className="text-sm font-medium text-foreground">{column.title}</p>
               {column.links.map((link) => (
                 <a
-                  className={cn(buttonVariants({ variant: "link" }), "h-auto w-fit p-0 justify-start text-sm font-normal text-muted-foreground hover:text-foreground")}
+                  className="w-fit text-sm text-muted-foreground"
+                  data-link="quiet"
                   href={link.href}
                   key={link.href}
                 >
@@ -107,7 +109,8 @@ export function SiteFooter() {
           <nav className="flex flex-wrap gap-4 text-sm" aria-label="Link legali nel piè di pagina">
             {legalLinks.map((link) => (
               <a
-                className={cn(buttonVariants({ variant: "link" }), "h-auto w-fit p-0 justify-start font-normal text-muted-foreground hover:text-foreground")}
+                className="w-fit text-muted-foreground"
+                data-link="quiet"
                 href={link.href}
                 key={link.href}
               >

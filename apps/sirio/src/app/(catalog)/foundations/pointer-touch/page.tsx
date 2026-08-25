@@ -9,6 +9,7 @@ import { IconClick } from "@tabler/icons-react";
 
 import { Badge } from "@qoovex/ui/components/badge";
 import { Button } from "@qoovex/ui/components/button";
+import { IconButton } from "@qoovex/ui/components/icon-button";
 import {
   Card,
   CardContent,
@@ -106,14 +107,14 @@ export default function PointerTouchFoundationPage() {
             data-visual-specimen="pointer-touch-targets"
           >
             <ProofCell label="Icon control · visual 24px">
-              <Button
+              <IconButton
                 aria-label="Apri strumento puntatore"
                 data-pointer-proof="icon-control"
-                size="icon-xs"
+                size="xs"
                 variant="ghost"
               >
                 <IconClick />
-              </Button>
+              </IconButton>
             </ProofCell>
 
             <ProofCell label="Compact checkbox · visual 16px">
@@ -182,7 +183,7 @@ export default function PointerTouchFoundationPage() {
           </div>
 
           <div className="mt-5 grid gap-4 rounded-xl border border-border bg-card p-4 md:grid-cols-[auto_1fr] md:items-center sm:p-6">
-            <Button
+            <IconButton
               aria-label="Prova press e cancel"
               className="group/pointer-proof"
               data-pointer-proof="press-lab"
@@ -194,7 +195,7 @@ export default function PointerTouchFoundationPage() {
               onPointerDown={beginPress}
               onPointerLeave={cancelPress}
               onPointerUp={() => setPhase("settled")}
-              size="icon-xs"
+              size="xs"
               variant="ghost"
             >
               <span
@@ -203,7 +204,7 @@ export default function PointerTouchFoundationPage() {
               >
                 <IconClick className="size-3.5" />
               </span>
-            </Button>
+            </IconButton>
 
             <div className="flex min-w-0 flex-wrap items-center gap-2" aria-live="polite">
               <Badge variant="outline">Fase: {phase}</Badge>

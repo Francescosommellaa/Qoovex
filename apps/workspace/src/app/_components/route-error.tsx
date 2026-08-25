@@ -2,7 +2,8 @@
 
 import { IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
-import { Button, buttonVariants } from "@qoovex/ui/components/button";
+import { Button } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import Link from "next/link";
 
 export function RouteError({
@@ -31,7 +32,7 @@ export function RouteError({
             <IconRefresh />
             Riprova
           </Button>
-          <Link className={buttonVariants()} href={backHref}>{backLabel}</Link>
+          <Link className={linkVariants({ variant: "primary" })} href={backHref}>{backLabel}</Link>
         </div>
       </div>
     </div>

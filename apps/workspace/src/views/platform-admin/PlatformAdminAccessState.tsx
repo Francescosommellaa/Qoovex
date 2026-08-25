@@ -1,6 +1,6 @@
 import Link from "next/link";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { WorkspaceAccessState } from "@/views/workspace/WorkspacePrimitives";
-import styles from "./PlatformAdmin.module.css";
 
 export function PlatformAdminAccessState({ mfaRequired = false }: { mfaRequired?: boolean }) {
   if (!mfaRequired) return <WorkspaceAccessState title="Console non disponibile" description="Questa sezione e riservata agli operatori Qoovex." />;
@@ -13,5 +13,5 @@ export function PlatformAdminAccessState({ mfaRequired = false }: { mfaRequired?
 }
 
 export function PlatformAdminBackLink() {
-  return <Link className={styles.linkButton} href="/qoovex-admin">Torna alla console</Link>;
+  return <Link className={linkVariants({ variant: "primary" })} href="/qoovex-admin">Torna alla console</Link>;
 }

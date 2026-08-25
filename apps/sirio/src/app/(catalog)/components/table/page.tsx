@@ -16,6 +16,7 @@ import {
   TablePagination,
 } from "@qoovex/ui/components/table";
 import { Button } from "@qoovex/ui/components/button";
+import { IconButton } from "@qoovex/ui/components/icon-button";
 import { Badge } from "@qoovex/ui/components/badge";
 import { Avatar, AvatarFallback } from "@qoovex/ui/components/avatar";
 import { SearchInput } from "@qoovex/ui/components/input";
@@ -195,9 +196,9 @@ export default function TablePage() {
                           {site.date}
                         </TableCell>
                         <TableCell className="text-center">
-                          <Button aria-label={`Azioni per ${site.name}`} variant="ghost" size="icon-xs">
+                          <IconButton aria-label={`Azioni per ${site.name}`} variant="ghost" size="xs">
                             <IconDotsVertical aria-hidden="true" className="size-3.5" />
-                          </Button>
+                          </IconButton>
                         </TableCell>
                       </TableRow>
                     ))}

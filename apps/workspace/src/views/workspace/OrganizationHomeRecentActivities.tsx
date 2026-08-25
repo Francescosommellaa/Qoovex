@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import type { OrganizationHomeRecentActivity } from "@shared/lib/organization-home-recent-activity";
 import { WorkspaceEmptyState, WorkspacePanel } from "./WorkspacePrimitives";
 
@@ -19,7 +19,7 @@ export function OrganizationHomeRecentActivities({ activities }: { activities: r
               <time dateTime={activity.occurredAt}>{activity.presentation.occurredAtLabel}</time>
             </div>
           </div>
-          <Link aria-label={`Apri ${activity.presentation.title} nel cantiere ${activity.jobSiteName}`} className={buttonVariants({ size: "sm", variant: "outline" })} href={activity.href}>Apri nel cantiere</Link>
+          <Link aria-label={`Apri ${activity.presentation.title} nel cantiere ${activity.jobSiteName}`} className={linkVariants({ size: "sm", variant: "outline" })} href={activity.href}>Apri nel cantiere</Link>
         </article>
       </li>)}
     </ul> : <WorkspaceEmptyState title="Nessuna attività recente" description="Gli aggiornamenti dei cantieri compariranno qui quando saranno disponibili." />}

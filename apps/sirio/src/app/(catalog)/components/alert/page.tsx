@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 import { PageHeader } from "@/components/page-header";
 import { Specimen, SpecimenGrid } from "@/components/specimen";
 import {
@@ -7,16 +11,18 @@ import {
   AlertAction,
 } from "@qoovex/ui/components/alert";
 import { Button } from "@qoovex/ui/components/button";
+import { CloseButton } from "@qoovex/ui/components/close-button";
 import {
   IconInfoCircle,
   IconCheck,
   IconAlertTriangle,
   IconAlertOctagon,
-  IconX,
   IconExternalLink,
 } from "@tabler/icons-react";
 
 export default function AlertCatalogPage() {
+  const [showInteractiveAlert, setShowInteractiveAlert] = useState(true);
+
   return (
     <div className="mx-auto w-full max-w-6xl">
       <PageHeader
@@ -86,29 +92,32 @@ export default function AlertCatalogPage() {
           <SpecimenGrid cols={1}>
             <Specimen title="Alert Interattivo con Pulsanti d'Azione">
               <div className="w-full max-w-2xl">
-                <Alert variant="info" className="w-full">
-                  <IconInfoCircle />
-                  <div>
-                    <AlertTitle>Modifica da valutare</AlertTitle>
-                    <AlertDescription>
-                      Apri la proposta per vedere cosa cambia e decidere come procedere.
-                    </AlertDescription>
-                    <div className="mt-3 flex items-center gap-2">
-                      <Button size="sm" variant="default">
-                        Apri proposta
-                      </Button>
-                      <Button size="sm" variant="ghost">
-                        Dettagli <IconExternalLink className="ml-1 h-3.5 w-3.5" />
-                      </Button>
+                {showInteractiveAlert ? (
+                  <Alert variant="info" className="w-full">
+                    <IconInfoCircle />
+                    <div>
+                      <AlertTitle>Modifica da valutare</AlertTitle>
+                      <AlertDescription>
+                        Apri la proposta per vedere cosa cambia e decidere come procedere.
+                      </AlertDescription>
+                      <div className="mt-3 flex items-center gap-2">
+                        <Button size="sm" variant="default">
+                          Apri proposta
+                        </Button>
+                        <Button size="sm" variant="ghost">
+                          Dettagli <IconExternalLink className="ml-1 h-3.5 w-3.5" />
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                  <AlertAction>
-                    <Button size="icon-xs" variant="ghost" className="text-muted-foreground hover:text-foreground">
-                      <IconX className="h-3.5 w-3.5" />
-                      <span className="sr-only">Chiudi</span>
-                    </Button>
-                  </AlertAction>
-                </Alert>
+                    <AlertAction>
+                      <CloseButton aria-label="Chiudi avviso" onClick={() => setShowInteractiveAlert(false)} />
+                    </AlertAction>
+                  </Alert>
+                ) : (
+                  <Button onClick={() => setShowInteractiveAlert(true)} type="button" variant="secondary">
+                    Ripristina avviso
+                  </Button>
+                )}
               </div>
             </Specimen>
           </SpecimenGrid>

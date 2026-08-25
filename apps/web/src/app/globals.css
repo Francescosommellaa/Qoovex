@@ -147,7 +147,7 @@
 .hero-mockup-glow {
   position: absolute;
   inset: -1px;
-  border-radius: 1rem;
+  border-radius: var(--radius-xl);
   background: linear-gradient(
     135deg,
     color-mix(in oklch, var(--foreground) 12%, transparent) 0%,
@@ -163,7 +163,7 @@
   position: relative;
   background: color-mix(in oklch, var(--card) 96%, var(--foreground) 4%);
   border: 1px solid color-mix(in oklch, var(--border) 80%, transparent);
-  border-radius: 1rem;
+  border-radius: var(--radius-xl);
   overflow: hidden;
 }
 

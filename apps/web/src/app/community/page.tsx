@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { IconArrowRight, IconUsersGroup } from "@tabler/icons-react";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { SiteShell } from "../site-chrome";
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default function CommunityPage() {
             come Qoovex organizza il lavoro condiviso tra impresa e cliente.
           </p>
           <a
-            className={buttonVariants({ className: "mt-8", variant: "outline" })}
+            className={linkVariants({ className: "mt-8", variant: "outline" })}
             href="/come-funziona"
           >
             Scopri come funziona

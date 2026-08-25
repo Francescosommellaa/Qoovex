@@ -11,6 +11,7 @@ import {
   TextareaToolbar,
 } from "@qoovex/ui/components/textarea";
 import { Button } from "@qoovex/ui/components/button";
+import { IconButton } from "@qoovex/ui/components/icon-button";
 import { Avatar, AvatarFallback } from "@qoovex/ui/components/avatar";
 import { Badge } from "@qoovex/ui/components/badge";
 import {
@@ -219,8 +220,8 @@ export default function TextareaPage() {
                   />
                   <TextareaToolbar>
                     <div className="flex items-center gap-1">
-                      <Button aria-label="Aggiungi allegato" variant="ghost" size="icon-xs"><IconPaperclip aria-hidden="true" /></Button>
-                      <Button aria-label="Aggiungi emoji" variant="ghost" size="icon-xs"><IconMoodSmile aria-hidden="true" /></Button>
+                      <IconButton aria-label="Aggiungi allegato" variant="ghost" size="xs"><IconPaperclip aria-hidden="true" /></IconButton>
+                      <IconButton aria-label="Aggiungi emoji" variant="ghost" size="xs"><IconMoodSmile aria-hidden="true" /></IconButton>
                     </div>
                     <Button size="sm" className="gap-1.5 h-7 text-xs">
                       <span>Invia</span>

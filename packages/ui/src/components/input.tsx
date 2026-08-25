@@ -17,6 +17,7 @@ import {
 } from "@tabler/icons-react"
 
 import { Button } from "#components/button"
+import { IconButton } from "#components/icon-button"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -370,16 +371,16 @@ function NumberInput({
 
   return (
     <div className="relative flex w-full items-center">
-      <Button
+      <IconButton
         type="button"
         variant="outline"
-        size="icon-xs"
-        className="absolute left-1.5 z-10 size-6 rounded-md"
+        size="xs"
+        className="absolute left-1.5 z-10"
         onClick={handleDecrement}
         aria-label="Riduci valore"
       >
         <IconMinus aria-hidden="true" className="size-3" />
-      </Button>
+      </IconButton>
       <Input
         type="number"
         value={value}
@@ -390,16 +391,16 @@ function NumberInput({
         className={cn("px-9 text-center font-accent", className)}
         {...props}
       />
-      <Button
+      <IconButton
         type="button"
         variant="outline"
-        size="icon-xs"
-        className="absolute right-1.5 z-10 size-6 rounded-md"
+        size="xs"
+        className="absolute right-1.5 z-10"
         onClick={handleIncrement}
         aria-label="Aumenta valore"
       >
         <IconPlus aria-hidden="true" className="size-3" />
-      </Button>
+      </IconButton>
     </div>
   )
 }
@@ -518,10 +519,10 @@ function DatePickerInput({
           <DropdownMenuLabel>Seleziona Data</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <div className="flex items-center justify-between mb-3 pt-1">
-            <Button
+            <IconButton
               type="button"
               variant="ghost"
-              size="icon-xs"
+              size="xs"
               aria-label="Mese precedente"
               onClick={(e) => {
                 e.stopPropagation()
@@ -529,14 +530,14 @@ function DatePickerInput({
               }}
             >
               <IconChevronLeft aria-hidden="true" />
-            </Button>
+            </IconButton>
             <span className="text-xs font-semibold font-accent">
               {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
             </span>
-            <Button
+            <IconButton
               type="button"
               variant="ghost"
-              size="icon-xs"
+              size="xs"
               aria-label="Mese successivo"
               onClick={(e) => {
                 e.stopPropagation()
@@ -544,7 +545,7 @@ function DatePickerInput({
               }}
             >
               <IconChevronRight aria-hidden="true" />
-            </Button>
+            </IconButton>
           </div>
 
           <div className="grid grid-cols-7 gap-1 text-center mb-1">

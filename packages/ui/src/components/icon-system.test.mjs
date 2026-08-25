@@ -43,6 +43,7 @@ test("icon-only pagination and loaders keep semantics on their owner", () => {
   assert.match(table, /aria-label="Pagina precedente"/);
   assert.match(table, /aria-label="Pagina successiva"/);
   assert.match(table, /IconChevronLeft aria-hidden="true"/);
-  assert.match(buttonClient, /IconLoader2[\s\S]*aria-hidden="true"[\s\S]*animate-spin motion-reduce:animate-none/);
+  assert.match(buttonClient, /aria-hidden="true"[\s\S]*data-slot="button-loader"/);
+  assert.match(buttonClient, /IconLoader2 className=\{cn\(loading && "animate-spin", "motion-reduce:animate-none"\)\}/);
   assert.match(spinner, /aria-hidden="true"[\s\S]*motion-reduce:animate-none/);
 });

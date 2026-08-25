@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { WorkQueueItem, WorkQueueItemActions, WorkQueueItemContent, WorkQueueItemDescription, WorkQueueItemTitle } from "@qoovex/ui/components/work-queue-item";
 import { presentOrganizationWorkItem } from "@shared/lib/job-site-operational-presentation";
 import { getOrganizationHomeWorkQueueGroup, organizationHomeWorkQueueGroups, type OrganizationHomeWorkItem, type OrganizationHomeWorkQueueGroup } from "@shared/lib/organization-home-work-queue";
@@ -44,7 +44,7 @@ export function OrganizationHomeWorkQueue({ items }: { items: readonly Organizat
                   <WorkQueueItemDescription><span className="font-medium text-foreground">{item.jobSiteName}</span> · {item.detail}</WorkQueueItemDescription>
                   <dl className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1 text-xs"><div className="flex items-center gap-2"><dt className="font-medium text-foreground">Stato</dt><dd><WorkspaceState state={presentation.state} /></dd></div><div className="flex items-center gap-1"><dt className="font-medium text-foreground">Deve intervenire:</dt><dd>{presentation.actor}</dd></div></dl>
                 </WorkQueueItemContent>
-                <WorkQueueItemActions><Link className={buttonVariants({ size: "sm", variant: "outline" })} href={item.href}>{presentation.actionLabel}</Link></WorkQueueItemActions>
+                <WorkQueueItemActions><Link className={linkVariants({ size: "sm", variant: "outline" })} href={item.href}>{presentation.actionLabel}</Link></WorkQueueItemActions>
               </WorkQueueItem></li>;
             })}
           </ul> : <p className="rounded-lg border border-dashed px-4 py-3 text-sm text-muted-foreground">{groupPresentation.emptyDescription}</p>}

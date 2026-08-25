@@ -117,7 +117,7 @@ function ValidInvitationSpecimen() {
 
         <Dialog onOpenChange={setOpen} open={open}>
           <DialogTrigger render={<Button className="mt-5" type="button" />}>Accetta e apri il lavoro</DialogTrigger>
-          <DialogContent size="sm">
+          <DialogContent closeButtonProps={{ "aria-label": "Chiudi invito" }} size="sm">
             <DialogHeader>
               <DialogTitle>Accetta l’invito a Ristrutturazione via Roma</DialogTitle>
               <DialogDescription>

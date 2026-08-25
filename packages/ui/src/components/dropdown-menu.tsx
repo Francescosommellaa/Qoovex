@@ -107,7 +107,7 @@ function DropdownMenuContent({
               }}
               {...props}
             >
-              <SlidingIndicator rounded="lg" />
+              <SlidingIndicator rounded="md" />
               {children}
             </MenuPrimitive.Popup>
           </SlidingIndicatorProvider>
@@ -170,7 +170,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "group/dropdown-menu-item relative z-10 flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-medium outline-none select-none transition-colors duration-200 data-inset:pl-8 data-[variant=destructive]:text-destructive data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-foreground/90",
+        "group/dropdown-menu-item relative z-10 flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-xs sm:text-sm font-medium outline-none select-none transition-colors duration-200 data-inset:pl-8 data-[variant=destructive]:text-destructive data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-foreground/90",
         className
       )}
       onMouseEnter={handleMouseEnter}
@@ -211,7 +211,7 @@ function DropdownMenuSubTrigger({
       data-slot="dropdown-menu-sub-trigger"
       data-inset={inset}
       className={cn(
-        "relative z-10 flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-medium outline-none select-none transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus:bg-transparent focus:text-accent-foreground data-highlighted:bg-transparent data-inset:pl-8 data-popup-open:bg-accent data-popup-open:text-accent-foreground data-open:bg-accent data-open:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-foreground/90",
+        "relative z-10 flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-1.5 text-xs sm:text-sm font-medium outline-none select-none transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus:bg-transparent focus:text-accent-foreground data-highlighted:bg-transparent data-inset:pl-8 data-popup-open:bg-accent data-popup-open:text-accent-foreground data-open:bg-accent data-open:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-foreground/90",
         className
       )}
       onMouseEnter={handleMouseEnter}
@@ -273,7 +273,7 @@ function DropdownMenuCheckboxItem({
       data-slot="dropdown-menu-checkbox-item"
       data-inset={inset}
       className={cn(
-        "relative z-10 flex cursor-pointer items-center gap-2 rounded-lg py-1.5 pr-8 pl-2.5 text-xs sm:text-sm font-medium outline-none select-none transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus:bg-transparent focus:text-accent-foreground data-highlighted:bg-transparent data-inset:pl-8 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-foreground/90",
+        "relative z-10 flex cursor-pointer items-center gap-2 rounded-md py-1.5 pr-8 pl-2.5 text-xs sm:text-sm font-medium outline-none select-none transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus:bg-transparent focus:text-accent-foreground data-highlighted:bg-transparent data-inset:pl-8 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-foreground/90",
         className
       )}
       checked={checked}
@@ -330,7 +330,7 @@ function DropdownMenuRadioItem({
       data-slot="dropdown-menu-radio-item"
       data-inset={inset}
       className={cn(
-        "relative z-10 flex cursor-pointer items-center gap-2 rounded-lg py-1.5 pr-8 pl-2.5 text-xs sm:text-sm font-medium outline-none select-none transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus:bg-transparent focus:text-accent-foreground data-highlighted:bg-transparent data-inset:pl-8 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-foreground/90",
+        "relative z-10 flex cursor-pointer items-center gap-2 rounded-md py-1.5 pr-8 pl-2.5 text-xs sm:text-sm font-medium outline-none select-none transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus:bg-transparent focus:text-accent-foreground data-highlighted:bg-transparent data-inset:pl-8 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 text-foreground/90",
         className
       )}
       onMouseEnter={handleMouseEnter}

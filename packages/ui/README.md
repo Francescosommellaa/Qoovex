@@ -31,6 +31,10 @@ La scala condivisa e semantica: `qv-icon-compact` / `--icon-compact` = 14px per 
 
 Icona e testo usano normalmente un allineamento centrato sulla line box. Un icon-only control centra il glyph nel proprio box, mantiene nome accessibile e hit target P004 sul controllo, e riceve il focus P003 sul controllo stesso. Un leading icon con testo multilinea puo usare un offset locale calcolato sulla prima line box; non esiste un offset universale. Selector come `[&_svg]` sono ammessi per struttura o size di default con opt-out esplicito, non per motion, colore, traslazione o scale indiscriminate su tutti i discendenti.
 
+ToggleButton usa Base UI Toggle per uno stato `pressed` persistente con significato stabile. `pressedContent` permette al consumer una copy di stato intenzionale: contenuto visibile, nome accessibile e `aria-pressed` restano allineati e condividono una geometria intrinseca stabile. Ha una sola presentation quiet; le size testuali derivano da Button e quelle `icon-*` da IconButton. Switch, disclosure, ToggleGroup e command che descrivono l'azione opposta restano separati.
+
+CloseButton e la specialization quiet per chiudere o dismissare una surface. Possiede IconX e geometria icon-only canoniche, ma non behavior di Dialog, placement o testo localizzato; il consumer compone il behavioral owner e fornisce `aria-label` o `aria-labelledby` contestuale.
+
 Le icone decorative usano `aria-hidden="true"`; il nome di un'azione icon-only appartiene a button/link. Soltanto un grafico standalone informativo usa `role="img"` e un nome accessibile. Icone status ereditano il colore semantico del parent e forced colors tramite `currentColor`; gli override di stroke sono eccezioni locali provate, non una seconda grammatica.
 
 Motion segue il lifecycle reale: disclosure/open, continuita direzionale, replacement di conferma e loading possono usare `motion/react` quando interruption e reversal migliorano. Rapid input retargetta dalla posizione corrente; nessuna trasformazione cambia hit area o focus geometry. Reduced motion usa replacement o stato istantaneo e conserva copy/ARIA. Spinner e loader sono `aria-hidden` quando il parent comunica `aria-busy`/status e fermano il movimento continuo in reduced motion senza rimuovere il feedback comprensibile.
@@ -46,6 +50,12 @@ Qoovex distingue `surface` (tono/background), `elevation` (separazione percettiv
 Ogni modal root usa un solo backdrop. Popup e menu annidati diventano floating sopra il modal senza accumulare dimming; un secondo modal reale conserva il proprio portal e lifecycle, mentre l'ordine numerico dei layer resta fuori P007 e appartiene al futuro contratto stacking.
 
 Motion può accompagnare un cambio reale di piano con transform e opacity usando la durata `surface`, mentre tono, bordo e shadow restano segnali statici del livello raggiunto. Non si anima una sequenza di box-shadow pesanti come effetto principale. Rapid open/close e reversal retargettano dalla posizione corrente; reduced motion applica immediatamente la gerarchia finale senza movimento spaziale.
+
+## Contratto curvature e nesting
+
+`--radius: 0.625rem` (10px alla root standard) e l'unico default Qoovex. I token derivati sono `--radius-sm: 6px`, `--radius-md: 8px`, `--radius-lg: 10px` e `--radius-xl: 14px`; componenti e app non ridefiniscono una copia locale del default. Le geometrie semanticamente pill continuano a usare `rounded-full`.
+
+Quando due bordi arrotondati nidificati condividono un angolo percettivo, la relazione e sempre `R esterno = R interno + inset reale`, quindi `R interno = max(0px, R esterno - padding)`. La formula si valuta per ogni angolo e usa la distanza effettiva tra i bordi, anche con padding asimmetrico; scegliere due step della scala “a occhio” non e equivalente. Un discendente lontano dagli angoli del parent non forma una coppia concentrica. Popup con item edge-adjacent, frame inset e surface concentriche devono invece rispettare la formula senza eccezioni.
 
 Il package contiene primitive presentazionali, `PasswordInput`, `OtpInput`, `ThemeProvider`, `ThemeToggle`, `FloatingNavigation`, `MarketingCursor`, `BrandMark`, `cn` e `useIsMobile`. I controlli password e OTP gestiscono soltanto presentazione, accessibilita e valore form: non contengono auth, Prisma, ruoli, permessi, servizi o copy normativo.
 
@@ -135,6 +145,11 @@ Il barrel root `@qoovex/ui` non esiste. I consumer importano esclusivamente subp
 
 ```ts
 import { Button } from "@qoovex/ui/components/button";
+import { IconButton } from "@qoovex/ui/components/icon-button";
+import { ToggleButton } from "@qoovex/ui/components/toggle-button";
+import { CloseButton } from "@qoovex/ui/components/close-button";
+import { CopyButton } from "@qoovex/ui/components/copy-button";
+import { Link, linkVariants } from "@qoovex/ui/components/link";
 import { ThemeProvider } from "@qoovex/ui/components/theme-provider";
 import { useIsMobile } from "@qoovex/ui/hooks/use-mobile";
 import { cn } from "@qoovex/ui/lib/utils";
@@ -156,7 +171,15 @@ Ogni app importa una sola volta:
 @source "../**/*.{ts,tsx}";
 ```
 
-`Button` e riservato alle azioni. Link e navigazione usano `<a>` o `Link` reali, eventualmente con `buttonVariants` per l'aspetto. Il facade mantiene `buttonVariants` server-safe mentre l’implementazione interattiva usa Base UI e `motion/react`; loading conserva label, geometria e focus, blocca activation ripetute e comunica `aria-busy`.
+`Button` e riservato esclusivamente alle azioni e il suo modulo esporta soltanto il command component. Link e navigazione usano un `<a>` reale, `Link`, oppure il router Link del consumer con lo styling server-safe di `linkVariants`; non importano API o variant dal modulo Button. L'implementazione Button usa Base UI e `motion/react`; loading conserva label, geometria e focus, blocca activation ripetute e comunica `aria-busy`.
+
+`IconButton` e l'entrypoint icon-only stateless: non e una size del Button testuale. Richiede `aria-label` oppure `aria-labelledby`, espone soltanto `xs`, `sm` e `default`, mantiene il glyph fuori dalla deformazione della surface e separa la size visuale dal target coarse reale da 44 px. Tooltip non viene montato automaticamente. Toggle, close/dismiss e copy restano responsabilita dei rispettivi componenti specializzati; le vecchie size `Button icon*` sono una migration surface temporanea per i consumer specializzati ancora non migrati e non sono ammesse nei nuovi consumer.
+
+`ToggleButton` e l'entrypoint standalone per una proprieta o modalita persistente di un button. Espone direttamente `pressed`, `defaultPressed`, `onPressedChange`, `disabled`, `render`, `nativeButton` e `value` di Base UI Toggle: non introduce alias come `active`, `selected` o `checked`, ne stato React parallelo. `pressedContent` e l'unica estensione per una rappresentazione ON distinta: i due layer condividono la stessa cella grid, il layer inattivo e `aria-hidden` e copy/icon/surface transizionano insieme senza reflow. Ha una sola presentation quiet; `sm/default/lg` riusano la geometria Button e `icon-xs/icon-sm/icon` quella IconButton, con nome accessibile obbligatorio per l'uso icon-only. Il layer di contatto fisico e quello `aria-pressed` persistente restano distinti. Switch conserva `checked` per setting on/off; disclosure usa `aria-expanded`; un command che rinomina l'azione opposta non e un ToggleButton; ToggleGroup resta separato.
+
+`CloseButton` e l'entrypoint specializzato per close/dismiss. Espone normali button props compatibili, `className`, disabled e il naming accessibile obbligatorio, ma non espone children, icon, variant, size, inline geometry style o loading. Usa una sola geometria quiet da 28px/radius 8px, con target coarse reale da 44px e Action Motion icon-only. Positioning e dismissal appartengono al consumer o alla primitive comportamentale: `Dialog.Close` lo compone senza nested button e conserva la focus restoration Base UI. Quando il close automatico e visibile, `DialogContent` richiede `closeButtonProps` con un nome contestuale e la composizione riserva spazio per target coarse piu offset, non soltanto per la X visuale.
+
+`CopyButton` e il command icon-only specializzato per copiare una stringa. Possiede Clipboard API, stati interni `idle → copying → success/error → idle`, IconCopy/Check/Error sovrapposte nello stesso slot, una sola presentazione quiet e un hold success di 1000ms; il nome accessibile resta stabile e un unico status live comunica esito o retry. Non espone stato controlled, icon, variant, size, timeout o callback generiche, non usa `aria-pressed` e non serializza mai il valore copiato nel DOM o nei metadata. Flussi sensibili e azioni testuali restano composizioni consumer dedicate.
 
 ## Confini
 

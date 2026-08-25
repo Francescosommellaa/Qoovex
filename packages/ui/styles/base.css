@@ -10,7 +10,7 @@
  */
 @custom-variant qv-disabled (&:is(:disabled, [data-disabled], [aria-disabled="true"]));
 @custom-variant qv-readonly (&:is([readonly], [data-readonly], [aria-readonly="true"]));
-@custom-variant qv-selected (&:is([data-selected], [data-state="selected"], [aria-selected="true"], [data-slot="toggle"][data-pressed]));
+@custom-variant qv-selected (&:is([data-selected], [data-state="selected"], [aria-selected="true"], [data-slot="toggle"][data-pressed], [data-slot="toggle-button"][data-pressed]));
 @custom-variant qv-checked (&:is(:checked, [data-checked], [aria-checked="true"]));
 @custom-variant qv-indeterminate (&:is(:indeterminate, [data-indeterminate], [aria-checked="mixed"]));
 @custom-variant qv-open (&:is([data-open], [data-panel-open], [data-popup-open], [aria-expanded="true"]));
@@ -156,6 +156,12 @@
  * minimum target usable on hybrid hardware without disabling fine-pointer
  * hover. Inline links remain the intentional prose exception.
  */
+.qv-icon-button {
+  width: var(--icon-button-visual-size);
+  height: var(--icon-button-visual-size);
+  border-radius: var(--icon-button-radius);
+}
+
 @media (hover: none), (pointer: coarse), (any-pointer: coarse) {
   .qv-touch-target:not(.qv-touch-target-inline) {
     min-width: var(--touch-target-min);
@@ -181,6 +187,11 @@
     content: "";
     pointer-events: auto;
     transform: translate(-50%, -50%);
+  }
+
+  .qv-icon-button {
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
   }
 }
 
@@ -219,7 +230,7 @@
   top: 0;
   left: 0;
   pointer-events: none;
-  border-radius: 0.625rem;
+  border-radius: var(--radius);
   background: var(--accent);
   box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--foreground) 7%, transparent);
   opacity: 0;

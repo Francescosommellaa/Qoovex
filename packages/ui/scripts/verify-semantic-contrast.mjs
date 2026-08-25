@@ -127,7 +127,7 @@ for (const [themeName, block] of Object.entries(themes)) {
     ["Badge info", colors.info, tinted("info", 0.1), 4.5],
     ["Badge success", colors.success, tinted("success", 0.1), 4.5],
     ["Badge warning", colors["warning-emphasis"], tinted("warning", 0.15), 4.5],
-    ["Button destructive", colors.destructive, tinted("destructive", themeName === "dark" ? 0.2 : 0.1), 4.5],
+    ["Button destructive solid", colors["destructive-foreground"], colors.destructive, 4.5],
     ["Alert title on info", colors.foreground, tinted("info", 0.1), 4.5],
     ["Alert description on info", colors["muted-foreground"], tinted("info", 0.1), 4.5],
     ["Alert info icon", colors.info, tinted("info", 0.1), 3],

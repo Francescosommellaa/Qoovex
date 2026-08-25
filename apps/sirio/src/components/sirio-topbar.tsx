@@ -29,20 +29,21 @@ export function SirioTopbar() {
     if (!current) return [{ label: "Sirio" }];
 
     const sirioHome = catalogNavigationGroups[0].href;
-
-    if (current.group.href === current.item.href) {
-      return [
-        { label: "Sirio", href: sirioHome, render: <Link href={sirioHome} /> },
-        { label: current.group.label },
-      ];
-    }
+    const groupBreadcrumbDisabled =
+      "breadcrumbDisabled" in current.group && current.group.breadcrumbDisabled;
 
     return [
       { label: "Sirio", href: sirioHome, render: <Link href={sirioHome} /> },
       {
-        label: current.group.label,
-        href: current.group.href,
-        render: <Link href={current.group.href} />,
+        label: groupBreadcrumbDisabled
+          ? <span aria-disabled="true">{current.group.label}</span>
+          : current.group.label,
+        ...(groupBreadcrumbDisabled
+          ? { className: "pointer-events-none cursor-default opacity-50" }
+          : {
+              href: current.group.href,
+              render: <Link href={current.group.href} />,
+            }),
       },
       { label: current.item.name },
     ];

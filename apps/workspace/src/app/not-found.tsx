@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IconMoodEmpty } from "@tabler/icons-react";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { Card, CardContent } from "@qoovex/ui/components/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@qoovex/ui/components/empty";
 import { cn } from "@qoovex/ui/lib/utils";
@@ -22,7 +22,7 @@ export default function NotFound() {
             </EmptyHeader>
           </Empty>
           <div className="mt-4 flex justify-center">
-            <Link className={cn(buttonVariants(), "h-11")} href="/">
+            <Link className={cn(linkVariants({ variant: "primary" }), "h-11")} href="/">
               Torna al workspace
             </Link>
           </div>

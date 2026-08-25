@@ -9,7 +9,7 @@ import {
   IconSun,
 } from "@tabler/icons-react";
 import { useTheme } from "next-themes";
-import { Button } from "#components/button";
+import { IconButton } from "#components/icon-button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,10 +64,10 @@ export function ThemeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
+          <IconButton
             aria-label={`Cambia tema, attuale: ${currentThemeLabel}`}
             ref={triggerRef}
-            size="icon"
+            size="default"
             variant="ghost"
           />
         }

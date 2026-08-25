@@ -141,7 +141,7 @@ export function JobSiteSearch({
       <IconSearch aria-hidden="true" />
       Cerca nel lavoro
     </DialogTrigger>
-    <DialogContent aria-busy={state.pending} size="lg">
+    <DialogContent aria-busy={state.pending} closeButtonProps={{ "aria-label": "Chiudi ricerca nel lavoro" }} size="lg">
       <DialogHeader>
         <DialogTitle>Cerca in {jobSiteName}</DialogTitle>
         <DialogDescription>Trova aggiornamenti, richieste, proposte, pagamenti e file che puoi consultare in questo lavoro.</DialogDescription>

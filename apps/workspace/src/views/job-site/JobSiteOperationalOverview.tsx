@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IconArrowRight, IconUsers } from "@tabler/icons-react";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import {
   WorkQueueItem,
   WorkQueueItemActions,
@@ -21,7 +21,7 @@ function OverviewItem({ item, primary = false }: { item: JobSiteOverviewItem; pr
         <div className="flex items-center gap-1"><dt className="font-medium text-foreground">Deve intervenire:</dt><dd>{item.actor}</dd></div>
       </dl>
     </WorkQueueItemContent>
-    {item.href && item.actionLabel ? <WorkQueueItemActions><Link className={buttonVariants({ size: "sm", variant: primary ? "default" : "outline" })} href={item.href}>{item.actionLabel}<IconArrowRight aria-hidden="true" /></Link></WorkQueueItemActions> : null}
+    {item.href && item.actionLabel ? <WorkQueueItemActions><Link className={linkVariants({ size: "sm", variant: primary ? "primary" : "outline" })} href={item.href}>{item.actionLabel}<IconArrowRight aria-hidden="true" /></Link></WorkQueueItemActions> : null}
   </WorkQueueItem>;
 }
 

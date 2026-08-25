@@ -3,7 +3,8 @@
 import { useEffect, useState, type FormEvent, type HTMLAttributes, type ReactNode } from "react";
 import { signOut } from "next-auth/react";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
-import { Button, buttonVariants } from "@qoovex/ui/components/button";
+import { Button } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { Card, CardContent } from "@qoovex/ui/components/card";
 import { Field, FieldDescription, FieldLabel } from "@qoovex/ui/components/field";
 import { Input } from "@qoovex/ui/components/input";
@@ -245,7 +246,7 @@ export function AccountSecurityFlow({ initialStatus, mode, showDataExport = fals
             <p className="text-muted-foreground">Inserisci manualmente il secret oppure apri il link sul dispositivo compatibile.</p>
             <code className={styles.codeBlock}>{setup.secret}</code>
             <div className={styles.actions}>
-              <a className={buttonVariants({ variant: "secondary" })} href={setup.otpauthUrl}>Apri nell&apos;app Authenticator</a>
+              <a className={linkVariants({ variant: "secondary" })} href={setup.otpauthUrl}>Apri nell&apos;app Authenticator</a>
               <Button disabled={loading === "copy"} onClick={() => copySensitiveValue(setup.secret, "Secret copiato negli appunti.")} variant="outline">{loading === "copy" ? <><Spinner /> Copia in corso</> : "Copia il secret"}</Button>
             </div>
             <form className={styles.form} onSubmit={confirmSetup}>
@@ -387,7 +388,7 @@ export function AccountSecurityFlow({ initialStatus, mode, showDataExport = fals
           <div className={styles.section}>
             <h2>I tuoi dati</h2>
             <p className="text-muted-foreground">Scarica un file JSON con le informazioni del tuo profilo, i tuoi immobili e le partecipazioni ai lavori.</p>
-            <a className={buttonVariants({ variant: "outline" })} href="/api/client/data-export">Scarica i tuoi dati</a>
+            <a className={linkVariants({ variant: "outline" })} href="/api/client/data-export">Scarica i tuoi dati</a>
           </div>
         </SecuritySection>
       ) : null}

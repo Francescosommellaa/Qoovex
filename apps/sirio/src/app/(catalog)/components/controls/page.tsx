@@ -11,6 +11,7 @@ import { OtpInput } from "@qoovex/ui/components/otp-input";
 import { RadioGroup, Radio, RadioCard } from "@qoovex/ui/components/radio-group";
 import { Slider } from "@qoovex/ui/components/slider";
 import { Toggle, ToggleGroup } from "@qoovex/ui/components/toggle";
+import { ToggleButton } from "@qoovex/ui/components/toggle-button";
 import { Button } from "@qoovex/ui/components/button";
 import { Input } from "@qoovex/ui/components/input";
 import {
@@ -301,26 +302,12 @@ export default function ControlsCatalogPage() {
             Toggle & ToggleGroup
           </h2>
           <SpecimenGrid cols={2}>
-            <Specimen title="Toggle Singolo (3 varianti)">
+            <Specimen title="ToggleButton standalone">
               <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-2">
-                  <Toggle aria-label="Bold" variant="default">
-                    <IconBold aria-hidden="true" />
-                  </Toggle>
-                  <span className="text-xs text-muted-foreground">default</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Toggle aria-label="Bold" variant="outline">
-                    <IconBold aria-hidden="true" />
-                  </Toggle>
-                  <span className="text-xs text-muted-foreground">outline</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Toggle aria-label="Bold" variant="solid">
-                    <IconBold aria-hidden="true" />
-                  </Toggle>
-                  <span className="text-xs text-muted-foreground">solid</span>
-                </div>
+                <ToggleButton aria-label="Grassetto" size="icon-sm">
+                  <IconBold aria-hidden="true" />
+                </ToggleButton>
+                <span className="text-xs text-muted-foreground">La proof completa vive nella pagina ToggleButton.</span>
               </div>
             </Specimen>
 

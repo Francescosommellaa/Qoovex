@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { WorkQueueItem, WorkQueueItemActions, WorkQueueItemContent, WorkQueueItemDescription, WorkQueueItemTitle } from "@qoovex/ui/components/work-queue-item";
 import type { ClientHomeWorkItem } from "@shared/lib/client-home-work-queue";
 import { presentClientWorkItem } from "@shared/lib/job-site-operational-presentation";
@@ -22,7 +22,7 @@ export function ClientHomeWorkQueue({ items }: { items: readonly ClientHomeWorkI
               <WorkQueueItemDescription><span className="font-medium text-foreground">{item.jobSiteName}</span> · {item.detail}</WorkQueueItemDescription>
               <dl className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1 text-xs"><div className="flex items-center gap-2"><dt className="font-medium text-foreground">Stato</dt><dd><WorkspaceState state={presentation.state} /></dd></div><div className="flex items-center gap-1"><dt className="font-medium text-foreground">Deve intervenire:</dt><dd>Tu</dd></div></dl>
             </WorkQueueItemContent>
-            <WorkQueueItemActions><Link className={buttonVariants({ size: "sm", variant: "outline" })} href={item.href}>{presentation.actionLabel}</Link></WorkQueueItemActions>
+            <WorkQueueItemActions><Link className={linkVariants({ size: "sm", variant: "outline" })} href={item.href}>{presentation.actionLabel}</Link></WorkQueueItemActions>
           </WorkQueueItem></li>;
         })}
       </ul>

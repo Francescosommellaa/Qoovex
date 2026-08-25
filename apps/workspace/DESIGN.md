@@ -45,8 +45,8 @@ typography:
     lineHeight: 1.2
     letterSpacing: "0.08em"
 rounded:
-  control: "8px"
-  surface: "12px"
+  control: "10px"
+  surface: "14px"
   sheet: "16px"
   pill: "999px"
 spacing:
@@ -62,15 +62,15 @@ components:
     textColor: "{colors.azione-principale-foreground}"
     typography: "{typography.body}"
     rounded: "{rounded.control}"
-    padding: "0 12px"
-    height: "32px"
+    padding: "8px 14px"
+    height: "40px"
   button-outline:
     backgroundColor: "{colors.calce}"
     textColor: "{colors.inchiostro}"
     typography: "{typography.body}"
     rounded: "{rounded.control}"
-    padding: "0 12px"
-    height: "32px"
+    padding: "8px 14px"
+    height: "40px"
   card-default:
     backgroundColor: "{colors.superficie}"
     textColor: "{colors.inchiostro}"
@@ -183,7 +183,7 @@ La profondità è stratificata e contenuta. Fondo, superfici tonali e bordi sott
 
 ## Shapes
 
-La forma è morbida ma utilitaria. Controlli e alert usano angoli da 8px; card, tabelle e contenitori principali usano 12px; sheet e superfici ampie possono arrivare a 16px. Badge, indicatori e controlli circolari usano la pillola completa. I bordi sono sottili e a basso contrasto; la geometria resta compatta e mai giocosa.
+La forma è morbida ma utilitaria. Controlli e alert usano il default condiviso da 10px; card, tabelle e contenitori principali usano 14px; sheet e superfici ampie possono arrivare a 16px. Ogni coppia di bordi arrotondati nidificati e concentrici rispetta `R esterno = R interno + padding reale`; un discendente lontano dagli angoli non costituisce una coppia. Badge, indicatori e controlli circolari usano la pillola completa. I bordi sono sottili e a basso contrasto; la geometria resta compatta e mai giocosa.
 
 **The Soft Utility Rule.** Gli angoli accompagnano l'interazione senza trasformare card e controlli in bolle decorative.
 
@@ -193,9 +193,9 @@ I componenti devono essere tattili con discrezione, morbidi, chiari e prevedibil
 
 ### Buttons
 
-- **Shape:** controllo compatto con angoli morbidi da 8px e altezze principali da 32px; la variante grande arriva a 38px.
+- **Shape:** controllo morbido con raggio default 10px e altezze `32/36/40/48px` per `xs/sm/default/lg`.
 - **Primary:** massimo contrasto tra azione e foreground, bordo trasparente e ombra minima.
-- **Hover / Focus:** lieve variazione tonale e scala quasi impercettibile; focus ad anello, press con compressione controllata.
+- **Hover / Focus:** espansione centrata sui quattro lati e squash anisotropo Motion; focus immediato e indipendente dalla deformazione.
 - **Outline / Secondary / Ghost:** gerarchia progressivamente più quieta, senza perdere target, contrasto o stato attivo.
 
 ### Chips
@@ -205,7 +205,7 @@ I componenti devono essere tattili con discrezione, morbidi, chiari e prevedibil
 
 ### Cards / Containers
 
-- **Corner Style:** superficie morbida da 12px.
+- **Corner Style:** superficie morbida da 14px.
 - **Background:** superficie piena, trasparente o Nebbia leggera secondo gerarchia.
 - **Shadow Strategy:** contatto minimo a riposo; piccolo sollevamento soltanto per card realmente interattive.
 - **Border:** bordo sottile sempre presente nelle superfici standard.
@@ -213,7 +213,7 @@ I componenti devono essere tattili con discrezione, morbidi, chiari e prevedibil
 
 ### Inputs / Fields
 
-- **Style:** campo trasparente o tonalmente attenuato, bordo sottile, altezza base 36px e raggio 8px.
+- **Style:** campo trasparente o tonalmente attenuato, bordo sottile, altezza base 36px e raggio default 10px.
 - **Focus:** bordo di focus e anello contenuto; nessun bagliore decorativo.
 - **Error / Disabled:** rosso semantico per errore; opacità e superficie attenuata per disabled, mantenendo leggibilità.
 

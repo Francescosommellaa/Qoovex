@@ -7,7 +7,8 @@ import { IconAlertCircle, IconArrowRight, IconCircleCheck, IconClock, IconUserPl
 import type { OrganizationRole } from "@qoovex/types";
 import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
 import { Badge } from "@qoovex/ui/components/badge";
-import { Button, buttonVariants } from "@qoovex/ui/components/button";
+import { Button } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { Spinner } from "@qoovex/ui/components/spinner";
 import { cn } from "@qoovex/ui/lib/utils";
 import { buildOrganizationInvitationPath } from "@shared/lib/workspace-link-routes";
@@ -29,7 +30,7 @@ export function InvitationUnavailablePageView() {
     >
       <AuthStage>
         <Alert variant="warning"><IconAlertCircle /><AlertDescription>Nessuna modifica è stata applicata al tuo account.</AlertDescription></Alert>
-        <Link className={cn(buttonVariants({ variant: "outline" }), "mt-5 h-11 w-full")} href="/sign-in">Vai all’accesso</Link>
+        <Link className={cn(linkVariants({ variant: "outline" }), "mt-5 h-11 w-full")} href="/sign-in">Vai all’accesso</Link>
       </AuthStage>
     </AuthPageShell>
   );
@@ -47,8 +48,8 @@ export function InvitationSignInPageView({ token, organizationName }: { token: s
       <AuthStage>
         <Alert variant="info"><IconUserPlus /><AlertDescription>Il link verrà conservato durante l’accesso o la registrazione.</AlertDescription></Alert>
         <div className={cn(styles.actions, "mt-5")}>
-          <Link className={cn(buttonVariants(), "h-11")} href={`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Accedi <IconArrowRight data-icon="inline-end" /></Link>
-          <Link className={cn(buttonVariants({ variant: "outline" }), "h-11")} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link>
+          <Link className={cn(linkVariants({ variant: "primary" }), "h-11")} href={`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Accedi <IconArrowRight data-icon="inline-end" /></Link>
+          <Link className={cn(linkVariants({ variant: "outline" }), "h-11")} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link>
         </div>
       </AuthStage>
     </AuthPageShell>
@@ -115,7 +116,7 @@ export function InvitationAcceptancePageView({
       >
         <AuthStage>
           <Alert role="status" variant="success"><IconCircleCheck /><AlertDescription>La tua associazione all’Azienda è stata aggiornata.</AlertDescription></Alert>
-          <Link className={cn(buttonVariants(), "mt-5 h-11 w-full")} href="/sign-in?callbackUrl=%2Fdashboard">Accedi al workspace <IconArrowRight data-icon="inline-end" /></Link>
+          <Link className={cn(linkVariants({ variant: "primary" }), "mt-5 h-11 w-full")} href="/sign-in?callbackUrl=%2Fdashboard">Accedi al workspace <IconArrowRight data-icon="inline-end" /></Link>
         </AuthStage>
       </AuthPageShell>
     );
@@ -124,7 +125,7 @@ export function InvitationAcceptancePageView({
   if (declined) {
     return (
       <AuthPageShell description={<p>L'invito a <strong>{organizationName}</strong> non e piu utilizzabile. Nessun accesso e stato aggiunto.</p>} kicker="Invito rifiutato" title="Invito rifiutato" titleId="invitation-declined-title">
-        <AuthStage><Link className={cn(buttonVariants({ variant: "outline" }), "h-11 w-full")} href="/">Torna al workspace</Link></AuthStage>
+        <AuthStage><Link className={cn(linkVariants({ variant: "outline" }), "h-11 w-full")} href="/">Torna al workspace</Link></AuthStage>
       </AuthPageShell>
     );
   }

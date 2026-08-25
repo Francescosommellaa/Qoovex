@@ -80,7 +80,7 @@ export function CatalogSearchModal({ open, onOpenChange }: CatalogSearchModalPro
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="p-0 gap-0 sm:max-w-lg overflow-hidden border-border/80 bg-popover/95 backdrop-blur-xl shadow-2xl">
+      <DialogContent closeButtonProps={{ "aria-label": "Chiudi ricerca nel catalogo" }} className="p-0 gap-0 sm:max-w-lg overflow-hidden border-border/80 bg-popover/95 backdrop-blur-xl shadow-2xl">
         <DialogHeader className="p-4 border-b border-border/60 pb-3">
           <div className="flex items-center justify-between pr-8">
             <DialogTitle className="text-sm font-bold font-accent flex items-center gap-2">

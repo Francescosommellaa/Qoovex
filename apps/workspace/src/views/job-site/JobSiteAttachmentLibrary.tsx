@@ -1,4 +1,4 @@
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import type { AttachmentCategory } from "@qoovex/db";
 import type { TimelineAudience } from "@qoovex/types";
 import { formatDateTime, formatFileSize, presentProposalVersion } from "@shared/lib/product-metadata-presentation";
@@ -94,7 +94,7 @@ export function JobSiteAttachmentList<TAttachment extends JobSiteAttachmentListI
               <div><dt className="sr-only">Dimensione</dt><dd>{formatFileSize(attachment.size)}</dd></div>
             </dl>
           </div>
-          <a aria-label={`Scarica ${attachment.originalFileName}`} className={buttonVariants({ variant: "outline", size: "sm" })} href={`${base}/attachments/${attachment.id}/download`}>Scarica</a>
+          <a aria-label={`Scarica ${attachment.originalFileName}`} className={linkVariants({ variant: "outline", size: "sm" })} href={`${base}/attachments/${attachment.id}/download`}>Scarica</a>
         </li>;
       })}
     </ul>

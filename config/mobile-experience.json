@@ -69,7 +69,7 @@
       "app": "sirio",
       "owner": "packages/ui",
       "routePatterns": ["/components/**", "/foundations/**"],
-      "runtimeRoutes": ["/components/button", "/components/dialog", "/components/sidebar", "/components/table", "/components/floating-navigation"],
+      "runtimeRoutes": ["/components/button", "/components/icon-button", "/components/toggle-button", "/components/close-button", "/components/copy-button", "/components/dialog", "/components/sidebar", "/components/table", "/components/floating-navigation"],
       "requiredScenarios": ["coarse-touch", "fine-hover", "portrait", "landscape", "zoom-200", "reduced-motion", "safe-area", "software-keyboard"]
     },
     {

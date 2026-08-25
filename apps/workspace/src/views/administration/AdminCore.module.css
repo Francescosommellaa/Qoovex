@@ -68,7 +68,6 @@
   min-width: min(100%, 280px);
 }
 
-.linkButton,
 .button,
 .dangerButton,
 .ghostButton {
@@ -90,7 +89,6 @@
   cursor: pointer;
 }
 
-.linkButton,
 .button {
   border: 1px solid color-mix(in oklab, var(--primary) 36%, var(--border));
   background: var(--primary);
@@ -182,8 +180,7 @@
 .field textarea:focus,
 .button:focus-visible,
 .dangerButton:focus-visible,
-.ghostButton:focus-visible,
-.linkButton:focus-visible {
+.ghostButton:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 2px;
 }

@@ -8,6 +8,7 @@ import {
   IconMenu2,
 } from "@tabler/icons-react";
 import { Button } from "#components/button";
+import { IconButton } from "#components/icon-button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -203,7 +204,7 @@ function NavigationResourceDropdown({
       >
         {resourceLinks.map((link) => (
           <DropdownMenuItem
-            className="relative z-10 min-h-14 gap-3 rounded-xl px-3 py-2"
+            className="relative z-10 min-h-14 gap-3 rounded-md px-3 py-2"
             key={link.href}
             render={<a data-link="plain" href={link.href} />}
           >
@@ -575,10 +576,10 @@ export function FloatingNavigation({
           <DialogPrimitive.Root onOpenChange={setMobileOpen} open={mobileOpen}>
             <DialogPrimitive.Trigger
               render={
-                <Button
+                <IconButton
                   aria-label="Apri navigazione"
                   className={belowDesktopVisibility}
-                  size="icon"
+                  size="default"
                   variant="ghost"
                 />
               }

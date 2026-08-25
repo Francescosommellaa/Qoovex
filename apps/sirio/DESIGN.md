@@ -42,10 +42,10 @@ typography:
     lineHeight: 1.333
     letterSpacing: "0.08em"
 rounded:
-  sm: "0.25rem"
-  md: "0.375rem"
-  lg: "0.5rem"
-  xl: "0.75rem"
+  sm: "0.375rem"
+  md: "0.5rem"
+  lg: "0.625rem"
+  xl: "0.875rem"
   full: "9999px"
 spacing:
   1: "0.25rem"
@@ -62,12 +62,12 @@ components:
     textColor: "{colors.calce}"
     typography: "{typography.body}"
     rounded: "{rounded.lg}"
-    height: "2rem"
-    padding: "0 0.75rem"
+    height: "2.5rem"
+    padding: "0.5rem 0.875rem"
   specimen-card:
     backgroundColor: "{colors.calce}"
     textColor: "{colors.inchiostro}"
-    rounded: "{rounded.lg}"
+    rounded: "{rounded.xl}"
     padding: "1.5rem"
   token-label:
     textColor: "{colors.grafite}"
@@ -169,7 +169,7 @@ La profondità segue gli stessi cinque ruoli condivisi: base per il canvas, cont
 
 ## Shapes
 
-Controlli e campioni usano prevalentemente `0.5rem`; card strutturate e dialog usano `0.75rem`; badge, tabs e indicatori ricorrono alla pill completa. I bordi neutrali descrivono i confini del campione. Icone e marker restano geometrici, semplici e allineati alla scala Tabler.
+Controlli e campioni usano prevalentemente `0.625rem`; card strutturate e dialog usano `0.875rem`; badge, tabs e indicatori ricorrono alla pill completa. Ogni coppia di bordi arrotondati nidificati e concentrici rispetta `R esterno = R interno + padding reale`; un discendente lontano dagli angoli non costituisce una coppia. I bordi neutrali descrivono i confini del campione. Icone e marker restano geometrici, semplici e allineati alla scala Tabler.
 
 La sidebar può diventare una colonna iconica senza cambiare forma dei controlli. Gli indicatori scorrevoli sono pill o rettangoli morbidi e seguono la geometria dell'elemento che evidenziano.
 
@@ -177,9 +177,9 @@ La sidebar può diventare una colonna iconica senza cambiare forma dei controlli
 
 ### Buttons
 
-- **Shape:** `0.5rem`, altezza base `2rem`, varianti compatte per il catalogo.
+- **Shape:** `0.625rem`, altezza default `2.5rem`, con varianti compatte `2/2.25rem` per il catalogo.
 - **Primary:** Inchiostro su Calce inversa; testo medio e icona Tabler da `1rem`.
-- **Hover / Focus:** variazione tonale e scala lieve per il pointer; focus usa l’outline condiviso immediato e compare nello specimen.
+- **Hover / Focus:** espansione centrata e squash anisotropo Motion per il pointer; focus usa l’outline condiviso immediato e compare nello specimen.
 - **Secondary / Ghost / Destructive:** dimostrati separatamente, con semantica e gerarchia invarianti.
 
 ### Chips
@@ -189,14 +189,14 @@ La sidebar può diventare una colonna iconica senza cambiare forma dei controlli
 
 ### Cards / Containers
 
-- **Corner Style:** `0.5rem` per specimen semplici, `0.75rem` per card condivise.
+- **Corner Style:** `0.625rem` per specimen semplici, `0.875rem` per card condivise.
 - **Background:** Calce o trasparente su canvas Calce/Nebbia.
 - **Shadow Strategy:** hairline; il bordo resta il principale segnale di struttura.
 - **Internal Padding:** `1.5rem` per specimen, `1rem` per esempi compatti.
 
 ### Inputs / Fields
 
-- **Style:** altezza `2.25rem`, bordo input, fondo trasparente, raggio `0.5rem`.
+- **Style:** altezza `2.25rem`, bordo input, fondo trasparente, raggio default `0.625rem`.
 - **Focus:** bordo semantico opzionale più outline condiviso da `2px`/`2px`; lo specimen include label e messaggio.
 - **Error / Disabled:** stati visibili e descritti, senza affidarsi soltanto al colore.
 

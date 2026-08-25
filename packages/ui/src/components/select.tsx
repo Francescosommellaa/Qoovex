@@ -147,7 +147,7 @@ function SelectContent({
               }}
               {...props}
             >
-              <SlidingIndicator rounded="md" />
+              <SlidingIndicator rounded="sm" />
               <SelectScrollUpButton />
               <SelectPrimitive.List>{children}</SelectPrimitive.List>
               <SelectScrollDownButton />
@@ -195,7 +195,7 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative z-10 flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus:bg-transparent focus:text-accent-foreground data-highlighted:bg-transparent data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+        "relative z-10 flex w-full cursor-default items-center gap-1.5 rounded-sm py-1 pr-8 pl-1.5 text-sm outline-hidden select-none transition-all duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus:bg-transparent focus:text-accent-foreground data-highlighted:bg-transparent data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className
       )}
       onMouseEnter={handleMouseEnter}

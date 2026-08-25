@@ -35,6 +35,12 @@ typography:
     fontWeight: 400
     lineHeight: 1.75
     letterSpacing: "normal"
+  compact:
+    fontFamily: "General Sans, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "0.875rem"
+    fontWeight: 500
+    lineHeight: 1.429
+    letterSpacing: "normal"
   label:
     fontFamily: "Array, General Sans, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.75rem"
@@ -42,10 +48,10 @@ typography:
     lineHeight: 1.333
     letterSpacing: "0.08em"
 rounded:
-  sm: "0.25rem"
-  md: "0.375rem"
-  lg: "0.5rem"
-  xl: "0.75rem"
+  sm: "0.375rem"
+  md: "0.5rem"
+  lg: "0.625rem"
+  xl: "0.875rem"
   full: "9999px"
 spacing:
   1: "0.25rem"
@@ -58,17 +64,17 @@ components:
   button-primary:
     backgroundColor: "{colors.inchiostro}"
     textColor: "{colors.calce}"
-    typography: "{typography.body}"
+    typography: "{typography.compact}"
     rounded: "{rounded.lg}"
-    height: "2rem"
-    padding: "0 0.75rem"
+    height: "2.5rem"
+    padding: "0.5rem 0.875rem"
   button-outline:
     backgroundColor: "{colors.calce}"
     textColor: "{colors.inchiostro}"
-    typography: "{typography.body}"
+    typography: "{typography.compact}"
     rounded: "{rounded.lg}"
-    height: "2rem"
-    padding: "0 0.75rem"
+    height: "2.5rem"
+    padding: "0.5rem 0.875rem"
   input-default:
     backgroundColor: "transparent"
     textColor: "{colors.inchiostro}"
@@ -197,7 +203,7 @@ Con reduced motion, rotazione e movimento spaziale non essenziali diventano repl
 
 ## Layout
 
-La foundation parte da un'unità di `0.25rem` e definisce passi fino a `1.5rem`. I controlli base sono compatti: `2rem` per button e select, `2.25rem` per input, `2.5rem` per controlli grandi. Le primitive non impongono una griglia applicativa; forniscono gap, padding e contenitori coerenti che i consumer possono comporre.
+La foundation parte da un'unità di `0.25rem` e definisce passi fino a `1.5rem`. Il Button testuale default misura `2.5rem`, con `2rem`/`2.25rem` per le size compatte e `3rem` per la large; input e altri controlli mantengono le proprie altezze pubbliche. Le primitive non impongono una griglia applicativa; forniscono gap, padding e contenitori coerenti che i consumer possono comporre.
 
 ### Responsive component contract
 
@@ -252,7 +258,9 @@ Un modal root possiede un solo backdrop contestuale. Un menu o popup annidato ne
 
 ## Shapes
 
-Il raggio base è `0.5rem`: small `0.25rem`, medium `0.375rem`, large `0.5rem`, extra large `0.75rem`. Button, input e select usano large; card e dialog usano extra large; badge, tabs e indicatori usano pill complete. I controlli più piccoli riducono il raggio senza diventare squadrati.
+Il raggio base canonico e `0.625rem`: small `0.375rem`, medium `0.5rem`, large/default `0.625rem`, extra large `0.875rem`. Ogni componente che ereditava il precedente default da `0.5rem` segue ora questa nuova curvature piu morbida tramite i token derivati, senza override locali. Le geometrie compatte possono sottrarre `0.125rem`; quelle large possono aggiungerlo quando la proporzione del componente lo richiede. Badge, tabs, indicatori e ogni geometria semanticamente pill restano `full` e non vengono convertiti al nuovo default.
+
+Per ogni coppia di superfici arrotondate nidificate che condivide un bordo percettivo vale sempre `R_esterno = R_interno + inset`, dove l'inset e il padding reale tra i due bordi; quindi il child usa `R_interno = max(0px, R_esterno - padding)`. La formula si applica per ciascun angolo corrispondente, anche con inset asimmetrici, e non si sostituisce con una scala approssimativa. Un discendente lontano dagli angoli del parent non forma una coppia concentrica; appena due bordi arrotondati si seguono, la relazione e obbligatoria. Le geometrie pill restano pill e non entrano in questa sottrazione.
 
 I bordi restano a un pixel e usano ruoli semantici. Le icone Tabler hanno tratto coerente e misura tipica `1rem`; icone più grandi compaiono soltanto in stati vuoti, alert o marcatori focali.
 
@@ -288,11 +296,46 @@ Ogni componente interattivo valuta elementi animati, lifecycle completo, rapid i
 
 ### Buttons
 
-- **Shape:** raggio `0.5rem`, altezza base `2rem`, peso medio e gap interno `0.375rem`.
-- **Primary:** background Inchiostro, testo Calce e ombra 2xs.
-- **Interaction:** Base UI mantiene il vero `<button>` e l’activation nativa; Motion anima soltanto il contenuto visuale con timing `feedback`, così hit area e layout non cambiano. Pointer leave/cancel, inversione e input rapido retargettano senza coda; focus usa l’outline condiviso immediato.
-- **Outline / Secondary / Ghost / Destructive / Link:** mantengono lo stesso ritmo ma ricevono ampiezza Motion coerente con la propria gerarchia. `link` non scala e resta un’azione, mai navigazione.
-- **Loading:** `aria-busy` e blocco Base UI impediscono nuove activation; `focusableWhenDisabled` conserva il focus soltanto durante il busy lifecycle. Il label resta nel layout, lo spinner è decorativo e reduced motion lo mantiene visibile senza rotazione.
+- **Shape:** il radius Qoovex canonico `--radius: 0.625rem` produce curvature da `0.5rem`, `0.625rem` e `0.75rem` per compact, default e large. Le size testuali `xs/sm/default/lg` misurano `2/2.25/2.5/3rem`, con aria verticale intenzionale e senza diventare pill.
+- **Opaque surfaces:** default usa `primary`, secondary `secondary`, outline `background + border`, destructive `destructive`; sono tutti stati finali opachi. Ghost e l'unica assenza intenzionale di surface a riposo. Le tint alpha non definiscono rest, hover o pressed.
+- **Interaction:** Base UI mantiene il vero `<button>` e l’activation nativa; Motion coordina surface, content e async senza trasformare hit area o box di layout. Hover espande dal centro sui quattro lati (`1.01 × 1.024`); il contatto usa uno squash anisotropo piu quieto (`1.012 × 0.962`) senza displacement. Release, cancel e inversione retargettano con la spring locale calibrata `410/28/0.76`, che conserva velocity e un solo overshoot sub-percettivo. Focus usa l’outline condiviso immediato.
+- **Variants:** la famiglia e soltanto default, secondary, outline, ghost e destructive. Ghost introduce una surface neutra interna tramite Motion; destructive usa superficie piena e la stessa fisica delle altre azioni. Il contrasto testo/surface destructive e verificato a `5.59:1` light e `6.90:1` dark. Button non espone una variant `link`: navigazione e link testuali usano semantica e styling Link dedicati.
+- **Boundary:** Button esporta soltanto il command component. `<a>` e navigazione appartengono al modulo Link separato; non importano classi o variant dal modulo Button.
+- **Loading:** `aria-busy` e blocco Base UI impediscono nuove activation; `focusableWhenDisabled` conserva il focus soltanto durante il busy lifecycle. Il label resta nel layout e crossfada con lo spinner decorativo senza variazioni geometriche; reduced motion mantiene il cambio di stato immediato e lo spinner visibile senza rotazione.
+
+### IconButtons
+
+- **Semantics:** `IconButton` e la primitive canonica per azioni icon-only stateless e richiede un nome accessibile tramite `aria-label` o `aria-labelledby`. Tooltip resta una composizione opzionale e non sostituisce il nome accessibile. Toggle, close/dismiss e copy appartengono ai componenti specializzati.
+- **Geometry:** le size pubbliche minime sono `xs` (24 px), `sm` (28 px) e `default` (32 px). Il root possiede focus e hit area; con primary coarse/no-hover diventa un target reale da 44 px, mentre surface e glyph conservano la size visuale. I target adiacenti occupano celle reali e non usano pseudo-hitbox sovrapposte.
+- **Material:** varianti, surface opache, action radius e focus sono quelli di Button. IconButton non eredita padding, wrapping o selector icon+label di Button e non e un alias di `Button size="icon"`.
+- **Motion:** la surface centrata usa una massa piu corta (`440/29/0.64`), hover elastico contenuto e press anisotropo quieto; il glyph resta otticamente stabile su un layer separato. Il semantic intent e esplicito e minimo: directional e upload/download usano micro-translation coerente, disclosure ruota dallo stato `aria-expanded`, close usa una risposta dedicata discreta, mentre neutral resta intenzionalmente statico. Copy e Toggle possiedono lifecycle specializzati. Release, cancel e rapid reversal riusano il lifecycle Action condiviso. Ghost introduce la surface tramite Motion; disabled usa tone, surface/border inattivi e assenza di motion senza dipendere dalla sola opacity; reduced motion conserva feedback non spaziale.
+- **Loading:** icon e loader condividono centro, root e hit area; `aria-busy`, blocco activation e `focusableWhenDisabled` seguono Button, mentre lo spinner e decorativo.
+- **Migration:** le size `icon*` di Button restano una migration surface temporanea per consumer specializzati ancora in attesa del proprio task (clear/search, password visibility e toolbar legacy); il copy esplicito usa gia `CopyButton` e nessun nuovo consumer puo adottare le size legacy.
+
+### ToggleButtons
+
+- **Semantics:** `ToggleButton` rappresenta un button a due stati persistenti e mantiene stabile il significato della proprieta controllata. Base UI Toggle possiede `pressed/defaultPressed/onPressedChange`, `aria-pressed`, keyboard e disabled; Switch, disclosure, command che descrive l'azione opposta e ToggleGroup restano responsabilita distinte. Il consumer puo usare `pressedContent` per una copy di stato intenzionale (`Fissa elemento` / `Elemento fissato`): il solo layer attivo forma il nome accessibile, quindi visible copy, accessible name e `aria-pressed` cambiano insieme senza mismatch.
+- **Stateful content:** il contenuto OFF e ON condivide una singola cella grid; entrambi contribuiscono alla geometria intrinseca, mentre Motion coordina opacity, micro-scale e state surface. Il cambio di copy/icon non provoca width jump e un update controlled dal parent anima lo stato senza simulare il contatto fisico.
+- **Presentation:** una sola presentation quiet. Unpressed non possiede surface; pressed introduce una surface neutra piena e immobile. Text mode riusa la geometria Button; icon-only riusa geometria, target coarse e naming accessibile di IconButton.
+- **Motion:** il wrapper fisico gestisce hover, squash e release; il persistent state layer gestisce separatamente unpressed/pressed. Release e state change formano un unico gesto, rapid reversal retargetta dalla posizione corrente e reduced motion conserva il cambio di surface senza movimento spaziale. Disabled conserva visibile lo stato persistente e sopprime interaction Motion.
+
+### CloseButtons
+
+- **Semantics:** `CloseButton` significa esclusivamente close/dismiss di una surface o di un contesto temporaneo. Clear input, remove/delete, collapse/back e status X restano azioni distinte. Il consumer fornisce sempre un nome contestuale tramite `aria-label` o `aria-labelledby`; Tooltip e `title` non lo sostituiscono.
+- **API e composition:** IconX Tabler, presentation quiet Ghost e size `sm` sono interne e invarianti. Non esistono children, variant, size, inline geometry style o loading pubblici. CloseButton non possiede Dialog context, dismissal state, Escape, position, margin, safe area o z-index: il behavioral owner come `Dialog.Close` lo compone tramite `render`, mentre la surface possiede placement e focus restoration. `DialogContent` richiede `closeButtonProps` con `aria-label` o `aria-labelledby` contestuale quando mostra il close control; non esiste una label italiana implicita.
+- **Geometry e Motion:** la surface visuale misura 28px con radius 8px e conserva il target coarse reale da 44px di IconButton. Root/focus owner, surface Motion e glyph restano separati. La composizione riserva almeno 60px sul lato del close root quando usa offset 16px (`44 + 16`), cosi testo e target coarse non collidono. Hover introduce una surface neutra opaca, press usa lo squash Action icon-only e release/cancel retargettano con la spring `440/29/0.64`; IconX riceve soltanto una micro-risposta scale/rotation coordinata alla surface, mai spin o motion decorativa. Disabled resta fermo e reduced motion conserva feedback non spaziale.
+
+### CopyButtons
+
+- **Semantics:** `CopyButton` e un command temporaneo, mai un ToggleButton: copia `value`, mantiene stabile `aria-label`/`aria-labelledby` e non usa `aria-pressed`. Success ed error descrivono l'ultima activation, non uno stato persistente.
+- **API e privacy:** IconCopy, IconCheck, IconAlertCircle, presentation Ghost, size `sm`, clipboard operation e hold da 1000ms sono interni. Non esistono children, icon, variant, size, timeout o stato controlled pubblici; `value` non viene scritto in data attribute, log, analytics o feedback accessibile. Flussi sensibili e Button testuali con notice/error propri non vengono assorbiti dalla primitive.
+- **Lifecycle e Motion:** `idle → copying → success/error → idle` segue l'esito reale di `navigator.clipboard.writeText`; failure non mostra mai Check e retry usa lo stesso command. La surface conserva Action Motion IconButton, mentre Copy e Check/Error sono sovrapposti nello stesso slot geometrico e si scambiano simultaneamente tramite compress/fade e spring breve, senza sequencing `wait`; reset e reduced motion sono piu quieti. Un request id e un solo timer impediscono race e stale reset, il root non viene rimontato e focus/geometria restano invariati. Un unico status live annuncia `Copiato negli appunti` o `Copia non riuscita. Riprova.` senza cambiare il nome dell'azione.
+
+### Links
+
+- **Semantics:** Link possiede esclusivamente navigazione e usa sempre un vero `<a>` o il router Link del consumer. Button non rappresenta mai una destinazione.
+- **Boundary:** `@qoovex/ui/components/link` e l'unico contratto pubblico di styling per link condivisi; non importa internals o variant del Button.
+- **Presentation:** `inline` e `quiet` restano link testuali; `primary`, `secondary`, `outline` e `ghost` sono CTA di navigazione con semantica anchor. Il redesign interaction completo appartiene al task Link dedicato, non al Button.
 
 ### Chips
 
@@ -301,7 +344,7 @@ Ogni componente interattivo valuta elementi animati, lifecycle completo, rapid i
 
 ### Cards / Containers
 
-- **Corner Style:** `0.75rem`.
+- **Corner Style:** `0.875rem` tramite `--radius-xl`.
 - **Background:** card, trasparente o muted al quaranta per cento secondo variant.
 - **Shadow Strategy:** 2xs a riposo; xs e traslazione `-0.125rem` soltanto per interactive.
 - **Border:** neutro e sempre presente su default/interactive.
@@ -309,7 +352,7 @@ Ogni componente interattivo valuta elementi animati, lifecycle completo, rapid i
 
 ### Inputs / Fields
 
-- **Style:** altezza `2.25rem`, raggio `0.5rem`, bordo input, background trasparente e testo almeno `1rem` su mobile.
+- **Style:** altezza `2.25rem`, raggio default `0.625rem`, bordo input, background trasparente e testo almeno `1rem` su mobile.
 - **Focus:** bordo semantico opzionale più outline condiviso opaco da due pixel, senza ring sovrapposti.
 - **Error / Disabled:** bordo e ring Segnale Rosso per invalid; fondo attenuato, cursore e opacità per disabled.
 
@@ -319,7 +362,7 @@ Tabs e navigazioni usano pill, testo `0.75rem`, indicatore scorrevole e stato at
 
 ### Dialog
 
-Su mobile il dialog è una sheet dal basso con raggio superiore `1rem`; da small viewport è centrato, largo secondo variant e arrotondato a `0.75rem`. Overlay nero al cinquanta per cento, blur minimo e animazione breve separano il piano senza nascondere il contesto.
+Su mobile il dialog è una sheet dal basso con raggio superiore `1rem`; da small viewport è centrato, largo secondo variant e arrotondato tramite `--radius-xl` (`0.875rem`). Overlay nero al cinquanta per cento, blur minimo e animazione breve separano il piano senza nascondere il contesto.
 
 ## Do's and Don'ts
 

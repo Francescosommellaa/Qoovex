@@ -5,7 +5,9 @@ import { PageHeader } from "@/components/page-header";
 import { Specimen, SpecimenGrid } from "@/components/specimen";
 import { Separator } from "@qoovex/ui/components/separator";
 import { Button } from "@qoovex/ui/components/button";
-import { IconCopy, IconShare, IconDownload, IconTrash } from "@tabler/icons-react";
+import { CopyButton } from "@qoovex/ui/components/copy-button";
+import { IconButton } from "@qoovex/ui/components/icon-button";
+import { IconShare, IconDownload, IconTrash } from "@tabler/icons-react";
 
 export default function SeparatorCatalogPage() {
   return (
@@ -37,19 +39,17 @@ export default function SeparatorCatalogPage() {
 
             <Specimen title="Verticale in Toolbar (Vertical)">
               <div className="flex items-center gap-2 rounded-lg border border-border/80 bg-card p-2">
-                <Button variant="ghost" size="icon-sm" aria-label="Copia documento">
-                  <IconCopy className="size-4" />
-                </Button>
-                <Button variant="ghost" size="icon-sm" aria-label="Condividi link">
+                <CopyButton aria-label="Copia documento" value="Documento Via Roma 42" />
+                <IconButton variant="ghost" size="sm" aria-label="Condividi link">
                   <IconShare className="size-4" />
-                </Button>
+                </IconButton>
                 <Separator orientation="vertical" className="h-6" />
-                <Button variant="ghost" size="icon-sm" aria-label="Scarica allegato">
+                <IconButton variant="ghost" size="sm" aria-label="Scarica allegato">
                   <IconDownload className="size-4" />
-                </Button>
-                <Button variant="ghost" size="icon-sm" className="text-destructive" aria-label="Elimina elemento">
+                </IconButton>
+                <IconButton variant="destructive" size="sm" aria-label="Elimina elemento">
                   <IconTrash className="size-4" />
-                </Button>
+                </IconButton>
               </div>
             </Specimen>
           </SpecimenGrid>

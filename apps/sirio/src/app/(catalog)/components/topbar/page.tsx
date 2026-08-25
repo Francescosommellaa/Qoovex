@@ -7,6 +7,7 @@ import { Topbar, TopbarStart, TopbarCenter, TopbarEnd } from "@qoovex/ui/compone
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@qoovex/ui/components/breadcrumb";
 import { Badge } from "@qoovex/ui/components/badge";
 import { Button } from "@qoovex/ui/components/button";
+import { IconButton } from "@qoovex/ui/components/icon-button";
 import { Separator } from "@qoovex/ui/components/separator";
 import {
   IconBell,
@@ -34,9 +35,9 @@ export default function TopbarCatalogPage() {
               <div className="w-full rounded-xl border border-border/80 bg-card overflow-hidden shadow-2xs">
                 <Topbar className="static">
                   <TopbarStart>
-                    <Button variant="ghost" size="icon-sm" aria-label="Riduci navigazione laterale">
+                    <IconButton variant="ghost" size="sm" aria-label="Riduci navigazione laterale">
                       <IconLayoutSidebarLeftCollapse aria-hidden="true" className="size-4" />
-                    </Button>
+                    </IconButton>
                     <Separator orientation="vertical" className="h-4" />
                   </TopbarStart>
 
@@ -45,10 +46,10 @@ export default function TopbarCatalogPage() {
                   </TopbarCenter>
 
                   <TopbarEnd>
-                    <Button variant="ghost" size="icon-sm" className="relative" aria-label="Apri notifiche, 3 non lette">
+                    <IconButton variant="ghost" size="sm" className="relative" aria-label="Apri notifiche, 3 non lette">
                       <IconBell aria-hidden="true" className="size-4" />
                       <span aria-hidden="true" className="absolute top-1 right-1 size-2 rounded-full bg-destructive ring-2 ring-background" />
-                    </Button>
+                    </IconButton>
                     <Badge variant="outline" size="sm" className="gap-1 font-mono">
                       <IconShieldLock className="size-3 text-primary" />
                       Admin
@@ -67,9 +68,9 @@ export default function TopbarCatalogPage() {
               <div className="w-full rounded-xl border border-border/80 bg-card overflow-hidden shadow-2xs">
                 <Topbar className="static">
                   <TopbarStart>
-                    <Button variant="ghost" size="icon-sm" aria-label="Riduci navigazione laterale">
+                    <IconButton variant="ghost" size="sm" aria-label="Riduci navigazione laterale">
                       <IconLayoutSidebarLeftCollapse aria-hidden="true" className="size-4" />
-                    </Button>
+                    </IconButton>
                     <Separator orientation="vertical" className="h-4" />
                   </TopbarStart>
 
@@ -78,9 +79,9 @@ export default function TopbarCatalogPage() {
                   </TopbarCenter>
 
                   <TopbarEnd>
-                    <Button variant="ghost" size="icon-sm" className="relative" aria-label="Apri notifiche">
+                    <IconButton variant="ghost" size="sm" className="relative" aria-label="Apri notifiche">
                       <IconBell aria-hidden="true" className="size-4" />
-                    </Button>
+                    </IconButton>
                     <Button variant="outline" size="sm" className="h-7 text-xs gap-1.5">
                       <IconSearch className="size-3.5" />
                       <span className="hidden sm:inline">Cerca...</span>

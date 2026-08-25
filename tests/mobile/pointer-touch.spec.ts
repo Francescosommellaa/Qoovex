@@ -43,8 +43,10 @@ test("coarse pointer exposes 44px targets while preserving compact visuals and i
   await expect(page.locator("[data-pointer-touch-foundation]")).toBeVisible();
   await expectNoDocumentOverflow(page, "Pointer + Touch proof at 320px");
   expect(await page.evaluate(() => matchMedia("(pointer: coarse)").matches)).toBe(true);
-  await expect(icon).toHaveCSS("min-width", "44px");
-  await expect(icon).toHaveCSS("min-height", "44px");
+  await expect(icon).toHaveCSS("width", "44px");
+  await expect(icon).toHaveCSS("height", "44px");
+  await expect(icon.locator('[data-slot="icon-button-motion-surface"]')).toHaveCSS("width", "24px");
+  await expect(icon.locator('[data-slot="icon-button-motion-surface"]')).toHaveCSS("height", "24px");
   await expect(field).toHaveCSS("min-height", "44px");
 
   await checkbox.scrollIntoViewIfNeeded();

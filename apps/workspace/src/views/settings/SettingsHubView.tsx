@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
 import type { WorkspaceCapabilities } from "@/views/workspace/workspace-records";
 import styles from "@/views/administration/AdminCore.module.css";
@@ -44,7 +45,7 @@ export function SettingsHubView({ capabilities }: { capabilities: WorkspaceCapab
             {section.areas.map((area) => (
               <article className={styles.record} key={area.href}>
                 <div className={styles.recordMain}><strong>{area.title}</strong><span>{area.description}</span></div>
-                <div className={styles.actions}><Link className={styles.linkButton} href={area.href}>Apri</Link></div>
+                <div className={styles.actions}><Link className={linkVariants({ variant: "primary" })} href={area.href}>Apri</Link></div>
               </article>
             ))}
           </div>

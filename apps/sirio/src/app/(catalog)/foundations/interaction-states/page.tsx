@@ -8,7 +8,7 @@ import {
 import { Input } from "@qoovex/ui/components/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@qoovex/ui/components/tabs";
 import { Textarea } from "@qoovex/ui/components/textarea";
-import { Toggle } from "@qoovex/ui/components/toggle";
+import { ToggleButton } from "@qoovex/ui/components/toggle-button";
 import {
   Card,
   CardHeader,
@@ -218,14 +218,13 @@ export default function InteractionStatesFoundationPage() {
 
                 <Specimen title="Toggle Button (selected specifico)">
                   <div className="flex flex-col items-center gap-2">
-                    <Toggle
+                    <ToggleButton
                       className="qv-selected:[--qv-state-proof:selected]"
                       data-state-proof="selected-toggle"
                       defaultPressed
-                      variant="outline"
                     >
                       Selezionato
-                    </Toggle>
+                    </ToggleButton>
                     <span className="text-xs text-muted-foreground">
                       Base UI usa data-pressed come selezione su Toggle
                     </span>

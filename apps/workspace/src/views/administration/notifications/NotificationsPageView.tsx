@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { linkVariants } from "@qoovex/ui/components/link";
 import type { NotificationListResponse, NotificationResponse } from "@qoovex/types";
 import { presentNotificationSeverity } from "@shared/lib/product-state-presentation";
 import { presentNotificationActionLabel } from "@shared/lib/job-site-notification-destination";
@@ -26,7 +27,7 @@ function NotificationCard({ notification }: { notification: NotificationResponse
       </div>
       <div className={styles.actions}>
         <WorkspaceState state={presentNotificationSeverity(notification.severity)} />
-        {notification.actionHref ? <Link className={styles.linkButton} href={notification.actionHref}>{presentNotificationActionLabel(notification.sourceType, notification.actionHref)}</Link> : null}
+        {notification.actionHref ? <Link className={linkVariants({ variant: "primary" })} href={notification.actionHref}>{presentNotificationActionLabel(notification.sourceType, notification.actionHref)}</Link> : null}
         <NotificationActionButtons notificationId={notification.id} read={read} />
       </div>
     </article>
@@ -39,7 +40,7 @@ export function NotificationsPageView({ data, activeFilter }: { data: Notificati
       <WorkspacePageHeader
         title="Notifiche"
         description="Apri ciò che richiede attenzione oppure segna e nascondi le notifiche già gestite."
-        action={<Link className={styles.ghostButton} href="/settings/notifications">Preferenze</Link>}
+        action={<Link className={linkVariants({ variant: "outline" })} href="/settings/notifications">Preferenze</Link>}
       />
       <WorkspacePanel title="Inbox" description={`${data.unreadCount} notifiche non lette. Le notifiche nascoste non appaiono nella vista standard.`}>
         <div className={styles.filterBar} aria-label="Filtra notifiche">
