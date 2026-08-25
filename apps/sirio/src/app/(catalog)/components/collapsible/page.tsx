@@ -9,6 +9,7 @@ import {
   CollapsibleContent,
 } from "@qoovex/ui/components/collapsible";
 import { Button } from "@qoovex/ui/components/button";
+import { IconButton } from "@qoovex/ui/components/icon-button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@qoovex/ui/components/card";
 import { Badge } from "@qoovex/ui/components/badge";
 import { Input } from "@qoovex/ui/components/input";
@@ -277,14 +278,14 @@ export default function CollapsibleCatalogPage() {
                     </div>
                     <CollapsibleTrigger
                       render={
-                        <Button aria-label={openNestedDocs ? "Riduci documenti condivisi" : "Espandi documenti condivisi"} variant="ghost" size="icon-sm" className="size-6">
+                        <IconButton aria-label={openNestedDocs ? "Riduci documenti condivisi" : "Espandi documenti condivisi"} variant="ghost" size="sm">
                           <IconChevronDown
                             aria-hidden="true"
                             className={`size-3.5 transition-transform duration-200 ${
                               openNestedDocs ? "rotate-180" : ""
                             }`}
                           />
-                        </Button>
+                        </IconButton>
                       }
                     />
                   </div>

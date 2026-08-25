@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { AccessError } from "@shared/server/access-errors";
 import { listPlatformOrganizations } from "@shared/server/platform-admin-service";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceEmptyState } from "@/views/workspace/WorkspacePrimitives";
@@ -23,7 +24,7 @@ export default async function PlatformOrganizationsPage({ searchParams }: { sear
               <SupportSessionForm organizationCode={organization.code} />
             </article>
           ))}</div>}
-          {data.nextCursor ? <Link className={styles.ghostButton} href={`/qoovex-admin/organizations?${new URLSearchParams({ ...(search.q ? { q: search.q } : {}), cursor: data.nextCursor }).toString()}`}>Pagina successiva</Link> : null}
+          {data.nextCursor ? <Link className={linkVariants({ variant: "outline" })} href={`/qoovex-admin/organizations?${new URLSearchParams({ ...(search.q ? { q: search.q } : {}), cursor: data.nextCursor }).toString()}`}>Pagina successiva</Link> : null}
         </WorkspacePanel>
       </WorkspacePage>
     );

@@ -1,5 +1,5 @@
 import { IconArrowRight } from "@tabler/icons-react";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { cn } from "@qoovex/ui/lib/utils";
 import { primaryCtaHref, primaryCtaLabel, signInLabel, signInUrl } from "@/app/site-config";
 
@@ -31,7 +31,7 @@ export function CtaBand({
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <a className={cn(buttonVariants({ size: "lg" }))} href={primaryHref}>
+          <a className={cn(linkVariants({ variant: "primary", size: "lg" }))} href={primaryHref}>
             {primaryLabel}
             <IconArrowRight
               aria-hidden="true"
@@ -40,7 +40,7 @@ export function CtaBand({
             />
           </a>
           {secondaryHref ? (
-            <a className={cn(buttonVariants({ variant: "ghost", size: "lg" }))} href={secondaryHref}>
+            <a className={cn(linkVariants({ variant: "ghost", size: "lg" }))} href={secondaryHref}>
               {secondaryLabel}
             </a>
           ) : null}

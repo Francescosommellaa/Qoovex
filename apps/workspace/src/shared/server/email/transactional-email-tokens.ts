@@ -15,7 +15,7 @@ export const transactionalEmailTokens = {
   severityWarning: "#f5c542",
   fontSans: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
   fontMono: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
-  radius: "8px",
-  radiusLg: "12px",
+  radius: "10px",
+  radiusLg: "14px",
   maxWidth: "560px",
 } as const;

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { IconAlertTriangle, IconArrowRight, IconBuilding, IconLogin2 } from "@tabler/icons-react";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { Card, CardContent } from "@qoovex/ui/components/card";
 import { cn } from "@qoovex/ui/lib/utils";
 import { OrganizationSetupForm } from "./OrganizationSetupForm";
@@ -44,8 +44,8 @@ export function SignInRequiredState({ callbackUrl = "/" }: { callbackUrl?: strin
     <AccessStateCard
       actions={(
         <>
-          <Link className={cn(buttonVariants(), "h-11")} href={`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Accedi <IconArrowRight data-icon="inline-end" /></Link>
-          <Link className={cn(buttonVariants({ variant: "outline" }), "h-11")} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link>
+          <Link className={cn(linkVariants({ variant: "primary" }), "h-11")} href={`/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Accedi <IconArrowRight data-icon="inline-end" /></Link>
+          <Link className={cn(linkVariants({ variant: "outline" }), "h-11")} href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Crea account</Link>
         </>
       )}
       description="Per usare Qoovex serve un account. Dopo l’accesso potrai seguire cantieri, aggiornamenti, richieste e decisioni."

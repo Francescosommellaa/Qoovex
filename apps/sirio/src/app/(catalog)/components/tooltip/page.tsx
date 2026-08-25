@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/page-header";
 import { Specimen, SpecimenGrid } from "@/components/specimen";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@qoovex/ui/components/tooltip";
 import { Button } from "@qoovex/ui/components/button";
+import { IconButton } from "@qoovex/ui/components/icon-button";
 import { Badge } from "@qoovex/ui/components/badge";
 import {
   IconInfoCircle,
@@ -82,7 +83,7 @@ export default function TooltipCatalogPage() {
             <Specimen title="Pulsanti Icona Inattivi / Azioni">
               <div className="flex items-center gap-3">
                 <Tooltip>
-                  <TooltipTrigger render={<Button variant="outline" size="icon-sm" aria-label="Informazioni" />}>
+                  <TooltipTrigger render={<IconButton variant="outline" size="sm" aria-label="Informazioni" />}>
                     <IconInfoCircle aria-hidden="true" className="size-4" />
                   </TooltipTrigger>
                   <TooltipContent>
@@ -91,7 +92,7 @@ export default function TooltipCatalogPage() {
                 </Tooltip>
 
                 <Tooltip>
-                  <TooltipTrigger render={<Button variant="outline" size="icon-sm" aria-label="Download" />}>
+                  <TooltipTrigger render={<IconButton variant="outline" size="sm" aria-label="Download" />}>
                     <IconDownload aria-hidden="true" className="size-4" />
                   </TooltipTrigger>
                   <TooltipContent>
@@ -100,7 +101,7 @@ export default function TooltipCatalogPage() {
                 </Tooltip>
 
                 <Tooltip>
-                  <TooltipTrigger render={<Button variant="outline" size="icon-sm" aria-label="Condividi allegato" />}>
+                  <TooltipTrigger render={<IconButton variant="outline" size="sm" aria-label="Condividi allegato" />}>
                     <IconShare aria-hidden="true" className="size-4" />
                   </TooltipTrigger>
                   <TooltipContent>
@@ -109,7 +110,7 @@ export default function TooltipCatalogPage() {
                 </Tooltip>
 
                 <Tooltip>
-                  <TooltipTrigger render={<Button variant="destructive" size="icon-sm" aria-label="Rimuovi elemento di esempio" />}>
+                  <TooltipTrigger render={<IconButton variant="destructive" size="sm" aria-label="Rimuovi elemento di esempio" />}>
                     <IconTrash aria-hidden="true" className="size-4" />
                   </TooltipTrigger>
                   <TooltipContent>

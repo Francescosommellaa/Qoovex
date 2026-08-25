@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Badge } from "@qoovex/ui/components/badge";
-import { Button, buttonVariants } from "@qoovex/ui/components/button";
+import { Button } from "@qoovex/ui/components/button";
 import {
   WorkQueueItem,
   WorkQueueItemActions,
@@ -25,7 +25,7 @@ export default function WorkQueueItemCatalogPage() {
       <p className="mb-8 max-w-3xl leading-7 text-muted-foreground">
         Questa pagina documenta le varianti visuali del componente. Per decidere quando creare una coda, quali dati mostrare
         e come classificare gli elementi, consulta{" "}
-        <Link className={buttonVariants({ variant: "link" })} href="/patterns/work-queue">il pattern Work Queue</Link>.
+        <Link className="text-primary" data-link="inline" href="/patterns/work-queue">il pattern Work Queue</Link>.
       </p>
 
       <section aria-labelledby="priority-levels-title">

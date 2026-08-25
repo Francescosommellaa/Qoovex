@@ -9,6 +9,7 @@ import { useIsMobile } from "#hooks/use-mobile"
 import { cn } from "#lib/utils"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import { Button } from "#components/button"
+import { IconButton } from "#components/icon-button"
 import { Input } from "#components/input"
 import { Separator } from "#components/separator"
 import { Skeleton } from "#components/skeleton"
@@ -274,13 +275,16 @@ function SidebarTrigger({
   className,
   onClick,
   ...props
-}: React.ComponentProps<typeof Button>) {
+}: Omit<React.ComponentProps<typeof IconButton>, "aria-label" | "aria-labelledby"> & {
+  "aria-label"?: string
+  "aria-labelledby"?: string
+}) {
   const { isMobile, open, openMobile, sidebarId, toggleSidebar } = useSidebar()
   const expanded = isMobile ? openMobile : open
   const label = expanded ? "Chiudi navigazione" : "Apri navigazione"
 
   return (
-    <Button
+    <IconButton
       {...props}
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
@@ -288,7 +292,7 @@ function SidebarTrigger({
       aria-expanded={expanded}
       aria-label={label}
       variant="ghost"
-      size="icon-sm"
+      size="sm"
       className={cn(className)}
       onClick={(event) => {
         onClick?.(event)
@@ -296,7 +300,7 @@ function SidebarTrigger({
       }}
     >
       <IconLayoutSidebar aria-hidden="true" />
-    </Button>
+    </IconButton>
   )
 }
 
@@ -1002,15 +1006,15 @@ function AdaptiveSidebar({
             )
           )}
           {search && (
-            <Button
+            <IconButton
               variant="ghost"
-              size="icon-sm"
+              size="sm"
               aria-label={search.placeholder ?? "Cerca"}
               onClick={search.onClick}
               className="group-data-[collapsible=icon]:hidden shrink-0"
             >
               <IconSearch aria-hidden="true" className="size-4 text-muted-foreground hover:text-foreground transition-colors" />
-            </Button>
+            </IconButton>
           )}
         </SidebarHeader>
       )}

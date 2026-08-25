@@ -74,10 +74,10 @@ export default function SurfaceFoundationPage() {
           </div>
 
           <div
-            className="qv-surface-base relative isolate min-h-[26rem] overflow-hidden rounded-2xl p-5 sm:p-8"
+            className="qv-surface-base relative isolate min-h-[26rem] overflow-hidden rounded-[calc(var(--radius-xl)+(var(--space-5)*2))] p-5"
             data-surface-hierarchy
           >
-            <div className="qv-surface-contained h-full min-h-[22rem] rounded-xl p-5 sm:p-7" data-surface-role="contained">
+            <div className="qv-surface-contained h-full min-h-[22rem] rounded-[calc(var(--radius-xl)+var(--space-5))] p-5" data-surface-role="contained">
               <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_minmax(12rem,0.75fr)]">
                 <div className="qv-surface-raised rounded-xl p-5" data-surface-role="raised">
                   <IconLayoutCards aria-hidden="true" className="qv-icon-emphasized" />
@@ -164,7 +164,7 @@ export default function SurfaceFoundationPage() {
             </p>
           </div>
           <div className="grid gap-4 lg:grid-cols-3" data-surface-stress-grid>
-            <div className="qv-surface-base rounded-xl p-4">
+            <div className="qv-surface-base rounded-[calc(var(--radius)+var(--space-4))] p-4">
               <div className="qv-surface-contained rounded-lg p-4" data-surface-stress="similar">
                 <p className="font-medium">Card su tono quasi identico</p>
                 <p className="mt-1 text-sm text-muted-foreground">Il bordo porta il confine.</p>
@@ -176,8 +176,8 @@ export default function SurfaceFoundationPage() {
                 <p className="text-sm font-medium">Floating sopra Card</p>
               </div>
             </div>
-            <div className="qv-surface-contained rounded-xl p-4" data-surface-stress="nested">
-              <div className="qv-surface-contained rounded-lg p-4">
+            <div className="qv-surface-contained rounded-[calc(var(--radius)+var(--space-4))] p-4" data-surface-stress="nested">
+              <div className="qv-surface-contained rounded-[var(--radius)] p-4">
                 <IconLayersIntersect aria-hidden="true" className="qv-icon-default" />
                 <p className="mt-2 text-sm font-medium">Contained annidato</p>
               </div>

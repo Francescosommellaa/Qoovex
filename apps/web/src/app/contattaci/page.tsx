@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { IconArrowRight, IconMail } from "@tabler/icons-react";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { contactEmail, contactHref } from "../site-config";
 import { SiteShell } from "../site-chrome";
 
@@ -32,7 +32,7 @@ export default function ContactPage() {
               </span>
               <p className="mt-5 text-sm text-muted-foreground">Scrivici a</p>
               <p className="mt-1 font-medium">{contactEmail}</p>
-              <a className={buttonVariants({ className: "mt-6" })} href={contactHref}>
+              <a className={linkVariants({ className: "mt-6", variant: "primary" })} href={contactHref}>
                 Invia un&apos;email{" "}
                 <IconArrowRight
                   aria-hidden="true"

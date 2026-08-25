@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { Button, buttonVariants } from "@qoovex/ui/components/button";
+import { Button } from "@qoovex/ui/components/button";
 import { Checkbox } from "@qoovex/ui/components/checkbox";
 import {
   Collapsible,
@@ -20,7 +20,7 @@ import {
 import { Input, InputAddon, InputGroup } from "@qoovex/ui/components/input";
 import { Radio, RadioGroup } from "@qoovex/ui/components/radio-group";
 import { Switch } from "@qoovex/ui/components/switch";
-import { Toggle } from "@qoovex/ui/components/toggle";
+import { ToggleButton } from "@qoovex/ui/components/toggle-button";
 import {
   Card,
   CardHeader,
@@ -142,7 +142,8 @@ export default function FocusFoundationPage() {
           >
             <ProofCell label="Link (variant=link)">
               <a
-                className={buttonVariants({ variant: "link" })}
+                className="text-primary"
+                data-link="inline"
                 data-focus-proof="link"
                 href="#focus-transfer"
               >
@@ -155,9 +156,9 @@ export default function FocusFoundationPage() {
             </ProofCell>
 
             <ProofCell label="Selected + focus">
-              <Toggle data-focus-proof="selected" defaultPressed variant="outline">
+              <ToggleButton data-focus-proof="selected" defaultPressed>
                 Vista selezionata
-              </Toggle>
+              </ToggleButton>
             </ProofCell>
 
             <ProofCell label="Checked + focus">
@@ -329,7 +330,7 @@ export default function FocusFoundationPage() {
                       </Button>
                     }
                   />
-                  <DialogContent>
+                  <DialogContent closeButtonProps={{ "aria-label": "Chiudi prova di focus" }}>
                     <DialogHeader>
                       <DialogTitle>Trasferimento del focus</DialogTitle>
                       <DialogDescription>
@@ -433,7 +434,8 @@ export default function FocusFoundationPage() {
                       <span className="text-xs text-muted-foreground">Fase strutturale attiva</span>
                     </div>
                     <a
-                      className={buttonVariants({ size: "sm", variant: "link" })}
+                      className="text-sm text-primary"
+                      data-link="inline"
                       href="#focus-obscured-title"
                     >
                       Primo target

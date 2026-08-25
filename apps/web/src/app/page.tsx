@@ -15,7 +15,7 @@ import { HeroMockupScroll } from "@/components/hero-mockup-scroll";
 import { InteractiveAppMockup } from "@/components/interactive-app-mockup";
 import { LinkCta } from "@/components/link-cta";
 import { Badge } from "@qoovex/ui/components/badge";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { cn } from "@qoovex/ui/lib/utils";
 import { CtaBand } from "@/components/cta-band";
@@ -128,7 +128,11 @@ export default function HomePage() {
                 Tutto ciò che lo racconta resta in ordine.
               </h1>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <a className={cn(buttonVariants({ size: "lg" }))} href={primaryCtaHref}>
+                <a
+                  className={cn(linkVariants({ variant: "primary", size: "lg" }))}
+                  data-cursor-magnetic="true"
+                  href={primaryCtaHref}
+                >
                   {primaryCtaLabel}
                   <IconArrowRight
                     aria-hidden="true"
@@ -136,7 +140,7 @@ export default function HomePage() {
                     className="transition-transform duration-200 group-hover/button:translate-x-0.5"
                   />
                 </a>
-                <a className={cn(buttonVariants({ variant: "outline", size: "lg" }))} href={signInUrl}>
+                <a className={cn(linkVariants({ variant: "outline", size: "lg" }))} href={signInUrl}>
                   {signInLabel}
                 </a>
               </div>
@@ -353,7 +357,7 @@ export default function HomePage() {
         </ol>
         <div className="mt-8">
           <a
-            className={cn(buttonVariants({ variant: "outline" }))}
+            className={cn(linkVariants({ variant: "outline" }))}
             href="/come-funziona"
           >
             Vedi il flusso completo
@@ -482,7 +486,7 @@ export default function HomePage() {
           ))}
         </div>
         <div className="mt-8">
-          <a className={cn(buttonVariants({ variant: "outline" }))} href="/fiducia">
+          <a className={cn(linkVariants({ variant: "outline" }))} href="/fiducia">
             Fiducia e privacy
             <IconArrowRight aria-hidden="true" data-icon="inline-end" className="transition-transform duration-200 group-hover/button:translate-x-0.5" />
           </a>

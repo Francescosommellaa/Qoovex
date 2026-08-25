@@ -60,7 +60,7 @@ export default function DialogCatalogPage() {
                     </Button>
                   }
                 />
-                <DialogContent>
+                <DialogContent closeButtonProps={{ "aria-label": "Chiudi creazione cantiere" }}>
                   <DialogHeader>
                     <DialogIcon variant="info">
                       <IconBuildingStore />
@@ -130,7 +130,7 @@ export default function DialogCatalogPage() {
                     </Button>
                   }
                 />
-                <DialogContent variant="destructive" size="sm">
+                <DialogContent closeButtonProps={{ "aria-label": "Chiudi eliminazione progetto" }} variant="destructive" size="sm">
                   <DialogHeader>
                     <DialogIcon variant="destructive">
                       <IconAlertTriangle />
@@ -167,7 +167,7 @@ export default function DialogCatalogPage() {
                     </Button>
                   }
                 />
-                <DialogContent variant="alert" size="sm">
+                <DialogContent closeButtonProps={{ "aria-label": "Chiudi avviso" }} variant="alert" size="sm">
                   <DialogHeader>
                     <DialogIcon variant="warning">
                       <IconInfoCircle />
@@ -204,7 +204,7 @@ export default function DialogCatalogPage() {
                     </Button>
                   }
                 />
-                <DialogContent variant="media" size="lg">
+                <DialogContent closeButtonProps={{ "aria-label": "Chiudi planimetria" }} variant="media" size="lg">
                   <div className="p-6 bg-card border-b">
                     <DialogHeader>
                       <DialogTitle>Planimetria Impianto Elettrico</DialogTitle>

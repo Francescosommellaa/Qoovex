@@ -1,5 +1,6 @@
 import type { AuditLogFilters, AuditLogListResponse, AuditMetadata } from "@qoovex/types";
 import { auditActions, auditEntityTypes, auditOutcomes } from "@qoovex/types";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { presentAuditAction, presentAuditEntityType, presentAuditMetadataEntry, presentAuditOutcome, presentOrganizationRole } from "@shared/lib/product-state-presentation";
 import { WorkspaceEmptyState, WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
 import styles from "../AdminCore.module.css";
@@ -88,7 +89,7 @@ export function AuditLogPageView({ data, filters }: { data: AuditLogListResponse
             <button className={styles.button} type="submit">
               Applica filtri
             </button>
-            <a className={styles.ghostButton} href="/audit-log">
+            <a className={linkVariants({ variant: "outline" })} href="/audit-log">
               Rimuovi filtri
             </a>
           </div>
@@ -139,7 +140,7 @@ export function AuditLogPageView({ data, filters }: { data: AuditLogListResponse
         )}
         {data.nextCursor ? (
           <div className={styles.actions}>
-            <a className={styles.ghostButton} href={filterHref({ ...filters, cursor: data.nextCursor })}>
+            <a className={linkVariants({ variant: "outline" })} href={filterHref({ ...filters, cursor: data.nextCursor })}>
               Mostra altri eventi
             </a>
           </div>

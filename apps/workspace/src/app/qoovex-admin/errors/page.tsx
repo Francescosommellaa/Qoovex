@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { AccessError } from "@shared/server/access-errors";
 import { listRuntimeErrors } from "@shared/server/platform-admin-service";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceEmptyState, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
@@ -16,9 +17,9 @@ export default async function PlatformErrorsPage({ searchParams }: { searchParam
         <WorkspacePageHeader title="Errori runtime" description="Errori server aggregati e sanitizzati. Le indisponibilita del database restano nei log Vercel." />
         <WorkspacePanel>
           <div className={styles.filters}>
-            <Link className={styles.ghostButton} href="/qoovex-admin/errors">Tutti</Link>
-            <Link className={styles.ghostButton} href="/qoovex-admin/errors?status=OPEN">Aperti</Link>
-            <Link className={styles.ghostButton} href="/qoovex-admin/errors?status=RESOLVED">Risolti</Link>
+            <Link className={linkVariants({ variant: "outline" })} href="/qoovex-admin/errors">Tutti</Link>
+            <Link className={linkVariants({ variant: "outline" })} href="/qoovex-admin/errors?status=OPEN">Aperti</Link>
+            <Link className={linkVariants({ variant: "outline" })} href="/qoovex-admin/errors?status=RESOLVED">Risolti</Link>
           </div>
         </WorkspacePanel>
         <WorkspacePanel title="Eventi">
@@ -34,7 +35,7 @@ export default async function PlatformErrorsPage({ searchParams }: { searchParam
               </article>
             ))}</div>
           )}
-          {data.nextCursor ? <Link className={styles.ghostButton} href={`/qoovex-admin/errors?${new URLSearchParams({ ...(search.status ? { status: search.status } : {}), ...(search.source ? { source: search.source } : {}), cursor: data.nextCursor }).toString()}`}>Pagina successiva</Link> : null}
+          {data.nextCursor ? <Link className={linkVariants({ variant: "outline" })} href={`/qoovex-admin/errors?${new URLSearchParams({ ...(search.status ? { status: search.status } : {}), ...(search.source ? { source: search.source } : {}), cursor: data.nextCursor }).toString()}`}>Pagina successiva</Link> : null}
         </WorkspacePanel>
       </WorkspacePage>
     );

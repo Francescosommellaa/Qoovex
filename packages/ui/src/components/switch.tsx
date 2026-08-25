@@ -99,6 +99,7 @@ function Switch({
   ...props
 }: SwitchProps) {
   const reducedMotion = useReducedMotion()
+  const [pressed, setPressed] = React.useState(false)
   const [resolvedSwitchMotion] = React.useState(readSwitchMotion)
   const switchMotion = reducedMotion
     ? immediateSwitchMotion
@@ -115,16 +116,43 @@ function Switch({
       className={cn(switchVariants({ size, color }), className)}
       {...props}
       render={(rootProps, state) => {
-        const motionRootProps = rootProps as React.ComponentProps<typeof motion.span>
+        const switchRootProps = rootProps as React.ComponentProps<"span">
 
         return (
-          <motion.span
-            {...motionRootProps}
-            animate={state.checked ? "checked" : "unchecked"}
-            initial={false}
-            whileTap={
-              reducedMotion || state.disabled || state.readOnly ? undefined : "pressed"
-            }
+          <span
+            {...switchRootProps}
+            onBlur={(event) => {
+              switchRootProps.onBlur?.(event)
+              setPressed(false)
+            }}
+            onKeyDown={(event) => {
+              switchRootProps.onKeyDown?.(event)
+              if (!state.disabled && !state.readOnly && !event.repeat && (event.key === "Enter" || event.key === " ")) setPressed(true)
+            }}
+            onKeyUp={(event) => {
+              switchRootProps.onKeyUp?.(event)
+              if (event.key === "Enter" || event.key === " ") setPressed(false)
+            }}
+            onPointerCancel={(event) => {
+              switchRootProps.onPointerCancel?.(event)
+              setPressed(false)
+            }}
+            onPointerDown={(event) => {
+              switchRootProps.onPointerDown?.(event)
+              if (!state.disabled && !state.readOnly && event.isPrimary) setPressed(true)
+            }}
+            onPointerEnter={(event) => {
+              switchRootProps.onPointerEnter?.(event)
+              if (!state.disabled && !state.readOnly && event.isPrimary && (event.buttons & 1) === 1) setPressed(true)
+            }}
+            onPointerLeave={(event) => {
+              switchRootProps.onPointerLeave?.(event)
+              setPressed(false)
+            }}
+            onPointerUp={(event) => {
+              switchRootProps.onPointerUp?.(event)
+              setPressed(false)
+            }}
           />
         )
       }}
@@ -136,7 +164,30 @@ function Switch({
           "dark:data-checked:bg-primary-foreground dark:data-unchecked:bg-foreground",
           thumbSizeStyles[size ?? "default"]
         )}
-        render={<motion.span variants={thumbMotionVariants} />}
+        render={(thumbProps, state) => {
+          const {
+            onAnimationStart: _nativeAnimationStartHandler,
+            onDrag: _nativeDragHandler,
+            onDragEnd: _nativeDragEndHandler,
+            onDragStart: _nativeDragStartHandler,
+            ...motionThumbProps
+          } = thumbProps
+
+          return (
+            <motion.span
+              {...motionThumbProps}
+              animate={
+                !reducedMotion && pressed && !state.disabled && !state.readOnly
+                  ? "pressed"
+                  : state.checked
+                    ? "checked"
+                    : "unchecked"
+              }
+              initial={false}
+              variants={thumbMotionVariants}
+            />
+          )
+        }}
       />
     </SwitchPrimitive.Root>
   )

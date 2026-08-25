@@ -4,7 +4,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { IconChevronUp, IconChevronDown, IconSelector, IconChevronLeft, IconChevronRight } from "@tabler/icons-react"
 
-import { Button } from "#components/button"
+import { IconButton } from "#components/icon-button"
 import { cn } from "#lib/utils"
 import {
   useSlidingIndicatorState,
@@ -326,27 +326,27 @@ function TablePagination({
         Visualizzati <strong className="text-foreground">{startItem}-{endItem}</strong> di <strong className="text-foreground">{totalItems}</strong> elementi
       </span>
       <div className="flex items-center gap-1.5">
-        <Button
+        <IconButton
           aria-label="Pagina precedente"
           variant="outline"
-          size="icon-xs"
+          size="xs"
           disabled={pageIndex <= 1}
           onClick={() => onPageChange?.(pageIndex - 1)}
         >
           <IconChevronLeft aria-hidden="true" className="size-3.5" />
-        </Button>
+        </IconButton>
         <span className="px-2">
           Pagina <strong className="text-foreground">{pageIndex}</strong> di {pageCount}
         </span>
-        <Button
+        <IconButton
           aria-label="Pagina successiva"
           variant="outline"
-          size="icon-xs"
+          size="xs"
           disabled={pageIndex >= pageCount}
           onClick={() => onPageChange?.(pageIndex + 1)}
         >
           <IconChevronRight aria-hidden="true" className="size-3.5" />
-        </Button>
+        </IconButton>
       </div>
     </div>
   )

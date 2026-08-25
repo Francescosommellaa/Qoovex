@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type MouseEvent } from "react";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
 import { focusVisibleTarget } from "@shared/lib/focus-management";
 import {
@@ -142,7 +142,7 @@ export function JobSiteSectionNavigation({ sections, targets }: { sections: read
           {sections.map((section) => (
             <a
               aria-current={activeSection === section ? "location" : undefined}
-              className={buttonVariants({ className: activeSection === section ? "bg-accent font-semibold shadow-none" : undefined, variant: "outline", size: "sm" })}
+              className={linkVariants({ className: activeSection === section ? "bg-accent font-semibold shadow-none" : undefined, variant: "outline", size: "sm" })}
               href={`#${targets[section]}`}
               key={section}
               onClick={(event) => handleSectionNavigation(event, targets[section])}

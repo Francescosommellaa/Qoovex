@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { BlobOrphanDryRunResponse, DataControlJobListResponse } from "@qoovex/types";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { presentDataControlJobStatus, presentDataControlJobType } from "@shared/lib/product-state-presentation";
 import styles from "../AdminCore.module.css";
 
@@ -86,7 +87,7 @@ export function DataControlActionsPanel({
           </div>
           <div className={styles.actions}>
             {job.type === "METADATA_EXPORT" && job.status === "COMPLETED" ? (
-              <a className={styles.linkButton} href={`/api/data/export-jobs/${job.id}/download`}>Scarica</a>
+              <a className={linkVariants({ variant: "primary" })} href={`/api/data/export-jobs/${job.id}/download`}>Scarica</a>
             ) : null}
           </div>
         </article>

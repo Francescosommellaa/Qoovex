@@ -42,10 +42,10 @@ typography:
     lineHeight: 1
     letterSpacing: "0.08em"
 rounded:
-  sm: "0.25rem"
-  md: "0.375rem"
-  lg: "0.5rem"
-  xl: "0.75rem"
+  sm: "0.375rem"
+  md: "0.5rem"
+  lg: "0.625rem"
+  xl: "0.875rem"
   2xl: "1rem"
   full: "9999px"
 spacing:
@@ -63,15 +63,15 @@ components:
     textColor: "{colors.calce}"
     typography: "{typography.body}"
     rounded: "{rounded.lg}"
-    height: "2.375rem"
-    padding: "0 1rem"
+    height: "2.5rem"
+    padding: "0.5rem 0.875rem"
   button-outline:
     backgroundColor: "{colors.calce}"
     textColor: "{colors.inchiostro}"
     typography: "{typography.body}"
     rounded: "{rounded.lg}"
-    height: "2.375rem"
-    padding: "0 1rem"
+    height: "2.5rem"
+    padding: "0.5rem 0.875rem"
   marketing-card:
     backgroundColor: "{colors.calce}"
     textColor: "{colors.inchiostro}"
@@ -168,7 +168,7 @@ La profondità è stratificata e contenuta. Bordi sottili e cambi tonali definis
 
 ## Shapes
 
-Il sistema usa angoli morbidi e gerarchici: `0.5rem` per controlli, `0.75rem` per card condivise, `1rem` per bento e cornici narrative, pill complete per badge e navigazione compatta. I bordi sono sottili e neutrali; la geometria esagonale del marchio è una firma, non una sagoma da ripetere su ogni componente.
+Il sistema eredita la curvature condivisa: `0.625rem` per controlli, `0.875rem` per card condivise, `1rem` per bento e cornici narrative, pill complete per badge e navigazione compatta. Ogni coppia di bordi arrotondati nidificati e concentrici rispetta `R esterno = R interno + padding reale`; un discendente lontano dagli angoli non costituisce una coppia. I bordi sono sottili e neutrali; la geometria esagonale del marchio è una firma, non una sagoma da ripetere su ogni componente.
 
 Gli elementi interattivi possono comprimersi leggermente in active state. Rotazioni e sovrapposizioni sono ammesse soltanto nelle dimostrazioni narrative, con intensità bassa e senza compromettere l'ordine di lettura.
 
@@ -176,10 +176,10 @@ Gli elementi interattivi possono comprimersi leggermente in active state. Rotazi
 
 ### Buttons
 
-- **Shape:** rettangoli morbidi (`0.5rem`) con altezza compatta e target chiaro.
+- **Shape:** rettangoli morbidi (`0.625rem`) con altezza default `2.5rem` e target chiaro.
 - **Primary:** Inchiostro su Calce inversa, peso medio e una sola azione dominante per gruppo.
-- **Hover / Focus:** lieve variazione tonale, scala massima circa `1.015`, compressione active a circa `0.97` e ring visibile.
-- **Outline / Ghost / Link:** separano azioni secondarie, utility e navigazione senza competere con la CTA primaria.
+- **Hover / Focus:** il Button condiviso usa espansione centrata e squash anisotropo Motion; il focus resta immediato e indipendente.
+- **Outline / Ghost:** separano azioni secondarie e utility senza competere con la CTA primaria. Link e CTA di navigazione restano anchor e usano il modulo Link separato.
 
 ### Chips
 
@@ -188,7 +188,7 @@ Gli elementi interattivi possono comprimersi leggermente in active state. Rotazi
 
 ### Cards / Containers
 
-- **Corner Style:** card condivise a `0.75rem`; bento e cornici marketing a `1rem`.
+- **Corner Style:** card condivise a `0.875rem`; bento e cornici marketing a `1rem`.
 - **Background:** Calce o Nebbia, con alternanza di sezione ottenuta per tono.
 - **Shadow Strategy:** hairline a riposo; sollevamento minimo sulle card interattive.
 - **Border:** una linea neutra è la separazione primaria.
@@ -196,7 +196,7 @@ Gli elementi interattivi possono comprimersi leggermente in active state. Rotazi
 
 ### Inputs / Fields
 
-- **Style:** altezza `2.25rem`, fondo trasparente, bordo Nebbia compatta e raggio `0.5rem`.
+- **Style:** altezza `2.25rem`, fondo trasparente, bordo Nebbia compatta e raggio default `0.625rem`.
 - **Focus:** bordo Inchiostro e ring sottile; placeholder e helper restano Grafite.
 - **Error / Disabled:** Segnale Rosso per errore; opacità e fondo tonale per disabled senza rimuovere l'etichetta.
 

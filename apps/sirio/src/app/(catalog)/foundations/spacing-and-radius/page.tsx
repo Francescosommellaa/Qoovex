@@ -23,7 +23,7 @@ const layoutPrinciples = [
   {
     title: "Raggio Proporzionale",
     description:
-      "La curvatura degli angoli cresce proporzionalmente alla dimensione del contenitore: dai tag compatti (sm), ai bottoni (md), alle card (lg), fino ai dialoghi (xl).",
+      "La scala canonica deriva dal raggio base di 10px. Tra superfici nidificate la curvatura non si sceglie a occhio: R esterno = R interno + padding.",
   },
   {
     title: "Target di Tocco Minimo (44px)",
@@ -166,53 +166,78 @@ export default function SpacingAndRadiusPage() {
               Raggi di curvatura (Border Radius)
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              La gerarchia dei raggi riflette la scala dei contenitori. Gli elementi nidificati usano raggi inferiori rispetto al loro contenitore genitore.
+              La scala canonica deriva dal solo <code>--radius: 0.625rem</code>. Le superfici nidificate rispettano sempre la geometria concentrica: raggio esterno = raggio interno + padding reale; le pill restano pill.
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             <RadiusSpecimen
-              name="Extra Small"
-              variable="--radius-xs"
-              size="0.125rem (2px)"
-              useCase="Indicatori minimi, tab slider"
-            />
-            <RadiusSpecimen
               name="Small"
               variable="--radius-sm"
-              size="0.25rem (4px)"
-              useCase="Tag, micro-badge, tooltip"
+              size="0.375rem (6px)"
+              useCase="Geometrie compatte non-pill"
             />
             <RadiusSpecimen
               name="Medium"
               variable="--radius-md"
-              size="0.375rem (6px)"
-              useCase="Pulsanti compatti, input field"
+              size="0.5rem (8px)"
+              useCase="Controlli e superfici compatte"
             />
             <RadiusSpecimen
               name="Large (Base)"
               variable="--radius-lg"
-              size="0.5rem (8px)"
-              useCase="Card, schede, menu a discesa"
+              size="0.625rem (10px)"
+              useCase="Default Qoovex per componenti e superfici"
             />
             <RadiusSpecimen
               name="Extra Large"
               variable="--radius-xl"
-              size="0.75rem (12px)"
-              useCase="Dialoghi, sheet, pannelli fluttuanti"
+              size="0.875rem (14px)"
+              useCase="Superfici ampie quando la proporzione lo richiede"
             />
-            <RadiusSpecimen
-              name="2X Large"
-              variable="--radius-2xl"
-              size="1rem (16px)"
-              useCase="Contenitori globali di pagina"
-            />
-            <RadiusSpecimen
-              name="Full / Pill"
-              variable="--radius-full"
-              size="9999px"
-              useCase="Avatar, pillole di stato, switch"
-            />
+          </div>
+
+          <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(15rem,0.6fr)]">
+            <div>
+              <h3 className="text-base font-semibold">Formula obbligatoria per il nesting</h3>
+              <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                Questa proof usa un padding reale di 8px: il contenitore esterno misura 18px e il child 10px. I bordi corrispondenti rimangono concentrici perché <code>18 = 10 + 8</code>.
+              </p>
+              <div
+                className="mt-4 border border-border bg-muted"
+                data-radius-layer="outer"
+                data-visual-specimen="nested-radius-formula"
+                style={{
+                  borderRadius: "calc(var(--radius) + var(--space-2))",
+                  padding: "var(--space-2)",
+                }}
+              >
+                <div
+                  className="min-h-32 border border-border bg-card p-5"
+                  data-radius-layer="inner"
+                  style={{ borderRadius: "var(--radius)" }}
+                >
+                  <code className="text-xs text-muted-foreground">
+                    R interno = max(0px, R esterno - padding)
+                  </code>
+                  <p className="mt-2 text-sm leading-relaxed">
+                    La formula usa l&apos;inset effettivo per ciascun angolo, non il nome approssimativo di un token.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-[var(--radius)] border border-border bg-card p-5">
+              <h3 className="text-base font-semibold">Eccezione semantica: pill</h3>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                Badge, switch, indicatori e controlli dichiaratamente pill conservano <code>rounded-full</code>; non vengono convertiti nella scala sottrattiva.
+              </p>
+              <div className="mt-5 flex min-h-20 items-center justify-center rounded-[var(--radius-md)] bg-muted p-3">
+                <span className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background">
+                  Pill invariata
+                </span>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -287,8 +312,8 @@ export default function SpacingAndRadiusPage() {
                   {sh.name}
                 </div>
                 <div className="flex flex-col">
-                  <code className="text-[10px] font-mono text-muted-foreground">{sh.token}</code>
-                  <span className="text-[10px] text-muted-foreground mt-0.5">{sh.desc}</span>
+                  <code className="font-mono text-xs text-muted-foreground">{sh.token}</code>
+                  <span className="mt-0.5 text-xs text-muted-foreground">{sh.desc}</span>
                 </div>
               </div>
             ))}
@@ -336,10 +361,15 @@ export default function SpacingAndRadiusPage() {
               </CardHeader>
               <CardContent>
                 <pre className="overflow-x-auto rounded-lg bg-muted p-3.5 text-xs font-mono leading-relaxed">
-                  <code>{`/* Bottone con altezza standard e raggio medio */
+                  <code>{`/* Controllo con altezza e raggio canonici */
 <button className="h-[var(--control)] rounded-md px-3 text-sm">
   Azione
 </button>
+
+/* Nesting: R esterno = R interno + padding */
+<div className="rounded-[calc(var(--radius)+var(--space-2))] p-[var(--space-2)]">
+  <div className="rounded-[var(--radius)]">Contenuto</div>
+</div>
 
 /* Area touch minima 44px garantita */
 <button className="min-h-[var(--touch-target-min)] px-4">

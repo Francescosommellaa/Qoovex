@@ -9,12 +9,13 @@ import {
   IconChevronRight,
   IconInfoCircle,
   IconInbox,
-  IconX,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Badge } from "@qoovex/ui/components/badge";
-import { Button, buttonVariants } from "@qoovex/ui/components/button";
+import { Button } from "@qoovex/ui/components/button";
+import { IconButton } from "@qoovex/ui/components/icon-button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import {
   Empty,
   EmptyDescription,
@@ -127,11 +128,11 @@ export function WorkspaceNotificationsPanel({ unreadNotificationCount }: { unrea
 
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
-      <DialogTrigger render={<Button aria-label={notificationLabel} className="relative" size="icon-sm" variant="ghost" />}>
+      <DialogTrigger render={<IconButton aria-label={notificationLabel} className="relative" size="sm" variant="ghost" />}>
         <IconBell aria-hidden="true" />
         {currentUnreadCount > 0 ? <span aria-hidden="true" className="absolute top-0 right-0 size-2 rounded-full bg-destructive ring-2 ring-background" /> : null}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent closeButtonProps={{ "aria-label": "Chiudi notifiche" }} className="sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
             <DialogTitle>Notifiche</DialogTitle>
@@ -171,7 +172,7 @@ export function WorkspaceNotificationsPanel({ unreadNotificationCount }: { unrea
         <Separator />
         <div className="mt-auto flex items-center justify-between gap-2 pt-2">
           {loading && data ? <span className="flex items-center gap-2 text-xs text-muted-foreground"><Spinner /> Aggiornamento…</span> : null}
-          <Link className={buttonVariants({ variant: "outline" })} data-link="plain" href="/notifications">Vedi tutte le notifiche</Link>
+          <Link className={linkVariants({ variant: "outline" })} data-link="plain" href="/notifications">Vedi tutte le notifiche</Link>
         </div>
       </DialogContent>
     </Dialog>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { IconAlertCircle, IconCircleCheck, IconClock, IconMail, IconUser } from "@tabler/icons-react";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { ClientInvitationAcceptAction, ClientInvitationAccountRecoveryAction } from "@/views/job-site/ClientInvitationAcceptAction";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel } from "@/views/workspace/WorkspacePrimitives";
 import { getClientInvitationPageState, type ClientInvitationPageState } from "@shared/server/job-site-lifecycle-service";
@@ -45,7 +45,7 @@ export default async function ClientInvitationPage({ params }: { params: Promise
           <WorkspacePageHeader title="Invito già accettato" description="Hai già accesso a questo lavoro con l'account attuale." />
           <WorkspacePanel title="Cosa puoi fare ora">
             <Alert role="status" variant="success"><IconCircleCheck aria-hidden="true" /><AlertTitle>Il lavoro è disponibile</AlertTitle><AlertDescription>Puoi aprire il lavoro e continuare da dove eri rimasto.</AlertDescription></Alert>
-            <Link className={`${buttonVariants()} mt-5`} href={`/client/job-sites/${encodeURIComponent(state.jobSiteId)}`}>Apri il lavoro</Link>
+            <Link className={`${linkVariants({ variant: "primary" })} mt-5`} href={`/client/job-sites/${encodeURIComponent(state.jobSiteId)}`}>Apri il lavoro</Link>
           </WorkspacePanel>
         </WorkspacePage>
       );

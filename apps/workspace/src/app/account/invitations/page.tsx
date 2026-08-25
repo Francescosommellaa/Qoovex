@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IconBuilding, IconLink, IconMail } from "@tabler/icons-react";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { cn } from "@qoovex/ui/lib/utils";
 import { requireAccountRole } from "@shared/server/account-role-service";
 import { AuthPageShell, AuthStage } from "@/views/auth/AuthPageShell";
@@ -62,7 +62,7 @@ export default async function AccountInvitationsPage() {
         </section>
 
         <div className="border-t pt-5">
-          <Link className={cn(buttonVariants({ variant: "outline" }), "h-11 w-full")} href="/account/security">Sicurezza account</Link>
+          <Link className={cn(linkVariants({ variant: "outline" }), "h-11 w-full")} href="/account/security">Sicurezza account</Link>
         </div>
       </AuthStage>
     </AuthPageShell>

@@ -5,7 +5,7 @@ import {
   IconCircleCheck,
   IconClock,
 } from "@tabler/icons-react";
-import { buttonVariants } from "@qoovex/ui/components/button";
+import { linkVariants } from "@qoovex/ui/components/link";
 import type { JobSiteStatus } from "@qoovex/types";
 import { presentJobSiteStatus } from "@shared/lib/product-state-presentation";
 import { WorkspacePanel, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
@@ -108,7 +108,7 @@ export function JobSiteActivationGuide({
           </li>;
         })}
       </ol>
-      {guide.action ? <Link className={buttonVariants()} href={guide.action.href}>{guide.action.label}<IconArrowRight aria-hidden="true" /></Link> : null}
+      {guide.action ? <Link className={linkVariants({ variant: "primary" })} href={guide.action.href}>{guide.action.label}<IconArrowRight aria-hidden="true" /></Link> : null}
     </div>
   </WorkspacePanel>;
 }

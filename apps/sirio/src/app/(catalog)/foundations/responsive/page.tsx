@@ -78,7 +78,7 @@ export default function ResponsiveFoundationPage() {
               </div>
               <ResponsiveContractProof label="Stesso componente in un container stretto" />
             </div>
-            <div className="qv-surface-base grid min-w-0 gap-3 rounded-xl p-3 xl:grid-cols-[8rem_minmax(0,1fr)]" data-responsive-host="complex">
+            <div className="qv-surface-base grid min-w-0 gap-3 rounded-[calc(var(--radius)+var(--space-3))] p-3 xl:grid-cols-[8rem_minmax(0,1fr)]" data-responsive-host="complex">
               <aside className="qv-surface-contained rounded-lg p-3 text-sm text-muted-foreground">
                 <IconDeviceDesktop aria-hidden="true" className="qv-icon-default" />
                 <p className="mt-2">Contesto laterale della composizione.</p>

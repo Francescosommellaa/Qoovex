@@ -1,6 +1,6 @@
 {
   "project": "Qoovex",
-  "updated_at": "2026-08-23",
+  "updated_at": "2026-08-24",
   "state_taxonomy": [
     "verified_current_state",
     "implemented_decision",
@@ -53,6 +53,19 @@
     "visual_foundation": {
       "typography": "General Sans primary and ARRAY accent",
       "icons": "Tabler",
+      "interaction_and_curvature_contract": {
+        "status": "implemented_decision",
+        "canonical_radius": "--radius: 0.625rem; derived sm/md/lg/xl = 6/8/10/14px; semantic pills remain full",
+        "nested_radius": "For every nested rounded pair sharing a perceptual corner, R_outer = R_inner + actual inset per corresponding corner; distant descendants are not a concentric pair",
+        "button_link_boundary": "Button is command-only and exports only Button; navigation uses a real anchor or router Link through @qoovex/ui/components/link without Button internals",
+        "action_motion": "Opaque settled surfaces; centered four-side hover; restrained anisotropic press; immediate independent focus; interruption and rapid input retarget from current position and velocity; reduced motion preserves non-spatial feedback",
+        "icon_button_boundary": "IconButton is the canonical stateless icon-only command with required aria-label or aria-labelledby, a stable root/focus owner, separate animated surface and glyph, and a real 44px coarse target; toggle, close and copy use specialized components",
+        "toggle_button_boundary": "ToggleButton is the canonical standalone two-state pressed control: Base UI owns state and aria-pressed; the controlled property meaning remains stable; optional pressedContent keeps visible copy, active accessible name, icon and persistent surface synchronized in one stable geometry slot; physical press stays separate; ToggleGroup/Switch/disclosure and opposite-action commands remain separate",
+        "close_button_boundary": "CloseButton is the canonical quiet close/dismiss action: internal IconX, fixed 28px visual geometry with 8px radius and 44px coarse target, no inline geometry override, required contextual aria-label or aria-labelledby (including explicit DialogContent closeButtonProps), Action Motion without glyph decoration, consumer-reserved coarse target plus placement offset, and no ownership of dismissal behavior, placement, loading, clear/remove/delete, or Dialog context",
+        "copy_button_boundary": "CopyButton is the canonical quiet icon-only clipboard command: stable accessible name, internal idle/copying/success/error lifecycle, simultaneous same-slot Copy-to-Check-or-Error Motion, one live status channel, 1000ms generation-safe hold, no aria-pressed, no copied value in DOM metadata, and no ownership of sensitive or text-action flows",
+        "canonical_docs": ["packages/ui/DESIGN.md", "packages/ui/README.md", "docs/05_UI_BRAND_AND_SURFACES.md"],
+        "runtime_proofs": ["/components/button", "/components/icon-button", "/components/toggle-button", "/components/close-button", "/components/copy-button", "/foundations/spacing-and-radius"]
+      },
       "impeccable_quality_layer": {
         "status": "implemented_decision",
         "authority": "mandatory for UI/UX but subordinate to Qoovex canonical sources and real code",

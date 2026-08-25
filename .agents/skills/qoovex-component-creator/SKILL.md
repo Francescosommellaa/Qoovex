@@ -14,7 +14,7 @@ Before editing:
 1. resolve exactly one target component; stop on zero, multiple or ambiguous targets;
 2. run the mandatory Qoovex protocol from `AGENTS.md`, including Brain UI routing when available;
 3. use Impeccable first as the general UI detector/critique layer;
-4. read the target implementation, exports, consumers, tests, tokens, nearest README and Sirio specimen patterns;
+4. read the target implementation, exports, consumers, tests, tokens, nearest README, the Perceptual Completeness Contract in `docs/05_UI_BRAND_AND_SURFACES.md` and Sirio P009 in `apps/sirio/README.md`;
 5. use `qoovex-ux-motion` additionally when interaction or motion is materially involved;
 6. use `ui-skills-root` only for a narrow specialist question that remains unresolved.
 
@@ -34,10 +34,13 @@ Use semantic tokens and current `@qoovex/ui` patterns. Base UI remains the behav
 - define the approval unit and allowed files;
 - specify anatomy, API, states, touch/keyboard behavior, accessibility, responsive behavior and compatibility before code;
 - implement only the component and direct support files;
-- prove applicable variants/states in Sirio when the repository protocol requires it;
+- for an interactive component, apply the canonical Component Done gate: every declared state must be causable through real input and lifecycle; static rows, fake state previews, prop coverage or screenshots are not sufficient proof;
+- prove applicable variants/states in Sirio through P009 when the repository protocol requires it;
 - inspect long text, narrow width, overflow, loading/error/disabled states, focus, keyboard, touch, reduced motion and console/runtime behavior according to risk;
 - run focused checks and then the Qoovex gate required by `docs/07_QUALITY_AND_RELEASE.md`;
 - finish with the mandatory Impeccable review.
+
+A pertinent failed Perceptual Completeness check leaves the component not Done. Keep the final report concise: interaction proof verified, remaining findings and gates executed; do not reproduce the checklist.
 
 ## Hard stops
 

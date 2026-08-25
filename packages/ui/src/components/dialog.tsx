@@ -2,10 +2,9 @@
 
 import * as React from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
-import { IconX } from "@tabler/icons-react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { Button } from "#components/button"
+import { CloseButton, type CloseButtonAccessibleName } from "#components/close-button"
 import { cn } from "#lib/utils"
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
@@ -48,7 +47,7 @@ const dialogContentVariants = cva(
       variant: {
         default: "",
         destructive: "border-destructive/30 sm:border-destructive/40",
-        alert: "text-center sm:text-center [&_[data-slot=dialog-header]]:items-center [&_[data-slot=dialog-header]]:pr-0 [&_[data-slot=dialog-footer]]:sm:justify-center",
+        alert: "text-center sm:text-center [&_[data-slot=dialog-header]]:items-center [&_[data-slot=dialog-header]]:px-16 [&_[data-slot=dialog-footer]]:sm:justify-center",
         media: "p-0 max-sm:p-0 sm:p-0 overflow-hidden sm:max-w-3xl",
       },
       size: {
@@ -65,19 +64,31 @@ const dialogContentVariants = cva(
   }
 )
 
+type DialogContentProps = DialogPrimitive.Popup.Props &
+  VariantProps<typeof dialogContentVariants> &
+  (
+    | {
+        closeButtonProps: CloseButtonAccessibleName
+        showCloseButton?: true
+      }
+    | {
+        closeButtonProps?: never
+        showCloseButton: false
+      }
+  ) & {
+    showHandle?: boolean
+  }
+
 function DialogContent({
   className,
   children,
+  closeButtonProps,
   showCloseButton = true,
   showHandle = true,
   variant = "default",
   size = "default",
   ...props
-}: DialogPrimitive.Popup.Props &
-  VariantProps<typeof dialogContentVariants> & {
-    showCloseButton?: boolean
-    showHandle?: boolean
-  }) {
+}: DialogContentProps) {
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -96,20 +107,16 @@ function DialogContent({
           />
         ) : null}
         {children}
-        {showCloseButton ? (
+        {showCloseButton && closeButtonProps ? (
           <DialogPrimitive.Close
             data-slot="dialog-close"
             render={
-              <Button
-                aria-label="Chiudi finestra"
-                className="absolute top-4 right-4 text-muted-foreground hover:text-foreground z-10"
-                size="icon-xs"
-                variant="ghost"
+              <CloseButton
+                {...closeButtonProps}
+                className="absolute top-4 right-4 z-10"
               />
             }
-          >
-            <IconX aria-hidden="true" />
-          </DialogPrimitive.Close>
+          />
         ) : null}
       </DialogPrimitive.Popup>
     </DialogPortal>
@@ -151,7 +158,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-1.5 pr-6 text-left", className)}
+      className={cn("flex flex-col gap-1.5 pr-16 text-left", className)}
       {...props}
     />
   )

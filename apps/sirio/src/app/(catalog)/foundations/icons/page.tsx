@@ -11,6 +11,7 @@ import {
 import { PageHeader } from "@/components/page-header";
 import { IconMotionProof } from "@/components/icon-motion-proof";
 import { Button } from "@qoovex/ui/components/button";
+import { IconButton } from "@qoovex/ui/components/icon-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@qoovex/ui/components/card";
 import { Separator } from "@qoovex/ui/components/separator";
 
@@ -131,9 +132,9 @@ export default function IconFoundationPage() {
               <CardHeader><CardTitle>Icon-only e multilinea</CardTitle></CardHeader>
               <CardContent className="grid gap-5">
                 <div className="flex items-center gap-3">
-                  <Button aria-label="Apri impostazioni icona" data-icon-only-control size="icon" type="button" variant="outline">
+                  <IconButton aria-label="Apri impostazioni icona" data-icon-only-control type="button" variant="outline">
                     <IconSettings aria-hidden="true" className="qv-icon-default" />
-                  </Button>
+                  </IconButton>
                   <span className="text-sm text-muted-foreground">Focus, nome e hit area appartengono al button.</span>
                 </div>
                 <div className="flex max-w-md items-start gap-3" data-icon-leading-multiline>

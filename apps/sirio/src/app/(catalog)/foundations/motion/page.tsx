@@ -292,7 +292,19 @@ export default function MotionFoundationPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-3">
-                  <div className="rounded-lg bg-muted/50 p-3">
+                  <div
+                    className="rounded-lg bg-muted/50 p-3"
+                    data-motion-easing={easing.name.toLowerCase()}
+                    style={{
+                      transitionDuration:
+                        "var(--motion-duration-surface), var(--motion-duration-feedback)",
+                      transitionProperty: "transform, opacity",
+                      transitionTimingFunction:
+                        easing.name === "Standard"
+                          ? "var(--ease-standard), var(--ease-standard)"
+                          : "var(--ease-emphasized), var(--ease-standard)",
+                    }}
+                  >
                     <EasingCurve cp1={easing.cp1} cp2={easing.cp2} />
                   </div>
                   <code className="text-xs text-muted-foreground">{easing.value}</code>

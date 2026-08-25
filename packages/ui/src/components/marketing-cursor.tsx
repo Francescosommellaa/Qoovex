@@ -10,13 +10,7 @@ const interactiveSelector =
   'a[href], button, summary, [role="button"], [data-cursor-label]';
 const nativeCursorSelector =
   'input, textarea, select, option, [contenteditable="true"], [data-cursor-native]';
-const magneticSelector = [
-  '[data-cursor-magnetic="true"]',
-  '[data-slot="button"][data-variant="default"]',
-  "a.bg-primary",
-  "button.bg-primary",
-  '[role="button"].bg-primary',
-].join(", ");
+const magneticSelector = '[data-cursor-magnetic="true"]';
 const magneticBlockingSurfaceSelector = [
   "header",
   '[role="dialog"]',
@@ -24,7 +18,9 @@ const magneticBlockingSurfaceSelector = [
   '[data-slot="dropdown-menu-content"]',
   '[data-slot="popover-content"]',
 ].join(", ");
-const magneticDistance = 16;
+const magneticDistance = 12;
+const magneticMaximumStrength = 0.14;
+const magneticMaximumOffset = 3;
 const magneticTargetRefreshInterval = 500;
 
 type CursorMode = "action" | "default" | "disabled" | "label" | "native";
@@ -110,9 +106,26 @@ function resolveMagneticPoint(pointer: Point, targets: readonly HTMLElement[]): 
     return { ...pointer, active: false, target: null };
   }
 
-  return {
+  const center = {
     x: nearest.rect.left + nearest.rect.width / 2,
     y: nearest.rect.top + nearest.rect.height / 2,
+  };
+  const distanceToCenter = Math.hypot(center.x - pointer.x, center.y - pointer.y);
+  const influenceRadius = Math.hypot(nearest.rect.width / 2, nearest.rect.height / 2) + magneticDistance;
+  const proximity = 1 - Math.min(distanceToCenter / influenceRadius, 1);
+  const strength = magneticMaximumStrength * proximity;
+  const rawOffset = {
+    x: (center.x - pointer.x) * strength,
+    y: (center.y - pointer.y) * strength,
+  };
+  const offsetMagnitude = Math.hypot(rawOffset.x, rawOffset.y);
+  const offsetLimit = offsetMagnitude > magneticMaximumOffset
+    ? magneticMaximumOffset / offsetMagnitude
+    : 1;
+
+  return {
+    x: pointer.x + rawOffset.x * offsetLimit,
+    y: pointer.y + rawOffset.y * offsetLimit,
     active: true,
     target: nearest.target,
   };

@@ -96,6 +96,8 @@ Non inventare stati, optimistic update o capability che il flusso non supporta.
 
 Verifica quando pertinenti: enter, exit, cambio di stato, cambio di layout, interruzione, input rapido ripetuto, inversione, unmount, navigazione e trasferimento del focus.
 
+Uno state change interno come loading, success, icon swap, selected o validation preserva layout box, hit area, focus geometry e posizione dei sibling. Applica Motion al layer visuale dentro uno slot gia riservato; anima un resize soltanto quando e parte esplicita del design, possiede un owner geometrico e viene verificato nel lifecycle reale.
+
 Per ogni componente interattivo valuta esplicitamente prima dell'implementazione:
 
 1. quali elementi meritano Motion e quale beneficio concreto produce;
@@ -106,6 +108,12 @@ Per ogni componente interattivo valuta esplicitamente prima dell'implementazione
 6. reduced motion in CSS e JavaScript;
 7. mouse, touch/coarse pointer e tastiera;
 8. costo runtime e bundle nel placement reale.
+
+### Interactive icon
+
+Per ogni icona dentro un controllo interattivo registra una decisione deliberata: **semantic motion** oppure **intentionally static**. Classifica prima l'intento come directional, disclosure, open/menu, progress/refresh, upload/download, toggle/state, confirmation, copy, close/dismiss o neutral. La categoria non rende obbligatorio il movimento: anima soltanto quando il glyph puo comunicare meglio intent, direzione, progresso o state transition; evita motion decorativa o ambigua.
+
+Se cambia soltanto l'intento, componi `IconButton` con il semantic behavior appropriato. Non creare un public component per ogni icona. Una specialization pubblica richiede una responsabilita sostanziale propria, come persistent state, transient success lifecycle o una convenience close semantica ripetuta; il raggruppamento in una family Sirio non determina il package boundary.
 
 ## Scelta della tecnologia
 
@@ -123,9 +131,17 @@ Usali per styling statico e transizioni visuali locali davvero banali, con propr
 
 Usa `motion/react` per interaction feedback, state transition, spatial continuity, enter/exit, layout animation, gesture, indicator movement, interruption/reversal e microinterazioni che beneficiano di variants state-driven, velocity continuity o controllo dichiarativo del lifecycle. Quando questo produce una differenza percepibile in precisione, continuità, fluidità, interruption handling o controllo, preferisci Motion anche se una transizione CSS approssimativa sarebbe possibile.
 
-Il benchmark interno è lo `Switch` condiviso: stato Base UI reale, Motion integrato tramite `render` senza alterare semantica o DOM, variants state-driven, `whileTap`, transizioni feedback/state distinte, interruzione naturale e reduced motion esplicito. Valuta lo stesso livello di progettazione per ogni componente; non copiare meccanicamente la sua implementazione.
+I benchmark interni correnti sono lo `Switch` condiviso, Cursor quando pertinente, la Actions foundation approvata e gli altri componenti della stessa famiglia. Confronta spring feel, interruption, reversal, velocity, coordinamento surface/content e state transition; non copiare meccanicamente un'implementazione e non considerare una generica `scale(.98)` come interaction design completa.
 
 Riusa `@qoovex/ui/lib/motion` per durate, easing e query reduced-motion canonici. Non duplicare mapping numerici nei componenti, non creare spring globali arbitrarie e non introdurre una dipendenza diretta da `framer-motion`. Un `MotionConfig` globale richiede una decisione separata che provi compatibilità e reduced motion in Web, Workspace e Sirio.
+
+Motion migliore non significa piu Motion: preferisci il controllo dichiarativo quando produce una differenza percepibile, poi calibra l'ampiezza minima che rende chiari causa, contatto e stato. Una spring locale e ammessa soltanto quando l'interazione e realmente interrompibile, la configurazione e motivata e misurata nel componente e non duplica un contratto gia condiviso. Un singolo overshoot molto contenuto puo comunicare ritorno materiale; bounce ripetuto, wobble e overshoot decorativo restano vietati. Press e stati di sistema continuano a usare i timing semantici canonici quando una spring non migliora il lifecycle.
+
+Quando la qualita percettiva e rilevante, tuna l'interazione nel runtime reale: confronta piu candidate temporanee, scegli quella che coordina meglio feedback, contenuto e stato, poi rimuovi le alternative. Non fissare spring o duration perche sono il primo valore funzionante, un numero comune o sufficienti a far passare i test. Il tuning deve includere input rapido, interruption e reversal, non soltanto il percorso ideale.
+
+### Materiale interattivo Actions
+
+Il Button calibrato e il riferimento iniziale per la grammatica Actions, non un preset numerico universale. I successivi controlli interattivi ereditano questi invarianti quando la loro anatomia li supporta: surface finali opache; hover che risponde dal centro senza ancorare casualmente un lato; press anisotropo controllato invece di una scale uniforme; layout box, hit area e focus geometry fermi; release, cancel, re-entry e rapid input che retargettano da posizione e velocity correnti. Focus-visible resta immediato e disabled resta statico. Una surface ghost puo comparire soltanto quando l'assenza a riposo appartiene davvero alla variant. Ampiezza e fisica restano component-specific e richiedono tuning reale.
 
 ## Carattere Qoovex
 
@@ -195,7 +211,7 @@ Motion è subordinato all'accessibilità. Verifica quando pertinenti:
 ## Design system e package boundaries
 
 - Usa token semantici esistenti; non hardcodare se il token esiste.
-- Non inventare duration, easing, spring config o motion token mancanti.
+- Non inventare duration, easing, spring config o motion token mancanti; una spring component-local calibrata secondo il contratto sopra non diventa un token globale implicito.
 - Non creare token casuali per un singolo componente o una foundation parallela.
 - Mantieni primitive generiche condivise in `packages/ui` e composizioni specifiche nelle rispettive app.
 - Non duplicare primitive o behavior Base UI.
@@ -213,13 +229,13 @@ Se la soluzione richiede uno di questi cambiamenti, fermala come proposta separa
 
 Per la superficie realmente modificata:
 
-1. dichiara il beneficio UX che giustifica motion, oppure conferma che non serve;
-2. verifica input, stati e transizioni pertinenti senza inventarne;
-3. prova interruzione, inversione e input rapido quando rilevanti;
-4. verifica feedback asincrono e sincronizzazione con lo stato reale;
-5. verifica tastiera, focus, screen reader, reduced motion, touch, responsive e overflow secondo il rischio;
-6. valuta performance e bundle cost in proporzione alla soluzione;
-7. esegui detector o review Impeccable appropriati e tratta i finding senza duplicarne il ruolo;
-8. esegui i gate Qoovex richiesti e riporta limitazioni o eccezioni con evidenza.
+1. applica il Perceptual Completeness Contract canonico in `docs/05_UI_BRAND_AND_SURFACES.md` e causa realmente ogni stato dichiarato;
+2. dichiara il beneficio UX che giustifica motion, oppure conferma la decisione `intentionally static`;
+3. verifica input, stati e transizioni pertinenti senza inventarne, inclusa la decisione per ogni interactive icon;
+4. prova interruzione, inversione, input rapido e invarianza della geometria di composizione quando rilevanti;
+5. verifica feedback asincrono e sincronizzazione con lo stato reale lungo trigger, pending, resolve/reject e settle/reset;
+6. verifica tastiera, focus, screen reader, reduced motion, touch, responsive e overflow secondo il rischio;
+7. valuta performance e bundle cost in proporzione alla soluzione;
+8. esegui detector o review Impeccable appropriati, tratta i finding ed esegui i gate Qoovex richiesti.
 
-Nel report indica sempre: tecnologia scelta, perché è sufficiente, comportamento reduced-motion, gestione dell'interruzione e placement package/app. Non dichiarare verificato ciò che non è stato provato.
+Nel report finale resta sintetico: interaction proof verificata, finding rimasti e gate eseguiti. Non ristampare la checklist e non dichiarare verificato cio che non e stato provato.

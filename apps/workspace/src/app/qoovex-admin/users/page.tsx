@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { linkVariants } from "@qoovex/ui/components/link";
 import { AccessError } from "@shared/server/access-errors";
 import { listPlatformUsers } from "@shared/server/platform-admin-service";
 import { WorkspacePage, WorkspacePageHeader, WorkspacePanel, WorkspaceEmptyState, WorkspaceState } from "@/views/workspace/WorkspacePrimitives";
@@ -19,9 +20,9 @@ export default async function PlatformUsersPage({ searchParams }: { searchParams
             <button className={styles.button} type="submit">Cerca</button>
           </form>
           <div className={styles.filters}>
-            <Link className={styles.ghostButton} href="/qoovex-admin/users">Tutti</Link>
-            <Link className={styles.ghostButton} href="/qoovex-admin/users?status=active">Attivi</Link>
-            <Link className={styles.ghostButton} href="/qoovex-admin/users?status=suspended">Sospesi</Link>
+            <Link className={linkVariants({ variant: "outline" })} href="/qoovex-admin/users">Tutti</Link>
+            <Link className={linkVariants({ variant: "outline" })} href="/qoovex-admin/users?status=active">Attivi</Link>
+            <Link className={linkVariants({ variant: "outline" })} href="/qoovex-admin/users?status=suspended">Sospesi</Link>
           </div>
         </WorkspacePanel>
         <WorkspacePanel title="Risultati">
@@ -34,12 +35,12 @@ export default async function PlatformUsersPage({ searchParams }: { searchParams
                     <WorkspaceState state={user.suspendedAt ? { label: "Account sospeso", tone: "danger" } : user.platformRole === "USER" ? { label: "Account attivo", tone: "good" } : presentPlatformRole(user.platformRole)} />
                   </div>
                   <p className="text-muted-foreground">{user.organizationMemberships.filter((membership) => membership.revokedAt === null).map((membership) => `${membership.organization.name} (${presentOrganizationRole(membership.role).label})`).join(", ") || "Nessuna azienda attiva"}</p>
-                  <div className={styles.actions}><Link className={styles.linkButton} href={`/qoovex-admin/users/${user.id}`}>Apri dettaglio</Link></div>
+                  <div className={styles.actions}><Link className={linkVariants({ variant: "primary" })} href={`/qoovex-admin/users/${user.id}`}>Apri dettaglio</Link></div>
                 </article>
               ))}
             </div>
           )}
-          {data.nextCursor ? <Link className={styles.ghostButton} href={`/qoovex-admin/users?${new URLSearchParams({ ...(search.q ? { q: search.q } : {}), ...(search.status ? { status: search.status } : {}), cursor: data.nextCursor }).toString()}`}>Pagina successiva</Link> : null}
+          {data.nextCursor ? <Link className={linkVariants({ variant: "outline" })} href={`/qoovex-admin/users?${new URLSearchParams({ ...(search.q ? { q: search.q } : {}), ...(search.status ? { status: search.status } : {}), cursor: data.nextCursor }).toString()}`}>Pagina successiva</Link> : null}
         </WorkspacePanel>
       </WorkspacePage>
     );
