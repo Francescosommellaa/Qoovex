@@ -7,6 +7,7 @@ import * as React from "react"
 import { cn } from "#lib/utils"
 import { useActionInteraction } from "../action-interaction"
 import { buttonVariants } from "../button/button-variants"
+import { IconActionInteractionProvider } from "../icon-action/icon-action-client"
 import { iconButtonVariants } from "../icon-button/icon-button-variants"
 import {
   getToggleButtonContentVariants,
@@ -216,30 +217,32 @@ function ToggleButton({
               initial={false}
               variants={contentVariants}
             >
-              {pressedContent === undefined ? children : (
-                <span className="inline-grid min-w-0 items-center justify-items-center">
-                  <motion.span
-                    animate={state.pressed ? "pressed" : "unpressed"}
-                    aria-hidden={state.pressed}
-                    className="col-start-1 row-start-1 inline-flex min-w-0 items-center justify-center gap-[inherit]"
-                    data-slot="toggle-button-unpressed-content"
-                    initial={false}
-                    variants={unpressedContentVariants}
-                  >
-                    {children}
-                  </motion.span>
-                  <motion.span
-                    animate={state.pressed ? "pressed" : "unpressed"}
-                    aria-hidden={!state.pressed}
-                    className="col-start-1 row-start-1 inline-flex min-w-0 items-center justify-center gap-[inherit]"
-                    data-slot="toggle-button-pressed-content"
-                    initial={false}
-                    variants={pressedContentVariants}
-                  >
-                    {pressedContent}
-                  </motion.span>
-                </span>
-              )}
+              <IconActionInteractionProvider phase={state.disabled ? "rest" : interaction.visualPhase}>
+                {pressedContent === undefined ? children : (
+                  <span className="inline-grid min-w-0 items-center justify-items-center">
+                    <motion.span
+                      animate={state.pressed ? "pressed" : "unpressed"}
+                      aria-hidden={state.pressed}
+                      className="col-start-1 row-start-1 inline-flex min-w-0 items-center justify-center gap-[inherit]"
+                      data-slot="toggle-button-unpressed-content"
+                      initial={false}
+                      variants={unpressedContentVariants}
+                    >
+                      {children}
+                    </motion.span>
+                    <motion.span
+                      animate={state.pressed ? "pressed" : "unpressed"}
+                      aria-hidden={!state.pressed}
+                      className="col-start-1 row-start-1 inline-flex min-w-0 items-center justify-center gap-[inherit]"
+                      data-slot="toggle-button-pressed-content"
+                      initial={false}
+                      variants={pressedContentVariants}
+                    >
+                      {pressedContent}
+                    </motion.span>
+                  </span>
+                )}
+              </IconActionInteractionProvider>
             </motion.span>
           </>
         )

@@ -146,7 +146,7 @@ Sirio usa la palette Qoovex senza reinterpretarla: Calce/Inchiostro per struttur
 
 Sirio usa una shell a piena altezza viewport: sidebar adattiva e collassabile, topbar alta `3.5rem`, area contenuto indipendente con overflow verticale. Il contenuto usa padding `1rem` su mobile e `2rem` da small viewport, con larghezza massima `72rem` per le pagine di fondazione.
 
-Le griglie partono da due colonne per campioni compatti e crescono fino a cinque colonne sui viewport ampi. Le pagine mantengono `3rem` tra gruppi principali, `2rem` tra header e contenuto e `1rem` tra campioni correlati. Su mobile la sidebar passa off-canvas e i controlli della topbar si riducono senza perdere breadcrumb, ricerca o tema.
+Le griglie partono da due colonne per campioni compatti e crescono fino a cinque colonne sui viewport ampi. Le pagine mantengono `3rem` tra gruppi principali, `2rem` tra header e contenuto e `1rem` tra campioni correlati. Su mobile la sidebar passa off-canvas; la ricerca resta disponibile nella navigazione e tramite shortcut globale, mentre la topbar preserva breadcrumb e tema senza duplicare il trigger.
 
 La proof responsive usa la matrice `320 / 390 / 768 / 1024 / 1440` come verifica, non come scala di breakpoint. Lo specimen mantiene un solo DOM e dimostra che una container query locale reagisce allo spazio del proprio host: un container stretto resta compatto anche dentro una viewport larga. Browser resize e reflow non animano il layout; safe area e viewport height seguono il contratto condiviso di `@qoovex/ui`.
 
@@ -177,6 +177,8 @@ La sidebar può diventare una colonna iconica senza cambiare forma dei controlli
 
 ### Buttons
 
+- **Proof:** Core variants usa righe allineate su un piano unico, senza bento o card per ogni gruppo. Gli esempi rispettano testo → icona, con Indietro come eccezione leading. Loading mostra Spinner condiviso; avanti/indietro e CTA magnetica sono verificabili con input reale.
+
 - **Shape:** `0.625rem`, altezza default `2.5rem`, con varianti compatte `2/2.25rem` per il catalogo.
 - **Primary:** Inchiostro su Calce inversa; testo medio e icona Tabler da `1rem`.
 - **Hover / Focus:** espansione centrata e squash anisotropo Motion per il pointer; focus usa l’outline condiviso immediato e compare nello specimen.
@@ -196,9 +198,9 @@ La sidebar può diventare una colonna iconica senza cambiare forma dei controlli
 
 ### Inputs / Fields
 
-- **Style:** altezza `2.25rem`, bordo input, fondo trasparente, raggio default `0.625rem`.
-- **Focus:** bordo semantico opzionale più outline condiviso da `2px`/`2px`; lo specimen include label e messaggio.
-- **Error / Disabled:** stati visibili e descritti, senza affidarsi soltanto al colore.
+- **Style:** altezza `2.25rem`, bordo da `1px`, surface opaca `background`, padding `0.75rem` e raggio default `0.625rem`.
+- **Focus:** outline condiviso immediato da `2px`/`2px`, senza ring locale o variazione geometrica; invalid mantiene contemporaneamente il bordo destructive.
+- **Availability:** readonly usa una surface muted ma conserva focus, selezione e testo pienamente leggibile; disabled usa surface e testo inattivi senza opacity globale. Lo specimen causa gli stati reali e usa Field soltanto per label, description ed error relationship.
 
 ### Pointer + Touch proof
 
@@ -210,7 +212,7 @@ La pagina Icone mostra la scala Tabler condivisa `14/16/20/28px` con box misurab
 
 ### Navigation
 
-La sidebar raggruppa Foundations e Componenti UI, usa Tabler da `1rem`, indicatori tonali e label compatte. La topbar combina controllo sidebar, breadcrumb, ricerca e tema in `3.5rem`; su mobile mantiene le azioni essenziali e nasconde soltanto il testo ridondante.
+La sidebar raggruppa Foundations e Componenti UI, usa Tabler da `1rem`, indicatori tonali e label compatte e possiede l’unico trigger visibile della ricerca catalogo. La topbar combina controllo sidebar, breadcrumb e tema in `3.5rem`; `Ctrl/Cmd+K` continua ad aprire la stessa modal senza introdurre un secondo trigger.
 
 ### Token Specimen
 

@@ -21,9 +21,21 @@ export const INTERACTION_SETUPS: Readonly<Record<string, InteractionSetup>> = Ob
     await (await targetFor(page, surface)).getByRole("button", { name: "Nuovo Cantiere", exact: true }).click();
     await expect(page.getByRole("dialog")).toBeVisible();
   },
+  "close-dialog-open": async (page, surface) => {
+    await (await targetFor(page, surface)).getByRole("button", { name: "Apri finestra", exact: true }).click();
+    await expect(page.getByRole("dialog", { name: "Focus restoration" })).toBeVisible();
+  },
   "dropdown-open": async (page, surface) => {
-    await (await targetFor(page, surface)).getByRole("button", { name: "Azioni Cantiere", exact: true }).click();
+    const trigger = (await targetFor(page, surface)).getByRole("button", { name: "Azioni Cantiere", exact: true });
+    await trigger.click();
     await expect(page.getByRole("menu")).toBeVisible();
+    await page.mouse.move(0, 0);
+    await expect.poll(() => trigger.locator('[data-slot="button-motion-content"]').evaluate((element) => {
+      const transform = getComputedStyle(element).transform;
+      if (transform === "none") return 0;
+      const matrix = new DOMMatrix(transform);
+      return Math.max(Math.abs(matrix.a - 1), Math.abs(matrix.d - 1));
+    })).toBeLessThan(0.0005);
   },
   "select-open": async (page, surface) => {
     await (await targetFor(page, surface)).getByRole("combobox").click();
@@ -58,7 +70,7 @@ export async function applyInteractionSetup(page: Page, surface: VisualSurface):
 }
 
 export function captureTarget(page: Page, surface: VisualSurface): Page | Locator {
-  if (["dialog-open", "dropdown-open", "select-open", "tooltip-open"].includes(surface.setupId ?? "")) {
+  if (["dialog-open", "close-dialog-open", "dropdown-open", "select-open", "tooltip-open"].includes(surface.setupId ?? "")) {
     return page;
   }
   if (surface.app !== "sirio") return page;

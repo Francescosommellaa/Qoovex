@@ -52,8 +52,8 @@ export function useSlidingIndicatorState(options?: {
         height: elRect.height,
         visible: true,
         width: elRect.width,
-        x: elRect.left - containerRect.left,
-        y: elRect.top - containerRect.top,
+        x: elRect.left - containerRect.left + container.scrollLeft,
+        y: elRect.top - containerRect.top + container.scrollTop,
         variant,
       });
     },
@@ -73,7 +73,12 @@ export function useSlidingIndicatorState(options?: {
       }
     };
     window.addEventListener("resize", handleResize, { passive: true });
-    return () => window.removeEventListener("resize", handleResize);
+    const container = containerRef.current;
+    container?.addEventListener("scroll", handleResize, { passive: true });
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      container?.removeEventListener("scroll", handleResize);
+    };
   }, [indicator.visible, indicator.variant, moveIndicator]);
 
   React.useEffect(() => {

@@ -1,17 +1,15 @@
 "use client"
 
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
-import { IconLoader2 } from "@tabler/icons-react"
 import { type VariantProps } from "class-variance-authority"
-import { motion, useReducedMotion } from "motion/react"
+import { motion } from "motion/react"
 import * as React from "react"
 
 import { cn } from "#lib/utils"
-import {
-  getActionIconVariants,
-  type ActionIconMotionIntent,
-} from "../action-icon-motion"
+import { PREFERS_REDUCED_MOTION_QUERY } from "#lib/motion"
 import { useActionInteraction } from "../action-interaction"
+import { IconActionInteractionProvider, readIconActionIntent } from "../icon-action/icon-action-client"
+import { Spinner } from "../spinner"
 import {
   getButtonContentVariants,
   getButtonSurfaceVariants,
@@ -30,7 +28,6 @@ function Button({
   variant = "default",
   size = "default",
   loading = false,
-  iconMotion = "neutral",
   disabled,
   focusableWhenDisabled,
   "aria-busy": ariaBusy,
@@ -41,22 +38,31 @@ function Button({
   ...props
 }: ButtonPrimitive.Props &
   VariantProps<typeof buttonVariants> & {
-    iconMotion?: ActionIconMotionIntent
     loading?: boolean
   }) {
-  const systemReducedMotion = Boolean(useReducedMotion())
   const [reducedMotion, setReducedMotion] = React.useState(false)
-  React.useEffect(() => setReducedMotion(systemReducedMotion), [systemReducedMotion])
+  React.useEffect(() => {
+    const media = window.matchMedia(PREFERS_REDUCED_MOTION_QUERY)
+    const update = () => setReducedMotion(media.matches)
+    update()
+    media.addEventListener("change", update)
+    return () => media.removeEventListener("change", update)
+  }, [])
   const buttonMotion = React.useMemo(
     () => readButtonMotion(reducedMotion),
     [reducedMotion]
   )
   const resolvedVariant = (variant ?? "default") as ButtonVariant
+  const iconIntent = readIconActionIntent(children)
   const isUnavailable = Boolean(disabled || loading)
+  const magneticStyle = {
+    translate: isUnavailable || reducedMotion ? "0px 0px" : "var(--action-magnetic-x, 0px) var(--action-magnetic-y, 0px)",
+    transition: reducedMotion ? "none" : "translate var(--motion-duration-feedback) var(--ease-standard)",
+  }
   const interaction = useActionInteraction(isUnavailable)
   const surfaceVariants = React.useMemo(
-    () => getButtonSurfaceVariants(resolvedVariant, reducedMotion, buttonMotion),
-    [buttonMotion, reducedMotion, resolvedVariant]
+    () => getButtonSurfaceVariants(resolvedVariant, reducedMotion, buttonMotion, iconIntent),
+    [buttonMotion, iconIntent, reducedMotion, resolvedVariant]
   )
   const contentVariants = React.useMemo(
     () => getButtonContentVariants(reducedMotion, buttonMotion),
@@ -70,27 +76,6 @@ function Button({
     () => getLoadingContentVariants(reducedMotion, buttonMotion, "loader"),
     [buttonMotion, reducedMotion]
   )
-  const iconVariants = React.useMemo(
-    () => getActionIconVariants(iconMotion, expanded === true, reducedMotion, buttonMotion),
-    [buttonMotion, expanded, iconMotion, reducedMotion]
-  )
-
-  const content = React.Children.map(children, (child) => {
-    if (!React.isValidElement<Record<string, unknown>>(child) || !("data-icon" in child.props)) return child
-
-    return (
-      <motion.span
-        animate={isUnavailable ? "rest" : interaction.visualPhase}
-        className="inline-grid shrink-0 place-items-center"
-        data-icon-motion={iconMotion}
-        initial={false}
-        variants={iconVariants}
-      >
-        {child}
-      </motion.span>
-    )
-  })
-
   return (
     <ButtonPrimitive
       data-slot="button"
@@ -161,11 +146,13 @@ function Button({
         aria-hidden="true"
         className="pointer-events-none absolute -inset-px -z-10 origin-center rounded-[inherit] border border-[var(--button-border)] bg-[var(--button-surface)] forced-colors:border-[ButtonBorder] forced-colors:bg-[ButtonFace]"
         data-slot="button-motion-surface"
+        style={magneticStyle}
         variants={surfaceVariants}
       />
       <motion.span
-        className="inline-grid max-w-full min-w-0 origin-center items-center justify-items-center"
+        className="inline-grid max-w-full min-w-0 origin-center items-center justify-items-center gap-[inherit]"
         data-slot="button-motion-content"
+        style={magneticStyle}
         variants={contentVariants}
       >
         <motion.span
@@ -175,7 +162,9 @@ function Button({
           initial={false}
           variants={labelVariants}
         >
-          {content}
+          <IconActionInteractionProvider phase={isUnavailable || reducedMotion ? "rest" : interaction.visualPhase}>
+            {children}
+          </IconActionInteractionProvider>
         </motion.span>
         <motion.span
           animate={loading ? "loading" : "idle"}
@@ -185,7 +174,7 @@ function Button({
           initial={false}
           variants={loaderVariants}
         >
-          <IconLoader2 className={cn(loading && "animate-spin", "motion-reduce:animate-none")} />
+          {loading ? <Spinner aria-hidden="true" size="xs" variant="hexagon" /> : null}
         </motion.span>
       </motion.span>
     </ButtonPrimitive>

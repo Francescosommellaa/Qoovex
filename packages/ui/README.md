@@ -37,7 +37,7 @@ CloseButton e la specialization quiet per chiudere o dismissare una surface. Pos
 
 Le icone decorative usano `aria-hidden="true"`; il nome di un'azione icon-only appartiene a button/link. Soltanto un grafico standalone informativo usa `role="img"` e un nome accessibile. Icone status ereditano il colore semantico del parent e forced colors tramite `currentColor`; gli override di stroke sono eccezioni locali provate, non una seconda grammatica.
 
-Motion segue il lifecycle reale: disclosure/open, continuita direzionale, replacement di conferma e loading possono usare `motion/react` quando interruption e reversal migliorano. Rapid input retargetta dalla posizione corrente; nessuna trasformazione cambia hit area o focus geometry. Reduced motion usa replacement o stato istantaneo e conserva copy/ARIA. Spinner e loader sono `aria-hidden` quando il parent comunica `aria-busy`/status e fermano il movimento continuo in reduced motion senza rimuovere il feedback comprensibile.
+Motion segue il lifecycle reale: disclosure/open, continuita direzionale, replacement di conferma e loading possono usare `motion/react` quando interruption e reversal migliorano. Rapid input retargetta dalla posizione corrente; nessuna trasformazione cambia hit area o focus geometry. Reduced motion usa replacement o stato istantaneo e conserva copy/ARIA. Spinner mantiene una famiglia intenzionale ridotta (`ring`, `track`, `hexagon`, `pulse`): `hexagon` usa una track fissa e anima soltanto il segmento di progresso lungo il perimetro. Spinner e loader sono `aria-hidden` quando il parent comunica `aria-busy`/status e fermano il movimento continuo in reduced motion senza rimuovere il feedback comprensibile.
 
 ## Contratto surface ed elevation
 
@@ -92,6 +92,12 @@ Base UI possiede apertura, focus iniziale, trap, Escape/dismiss e ritorno al tri
 
 Topbar e superfici fixed/sticky non devono oscurare il target. Il layout owner applica `scroll-padding` allo scrollport reale e `scroll-margin` ai target quando la geometria lo richiede; offset globali non sostituiscono la verifica del container annidato. Pointer e touch non ricevono un finto keyboard ring, mentre tastiera e forced colors mantengono sempre un indicatore robusto.
 
+## Ordine delle action con testo
+
+Seguire `docs/05_UI_BRAND_AND_SURFACES.md`: testo prima, icona dopo; leading soltanto per un motivo semantico esplicito, come Indietro. Button conserva l'ordine JSX e propaga il gap della size a entrambi i layer interni. Il loader usa Spinner `hexagon`. Le frecce orizzontali condividono l'intent IconAction con IconButton; su/giu non spingono la surface dei Button testuali.
+
+La CTA con `data-cursor-magnetic="true"`, in presenza di MarketingCursor, riceve un offset limitato ai layer visuali: root, hitbox, focus e sibling restano fermi. Nessun magnetismo implicito sui Button normali; touch, reduced motion e forced colors lo disattivano.
+
 ## Contratto motion
 
 La grammatica canonica e `instant → feedback → state → surface`. I valori numerici vivono soltanto in `styles/tokens.css`; CSS li usa con `var(...)`, mentre JavaScript e `motion/react` li proiettano tramite `@qoovex/ui/lib/motion` leggendo i custom property computati. Copiare durate o curve in mapping locali crea una seconda source of truth ed e vietato.
@@ -119,7 +125,15 @@ Il ruolo del collegamento viene dichiarato con `data-link`: `inline` per link de
 
 Il testo editoriale resta copiabile con un highlight neutro tokenizzato. Immagini e `BrandMark` non sono selezionabili; i mockup UI possono dichiarare `data-selection="none"` senza modificare la selezione delle superfici prodotto reali. Forced colors conserva l'highlight di sistema.
 
-`ScrollbarController` rende attiva per un tempo breve la scrollbar nativa durante lo scroll e vicino ai bordi della viewport. Il CSS condiviso gestisce anche contenitori annidati, tabelle, menu e sidebar con thumb sottile tokenizzato; touch, pointer coarse e forced colors mantengono il comportamento nativo.
+`ScrollbarController` rende attiva per un tempo breve la scrollbar nativa durante lo scroll e vicino ai bordi della viewport. `styles/base.css` è l'unico owner dello stile scrollbar: la stessa scrollbar approvata per la sidebar viene ereditata da pagine, contenitori annidati, tabelle, dropdown e textarea, senza classi opt-in né skin locali. Nei motori WebKit/Chromium desktop il segno visivo da 4 px sta in una corsia nativa trascinabile da 8 px (`--scrollbar-size`), trasparente e senza frecce; hover/focus/scroll cambiano solo il tono, non la geometria. Gli altri motori desktop usano `thin` con gli stessi token; touch e forced colors conservano la scrollbar del browser. I componenti possono possedere solo la geometria locale (gutter stabile della sidebar, track rientrata negli angoli del textarea), non un secondo stile.
+
+`SelectContent` e `DropdownMenuContent` (inclusi i submenu) dimensionano il popup sul contenuto, entro la larghezza disponibile alla surface. Nessun minimo fisso o aggancio automatico alla larghezza del trigger. Una larghezza esplicita del consumer resta possibile quando appartiene alla composizione; non aggiungere override locali per Phone/Currency. La scrollbar è quella globale, non una variante dropdown.
+
+`PhoneInput` mantiene il prefisso selezionato separato dal valore nazionale. Il vero `type="tel"` accetta e invia soltanto cifre, usa tastiera numerica mobile e limita l'inserimento al massimo strutturale di 15 cifre complessive, sottraendo quelle del prefisso; paste con lo stesso prefisso lo elimina. È un controllo sintattico minimo, non valida l'esistenza del numero né regole nazionali complete.
+
+`AdaptiveSidebar` conserva due opt-in, attivi nella shell Sirio: `resizable` permette il drag desktop della larghezza tra 224 e 360 px (default 256), con gap di pagina sincronizzato, frecce da tastiera a passi di 8 px, Home/End e doppio clic per ripristinare; il resize diretto non viene animato. `scrollEdges` applica al solo fondo della lista una fascia da 48 px con blur da 6 px e tint uniforme della surface sidebar: una sola maschera progressiva evita la doppia attenuazione di gradienti sovrapposti. Esclude la scrollbar, scompare raggiungendo l'ultima voce e non intercetta il pointer. Nessun blur in forced colors. Header/footer e mobile Dialog mantengono i propri confini. Il thumb nativo desktop ha un segno da 4 px in un gutter trascinabile da 8 px; la maniglia resize occupa il margine esterno separato e non viene offerta su pointer coarse.
+
+In dark, la stessa maschera dissolve il testo direttamente nella surface opaca, senza backdrop blur: i pixel chiari si attenuano senza generare aloni luminosi.
 
 ## Contratto pointer, touch e adattivo
 
@@ -145,6 +159,7 @@ Il barrel root `@qoovex/ui` non esiste. I consumer importano esclusivamente subp
 
 ```ts
 import { Button } from "@qoovex/ui/components/button";
+import { IconAction } from "@qoovex/ui/components/icon-action";
 import { IconButton } from "@qoovex/ui/components/icon-button";
 import { ToggleButton } from "@qoovex/ui/components/toggle-button";
 import { CloseButton } from "@qoovex/ui/components/close-button";
@@ -155,7 +170,21 @@ import { useIsMobile } from "@qoovex/ui/hooks/use-mobile";
 import { cn } from "@qoovex/ui/lib/utils";
 ```
 
+`Input` è il primitive nativo/Base UI di text entry all'entrypoint `@qoovex/ui/components/input`. Espone direttamente le props HTML senza stato controlled parallelo, alias semantici o API per icon/addon. Possiede una sola geometria base `36px`/`10px`, width fluida nel container, surface opaca, focus immediato e stati readonly, disabled e invalid distinti senza opacity globale o trasformazioni. Field possiede label, description ed error message; Password/Search/Phone/Currency/Number/OTP e InputGroup possiedono le rispettive composizioni specializzate.
+
+### Prefissi e suffissi statici (P020)
+
+`InputGroup` e `InputAddon` restano export di `@qoovex/ui/components/input`. Il pattern è esplicito: `<InputGroup><InputAddon>https://</InputAddon><Input /></InputGroup>`; il suffisso segue Input nel DOM, senza props nuove sul controllo. Group possiede una sola surface opaca, radius Input (10px), altezza 36px/44px coarse, bordo e focus visuale. Il vero Input diretto conserva focus, ref, native props, valore, selezione e form association. Le dichiarazioni CSS degli stati sono le stesse di Input, selezionate tramite `:has()` sul controllo: nessuna state machine, ring interno, clipping del focus o motion spaziale. Gli addon non possiedono action, tab stop, click-to-focus o IconAction; un glyph puramente decorativo usa Icon/Tabler normale e `aria-hidden`.
+
+Addon possiede padding inline 12px e separatore inset 6px: la posizione deriva dall'ordine DOM; `position="left" | "right"` resta accettato come compatibilità, non riordina il contenuto. Testo su una riga, max-width 35% per addon ed ellissi proteggono lo spazio editabile; il testo completo resta nel DOM. Contesti necessari al significato del valore vanno associati dal consumer con `aria-describedby` (preferibile una descrizione leggibile, anche del contenuto troncato). Se la descrizione include già quel significato, il duplicato visuale può essere `aria-hidden`. Nessun tooltip automatico o form control aggiuntivo.
+
+Un prefisso visuale non fa parte di `value` o FormData. Per `https:// | dominio`, `UrlInput` usa `type="text"` con `inputMode="url"`: il valore resta dominio/percorso e il consumer aggiunge esplicitamente `https://`. Il controllo rifiuta soltanto errori sintattici locali evidenti (protocollo duplicato, spazi, dominio incompleto); non normalizza, interroga DNS o naviga. `CurrencyInput` conserva l'importo come stringa esatta, formatta soltanto in uscita dal campo e non converte quando cambia valuta. `CompositeInput`, `PhoneInput`, `CurrencyInput` e `UrlInput` sono provati nella pagina Sirio `/components/composite-input`; il suffix `%` resta composizione statica, senza un PercentageInput pubblico privo di consumer.
+
 ### Public Entry Point Rule
+
+`NumberInput` usa esclusivamente `@qoovex/ui/components/number-input`. Base UI NumberField possiede parsing, empty/null, controlled/uncontrolled, min/max/step e form value; il vecchio export da Input e `onChangeValue` non avevano consumer e sono rimossi. API: `value: number | null` + `onValueChange`, oppure `defaultValue`, `onValueCommitted`, `min/max/step/locale` e props native del vero input (incluso `ref`). Nessun default zero, wheel stepping o formatting di dominio. `className` compone width/layout del root.
+
+La presentazione riusa il contratto interno Input e `.qv-input`, senza duplicare i suoi stati. Una grid stabile lascia il bordo al vero input e colloca IconButton/IconAction nei due slot laterali: altezza 44px fine-pointer, 56px coarse, target touch 44px, radius Input invariato. I render prop di NumberField trasferiscono behavior, ref e unavailable state alle Actions senza nested button. Tab segue − / input / +; ai limiti e in readonly/disabled le Actions sono realmente disabled. Pointer, focus restoration e hold nativo restano di Base UI, senza handler o timer paralleli.
 
 - ogni componente espone un solo import path pubblico canonico;
 - gli internals restano fuori dall'export map e nessun consumer li importa;
@@ -175,6 +204,19 @@ Ogni app importa una sola volta:
 
 `IconButton` e l'entrypoint icon-only stateless: non e una size del Button testuale. Richiede `aria-label` oppure `aria-labelledby`, espone soltanto `xs`, `sm` e `default`, mantiene il glyph fuori dalla deformazione della surface e separa la size visuale dal target coarse reale da 44 px. Tooltip non viene montato automaticamente. Toggle, close/dismiss e copy restano responsabilita dei rispettivi componenti specializzati; le vecchie size `Button icon*` sono una migration surface temporanea per i consumer specializzati ancora non migrati e non sono ammesse nei nuovi consumer.
 
+`IconAction` e il glyph layer decorativo condiviso dalle Actions. Non renderizza un controllo, non possiede focus, click, hit target o nome accessibile: il parent dichiara l'intent semantico e continua a possedere l'interazione. Gli intent canonici scelgono Tabler glyph, slot stabile, motion recipe e comportamento reduced-motion; `neutral` richiede esplicitamente un glyph e resta statico. Non espone classi geometriche o primitive di animazione.
+
+| Intent | Glyph | Trigger | Motion | Uso |
+| --- | --- | --- | --- | --- |
+| `forward/back/up/down` | Arrow | hover/press | micro-translate direzionale | progressione e navigazione |
+| `disclosure` | ChevronDown | `closed/open` | rotazione controllata | expand/collapse |
+| `visibility` | Eye/EyeOff | `hidden/visible` | switch coordinato | visibilita password |
+| `clear` / `close` | X | hover/press | microresponse discreta | clear value / dismiss surface |
+| `copy` | Copy/Check/Error | lifecycle | switch coordinato | conferma clipboard |
+| `increment/decrement` | Plus/Minus | hover/press | micro-scale centrata, nessuna traslazione | numeric stepping |
+| `menu` | Menu a due linee / X | hover/press, `closed/open` | lieve apertura delle linee, switch centrato; X coerente con close | apertura/chiusura menu |
+| `neutral` | glyph consumer | nessuno | statico intenzionale | command senza moto semantico |
+
 `ToggleButton` e l'entrypoint standalone per una proprieta o modalita persistente di un button. Espone direttamente `pressed`, `defaultPressed`, `onPressedChange`, `disabled`, `render`, `nativeButton` e `value` di Base UI Toggle: non introduce alias come `active`, `selected` o `checked`, ne stato React parallelo. `pressedContent` e l'unica estensione per una rappresentazione ON distinta: i due layer condividono la stessa cella grid, il layer inattivo e `aria-hidden` e copy/icon/surface transizionano insieme senza reflow. Ha una sola presentation quiet; `sm/default/lg` riusano la geometria Button e `icon-xs/icon-sm/icon` quella IconButton, con nome accessibile obbligatorio per l'uso icon-only. Il layer di contatto fisico e quello `aria-pressed` persistente restano distinti. Switch conserva `checked` per setting on/off; disclosure usa `aria-expanded`; un command che rinomina l'azione opposta non e un ToggleButton; ToggleGroup resta separato.
 
 `CloseButton` e l'entrypoint specializzato per close/dismiss. Espone normali button props compatibili, `className`, disabled e il naming accessibile obbligatorio, ma non espone children, icon, variant, size, inline geometry style o loading. Usa una sola geometria quiet da 28px/radius 8px, con target coarse reale da 44px e Action Motion icon-only. Positioning e dismissal appartengono al consumer o alla primitive comportamentale: `Dialog.Close` lo compone senza nested button e conserva la focus restoration Base UI. Quando il close automatico e visibile, `DialogContent` richiede `closeButtonProps` con un nome contestuale e la composizione riserva spazio per target coarse piu offset, non soltanto per la X visuale.
@@ -182,6 +224,12 @@ Ogni app importa una sola volta:
 `CopyButton` e il command icon-only specializzato per copiare una stringa. Possiede Clipboard API, stati interni `idle → copying → success/error → idle`, IconCopy/Check/Error sovrapposte nello stesso slot, una sola presentazione quiet e un hold success di 1000ms; il nome accessibile resta stabile e un unico status live comunica esito o retry. Non espone stato controlled, icon, variant, size, timeout o callback generiche, non usa `aria-pressed` e non serializza mai il valore copiato nel DOM o nei metadata. Flussi sensibili e azioni testuali restano composizioni consumer dedicate.
 
 ## Confini
+
+`SearchResults` mantiene il contenuto dei risultati sotto il controllo del consumer. `empty` dichiara esplicitamente una ricerca conclusa senza corrispondenze (mai la query iniziale vuota) e mostra la stessa composizione `Empty` in inline e modal. `onReset`, quando disponibile, espone “Ricomincia la ricerca”: il consumer svuota la query e ripristina il focus nell'Input. Solo il messaggio vuoto è uno status; la lista non diventa automaticamente una live region. `SearchField` non acquisisce logica di ricerca o risultati.
+
+Textarea mantiene il vero elemento nativo come owner di ref, props, focus, valore, selezione e tre esiti di altezza: auto-grow (default), fissa, verticale manuale. Un frame privato non interattivo posiziona una dissolvenza del contenuto sui soli bordi con testo fuori vista; copre la larghezza interna esclusa la scrollbar reale, senza mascherare border o focus. La dissolvenza usa la stessa surface opaca dello stato corrente tramite `--qv-field-surface`, non filtri backdrop: fondo e angoli restano nitidi, senza diffondere la luminosità dei glyph in dark. La rampa di 1.5rem si attenua al 60% durante il focus editabile, senza scomparire: caret e selezione restano visibili e lo scroll-to-caret resta nativo. Opacity e surface seguono i timing Fields; reduced motion rende il cambio immediato. ResizeObserver, scroll/input e aggiornamenti React sincronizzano gli indicatori senza un secondo value state o un algoritmo di scroll/resize. Il frame non viene montato/smontato al cambiare dell'overflow. Forced colors rimuove la dissolvenza.
+
+Il resize manuale stilizza la vera `::-webkit-resizer` con un segno orizzontale 8 x 2 px, indipendente dalla hit area nativa: nessun grip finto o pointer handler. Con fine pointer e supporto WebKit, Textarea usa il thumb e i token scrollbar esistenti, senza i pulsanti freccia nativi. I motori senza quel pseudo-elemento e forced colors mantengono la maniglia nativa funzionale; touch e forced colors mantengono la scrollbar del browser. Lo styling non promette un resize custom uniforme tra motori.
 
 - nessun import da `apps/*`, `@qoovex/db`, Auth.js o tipi di dominio;
 - nessun componente condiviso duplicato nelle app;

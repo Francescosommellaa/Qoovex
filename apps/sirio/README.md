@@ -56,6 +56,8 @@ La foundation surface/elevation e provata in `/foundations/surfaces`: distingue 
 
 ## P009 — Standard specimen dei componenti
 
+Per evitare duplicazioni, applicare la regola "Responsabilita delle proof" in `docs/05_UI_BRAND_AND_SURFACES.md`: foundation per le dimostrazioni tecniche condivise, component page per casi d'uso e stati utili. I test di integrazione riusano gli specimen principali; nessuna sezione focus/geometry o matrice di props aggiunta soltanto per ospitare un test. Semplificare non significa rimuovere esempi utili.
+
 Le pagine `/components/*` applicano il Perceptual Completeness Contract canonico di `docs/05_UI_BRAND_AND_SURFACES.md` ed estendono `src/components/specimen.tsx`; non costruiscono un catalogo parallelo. Ogni pagina parte da un overview reale nel `PageHeader` e mostra, quando l'API pubblica li possiede, varianti, size e stati persistenti supportati. La matrice resta piccola e ogni specimen risponde a una domanda reale con copy e scenari realistici: default, stati di disponibilita o selezione pertinenti, interaction state rilevanti e una o due combinazioni ad alto rischio. Non aggiungere esempi soltanto per coprire una prop, come trailing icon priva di behavior o contesto, expanded senza trigger, loading senza action o placeholder icon grid immobile. Sirio puo documentare una family che comprende piu componenti tecnici senza trasformare il raggruppamento in un package boundary.
 
 `SpecimenSection` nomina semanticamente la regione tramite `data-specimen-region` e un heading accessibile. `Specimen.stateId` identifica soltanto configurazioni deterministiche reali; `visualId` resta l'identificatore stabile ed esclusivo per i target Visual Geometry. Focus, loading, pressed, expanded, selected, success, error, drag, open e close non possono essere dichiarati da specimen puramente statici: la proof primaria deve permettere di causare lo stato con input e lifecycle reali. Playwright produce focus con `Tab`, interaction con pointer/tastiera e async con `trigger → pending → resolve/reject → settle/reset`; una fake state preview puo esistere soltanto come visual reference secondaria. Per i componenti animati, `motion-final` contiene gli stati settled deterministici; `motion-lifecycle` prova enter, hover, press, release/cancel, reversal, input rapido e reduced motion. Uno snapshot con animazioni disabilitate prova geometria e stato finale, non behavior o qualita del lifecycle Motion.
@@ -67,6 +69,8 @@ Una sezione `Motion Playground` esiste soltanto se rende provabile un comportame
 Reflow, 320px, zoom 200%, coarse pointer, forced colors, reduced motion e touch target sono quality condition da verificare quando pertinenti, non design specimen da ripetere automaticamente come sezioni visuali. Entrano nella pagina soltanto quando aiutano davvero a capire il componente. P009 non aggiunge un report rituale: il component Done gate e la forma di reporting restano quelli del contratto canonico.
 
 ## Comandi
+
+La pagina Componenti UI `/components/composite-input` prova la foundation P020 e le specializzazioni P020.5: telefono con prefisso selezionabile, importo con valuta selezionabile o fissa, URL con prefisso statico e suffix `%` puramente compositivo. Il form URL invia solo dominio/percorso e l'anteprima aggiunge esplicitamente `https://`; la validazione resta sintattica e locale. Focus, typeahead nativo, temi e larghezze ridotte si verificano sulla stessa composizione, senza copie decorative o logica di dominio.
 
 ```bash
 pnpm --filter @qoovex/sirio type-check

@@ -1,8 +1,7 @@
 "use client"
 
-import { IconX } from "@tabler/icons-react"
-
 import { cn } from "#lib/utils"
+import { IconAction } from "../icon-action"
 import type { IconButtonProps } from "../icon-button"
 import { IconButtonRoot } from "../icon-button/icon-button-client"
 
@@ -32,11 +31,10 @@ function CloseButton({ className, ...props }: CloseButtonProps) {
         className
       )}
       data-slot="close-button"
-      motionIntent="close"
       size="sm"
       variant="ghost"
     >
-      <IconX aria-hidden="true" />
+      <IconAction intent="close" />
     </IconButtonRoot>
   )
 }

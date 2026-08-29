@@ -19,7 +19,7 @@ import { Button } from "@qoovex/ui/components/button";
 import { IconButton } from "@qoovex/ui/components/icon-button";
 import { Badge } from "@qoovex/ui/components/badge";
 import { Avatar, AvatarFallback } from "@qoovex/ui/components/avatar";
-import { SearchInput } from "@qoovex/ui/components/input";
+import { SearchField } from "@qoovex/ui/components/search-field";
 import {
   IconPlus,
   IconDownload,
@@ -121,11 +121,10 @@ export default function TablePage() {
               >
                 <TableToolbar>
                   <div className="flex items-center gap-2 max-w-xs w-full">
-                    <SearchInput
+                    <SearchField
                       placeholder="Filtra cantieri..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      onClear={() => setSearch("")}
                     />
                   </div>
                   <div className="flex items-center gap-2">

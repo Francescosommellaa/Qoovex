@@ -62,7 +62,7 @@ export default function DropdownMenuCatalogPage() {
                     </Button>
                   }
                 />
-                <DropdownMenuContent className="w-56">
+                <DropdownMenuContent>
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>JOB-SITE #8942-2026</DropdownMenuLabel>
                     <DropdownMenuSeparator />
@@ -99,7 +99,7 @@ export default function DropdownMenuCatalogPage() {
                     </Button>
                   }
                 />
-                <DropdownMenuContent className="w-56">
+                <DropdownMenuContent>
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>Formato di Export</DropdownMenuLabel>
                     <DropdownMenuSeparator />
@@ -148,7 +148,7 @@ export default function DropdownMenuCatalogPage() {
                     </Button>
                   }
                 />
-                <DropdownMenuContent className="w-60">
+                <DropdownMenuContent>
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>Filtri Cronologia</DropdownMenuLabel>
                     <DropdownMenuSeparator />
@@ -179,7 +179,7 @@ export default function DropdownMenuCatalogPage() {
                     </Button>
                   }
                 />
-                <DropdownMenuContent className="w-56">
+                <DropdownMenuContent>
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>Seleziona Ruolo</DropdownMenuLabel>
                     <DropdownMenuSeparator />

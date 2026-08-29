@@ -13,6 +13,7 @@ import { Input } from "@qoovex/ui/components/input";
 import { OtpInput } from "@qoovex/ui/components/otp-input";
 import { PasswordInput } from "@qoovex/ui/components/password-input";
 import { Spinner } from "@qoovex/ui/components/spinner";
+import { estimatePasswordStrength } from "../../shared/lib/password-strength";
 import { AuthPageShell, AuthStage, credentialSteps } from "./AuthPageShell";
 import styles from "./AuthPages.module.css";
 
@@ -52,6 +53,7 @@ export function SignUpPageView({
   );
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     if (verifiedEmail) return;
@@ -234,9 +236,12 @@ export function SignUpPageView({
                   maxLength={128}
                   minLength={12}
                   name="password"
+                  onChange={(event) => setPassword(event.target.value)}
                   required
                   revealLabel="Mostra password"
                   concealLabel="Nascondi password"
+                  strength={estimatePasswordStrength(password)}
+                  value={password}
                 />
                 <FieldDescription>Almeno 12 caratteri. Evita password comuni o già usate altrove.</FieldDescription>
               </Field>

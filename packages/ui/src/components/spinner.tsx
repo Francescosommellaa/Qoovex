@@ -10,13 +10,11 @@ const spinnerVariants = cva(
       variant: {
         ring: "",
         track: "",
-        bars: "",
-        dots: "",
-        orbit: "",
+        hexagon: "",
         pulse: "",
       },
       size: {
-        xs: "size-3.5 text-[0.65rem]",
+        xs: "size-3.5 text-xs",
         sm: "size-4.5 text-xs",
         default: "size-5.5 text-xs",
         lg: "size-7 text-sm",
@@ -30,9 +28,9 @@ const spinnerVariants = cva(
         destructive: "text-destructive",
       },
       speed: {
-        slow: "[animation-duration:1.5s]",
-        normal: "[animation-duration:1s]",
-        fast: "[animation-duration:0.6s]",
+        slow: "[--spinner-duration:1.5s] [animation-duration:1.5s]",
+        normal: "[--spinner-duration:1s] [animation-duration:1s]",
+        fast: "[--spinner-duration:0.6s] [animation-duration:0.6s]",
       },
     },
     defaultVariants: {
@@ -106,8 +104,19 @@ function Spinner({
       )
     }
 
-    // Determinate Circular Gauge
+    // Determinate gauge
     if (isDeterminate) {
+      if (variant === "hexagon") {
+        return (
+          <div className="relative flex size-full items-center justify-center">
+            <svg aria-hidden="true" className="size-full" fill="none" viewBox="0 0 24 24">
+              <polygon className="opacity-15" pathLength="100" points="12,2.5 20.23,7.25 20.23,16.75 12,21.5 3.77,16.75 3.77,7.25" stroke="currentColor" strokeLinejoin="round" strokeWidth="2" />
+              <polygon className="transition-[stroke-dashoffset] duration-300 ease-out" pathLength="100" points="12,2.5 20.23,7.25 20.23,16.75 12,21.5 3.77,16.75 3.77,7.25" stroke="currentColor" strokeDasharray="100" strokeDashoffset={100 - clampedProgress} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+            </svg>
+          </div>
+        )
+      }
+
       return (
         <div className="relative flex size-full items-center justify-center">
           <svg aria-hidden="true" className="size-full -rotate-90" viewBox="0 0 24 24" fill="none">
@@ -131,39 +140,17 @@ function Spinner({
               className="transition-[stroke-dashoffset] duration-300 ease-out"
             />
           </svg>
-          {size === "xl" || size === "lg" ? (
-            <span className="absolute font-mono text-[0.6rem] font-bold tracking-tighter">
-              {Math.round(clampedProgress)}%
-            </span>
-          ) : null}
         </div>
       )
     }
 
     // Indeterminate Variants
     switch (variant) {
-      case "bars":
+      case "hexagon":
         return (
-          <svg
-            aria-hidden="true"
-            className={cn("size-full animate-spin motion-reduce:animate-none", spinnerVariants({ speed }))}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-          >
-            {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
-              <line
-                key={angle}
-                x1="12"
-                y1="3"
-                x2="12"
-                y2="6"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                transform={`rotate(${angle} 12 12)`}
-                style={{ opacity: 0.15 + (i / 8) * 0.85 }}
-              />
-            ))}
+          <svg aria-hidden="true" className="size-full" fill="none" viewBox="0 0 24 24">
+            <polygon className="opacity-15" pathLength="100" points="12,2.5 20.23,7.25 20.23,16.75 12,21.5 3.77,16.75 3.77,7.25" stroke="currentColor" strokeLinejoin="round" strokeWidth="2" />
+            <polygon className="qv-spinner-hexagon-segment" pathLength="100" points="12,2.5 20.23,7.25 20.23,16.75 12,21.5 3.77,16.75 3.77,7.25" stroke="currentColor" strokeDasharray="28 72" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
           </svg>
         )
 
@@ -189,37 +176,6 @@ function Spinner({
               strokeWidth="2.5"
               strokeLinecap="round"
             />
-          </svg>
-        )
-
-      case "dots":
-        return (
-          <span className="inline-flex items-center gap-1">
-            <span className="size-1.5 rounded-full bg-current animate-pulse motion-reduce:animate-none [animation-delay:-0.32s]" />
-            <span className="size-1.5 rounded-full bg-current animate-pulse motion-reduce:animate-none [animation-delay:-0.16s]" />
-            <span className="size-1.5 rounded-full bg-current animate-pulse motion-reduce:animate-none" />
-          </span>
-        )
-
-      case "orbit":
-        return (
-          <svg
-            aria-hidden="true"
-            className={cn("size-full animate-spin motion-reduce:animate-none", spinnerVariants({ speed }))}
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <circle
-              cx="12"
-              cy="12"
-              r="9"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              className="opacity-20"
-              strokeDasharray="3 3"
-            />
-            <circle cx="12" cy="3" r="2.5" fill="currentColor" />
-            <circle cx="12" cy="21" r="1.5" fill="currentColor" className="opacity-60" />
           </svg>
         )
 

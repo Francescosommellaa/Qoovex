@@ -1,285 +1,194 @@
 "use client";
 
 import { useState } from "react";
+
 import { PageHeader } from "@/components/page-header";
-import { Specimen, SpecimenGrid } from "@/components/specimen";
-import { Field, FieldLabel, FieldDescription } from "@qoovex/ui/components/field";
-import {
-  Textarea,
-  TextareaGroup,
-  TextareaCounter,
-  TextareaToolbar,
-} from "@qoovex/ui/components/textarea";
+import { Specimen, SpecimenGrid, SpecimenSection } from "@/components/specimen";
 import { Button } from "@qoovex/ui/components/button";
-import { IconButton } from "@qoovex/ui/components/icon-button";
-import { Avatar, AvatarFallback } from "@qoovex/ui/components/avatar";
-import { Badge } from "@qoovex/ui/components/badge";
-import {
-  IconPaperclip,
-  IconMoodSmile,
-  IconSend,
-  IconBold,
-  IconItalic,
-  IconList,
-  IconStarFilled,
-  IconAlertTriangle,
-  IconLock,
-  IconMapPin,
-} from "@tabler/icons-react";
+import { CharacterCounter } from "@qoovex/ui/components/character-counter";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@qoovex/ui/components/field";
+import { Input } from "@qoovex/ui/components/input";
+import { Textarea } from "@qoovex/ui/components/textarea";
+
+const exampleText = [
+  "Sopralluogo completato con il referente.",
+  "Demolizione conclusa al piano terra.",
+  "Impianto elettrico in verifica.",
+  "Materiali in consegna giovedì.",
+  "Confermare l’accesso prima della consegna.",
+  "Aggiornare il verbale dopo la verifica.",
+  "Condividere le fotografie del sopralluogo.",
+].join("\n");
 
 export default function TextareaPage() {
-  const [basicText, setBasicText] = useState("Descrizione iniziale del cantiere...");
-  const [charText, setCharText] = useState("Aggiornamento sullo stato del lavoro e sulle attività completate.");
-  const [wordText, setWordText] = useState("Il Cliente ha accettato una modifica relativa al primo lotto.");
-  const [commentText, setCommentText] = useState("");
-  const [chatMessage, setChatMessage] = useState("");
-  const [feedbackText, setFeedbackText] = useState("");
-  const [rating, setRating] = useState(5);
-  const [issueText, setIssueText] = useState("");
-  const [addressText, setAddressText] = useState("Via Roma 42, Piano 3\n00100 Roma (RM)\nPresso Cantiere Edile Alfa");
-
-  const wordCount = wordText.trim() ? wordText.trim().split(/\s+/).length : 0;
+  const [value, setValue] = useState("");
+  const [comment, setComment] = useState("");
+  const [shortNote, setShortNote] = useState("");
+  const [description, setDescription] = useState("");
+  const descriptionMissing = description.trim().length === 0;
 
   return (
-    <div className="mx-auto w-full max-w-6xl">
+    <div className="mx-auto w-full max-w-4xl space-y-10">
       <PageHeader
         title="Textarea"
-        description="Campo di testo multilinea avanzato con auto-ridimensionamento pulito (senza maniglie superflue), supporto al ridimensionamento manuale con grip custom Qoovex, limiti di caratteri/parole e composer di messaggi."
-        importPath="import { Textarea, TextareaGroup, TextareaCounter, TextareaToolbar } from '@qoovex/ui/components/textarea'"
+        description="Scrittura multilinea. Cresce con il contenuto, oppure mantiene un’altezza fissa o regolabile."
+        importPath="import { Textarea } from '@qoovex/ui/components/textarea'"
       />
 
-      <div className="flex flex-col gap-12">
-        {/* ── Sezione 1: Ridimensionamento Pulito ────────────────────────────── */}
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight">1. Ridimensionamento & Limiti</h2>
-          <SpecimenGrid cols={2}>
-            <Specimen title="1. Auto-resize (Senza Maniglia Superflua)">
-              <Field className="w-full">
-                <FieldLabel htmlFor="basic-ta">Auto-resize Pulito (Default)</FieldLabel>
-                <Textarea
-                  id="basic-ta"
-                  value={basicText}
-                  onChange={(e) => setBasicText(e.target.value)}
-                  placeholder="Scrivi qui..."
-                />
-                <FieldDescription>Espansione automatica senza maniglie di trascinamento superflue.</FieldDescription>
-              </Field>
-            </Specimen>
+      <Specimen title="Crescita automatica" visualId="sirio-textarea-auto">
+        <Field className="w-full">
+          <FieldLabel htmlFor="textarea-auto">Nota operativa</FieldLabel>
+          <Textarea
+            id="textarea-auto"
+            data-textarea-proof="auto"
+            maxRows={5}
+            onChange={(event) => setValue(event.target.value)}
+            placeholder={"Scrivi una nota…\nPuoi continuare su più righe."}
+            value={value}
+          />
+          <FieldDescription>Cresce fino a cinque righe, poi il testo scorre all’interno.</FieldDescription>
+          <div className="flex flex-wrap gap-2" data-textarea-proof="actions">
+            <Button onClick={() => setValue(exampleText)} size="sm" type="button" variant="secondary">Inserisci esempio</Button>
+            <Button onClick={() => setValue("")} size="sm" type="button" variant="ghost">Svuota</Button>
+          </div>
+        </Field>
+      </Specimen>
 
-            <Specimen title="2. Manual Resizable (Grip Custom Qoovex)">
-              <Field className="w-full">
-                <FieldLabel htmlFor="resizable-ta">Resizable Manuale con Grip Custom</FieldLabel>
-                <Textarea
-                  id="resizable-ta"
-                  autoResize={false}
-                  resizable
-                  placeholder="Trascina dall'angolo in basso a destra..."
-                />
-                <FieldDescription>Sostituita la maniglia nativa del browser con una maniglia visiva minimale.</FieldDescription>
-              </Field>
-            </Specimen>
+      <SpecimenGrid cols={2}>
+        <Specimen title="Altezza fissa" visualId="sirio-textarea-fixed">
+          <Field className="w-full">
+            <FieldLabel htmlFor="textarea-fixed">Aggiornamento</FieldLabel>
+            <Textarea
+              id="textarea-fixed"
+              autoResize={false}
+              data-textarea-proof="fixed"
+              defaultValue={exampleText}
+              rows={3}
+            />
+            <FieldDescription>Tre righe visibili. Scorri per leggere il resto.</FieldDescription>
+          </Field>
+        </Specimen>
+        <Specimen title="Altezza regolabile" visualId="sirio-textarea-manual">
+          <Field className="w-full">
+            <FieldLabel htmlFor="textarea-manual">Appunti</FieldLabel>
+            <Textarea
+              id="textarea-manual"
+              autoResize={false}
+              data-textarea-proof="manual"
+              maxRows={8}
+              placeholder="Spazio per i tuoi appunti…"
+              resizable
+            />
+            <FieldDescription>Trascina la maniglia in basso a destra.</FieldDescription>
+          </Field>
+        </Specimen>
+      </SpecimenGrid>
 
-            <Specimen title="3. Min/Max Rows (Intervallo Limitato)">
-              <Field className="w-full">
-                <FieldLabel htmlFor="rows-ta">Min/Max Rows (Righe 2-5)</FieldLabel>
-                <Textarea
-                  id="rows-ta"
-                  minRows={2}
-                  maxRows={5}
-                  placeholder="Inizia a digitare per espandere fino a 5 righe..."
-                />
-                <FieldDescription>Cresce da 2 a 5 righe prima dello scroll interno.</FieldDescription>
-              </Field>
-            </Specimen>
-
-            <Specimen title="4. Character-limited (Limite Caratteri)">
-              <Field className="w-full">
-                <div className="flex items-center justify-between">
-                  <FieldLabel htmlFor="char-ta">Descrizione Breve</FieldLabel>
-                  <TextareaCounter current={charText.length} max={500} mode="character" />
-                </div>
-                <Textarea
-                  id="char-ta"
-                  value={charText}
-                  maxLength={500}
-                  onChange={(e) => setCharText(e.target.value)}
-                />
-                <FieldDescription>Massimo 500 caratteri consentiti.</FieldDescription>
-              </Field>
-            </Specimen>
-          </SpecimenGrid>
-        </section>
-
-        {/* ── Sezione 2: Descrizioni Avanzate & Note ────────────────────────────── */}
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight">2. Conteggio Parole, Formattazione & Note</h2>
-          <SpecimenGrid cols={2}>
-            <Specimen title="5. Word-limited (Limite Parole)">
-              <Field className="w-full">
-                <div className="flex items-center justify-between">
-                  <FieldLabel htmlFor="word-ta">Sintesi Esecutiva</FieldLabel>
-                  <TextareaCounter current={wordCount} max={50} mode="word" />
-                </div>
-                <Textarea
-                  id="word-ta"
-                  value={wordText}
-                  onChange={(e) => setWordText(e.target.value)}
-                  placeholder="Inserisci massimo 50 parole..."
-                />
-                <FieldDescription>Conteggio dinamico del numero di parole inserite.</FieldDescription>
-              </Field>
-            </Specimen>
-
-            <Specimen title="6. Rich Description (Barra Strumenti Formattazione)">
-              <Field className="w-full">
-                <FieldLabel>Rich Description (Descrizione Estesa)</FieldLabel>
-                <TextareaGroup>
-                  <Textarea
-                    placeholder="Aggiungi una descrizione dettagliata del cantiere..."
-                    className="border-0 focus-visible:ring-0 rounded-b-none min-h-24"
-                  />
-                  <TextareaToolbar>
-                    <div className="flex items-center gap-1">
-                      <Button aria-label="Grassetto" variant="ghost" size="icon-xs"><IconBold aria-hidden="true" /></Button>
-                      <Button aria-label="Corsivo" variant="ghost" size="icon-xs"><IconItalic aria-hidden="true" /></Button>
-                      <Button aria-label="Elenco" variant="ghost" size="icon-xs"><IconList aria-hidden="true" /></Button>
-                    </div>
-                    <span className="text-[0.6875rem] text-muted-foreground font-accent">Rich Text Enabled</span>
-                  </TextareaToolbar>
-                </TextareaGroup>
-              </Field>
-            </Specimen>
-
-            <Specimen title="7. Notes (Note Operative Riservate)">
-              <Field className="w-full">
-                <div className="flex items-center gap-2 mb-1">
-                  <FieldLabel htmlFor="notes-ta">Note Interne Riservate</FieldLabel>
-                  <Badge variant="outline" className="gap-1 text-muted-foreground">
-                    <IconLock className="size-3" />
-                    <span>Riservato Team</span>
-                  </Badge>
-                </div>
-                <Textarea
-                  id="notes-ta"
-                  className="bg-muted/30 border-muted-foreground/20 font-accent text-xs"
-                  defaultValue="Nota tecnica: Verificare la pressione della tubatura principale prima dell'attivazione del secondo lotto."
-                />
-              </Field>
-            </Specimen>
-
-            <Specimen title="8. Address Multiline (Indirizzo Cantiere)">
-              <Field className="w-full">
-                <FieldLabel htmlFor="address-ta">Indirizzo di Spedizione / Cantiere</FieldLabel>
-                <div className="relative w-full">
-                  <Textarea
-                    id="address-ta"
-                    value={addressText}
-                    onChange={(e) => setAddressText(e.target.value)}
-                    className="pl-9 font-accent"
-                  />
-                  <IconMapPin className="absolute left-3 top-3 size-4 text-muted-foreground" />
-                </div>
-              </Field>
-            </Specimen>
-          </SpecimenGrid>
-        </section>
-
-        {/* ── Sezione 3: Messaggistica, Commenti & Feedback ────────────────────────────── */}
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight">3. Messaggistica, Commenti & Feedback</h2>
-          <SpecimenGrid cols={2}>
-            <Specimen title="9. Comment (Commenti Brevi)">
-              <div className="flex gap-3 w-full">
-                <Avatar size="sm">
-                  <AvatarFallback className="bg-primary/10 text-primary">MR</AvatarFallback>
-                </Avatar>
-                <div className="flex-1 space-y-2">
-                  <Textarea
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                    placeholder="Aggiungi un commento al cantiere..."
-                    className="min-h-16 text-xs"
-                  />
-                  <div className="flex justify-end gap-2">
-                    <Button size="sm" variant="ghost">Annulla</Button>
-                    <Button size="sm">Pubblica</Button>
-                  </div>
-                </div>
+      <SpecimenSection region="variants" title="Varianti d’uso">
+        <div className="space-y-4">
+          <Specimen title="Commento con limite caratteri" visualId="sirio-textarea-comment">
+            <Field className="w-full">
+              <FieldLabel htmlFor="textarea-comment">Commento</FieldLabel>
+              <Textarea
+                id="textarea-comment"
+                aria-describedby="textarea-comment-help textarea-comment-count"
+                data-textarea-proof="comment"
+                maxLength={200}
+                maxRows={5}
+                onChange={(event) => setComment(event.target.value)}
+                placeholder="Aggiungi un aggiornamento breve…"
+                value={comment}
+              />
+              <div className="flex min-w-0 items-start justify-between gap-4">
+                <FieldDescription className="min-w-0" id="textarea-comment-help">Massimo 200 caratteri, anche quando incolli un testo.</FieldDescription>
+                <CharacterCounter current={comment.length} id="textarea-comment-count" max={200} />
               </div>
-            </Specimen>
-
-            <Specimen title="10. Message Composer (Chat & Allegati)">
-              <Field className="w-full">
-                <FieldLabel>Composer Messaggi</FieldLabel>
-                <TextareaGroup>
-                  <Textarea
-                    value={chatMessage}
-                    onChange={(e) => setChatMessage(e.target.value)}
-                    placeholder="Scrivi un messaggio al referente..."
-                    className="border-0 focus-visible:ring-0 rounded-b-none min-h-20"
-                  />
-                  <TextareaToolbar>
-                    <div className="flex items-center gap-1">
-                      <IconButton aria-label="Aggiungi allegato" variant="ghost" size="xs"><IconPaperclip aria-hidden="true" /></IconButton>
-                      <IconButton aria-label="Aggiungi emoji" variant="ghost" size="xs"><IconMoodSmile aria-hidden="true" /></IconButton>
-                    </div>
-                    <Button size="sm" className="gap-1.5 h-7 text-xs">
-                      <span>Invia</span>
-                      <IconSend className="size-3.5" />
-                    </Button>
-                  </TextareaToolbar>
-                </TextareaGroup>
-              </Field>
-            </Specimen>
-
-            <Specimen title="11. Feedback Textarea (Valutazione Servizio)">
-              <Field className="w-full">
-                <div className="flex items-center justify-between">
-                  <FieldLabel>Feedback Intervento</FieldLabel>
-                  <div aria-label="Valutazione del servizio" className="flex gap-1 text-warning-emphasis" role="group">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <button
-                        key={star}
-                        type="button"
-                        onClick={() => setRating(star)}
-                        aria-label={`${star} ${star === 1 ? "stella" : "stelle"}${star === rating ? ", selezionata" : ""}`}
-                        className="p-0.5 hover:scale-110 transition-transform"
-                      >
-                        <IconStarFilled aria-hidden="true" className={`size-4 ${star <= rating ? "text-warning-emphasis" : "text-muted-foreground/30"}`} />
-                      </button>
-                    ))}
-                  </div>
+            </Field>
+          </Specimen>
+          <Specimen title="Input breve con limite">
+            <Field className="w-full">
+              <FieldLabel htmlFor="input-counter">Titolo breve</FieldLabel>
+              <Input
+                aria-describedby="input-counter-help input-counter-count"
+                id="input-counter"
+                maxLength={40}
+                onChange={(event) => setShortNote(event.target.value)}
+                placeholder="Titolo dell’aggiornamento…"
+                value={shortNote}
+              />
+              <div className="flex min-w-0 items-start justify-between gap-4">
+                <FieldDescription className="min-w-0" id="input-counter-help">Sintetico e riconoscibile nell’elenco.</FieldDescription>
+                <CharacterCounter current={shortNote.length} id="input-counter-count" max={40} />
+              </div>
+            </Field>
+          </Specimen>
+          <Specimen title="Enfasi progressiva">
+            <div className="grid w-full gap-x-8 gap-y-3 sm:grid-cols-2">
+              {[
+                ["Normale", 120],
+                ["Vicino al limite", 470],
+                ["Al limite", 500],
+                ["Oltre il limite", 510],
+              ].map(([label, current]) => (
+                <div className="flex items-center justify-between gap-6 border-b border-border py-2 last:border-b-0 sm:[&:nth-last-child(-n+2)]:border-b-0" key={label}>
+                  <span className="text-sm text-muted-foreground">{label}</span>
+                  <CharacterCounter current={current as number} max={500} />
                 </div>
-                <Textarea
-                  value={feedbackText}
-                  onChange={(e) => setFeedbackText(e.target.value)}
-                  placeholder="Lascia un commento sulla qualità del lavoro eseguito..."
-                  className="min-h-20"
-                />
-              </Field>
-            </Specimen>
-
-            <Specimen title="12. Issue Description (Anomalie Cantiere)">
+              ))}
+            </div>
+          </Specimen>
+            <Specimen title="Nota compatta" visualId="sirio-textarea-note">
               <Field className="w-full">
-                <div className="flex items-center gap-2 mb-1">
-                  <FieldLabel htmlFor="issue-ta" className="text-destructive">Descrizione Anomalia Cantiere</FieldLabel>
-                  <Badge variant="destructive" className="gap-1">
-                    <IconAlertTriangle className="size-3" />
-                    <span>Segnalazione Critica</span>
-                  </Badge>
-                </div>
+                <FieldLabel htmlFor="textarea-note">Nota interna (opzionale)</FieldLabel>
                 <Textarea
-                  id="issue-ta"
-                  value={issueText}
-                  onChange={(e) => setIssueText(e.target.value)}
-                  placeholder="Descrivi l'anomalia riscontrata sul luogo di lavoro..."
-                  className="border-destructive/40 focus-visible:ring-destructive/30 min-h-20"
+                  id="textarea-note"
+                  data-textarea-proof="note"
+                  maxRows={4}
+                  minRows={2}
+                  placeholder="Un promemoria per il team…"
                 />
+                <FieldDescription>Parte da due righe e cresce quando serve.</FieldDescription>
               </Field>
             </Specimen>
-          </SpecimenGrid>
-        </section>
-      </div>
+        </div>
+      </SpecimenSection>
+
+      <SpecimenSection region="persistent-states" title="Disponibilità e validazione">
+        <Specimen visualId="sirio-textarea-states">
+          <div className="grid w-full gap-6 lg:grid-cols-2">
+            <Field className="lg:col-span-2">
+              <FieldLabel htmlFor="textarea-disabled">Disabilitata</FieldLabel>
+              <Textarea
+                id="textarea-disabled"
+                aria-describedby="textarea-disabled-help"
+                data-textarea-proof="disabled"
+                defaultValue={"Nota non disponibile\nin questa fase."}
+                disabled
+              />
+              <FieldDescription id="textarea-disabled-help">Il contenuto resta leggibile, ma non è modificabile.</FieldDescription>
+            </Field>
+            <Field className="lg:col-span-2" data-invalid={descriptionMissing || undefined}>
+              <FieldLabel htmlFor="textarea-invalid">Descrizione obbligatoria</FieldLabel>
+              <Textarea
+                id="textarea-invalid"
+                aria-describedby="textarea-invalid-help"
+                aria-invalid={descriptionMissing || undefined}
+                data-textarea-proof="invalid"
+                maxRows={5}
+                onChange={(event) => setDescription(event.target.value)}
+                placeholder="Descrivi l’intervento…"
+                required
+                value={description}
+              />
+              {descriptionMissing ? (
+                <FieldError id="textarea-invalid-help">Aggiungi una descrizione per continuare.</FieldError>
+              ) : (
+                <FieldDescription id="textarea-invalid-help">Descrizione inserita.</FieldDescription>
+              )}
+            </Field>
+          </div>
+        </Specimen>
+      </SpecimenSection>
     </div>
   );
 }

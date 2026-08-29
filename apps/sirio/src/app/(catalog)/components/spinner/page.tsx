@@ -33,7 +33,7 @@ export default function SpinnerCatalogPage() {
     <div className="mx-auto w-full max-w-6xl">
       <PageHeader
         title="Spinner"
-        description="Indicatore di caricamento ultra-dinamico GPU con avanzamento determinato (0-100%), morphing di stato (Loading → Success → Error), messaggi rotanti dinamici e 6 varianti di stile."
+        description="Indicatori di caricamento essenziali. Hexagon richiama Qoovex con una track fissa e un segmento che percorre il perimetro."
         importPath="import { Spinner } from '@qoovex/ui/components/spinner'"
       />
 
@@ -45,7 +45,8 @@ export default function SpinnerCatalogPage() {
             <Specimen title="Avanzamento Determinato 0-100% con Status Morphing">
               <div className="flex flex-col items-center gap-4 py-3">
                 <Spinner
-                  variant="track"
+                  data-spinner-proof="hexagon-determinate"
+                  variant="hexagon"
                   size="xl"
                   color={status === "success" ? "success" : status === "error" ? "destructive" : "primary"}
                   progress={status === "loading" ? progress : undefined}
@@ -86,7 +87,14 @@ export default function SpinnerCatalogPage() {
         {/* ── Varianti di Stile ──────────────────────────────────────────────────────── */}
         <section>
           <h2 className="mb-4 text-2xl font-semibold tracking-tight">Varianti di Stile Indeterminate</h2>
-          <SpecimenGrid cols={3}>
+          <SpecimenGrid cols={2}>
+            <Specimen title="Hexagon (Qoovex)">
+              <div className="flex flex-col items-center gap-2 py-2">
+                <Spinner data-spinner-proof="hexagon" variant="hexagon" size="lg" color="primary" />
+                <span className="text-xs font-mono text-muted-foreground">hexagon</span>
+              </div>
+            </Specimen>
+
             <Specimen title="Ring (Default Sweep)">
               <div className="flex flex-col items-center gap-2 py-2">
                 <Spinner variant="ring" size="lg" color="primary" />
@@ -101,20 +109,6 @@ export default function SpinnerCatalogPage() {
               </div>
             </Specimen>
 
-            <Specimen title="Bars (iOS Radial)">
-              <div className="flex flex-col items-center gap-2 py-2">
-                <Spinner variant="bars" size="lg" color="primary" />
-                <span className="text-xs font-mono text-muted-foreground">bars</span>
-              </div>
-            </Specimen>
-
-            <Specimen title="Orbit (Concentric Circles)">
-              <div className="flex flex-col items-center gap-2 py-2">
-                <Spinner variant="orbit" size="lg" color="primary" />
-                <span className="text-xs font-mono text-muted-foreground">orbit</span>
-              </div>
-            </Specimen>
-
             <Specimen title="Pulse (Ambient Beacon)">
               <div className="flex flex-col items-center gap-2 py-2">
                 <Spinner variant="pulse" size="lg" color="primary" />
@@ -122,12 +116,6 @@ export default function SpinnerCatalogPage() {
               </div>
             </Specimen>
 
-            <Specimen title="Dots (Wave Bouncing)">
-              <div className="flex flex-col items-center gap-2 py-2">
-                <Spinner variant="dots" size="lg" color="primary" />
-                <span className="text-xs font-mono text-muted-foreground">dots</span>
-              </div>
-            </Specimen>
           </SpecimenGrid>
         </section>
 
