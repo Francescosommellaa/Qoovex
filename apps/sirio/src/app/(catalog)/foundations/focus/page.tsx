@@ -217,10 +217,10 @@ export default function FocusFoundationPage() {
 
             <ProofCell label="Composite owner">
               <InputGroup data-focus-proof="composite">
-                <InputAddon position="left">QV</InputAddon>
+                <InputAddon id="focus-code-prefix">QV</InputAddon>
                 <Input
                   aria-label="Codice composito"
-                  className="rounded-l-none border-0"
+                  aria-describedby="focus-code-prefix"
                   data-focus-proof="composite-input"
                   defaultValue="2026-018"
                 />

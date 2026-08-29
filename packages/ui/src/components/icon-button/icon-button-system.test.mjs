@@ -9,7 +9,7 @@ const here = dirname(fileURLToPath(import.meta.url))
 const implementation = readFileSync(resolve(here, "icon-button-client.tsx"), "utf8")
 const motion = readFileSync(resolve(here, "icon-button-motion.ts"), "utf8")
 const variants = readFileSync(resolve(here, "icon-button-variants.ts"), "utf8")
-const iconMotion = readFileSync(resolve(here, "../action-icon-motion.ts"), "utf8")
+const iconAction = readFileSync(resolve(here, "../icon-action/icon-action-client.tsx"), "utf8")
 const base = readFileSync(resolve(here, "../../../styles/base.css"), "utf8")
 const buttonVariants = readFileSync(resolve(here, "../button/button-variants.ts"), "utf8")
 const repositoryRoot = resolve(here, "../../../../..")
@@ -49,31 +49,35 @@ test("IconButton uses a real coarse target and icon-specific anisotropic motion"
   assert.match(base, /\.qv-icon-button\s*\{[\s\S]*width:\s*var\(--icon-button-visual-size\)/)
   assert.match(base, /@media \(hover: none\), \(pointer: coarse\), \(any-pointer: coarse\)[\s\S]*\.qv-icon-button\s*\{[\s\S]*width:\s*var\(--touch-target-min\)/)
   assert.match(motion, /stiffness:\s*440/)
-  assert.match(motion, /scaleX:\s*1\.0\d+/)
-  assert.match(motion, /scaleY:\s*0\.9\d+/)
+  assert.match(motion, /scaleX:[^\n]*1\.0\d+/)
+  assert.match(motion, /scaleY:[^\n]*0\.9\d+/)
   assert.match(implementation, /onTapCancel/)
   assert.match(implementation, /focusableWhenDisabled=\{loading \? true : focusableWhenDisabled\}/)
 })
 
 test("semantic icon motion is explicit while disabled remains solid and still", () => {
-  for (const intent of ["neutral", "directional-right", "download", "disclosure", "close"]) {
-    assert.match(iconMotion, new RegExp(`"${intent}"`))
-  }
-  assert.match(implementation, /motionIntent\?: ActionIconMotionIntent/)
-  assert.match(implementation, /data-icon-motion=\{motionIntent\}/)
+  assert.match(implementation, /IconActionInteractionProvider/)
+  assert.match(iconAction, /type IconActionProps/)
   assert.match(implementation, /event\.pointerType !== "touch"/)
-  assert.doesNotMatch(iconMotion, /displayName|\.name\b|constructor/)
+  assert.doesNotMatch(implementation, /motionIntent|getActionIconVariants/)
+  assert.doesNotMatch(iconAction, /displayName|\.name\b|constructor/)
   assert.doesNotMatch(variants, /qv-disabled:opacity-/)
   assert.match(variants, /data-\[availability=disabled\]:text-muted-foreground/)
 })
 
+test("directional intent deforms the real IconButton surface without a second border", () => {
+  assert.match(implementation, /readIconActionIntent/)
+  assert.match(iconAction, /child\.type === IconAction/)
+  assert.match(motion, /intent === "forward" \|\| intent === "back" \|\| intent === "up" \|\| intent === "down"/)
+  assert.match(motion, /x: directional && horizontal/)
+  assert.match(motion, /y: directional && !horizontal/)
+  assert.doesNotMatch(implementation, /icon-action-directional-frame/)
+  assert.doesNotMatch(iconAction, /icon-action-directional-frame/)
+})
+
 test("legacy Button icon sizes remain limited to the explicit specialized-consumer allowlist", () => {
   const expected = new Map([
-    ["apps/sirio/src/app/(catalog)/components/textarea/page.tsx", 3],
     ["packages/ui/src/components/floating-navigation.tsx", 1],
-    ["packages/ui/src/components/input.tsx", 2],
-    ["packages/ui/src/components/password-input.tsx", 1],
-    ["packages/ui/src/components/search-field.tsx", 1],
   ])
   const roots = ["apps/sirio/src", "apps/workspace/src", "packages/ui/src"]
   const actual = new Map()

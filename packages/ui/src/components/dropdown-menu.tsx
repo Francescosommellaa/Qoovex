@@ -94,7 +94,7 @@ function DropdownMenuContent({
               ref={containerRef as React.RefObject<HTMLDivElement>}
               data-slot="dropdown-menu-content"
               className={cn(
-                "relative z-50 max-h-(--available-height) min-w-44 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-xl border border-border bg-popover/95 p-1.5 text-popover-foreground shadow-lg backdrop-blur-md duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+                "relative z-50 max-h-(--available-height) w-max min-w-0 max-w-(--available-width) [overflow-wrap:anywhere] origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-xl border border-border bg-popover/95 p-1.5 text-popover-foreground shadow-lg backdrop-blur-md duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
                 className
               )}
               onMouseLeave={(e) => {
@@ -235,7 +235,7 @@ function DropdownMenuSubContent({
   return (
     <DropdownMenuContent
       data-slot="dropdown-menu-sub-content"
-      className={cn("min-w-40 rounded-xl bg-popover/95 p-1.5 text-popover-foreground shadow-xl border border-border backdrop-blur-md duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95", className)}
+      className={cn("rounded-xl bg-popover/95 p-1.5 text-popover-foreground shadow-xl border border-border backdrop-blur-md duration-200 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95", className)}
       align={align}
       alignOffset={alignOffset}
       side={side}

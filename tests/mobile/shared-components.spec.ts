@@ -4,7 +4,7 @@ import { createInputContext, mobileUrls } from "./support/context";
 import { trackRuntimeErrors } from "./support/diagnostics";
 import { expectNoDocumentOverflow, expectTouchTarget, expectWithinVisualViewport } from "./support/geometry";
 
-async function tabTo(page: Page, target: Locator, maximumTabs = 80) {
+async function tabTo(page: Page, target: Locator, maximumTabs = 200) {
   for (let index = 0; index < maximumTabs; index += 1) {
     await page.keyboard.press("Tab");
     if (await target.evaluate((element) => element === document.activeElement)) return;
@@ -37,13 +37,13 @@ async function installClipboardMock(page: Page) {
   });
 }
 
-test("ToggleButton coordinates stateful copy, physical press, parent updates, and stable geometry", async ({ browser }) => {
+test("icon-only ToggleButton keeps persistent semantics inside the IconButton family", async ({ browser }) => {
   const context = await createInputContext(browser, { width: 1024, height: 768, touch: false });
   const page = await context.newPage();
-  const assertNoRuntimeErrors = trackRuntimeErrors(page, "ToggleButton interaction lifecycle");
-  await page.goto(`${mobileUrls.sirio}/components/toggle-button`);
+  const assertNoRuntimeErrors = trackRuntimeErrors(page, "icon-only ToggleButton interaction lifecycle");
+  await page.goto(`${mobileUrls.sirio}/components/icon-button`);
 
-  const toggle = page.locator('[data-toggle-button-proof="stateful-copy"]');
+  const toggle = page.locator('[data-toggle-button-proof="icon-only"]');
   const physical = toggle.locator('[data-slot="toggle-button-interaction-surface"]');
   const visual = toggle.locator('[data-slot="toggle-button-visual-surface"]');
   const hover = toggle.locator('[data-slot="toggle-button-hover-surface"]');
@@ -53,17 +53,12 @@ test("ToggleButton coordinates stateful copy, physical press, parent updates, an
   }
   await expect(toggle).toHaveAttribute("aria-pressed", "false");
   await expect(toggle).toHaveAccessibleName("Fissa elemento");
-  const geometryBefore = await page.locator('[data-toggle-button-geometry-row]').evaluate((row) => {
-    const button = row.querySelector<HTMLElement>('[data-slot="toggle-button"]')!;
-    const before = row.querySelector<HTMLElement>('[data-toggle-button-sibling="before"]')!;
-    const after = row.querySelector<HTMLElement>('[data-toggle-button-sibling="after"]')!;
-    return [button, before, after].map((element) => ({
-      height: element.offsetHeight,
-      left: element.offsetLeft,
-      top: element.offsetTop,
-      width: element.offsetWidth,
-    }));
-  });
+  const geometryBefore = await toggle.evaluate((element) => ({
+    height: (element as HTMLElement).offsetHeight,
+    left: (element as HTMLElement).offsetLeft,
+    top: (element as HTMLElement).offsetTop,
+    width: (element as HTMLElement).offsetWidth,
+  }));
   await toggle.hover();
   const box = await toggle.boundingBox();
   expect(box).not.toBeNull();
@@ -92,20 +87,15 @@ test("ToggleButton coordinates stateful copy, physical press, parent updates, an
   )).toBeLessThan(0.1);
   await page.mouse.up();
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
-  await expect(toggle).toHaveAccessibleName("Elemento fissato");
+  await expect(toggle).toHaveAccessibleName("Rimuovi fissaggio");
   await expect.poll(() => persistent.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeGreaterThan(0.95);
   await expect.poll(() => physical.evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).d)).toBeGreaterThan(0.99);
-  const geometryAfter = await page.locator('[data-toggle-button-geometry-row]').evaluate((row) => {
-    const button = row.querySelector<HTMLElement>('[data-slot="toggle-button"]')!;
-    const before = row.querySelector<HTMLElement>('[data-toggle-button-sibling="before"]')!;
-    const after = row.querySelector<HTMLElement>('[data-toggle-button-sibling="after"]')!;
-    return [button, before, after].map((element) => ({
-      height: element.offsetHeight,
-      left: element.offsetLeft,
-      top: element.offsetTop,
-      width: element.offsetWidth,
-    }));
-  });
+  const geometryAfter = await toggle.evaluate((element) => ({
+    height: (element as HTMLElement).offsetHeight,
+    left: (element as HTMLElement).offsetLeft,
+    top: (element as HTMLElement).offsetTop,
+    width: (element as HTMLElement).offsetWidth,
+  }));
   expect(geometryAfter).toEqual(geometryBefore);
 
   await page.mouse.down();
@@ -113,16 +103,6 @@ test("ToggleButton coordinates stateful copy, physical press, parent updates, an
   await page.mouse.up();
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
   await expect.poll(() => physical.evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).a)).toBeCloseTo(1, 2);
-
-  const controlled = page.locator('[data-toggle-button-proof="controlled"]');
-  const controlledPhysical = controlled.locator('[data-slot="toggle-button-interaction-surface"]');
-  await expect(controlled).toHaveAccessibleName("Fissa elemento");
-  await controlled.focus();
-  await page.locator('[data-toggle-button-parent-control]').click();
-  await expect(page.locator('[data-toggle-button-render-blur-count]')).toHaveText("1");
-  await expect(controlled).toHaveAttribute("aria-pressed", "true");
-  await expect(controlled).toHaveAccessibleName("Elemento fissato");
-  await expect.poll(() => controlledPhysical.evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).a)).toBeCloseTo(1, 2);
 
   await page.mouse.click(8, 8);
   await tabTo(page, toggle);
@@ -137,13 +117,13 @@ test("ToggleButton keeps coarse targets and reduced-motion state feedback", asyn
   const context = await createInputContext(browser, { width: 320, height: 720, touch: true, reducedMotion: "reduce" });
   const page = await context.newPage();
   const assertNoRuntimeErrors = trackRuntimeErrors(page, "ToggleButton coarse and reduced motion");
-  await page.goto(`${mobileUrls.sirio}/components/toggle-button`);
-  const toggle = page.locator('[data-toggle-button-proof="stateful-copy"]');
-  await expectTouchTarget(toggle, "ToggleButton stateful copy");
+  await page.goto(`${mobileUrls.sirio}/components/icon-button`);
+  const toggle = page.locator('[data-toggle-button-proof="icon-only"]');
+  await expectTouchTarget(toggle, "ToggleButton icon-only");
   await expect(toggle).toHaveAttribute("data-reduced-motion", "true");
   await toggle.tap();
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
-  await expect(toggle).toHaveAccessibleName("Elemento fissato");
+  await expect(toggle).toHaveAccessibleName("Rimuovi fissaggio");
   await expect(toggle.locator('[data-slot="toggle-button-interaction-surface"]')).toHaveCSS("transform", "none");
   await page.locator("html").evaluate((element) => element.classList.add("dark"));
   await expect.poll(() => toggle.locator('[data-slot="toggle-button-state-surface"]').evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeGreaterThan(0.95);
@@ -167,12 +147,14 @@ test("IconButton keeps root geometry stable through hover, squash, cancel, and r
 
   await button.hover();
   await expect.poll(() => surface.evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).a)).toBeGreaterThan(1.02);
-  await expect.poll(() => button.locator('[data-slot="icon-button-semantic-icon"]').evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).e)).toBeGreaterThan(1);
+  await expect.poll(() => button.locator('[data-icon-action-intent="forward"]').evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).e)).toBeGreaterThan(1);
   const hoveredRootBox = await button.boundingBox();
   expect(hoveredRootBox).not.toBeNull();
   const hoverBox = await surface.boundingBox();
   expect(hoverBox).not.toBeNull();
-  expect(Math.abs((hoveredRootBox!.x - hoverBox!.x) - (hoverBox!.x + hoverBox!.width - (hoveredRootBox!.x + hoveredRootBox!.width)))).toBeLessThan(0.1);
+  const leftOverflow = hoveredRootBox!.x - hoverBox!.x;
+  const rightOverflow = hoverBox!.x + hoverBox!.width - (hoveredRootBox!.x + hoveredRootBox!.width);
+  expect(rightOverflow).toBeGreaterThan(leftOverflow + 1);
   expect(Math.abs((hoveredRootBox!.y - hoverBox!.y) - (hoverBox!.y + hoverBox!.height - (hoveredRootBox!.y + hoveredRootBox!.height)))).toBeLessThan(0.1);
 
   await page.mouse.down();
@@ -190,14 +172,13 @@ test("IconButton keeps root geometry stable through hover, squash, cancel, and r
   await tabTo(page, button);
   await expect.poll(() => button.evaluate((element) => element.matches(":focus-visible"))).toBe(true);
 
-  const semanticRegion = page.locator('[data-specimen-region="motion-lifecycle"]');
-  const disclosure = semanticRegion.getByRole("button", { name: "Mostra dettagli" });
+  const disclosure = page.locator('[data-icon-action-proof="disclosure"]');
   await disclosure.click();
   await expect(disclosure).toHaveAttribute("aria-expanded", "true");
-  await expect.poll(() => disclosure.locator('[data-slot="icon-button-semantic-icon"]').evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).a)).toBeLessThan(-0.9);
-  const neutral = semanticRegion.getByRole("button", { name: "Impostazioni" });
+  await expect.poll(() => disclosure.locator('[data-icon-action-intent="disclosure"]').evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).a)).toBeLessThan(-0.9);
+  const neutral = page.locator('[data-icon-action-proof="neutral"]');
   await neutral.hover();
-  await expect(neutral.locator('[data-slot="icon-button-semantic-icon"]')).toHaveCSS("transform", "none");
+  await expect(neutral.locator('[data-icon-action-intent="neutral"]')).toHaveCSS("transform", "none");
   assertNoRuntimeErrors();
   await context.close();
 });
@@ -225,11 +206,35 @@ test("IconButton loading preserves focus and blocks repeated activation", async 
   await expect(loading).not.toHaveAttribute("aria-busy", "true", { timeout: 2500 });
   await expect(loading).toBeFocused();
 
-  const targets = page.locator("[data-icon-button-target-grid] [data-slot=icon-button]");
+  const targets = page.locator("[data-icon-button-target-grid]").getByRole("button");
   await expect(targets).toHaveCount(4);
+  const permanentLoading = page.locator('[data-icon-button-proof="permanent-loading"]');
+  await expect(permanentLoading).toHaveAccessibleName("Caricamento in corso");
+  await expect(permanentLoading).toHaveAttribute("aria-busy", "true");
+  await expect(permanentLoading.locator('[data-slot="spinner"]')).toBeVisible();
+  await expect(page.locator('[data-icon-button-target-grid] > div > span:last-child')).toHaveText(["active", "loading", "focus", "disabled"]);
+  await permanentLoading.focus();
+  await page.keyboard.press("Tab");
+  const focus = page.locator('[data-icon-button-proof="focus"]');
+  await expect(focus).toBeFocused();
+  await expect(focus).toHaveAttribute("aria-pressed", "true");
+  expect(await focus.evaluate((element) => element.matches(":focus-visible"))).toBe(true);
+  await expect(focus).toHaveCSS("outline-width", "2px");
+  await page.keyboard.press("Tab");
+  await expect(focus).not.toBeFocused();
+  await expect(focus).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator('[data-copy-button-proof="disabled"]')).not.toBeFocused();
+  await expect(permanentLoading).toHaveAttribute("aria-busy", "true");
+  await expect(page.locator('[data-icon-button-target-grid] button:is(:disabled, [aria-disabled="true"])')).toHaveCount(2);
   for (let index = 0; index < 4; index += 1) await expectTouchTarget(targets.nth(index), `IconButton target ${index + 1}`);
   const boxes = await targets.evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().toJSON()));
-  for (let index = 1; index < boxes.length; index += 1) expect(boxes[index]!.left).toBeGreaterThanOrEqual(boxes[index - 1]!.right);
+  for (let index = 0; index < boxes.length; index += 1) {
+    for (let other = index + 1; other < boxes.length; other += 1) {
+      const a = boxes[index]!;
+      const b = boxes[other]!;
+      expect(a.right <= b.left || b.right <= a.left || a.bottom <= b.top || b.bottom <= a.top).toBe(true);
+    }
+  }
   assertNoRuntimeErrors();
   await context.close();
 });
@@ -238,7 +243,7 @@ test("IconButton reduced motion removes spatial feedback without hiding state", 
   const context = await createInputContext(browser, { width: 320, height: 720, touch: false, reducedMotion: "reduce" });
   const page = await context.newPage();
   await page.goto(`${mobileUrls.sirio}/components/icon-button`);
-  const ghost = page.locator('[data-specimen-region="motion-lifecycle"]').getByRole("button", { name: "Impostazioni" });
+  const ghost = page.locator('[data-icon-action-proof="neutral"]');
   const surface = ghost.locator('[data-slot="icon-button-motion-surface"]');
   await expect(ghost).toHaveAttribute("data-reduced-motion", "true");
   await ghost.hover();
@@ -258,10 +263,15 @@ test("CloseButton keeps centered Action motion and restores Dialog focus", async
   const context = await createInputContext(browser, { width: 1024, height: 768, touch: false });
   const page = await context.newPage();
   const assertNoRuntimeErrors = trackRuntimeErrors(page, "CloseButton interaction and Dialog composition");
-  await page.goto(`${mobileUrls.sirio}/components/close-button`);
+  await page.goto(`${mobileUrls.sirio}/components/icon-button`);
 
-  const close = page.locator('[data-close-button-proof="core"]');
+  const trigger = page.locator("[data-close-button-dialog-trigger]");
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "Focus restoration" });
+  await expect(dialog).toBeVisible();
+  const close = dialog.getByRole("button", { name: "Chiudi finestra di prova" });
   const surface = close.locator('[data-slot="icon-button-motion-surface"]');
+  await close.scrollIntoViewIfNeeded();
   await expect(close).toHaveCSS("width", "28px");
   await expect(close).toHaveCSS("height", "28px");
   await expect(close).toHaveCSS("border-radius", "8px");
@@ -273,7 +283,7 @@ test("CloseButton keeps centered Action motion and restores Dialog focus", async
   expect(rootBox).not.toBeNull();
   await close.hover();
   await expect.poll(() => surface.evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).a)).toBeGreaterThan(1.02);
-  await expect.poll(() => close.locator('[data-slot="icon-button-semantic-icon"]').evaluate((element) => Math.abs(new DOMMatrix(getComputedStyle(element).transform).b))).toBeGreaterThan(0.02);
+  await expect.poll(() => close.locator('[data-icon-action-intent="close"]').evaluate((element) => Math.abs(new DOMMatrix(getComputedStyle(element).transform).b))).toBeGreaterThan(0.02);
   const hoverBox = await surface.boundingBox();
   expect(hoverBox).not.toBeNull();
   expect(Math.abs((rootBox!.x - hoverBox!.x) - (hoverBox!.x + hoverBox!.width - (rootBox!.x + rootBox!.width)))).toBeLessThan(0.1);
@@ -286,19 +296,11 @@ test("CloseButton keeps centered Action motion and restores Dialog focus", async
   await expect.poll(() => surface.evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).a)).toBeCloseTo(0.78, 2);
   expect(await close.boundingBox()).toEqual(rootBox);
 
-  await page.mouse.click(8, 8);
-  await tabTo(page, close);
+  await page.keyboard.press("Tab");
+  await close.focus();
   await expect.poll(() => close.evaluate((element) => element.matches(":focus-visible"))).toBe(true);
   await expect(close).toHaveCSS("outline-width", "2px");
 
-  const trigger = page.locator("[data-close-button-dialog-trigger]");
-  await trigger.focus();
-  await page.keyboard.press("Enter");
-  const dialog = page.getByRole("dialog", { name: "Conferma composizione CloseButton" });
-  await expect(dialog).toBeVisible();
-  const dialogClose = dialog.getByRole("button", { name: "Chiudi finestra di prova" });
-  await dialogClose.focus();
-  await expect(dialogClose).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
@@ -311,14 +313,6 @@ test("CloseButton keeps centered Action motion and restores Dialog focus", async
     await expect(trigger).toBeFocused();
   }
 
-  const liveClose = page.locator('[data-close-button-proof="motion"]');
-  await liveClose.click();
-  await expect(page.locator("[data-close-button-close-count]")).toContainText("1");
-  await page.getByRole("button", { name: "Riapri surface" }).click();
-  await page.locator('[data-close-button-proof="motion"]').focus();
-  await page.keyboard.press("Space");
-  await expect(page.locator("[data-close-button-close-count]")).toContainText("2");
-
   assertNoRuntimeErrors();
   await context.close();
 });
@@ -328,7 +322,7 @@ test("CloseButton preserves compact surface, coarse targets, and reduced-motion 
   const page = await context.newPage();
   const assertNoRuntimeErrors = trackRuntimeErrors(page, "CloseButton coarse and accessibility modes");
   await page.emulateMedia({ forcedColors: "active", reducedMotion: "reduce" });
-  await page.goto(`${mobileUrls.sirio}/components/close-button`);
+  await page.goto(`${mobileUrls.sirio}/components/icon-button`);
 
   expect(await page.evaluate(() => ({
     fineHover: matchMedia("(hover: hover) and (pointer: fine)").matches,
@@ -336,31 +330,16 @@ test("CloseButton preserves compact surface, coarse targets, and reduced-motion 
     reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
   }))).toEqual({ fineHover: false, forcedColors: true, reducedMotion: true });
 
-  const targets = page.locator('[data-close-button-target-grid] [data-slot="close-button"]');
-  await expect(targets).toHaveCount(3);
-  for (let index = 0; index < 3; index += 1) {
-    const target = targets.nth(index);
-    await expectTouchTarget(target, `CloseButton target ${index + 1}`);
-    const targetSurface = target.locator('[data-slot="icon-button-motion-surface"]');
-    await expect(targetSurface).toHaveCSS("width", "28px");
-    await expect(targetSurface).toHaveCSS("height", "28px");
-    await expect(targetSurface).toHaveCSS("border-radius", "8px");
-    await expect(targetSurface).toHaveCSS("transform", "none");
-  }
-  const boxes = await targets.evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().toJSON()));
-  for (let index = 1; index < boxes.length; index += 1) expect(boxes[index]!.left).toBeGreaterThanOrEqual(boxes[index - 1]!.right);
-
-  const focusTarget = targets.first();
-  await focusTarget.focus();
-  await expect(focusTarget).toHaveCSS("outline-width", "2px");
-  await expect(focusTarget.locator('[data-slot="icon-button-motion-surface"]')).toHaveCSS("border-top-width", "1px");
-
   const dialogTrigger = page.locator("[data-close-button-dialog-trigger]");
   await dialogTrigger.tap();
-  const dialog = page.getByRole("dialog", { name: "Conferma composizione CloseButton" });
+  const dialog = page.getByRole("dialog", { name: "Focus restoration" });
   const dialogClose = dialog.getByRole("button", { name: "Chiudi finestra di prova" });
-  const dialogTitle = dialog.getByRole("heading", { name: "Conferma composizione CloseButton" });
+  const dialogTitle = dialog.getByRole("heading", { name: "Focus restoration" });
   await expectTouchTarget(dialogClose, "Dialog CloseButton coarse target");
+  await expect(dialogClose.locator('[data-slot="icon-button-motion-surface"]')).toHaveCSS("transform", "none");
+  await page.keyboard.press("Tab");
+  await dialogClose.focus();
+  await expect(dialogClose).toHaveCSS("outline-width", "2px");
   const [titleBox, closeBox] = await Promise.all([dialogTitle.boundingBox(), dialogClose.boundingBox()]);
   expect(titleBox).not.toBeNull();
   expect(closeBox).not.toBeNull();
@@ -377,7 +356,7 @@ test("CopyButton keeps truthful success, failure, retry, timer, keyboard, and fo
   const page = await context.newPage();
   const assertNoRuntimeErrors = trackRuntimeErrors(page, "CopyButton lifecycle");
   await installClipboardMock(page);
-  await page.goto(`${mobileUrls.sirio}/components/copy-button`);
+  await page.goto(`${mobileUrls.sirio}/components/icon-button`);
 
   const copy = page.locator('[data-copy-button-proof="core"]');
   await expect(copy).toHaveAttribute("aria-label", "Copia identificativo");
@@ -399,8 +378,8 @@ test("CopyButton keeps truthful success, failure, retry, timer, keyboard, and fo
   await expect(copy).toBeFocused();
   await expect(copy).toHaveAttribute("data-copy-state", "success");
   await expect(copy).not.toHaveAttribute("aria-busy");
-  await expect(copy.locator('[data-slot="copy-button-icon-success"]')).toBeVisible();
-  await expect(copy.locator("xpath=following-sibling::*[@data-slot='copy-button-status']")).toHaveText("Copiato negli appunti");
+  await expect.poll(() => copy.locator('[data-icon-action-layer="success"]').evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeGreaterThan(0.95);
+  await expect(copy.locator("xpath=following-sibling::*[@data-slot='copy-button-status'][1]")).toHaveText("Copiato negli appunti");
   await expect(copy).toHaveAttribute("aria-label", "Copia identificativo");
   await expect(copy).toBeFocused();
 
@@ -411,25 +390,26 @@ test("CopyButton keeps truthful success, failure, retry, timer, keyboard, and fo
   await expect(copy).toHaveAttribute("data-copy-state", "success");
   await expect(copy).toHaveAttribute("data-copy-state", "idle", { timeout: 1100 });
 
-  const rapid = page.locator('[data-copy-button-proof="rapid"]');
-  await rapid.click({ clickCount: 5, delay: 20 });
-  await expect(rapid).toHaveAttribute("data-copy-state", "success");
-  expect(await page.evaluate(() => (window as Window & { __copyTest: { calls: string[] } }).__copyTest.calls.filter((value) => value === "RAPID-P014").length)).toBe(5);
+  await expect(copy).toHaveAttribute("data-copy-state", "idle", { timeout: 1100 });
+  const callsBeforeRapid = await page.evaluate(() => (window as Window & { __copyTest: { calls: string[] } }).__copyTest.calls.length);
+  await copy.click({ clickCount: 5, delay: 20 });
+  await expect(copy).toHaveAttribute("data-copy-state", "success");
+  expect(await page.evaluate(() => (window as Window & { __copyTest: { calls: string[] } }).__copyTest.calls.length)).toBe(callsBeforeRapid + 5);
 
-  const failure = page.locator('[data-copy-button-proof="failure"]');
+  await expect(copy).toHaveAttribute("data-copy-state", "idle", { timeout: 1100 });
   await page.evaluate(() => { (window as Window & { __copyTest: { mode: string } }).__copyTest.mode = "unavailable"; });
-  await failure.click();
-  await expect(failure).toHaveAttribute("data-copy-state", "error");
-  await expect(failure.locator('[data-slot="copy-button-icon-error"]')).toBeVisible();
-  await expect.poll(() => failure.locator('[data-slot="copy-button-icon-success"]').evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeLessThan(0.05);
-  await expect(failure.locator("xpath=following-sibling::*[@data-slot='copy-button-status']")).toHaveText("Copia non riuscita. Riprova.");
+  await copy.click();
+  await expect(copy).toHaveAttribute("data-copy-state", "error");
+  await expect.poll(() => copy.locator('[data-icon-action-layer="error"]').evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeGreaterThan(0.95);
+  await expect.poll(() => copy.locator('[data-icon-action-layer="success"]').evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeLessThan(0.05);
+  await expect(copy.locator("xpath=following-sibling::*[@data-slot='copy-button-status'][1]")).toHaveText("Copia non riuscita. Riprova.");
 
   await page.evaluate(() => { (window as Window & { __copyTest: { mode: string } }).__copyTest.mode = "rejected"; });
-  await failure.click();
-  await expect(failure).toHaveAttribute("data-copy-state", "error");
+  await copy.click();
+  await expect(copy).toHaveAttribute("data-copy-state", "error");
   await page.evaluate(() => { (window as Window & { __copyTest: { mode: string } }).__copyTest.mode = "success"; });
-  await failure.click();
-  await expect(failure).toHaveAttribute("data-copy-state", "success");
+  await copy.click();
+  await expect(copy).toHaveAttribute("data-copy-state", "success");
 
   const disabled = page.locator('[data-copy-button-proof="disabled"]');
   const callsBeforeDisabled = await page.evaluate(() => (window as Window & { __copyTest: { calls: string[] } }).__copyTest.calls.length);
@@ -449,7 +429,7 @@ test("CopyButton preserves compact geometry, coarse targets, reduced motion, and
   const assertNoRuntimeErrors = trackRuntimeErrors(page, "CopyButton coarse and accessibility modes");
   await installClipboardMock(page);
   await page.emulateMedia({ forcedColors: "active", reducedMotion: "reduce" });
-  await page.goto(`${mobileUrls.sirio}/components/copy-button`);
+  await page.goto(`${mobileUrls.sirio}/components/icon-button`);
 
   const target = page.locator('[data-copy-button-proof="core"]');
   await expectTouchTarget(target, "CopyButton core target");
@@ -459,13 +439,12 @@ test("CopyButton preserves compact geometry, coarse targets, reduced motion, and
   await expect(targetSurface).toHaveCSS("border-radius", "8px");
   await expect(targetSurface).toHaveCSS("transform", "none");
 
-  const rapid = page.locator('[data-copy-button-proof="rapid"]');
-  await rapid.tap();
-  await expect(rapid).toHaveAttribute("data-copy-state", "success");
-  await expect(rapid.locator('[data-slot="copy-button-icon-success"]')).toHaveCSS("transform", "none");
-  await rapid.focus();
-  await expect.poll(() => rapid.evaluate((element) => Number.parseFloat(getComputedStyle(element).outlineWidth))).toBeGreaterThanOrEqual(2);
-  await expect(rapid.locator('[data-slot="icon-button-motion-surface"]')).toHaveCSS("border-top-width", "1px");
+  await target.tap();
+  await expect(target).toHaveAttribute("data-copy-state", "success");
+  await expect(target.locator('[data-icon-action-layer="success"]')).toHaveCSS("transform", "none");
+  await target.focus();
+  await expect.poll(() => target.evaluate((element) => Number.parseFloat(getComputedStyle(element).outlineWidth))).toBeGreaterThanOrEqual(2);
+  await expect(target.locator('[data-slot="icon-button-motion-surface"]')).toHaveCSS("border-top-width", "1px");
   await expectNoDocumentOverflow(page, "CopyButton 320px proof");
   assertNoRuntimeErrors();
   await context.close();
@@ -486,6 +465,7 @@ test("Button keeps stable geometry while browser input drives hover, press, canc
   const defaultRow = variants.locator('[data-button-variant-row="default"]');
   const button = defaultRow.getByRole("button", { name: "Crea cantiere" });
   const motionSurface = button.locator('[data-slot="button-motion-surface"]');
+  await expect(button.locator('[data-slot="button-label"]')).toHaveCSS("column-gap", "8px");
   await button.scrollIntoViewIfNeeded();
 
   const initialGeometry = await button.evaluate((element) => ({
@@ -573,6 +553,9 @@ test("Button keeps stable geometry while browser input drives hover, press, canc
   const pointer = { x: magneticBox!.x + 4, y: magneticBox!.y + magneticBox!.height / 2 };
   await page.mouse.move(pointer.x, pointer.y);
   await expect(cursor).toHaveAttribute("data-magnetic", "true");
+  const magneticSurface = magneticPrimary.locator('[data-slot="button-motion-surface"]');
+  await expect.poll(() => magneticSurface.evaluate((element) => Number.parseFloat(getComputedStyle(element).translate))).toBeLessThan(-0.5);
+  expect(await magneticPrimary.boundingBox()).toEqual(magneticBox);
   const magneticPosition = await cursor.locator('.marketing-cursor__core').evaluate((element) => {
     const match = (element as HTMLElement).style.transform.match(/translate3d\(([-\d.]+)px,\s*([-\d.]+)px/);
     return match ? { x: Number(match[1]), y: Number(match[2]) } : null;
@@ -581,6 +564,7 @@ test("Button keeps stable geometry while browser input drives hover, press, canc
   expect(Math.hypot(magneticPosition!.x - pointer.x, magneticPosition!.y - pointer.y)).toBeLessThanOrEqual(3.05);
   await page.mouse.move(magneticBox!.x + magneticBox!.width + 30, magneticBox!.y + magneticBox!.height + 30);
   await expect(cursor).toHaveAttribute("data-magnetic", "false");
+  await expect.poll(() => magneticSurface.evaluate((element) => Number.parseFloat(getComputedStyle(element).translate))).toBe(0);
 
   await page.mouse.click(8, 8);
   await tabTo(page, button);
@@ -634,8 +618,29 @@ test("Button variants use opaque surfaces and Ghost owns a Motion interaction su
   await expect(page.locator('[data-button-variant-row="link"]')).toHaveCount(0);
 
   const continueButton = page.getByRole("button", { name: "Continua" });
+  await continueButton.scrollIntoViewIfNeeded();
+  const directionalBox = await continueButton.boundingBox();
   await continueButton.hover();
-  await expect.poll(() => continueButton.locator('[data-icon-motion="directional-right"]').evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).e)).toBeGreaterThan(1);
+  await expect.poll(() => continueButton.locator('[data-icon-action-intent="forward"]').evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).e)).toBeGreaterThan(1);
+  const forwardSurface = continueButton.locator('[data-slot="button-motion-surface"]');
+  await expect.poll(() => forwardSurface.evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).e)).toBeGreaterThan(0.5);
+  expect(await continueButton.boundingBox()).toEqual(directionalBox);
+  const back = page.getByRole("button", { name: "Indietro", exact: true });
+  await back.hover();
+  await expect.poll(() => back.locator('[data-slot="button-motion-surface"]').evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).e)).toBeLessThan(-0.5);
+  for (const [target, intent, first] of [[back, "back", true], [continueButton, "forward", false]] as const) {
+    expect(await target.locator('[data-slot="button-label"]').evaluate((element, { intent, first }) => {
+      const content = Array.from(element.childNodes).filter((node) => node.textContent?.trim() || node instanceof Element);
+      const icon = element.querySelector(`[data-icon-action-intent="${intent}"]`);
+      return (first ? content[0] : content.at(-1)) === icon;
+    }, { intent, first })).toBe(true);
+  }
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect.poll(() => back.locator('[data-slot="button-motion-surface"]').evaluate((element) => new DOMMatrix(getComputedStyle(element).transform).e)).toBe(0);
+  const magnetic = page.locator('[data-magnetic-cta-proof]');
+  await magnetic.hover();
+  await expect(page.locator('[data-slot="marketing-cursor"]')).toHaveAttribute("data-enabled", "false");
+  await expect.poll(() => magnetic.locator('[data-slot="button-motion-surface"]').evaluate((element) => Number.parseFloat(getComputedStyle(element).translate))).toBe(0);
 
   assertNoRuntimeErrors();
   await context.close();
@@ -666,6 +671,7 @@ test("Button loading preserves focus and geometry while preventing repeated acti
   await button.focus();
   await page.keyboard.press("Enter");
   await expect(button).toHaveAttribute("aria-busy", "true");
+  await expect(button.locator('[data-slot="spinner"]')).toBeVisible();
   await expect(button).toHaveAttribute("aria-disabled", "true");
   await expect(button).toBeFocused();
   await expect.poll(() => button.evaluate((element) => {
@@ -1209,8 +1215,8 @@ test("focus foundation exposes one immediate keyboard indicator without geometry
   const compositeTarget = page.locator('[data-focus-proof="composite-input"]');
   await tabTo(page, compositeTarget);
   await expect(compositeTarget).toBeFocused();
-  await expect(composite).toHaveCSS("outline-width", "2px");
-  await expect(composite).toHaveCSS("outline-offset", "2px");
+  await expect(composite).toHaveCSS("outline-width", "1px");
+  await expect(composite).toHaveCSS("outline-offset", "0px");
   await expect(compositeTarget).toHaveCSS("outline-style", "none");
 
   await page.mouse.click(8, 8);

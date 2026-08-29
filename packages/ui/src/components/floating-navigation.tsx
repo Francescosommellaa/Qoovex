@@ -5,10 +5,10 @@ import {
   IconChevronDown,
   IconChevronLeft,
   IconChevronRight,
-  IconMenu2,
 } from "@tabler/icons-react";
 import { Button } from "#components/button";
 import { IconButton } from "#components/icon-button";
+import { IconAction } from "#components/icon-action";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -584,7 +584,7 @@ export function FloatingNavigation({
                 />
               }
             >
-              <IconMenu2 aria-hidden="true" />
+              <IconAction intent="menu" state={mobileOpen ? "open" : "closed"} />
             </DialogPrimitive.Trigger>
             <DialogPrimitive.Portal>
               <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0" />

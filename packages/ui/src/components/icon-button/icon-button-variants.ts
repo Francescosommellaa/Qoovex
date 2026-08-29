@@ -12,9 +12,9 @@ const iconButtonVariants = cva(
         destructive: "text-destructive-foreground [--icon-button-border:transparent] [--icon-button-surface:var(--destructive)]",
       },
       size: {
-        xs: "[--icon-button-radius:calc(var(--radius)-0.125rem)] [--icon-button-visual-size:1.5rem] [&_svg:not([class*='size-'])]:size-[var(--icon-compact)]",
-        sm: "[--icon-button-radius:calc(var(--radius)-0.125rem)] [--icon-button-visual-size:1.75rem] [&_svg:not([class*='size-'])]:size-[var(--icon)]",
-        default: "[--icon-button-radius:var(--radius)] [--icon-button-visual-size:2rem] [&_svg:not([class*='size-'])]:size-[var(--icon)]",
+        xs: "[--icon-action-size:var(--icon-compact)] [--icon-button-radius:calc(var(--radius)-0.125rem)] [--icon-button-visual-size:1.5rem] [&_svg:not([class*='size-'])]:size-[var(--icon-compact)]",
+        sm: "[--icon-action-size:var(--icon)] [--icon-button-radius:calc(var(--radius)-0.125rem)] [--icon-button-visual-size:1.75rem] [&_svg:not([class*='size-'])]:size-[var(--icon)]",
+        default: "[--icon-action-size:var(--icon)] [--icon-button-radius:var(--radius)] [--icon-button-visual-size:2rem] [&_svg:not([class*='size-'])]:size-[var(--icon)]",
       },
     },
     defaultVariants: { variant: "default", size: "default" },

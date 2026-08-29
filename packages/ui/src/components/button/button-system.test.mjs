@@ -54,6 +54,13 @@ test("Button loading keeps label and loader in one intrinsic grid slot", () => {
   assert.match(implementation, /data-slot="button-loader"/)
   assert.match(implementation, /inline-grid max-w-full min-w-0/)
   assert.doesNotMatch(implementation, /AnimatePresence/)
+  assert.match(implementation, /<Spinner[^>]*variant="hexagon"/)
+  assert.doesNotMatch(implementation, /IconLoader/)
+})
+
+test("Button passes its icon gap through both intrinsic content layers", () => {
+  assert.match(implementation, /inline-grid max-w-full min-w-0[^\n]*gap-\[inherit\]/)
+  assert.match(variants, /default: "min-h-10 gap-2 /)
 })
 
 test("marketing magnetism is explicit, bounded, and never inherited from Button", () => {

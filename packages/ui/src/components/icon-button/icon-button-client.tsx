@@ -1,17 +1,14 @@
 "use client"
 
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
-import { IconLoader2 } from "@tabler/icons-react"
 import { type VariantProps } from "class-variance-authority"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import * as React from "react"
 
 import { cn } from "#lib/utils"
-import {
-  getActionIconVariants,
-  type ActionIconMotionIntent,
-} from "../action-icon-motion"
 import { useActionInteraction } from "../action-interaction"
+import { IconActionInteractionProvider, readIconActionIntent } from "../icon-action/icon-action-client"
+import { Spinner } from "../spinner"
 import {
   getIconButtonContentVariants,
   getIconButtonLoadingVariants,
@@ -31,7 +28,6 @@ type IconButtonBaseProps = Omit<
 > &
   VariantProps<typeof iconButtonVariants> & {
     loading?: boolean
-    motionIntent?: ActionIconMotionIntent
   }
 
 export type IconButtonProps = IconButtonBaseProps & AccessibleName
@@ -46,7 +42,6 @@ function IconButtonRoot({
   variant = "default",
   size = "default",
   loading = false,
-  motionIntent = "neutral",
   disabled,
   focusableWhenDisabled,
   "aria-busy": ariaBusy,
@@ -58,16 +53,16 @@ function IconButtonRoot({
   React.useEffect(() => setReducedMotion(systemReducedMotion), [systemReducedMotion])
 
   const resolvedVariant = (variant ?? "default") as IconButtonVariant
+  const iconIntent = readIconActionIntent(children)
   const isUnavailable = Boolean(disabled || loading)
-  const expanded = props["aria-expanded"] === true
   const interaction = useActionInteraction(isUnavailable)
   const actionMotion = React.useMemo(
     () => readIconButtonMotion(reducedMotion),
     [reducedMotion]
   )
   const surfaceVariants = React.useMemo(
-    () => getIconButtonSurfaceVariants(resolvedVariant, reducedMotion, actionMotion, Boolean(disabled)),
-    [actionMotion, disabled, reducedMotion, resolvedVariant]
+    () => getIconButtonSurfaceVariants(resolvedVariant, reducedMotion, actionMotion, Boolean(disabled), iconIntent),
+    [actionMotion, disabled, iconIntent, reducedMotion, resolvedVariant]
   )
   const contentVariants = React.useMemo(
     () => getIconButtonContentVariants(reducedMotion),
@@ -81,11 +76,6 @@ function IconButtonRoot({
     () => getIconButtonLoadingVariants(reducedMotion, actionMotion, "loader"),
     [actionMotion, reducedMotion]
   )
-  const semanticIconVariants = React.useMemo(
-    () => getActionIconVariants(motionIntent, expanded, reducedMotion, actionMotion),
-    [actionMotion, expanded, motionIntent, reducedMotion]
-  )
-
   return (
     <ButtonPrimitive
       {...props}
@@ -93,7 +83,6 @@ function IconButtonRoot({
       className={cn(iconButtonVariants({ className, size, variant: resolvedVariant }))}
       data-loading={loading ? "true" : undefined}
       data-availability={disabled ? "disabled" : loading ? "loading" : undefined}
-      data-icon-motion={motionIntent}
       data-reduced-motion={reducedMotion ? "true" : undefined}
       data-slot={dataSlot}
       data-variant={resolvedVariant}
@@ -169,15 +158,9 @@ function IconButtonRoot({
             initial={false}
             variants={iconVariants}
           >
-            <motion.span
-              animate={isUnavailable ? "rest" : interaction.visualPhase}
-              className="inline-grid place-items-center"
-              data-slot="icon-button-semantic-icon"
-              initial={false}
-              variants={semanticIconVariants}
-            >
+            <IconActionInteractionProvider phase={isUnavailable ? "rest" : interaction.visualPhase}>
               {children}
-            </motion.span>
+            </IconActionInteractionProvider>
           </motion.span>
         </motion.span>
       </span>
@@ -193,7 +176,7 @@ function IconButtonRoot({
             key="icon-button-loader"
             variants={loaderVariants}
           >
-            <IconLoader2 className="animate-spin motion-reduce:animate-none" />
+            <Spinner aria-hidden="true" size="xs" variant="hexagon" />
           </motion.span>
         ) : null}
       </AnimatePresence>

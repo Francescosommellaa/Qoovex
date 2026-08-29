@@ -4,6 +4,7 @@ export const VISUAL_INTERACTION_SETUP_IDS = Object.freeze([
   "checked-controls",
   "collapsible-expanded",
   "dialog-open",
+  "close-dialog-open",
   "dropdown-open",
   "focus-visible",
   "none",
@@ -94,7 +95,7 @@ export const VISUAL_SURFACES = Object.freeze([
     ],
   }),
   surface("sirio-button-default", "sirio", "/components/button", "button-default", {
-    geometry: [exactOverflow("button-default"), exactScalar("button", '[data-button-proof="rapid"]', "height", 40), exactScalar("button", '[data-button-proof="rapid"]', "paddingLeft", 12), exactScalar("button", '[data-button-proof="rapid"]', "paddingRight", 14), exactScalar("button", '[data-button-proof="rapid"]', "borderRadius", 10)],
+    geometry: [exactOverflow("button-default"), exactScalar("button", '[data-button-proof="rapid"]', "height", 40), exactScalar("button", '[data-button-proof="rapid"]', "paddingLeft", 14), exactScalar("button", '[data-button-proof="rapid"]', "paddingRight", 12), exactScalar("button", '[data-button-proof="rapid"]', "borderRadius", 10)],
   }),
   surface("sirio-button-disabled", "sirio", "/components/button", "button-disabled", {
     geometry: [exactOverflow("button-disabled"), exactScalar("disabled button", '[data-slot="button"]', "height", 40), exactScalar("disabled button", '[data-slot="button"]', "paddingLeft", 14), exactScalar("disabled button", '[data-slot="button"]', "borderRadius", 10)],
@@ -107,42 +108,34 @@ export const VISUAL_SURFACES = Object.freeze([
     geometry: [exactOverflow("sirio-icon-button-variants"), exactScalar("default icon button", '[data-slot="icon-button"][aria-label="Aggiungi elemento"]', "width", 32), exactScalar("default icon button", '[data-slot="icon-button"][aria-label="Aggiungi elemento"]', "height", 32), exactScalar("default icon button", '[data-slot="icon-button"][aria-label="Aggiungi elemento"]', "borderRadius", 10)],
   }),
   surface("sirio-icon-button-targets", "sirio", "/components/icon-button", "sirio-icon-button-targets", {
-    geometry: [exactOverflow("sirio-icon-button-targets"), exactScalar("compact icon button", '[data-slot="icon-button"][aria-label="Aggiungi"]', "width", 24), exactScalar("compact icon button", '[data-slot="icon-button"][aria-label="Aggiungi"]', "height", 24), exactScalar("compact icon button", '[data-slot="icon-button"][aria-label="Aggiungi"]', "borderRadius", 8)],
+    geometry: [exactOverflow("sirio-icon-button-targets"), exactScalar("keyboard icon button", '[data-slot="icon-button"][aria-label="Aggiungi con tastiera"]', "width", 32), exactScalar("keyboard icon button", '[data-slot="icon-button"][aria-label="Aggiungi con tastiera"]', "height", 32), exactScalar("keyboard icon button", '[data-slot="icon-button"][aria-label="Aggiungi con tastiera"]', "borderRadius", 10)],
   }),
-  surface("sirio-toggle-button-states", "sirio", "/components/toggle-button", "sirio-toggle-button-pressed", {
+  surface("sirio-toggle-button-icon-only", "sirio", "/components/icon-button", "sirio-toggle-button-icon-only", {
     geometry: [
-      exactOverflow("sirio-toggle-button-pressed"),
-      exactScalar("pressed toggle", '[data-slot="toggle-button"]', "height", 40),
-      exactScalar("pressed toggle", '[data-slot="toggle-button"]', "borderRadius", 10),
-      exactScalar("pressed visual surface", '[data-slot="toggle-button-visual-surface"]', "borderRadius", 10),
-      exactScalar("pressed hover surface", '[data-slot="toggle-button-hover-surface"]', "borderRadius", 10),
-      exactScalar("pressed state surface", '[data-slot="toggle-button-state-surface"]', "borderRadius", 10),
+      exactOverflow("sirio-toggle-button-icon-only"),
+      exactScalar("icon-only toggle", '[data-toggle-button-proof="icon-only"]', "height", 32),
+      exactScalar("icon-only toggle", '[data-toggle-button-proof="icon-only"]', "width", 32),
+      exactScalar("icon-only toggle", '[data-toggle-button-proof="icon-only"]', "borderRadius", 10),
+      exactScalar("icon-only state surface", '[data-toggle-button-proof="icon-only"] [data-slot="toggle-button-state-surface"]', "borderRadius", 10),
     ],
   }),
-  surface("sirio-toggle-button-targets", "sirio", "/components/toggle-button", "sirio-toggle-button-targets", {
-    geometry: [
-      exactOverflow("sirio-toggle-button-targets"),
-      exactScalar("stateful toggle", '[data-toggle-button-proof="stateful-copy"]', "height", 40),
-      exactScalar("stateful toggle", '[data-toggle-button-proof="stateful-copy"]', "borderRadius", 10),
-      exactScalar("stateful visual surface", '[data-toggle-button-proof="stateful-copy"] [data-slot="toggle-button-visual-surface"]', "borderRadius", 10),
-    ],
-  }),
-  surface("sirio-close-button-core", "sirio", "/components/close-button", "sirio-close-button-core", {
+  surface("sirio-close-button-core", "sirio", "/components/icon-button", "sirio-close-button-core", {
+    setupId: "close-dialog-open",
     geometry: [
       exactOverflow("sirio-close-button-core"),
-      exactScalar("close button", '[data-slot="close-button"]', "width", 28),
-      exactScalar("close button", '[data-slot="close-button"]', "height", 28),
-      exactScalar("close button", '[data-slot="close-button"]', "borderRadius", 8),
-      exactScalar("close visual surface", '[data-slot="close-button"] [data-slot="icon-button-motion-surface"]', "borderRadius", 8),
+      exactScalar("close button", '[data-slot="close-button"]', "width", 28, "page"),
+      exactScalar("close button", '[data-slot="close-button"]', "height", 28, "page"),
+      exactScalar("close button", '[data-slot="close-button"]', "borderRadius", 8, "page"),
+      exactScalar("close visual surface", '[data-slot="close-button"] [data-slot="icon-button-motion-surface"]', "borderRadius", 8, "page"),
     ],
   }),
-  surface("sirio-copy-button-core", "sirio", "/components/copy-button", "sirio-copy-button-core", {
+  surface("sirio-copy-button-core", "sirio", "/components/icon-button", "sirio-icon-button-targets", {
     geometry: [
-      exactOverflow("sirio-copy-button-core"),
-      exactScalar("copy button", '[data-slot="copy-button"]', "width", 28),
-      exactScalar("copy button", '[data-slot="copy-button"]', "height", 28),
-      exactScalar("copy button", '[data-slot="copy-button"]', "borderRadius", 8),
-      exactScalar("copy visual surface", '[data-slot="copy-button"] [data-slot="icon-button-motion-surface"]', "borderRadius", 8),
+      exactOverflow("sirio-icon-button-targets"),
+      exactScalar("copy button", '[data-copy-button-proof="core"]', "width", 28),
+      exactScalar("copy button", '[data-copy-button-proof="core"]', "height", 28),
+      exactScalar("copy button", '[data-copy-button-proof="core"]', "borderRadius", 8),
+      exactScalar("copy visual surface", '[data-copy-button-proof="core"] [data-slot="icon-button-motion-surface"]', "borderRadius", 8),
     ],
   }),
   surface("sirio-controls-checked", "sirio", "/components/controls", "controls-checked", {
@@ -207,6 +200,7 @@ const nonCriticalSirio = [
   "/patterns/timeline-event",
   "/patterns/status-presentation",
   "/patterns/form-validation",
+  "/components/composite-input",
   "/patterns/money",
   "/patterns/proposal-review",
   "/patterns/contextual-attachment",
@@ -217,6 +211,10 @@ const nonCriticalSirio = [
   "/components/chart",
   "/components/collapsible",
   "/components/floating-navigation",
+  "/components/input",
+  "/components/otp-input",
+  "/components/password-input",
+  "/components/number-input",
   "/components/search-field",
   "/components/separator",
   "/components/sidebar",
@@ -242,9 +240,6 @@ const coveredSirio = [
   "/components/alert",
   "/components/button",
   "/components/icon-button",
-  "/components/toggle-button",
-  "/components/close-button",
-  "/components/copy-button",
   "/components/card",
   "/components/controls",
   "/components/dialog",

@@ -41,6 +41,16 @@ test("IconButton keeps one public facade and private internals", () => {
   assert.equal(existsSync(new URL("./icon-button/icon-button-client.tsx", import.meta.url)), true);
 });
 
+test("IconAction keeps one public facade and private glyph-motion internals", () => {
+  const facade = read("./icon-action.tsx");
+
+  assert.equal(packageJson.exports["./components/icon-action/*"], null);
+  assert.match(facade, /\.\/icon-action\/icon-action-client/);
+  assert.doesNotMatch(facade, /IconArrow|IconEye|motion\/react|interactionContext/);
+  assert.equal(existsSync(new URL("./icon-action-client.tsx", import.meta.url)), false);
+  assert.equal(existsSync(new URL("./icon-action/icon-action-client.tsx", import.meta.url)), true);
+});
+
 
 test("ToggleButton keeps one public facade and private internals", () => {
   const facade = read("./toggle-button.tsx");

@@ -168,6 +168,7 @@ function Sidebar({
   className,
   children,
   dir,
+  style,
   ...props
 }: React.ComponentProps<"div"> & {
   side?: "left" | "right"
@@ -181,6 +182,7 @@ function Sidebar({
     return (
       <div
         data-slot="sidebar"
+        style={style}
         className={cn(
           "flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground",
           className
@@ -230,6 +232,7 @@ function Sidebar({
       data-variant={variant}
       data-side={side}
       data-slot="sidebar"
+      style={style}
     >
       {/* This is what handles the sidebar gap on desktop */}
       <div
@@ -401,18 +404,56 @@ function SidebarSeparator({
   )
 }
 
-function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
-  return (
+function SidebarContent({ className, scrollEdges = false, ref, onScroll, children, ...props }: React.ComponentProps<"div"> & {
+  scrollEdges?: boolean
+}) {
+  const viewportRef = React.useRef<HTMLDivElement | null>(null)
+  const frameRef = React.useRef<HTMLDivElement | null>(null)
+  const updateEdge = React.useCallback(() => {
+    const viewport = viewportRef.current
+    if (!viewport || !frameRef.current) return
+    const remaining = viewport.scrollHeight - viewport.clientHeight - viewport.scrollTop
+    frameRef.current.style.setProperty("--sidebar-scroll-edge", String(Math.min(1, Math.max(0, remaining - 1) / 24)))
+  }, [])
+
+  React.useEffect(() => {
+    const viewport = viewportRef.current
+    if (!scrollEdges || !viewport) return
+    const observer = new ResizeObserver(updateEdge)
+    observer.observe(viewport)
+    for (const child of viewport.children) observer.observe(child)
+    updateEdge()
+    return () => observer.disconnect()
+  }, [scrollEdges, children, updateEdge])
+
+  const content = (
     <div
+      ref={(element) => {
+        viewportRef.current = element
+        if (typeof ref === "function") return ref(element)
+        if (ref) ref.current = element
+      }}
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
         "flex min-h-0 flex-1 flex-col gap-0 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
         className
       )}
+      onScroll={(event) => {
+        updateEdge()
+        onScroll?.(event)
+      }}
       {...props}
-    />
+    >
+      {children}
+    </div>
   )
+  return scrollEdges ? (
+    <div ref={frameRef} data-slot="sidebar-scroll-frame" className="relative flex min-h-0 flex-1 flex-col">
+      {content}
+      <div aria-hidden="true" data-slot="sidebar-scroll-edge" />
+    </div>
+  ) : content
 }
 
 function SidebarGroup({ className, ...props }: React.ComponentProps<"div">) {
@@ -834,50 +875,68 @@ function SidebarResizeHandle({
   minWidth = 224,
   maxWidth = 360,
   defaultWidth = 256,
+  width = defaultWidth,
+  side = "left",
   onWidthChange,
 }: {
   minWidth?: number
   maxWidth?: number
   defaultWidth?: number
+  width?: number
+  side?: "left" | "right"
   onWidthChange?: (width: number) => void
 }) {
-  const { isMobile, state } = useSidebar()
+  const { isMobile, state, sidebarId } = useSidebar()
+  const [resizing, setResizing] = React.useState(false)
   const drag = React.useRef<{ pointerId: number; startWidth: number; startX: number } | null>(null)
   const previousBodyStyles = React.useRef<{ cursor: string; userSelect: string } | null>(null)
 
-  React.useEffect(() => () => {
+  const restoreBody = React.useCallback(() => {
+    drag.current = null
     if (!previousBodyStyles.current) return
     document.body.style.cursor = previousBodyStyles.current.cursor
     document.body.style.userSelect = previousBodyStyles.current.userSelect
+    previousBodyStyles.current = null
   }, [])
+
+  React.useEffect(() => {
+    setResizing(false)
+    return restoreBody
+  }, [isMobile, state, restoreBody])
 
   if (isMobile || state !== "expanded") return null
 
   const finishResize = (event: React.PointerEvent<HTMLDivElement>) => {
     if (drag.current?.pointerId !== event.pointerId) return
+    restoreBody()
+    setResizing(false)
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId)
     }
-    drag.current = null
-    if (previousBodyStyles.current) {
-      document.body.style.cursor = previousBodyStyles.current.cursor
-      document.body.style.userSelect = previousBodyStyles.current.userSelect
-      previousBodyStyles.current = null
-    }
   }
+
+  const changeWidth = (nextWidth: number) => onWidthChange?.(Math.min(maxWidth, Math.max(minWidth, nextWidth)))
+  const direction = side === "left" ? 1 : -1
 
   return (
     <div
       aria-label="Ridimensiona navigazione"
       aria-orientation="vertical"
+      aria-controls={sidebarId}
       aria-valuemin={minWidth}
       aria-valuemax={maxWidth}
-      className="absolute inset-y-2 -right-2 z-30 hidden w-4 touch-none cursor-col-resize items-center justify-center outline-none after:h-10 after:w-0.5 after:rounded-full after:bg-transparent hover:after:bg-sidebar-border focus-visible:after:bg-sidebar-ring md:flex"
+      aria-valuenow={width}
+      aria-valuetext={`${width} pixel`}
+      className={cn("absolute inset-y-2 z-30 hidden w-2 touch-none cursor-col-resize items-center justify-center outline-none after:h-10 after:w-0.5 after:rounded-full after:bg-transparent hover:after:bg-sidebar-border focus-visible:after:bg-sidebar-ring md:flex", side === "left" ? "right-0" : "left-0")}
       data-slot="sidebar-resize-handle"
+      data-cursor-native="true"
+      data-resizing={resizing || undefined}
       onDoubleClick={() => onWidthChange?.(defaultWidth)}
       onKeyDown={(event) => {
-        if (event.key === "ArrowLeft") onWidthChange?.(minWidth)
-        else if (event.key === "ArrowRight") onWidthChange?.(maxWidth)
+        if (event.key === "ArrowLeft") changeWidth(width - 8 * direction)
+        else if (event.key === "ArrowRight") changeWidth(width + 8 * direction)
+        else if (event.key === "Home") changeWidth(minWidth)
+        else if (event.key === "End") changeWidth(maxWidth)
         else return
         event.preventDefault()
       }}
@@ -885,7 +944,8 @@ function SidebarResizeHandle({
       onPointerDown={(event) => {
         if (event.button !== 0) return
         event.currentTarget.focus()
-        drag.current = { pointerId: defaultWidth, startWidth: defaultWidth, startX: event.clientX }
+        drag.current = { pointerId: event.pointerId, startWidth: width, startX: event.clientX }
+        setResizing(true)
         previousBodyStyles.current = { cursor: document.body.style.cursor, userSelect: document.body.style.userSelect }
         document.body.style.cursor = "col-resize"
         document.body.style.userSelect = "none"
@@ -894,10 +954,10 @@ function SidebarResizeHandle({
       }}
       onPointerMove={(event) => {
         if (!drag.current || drag.current.pointerId !== event.pointerId) return
-        const nextWidth = Math.min(maxWidth, Math.max(minWidth, drag.current.startWidth + event.clientX - drag.current.startX))
-        onWidthChange?.(nextWidth)
+        changeWidth(drag.current.startWidth + (event.clientX - drag.current.startX) * direction)
       }}
       onPointerUp={finishResize}
+      onPointerCancel={finishResize}
       role="separator"
       tabIndex={0}
       title="Trascina per ridimensionare. Doppio clic per ripristinare."
@@ -914,6 +974,8 @@ export interface SidebarNavItem {
   badge?: string | number
   isActive?: boolean
   onClick?: (event: React.MouseEvent) => void
+  /** Router-owned link supplied by the app; native anchor remains the default. */
+  render?: React.ReactElement
 }
 
 export interface SidebarNavGroup {
@@ -944,6 +1006,7 @@ export interface AdaptiveSidebarProps extends Omit<React.ComponentProps<"div">, 
   }
   pathname?: string
   resizable?: boolean
+  scrollEdges?: boolean
   collapsible?: "offcanvas" | "icon" | "none"
   variant?: "sidebar" | "floating" | "inset"
   side?: "left" | "right"
@@ -958,12 +1021,14 @@ function AdaptiveSidebar({
   footer,
   pathname,
   resizable = false,
+  scrollEdges = false,
   collapsible = "icon",
   variant = "inset",
   side = "left",
   inline = false,
   className,
   children,
+  style,
   ...props
 }: AdaptiveSidebarProps) {
   const [sidebarWidth, setSidebarWidth] = React.useState(256)
@@ -975,7 +1040,7 @@ function AdaptiveSidebar({
       side={side}
       inline={inline}
       className={className}
-      style={resizable ? ({ "--sidebar-width": `${sidebarWidth}px` } as React.CSSProperties) : undefined}
+      style={{ ...style, ...(resizable ? { "--sidebar-width": `${sidebarWidth}px` } : {}) } as React.CSSProperties}
       {...props}
     >
       {/* Header */}
@@ -1020,7 +1085,7 @@ function AdaptiveSidebar({
       )}
 
       {/* Main Navigation Content */}
-      <SidebarContent>
+      <SidebarContent scrollEdges={scrollEdges}>
         {groups?.map((group, groupIdx) => (
           <SidebarGroup key={group.id ?? group.label ?? `group-${groupIdx}`}>
             {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
@@ -1037,11 +1102,11 @@ function AdaptiveSidebar({
                     <SidebarMenuItem key={item.name + item.href}>
                       <SidebarMenuButton
                         isActive={active}
+                        aria-current={active ? "page" : undefined}
                         onClick={item.onClick}
                         tooltip={item.name}
-                        render={
+                        render={item.render ??
                           <a
-                            aria-current={active ? "page" : undefined}
                             href={item.href}
                           />
                         }
@@ -1099,7 +1164,8 @@ function AdaptiveSidebar({
       {/* Resizable Handle */}
       {resizable && (
         <SidebarResizeHandle
-          defaultWidth={sidebarWidth}
+          width={sidebarWidth}
+          side={side}
           onWidthChange={setSidebarWidth}
         />
       )}

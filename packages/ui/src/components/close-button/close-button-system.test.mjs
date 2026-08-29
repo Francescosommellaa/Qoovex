@@ -4,17 +4,18 @@ import test from "node:test"
 
 const implementation = readFileSync(new URL("./close-button-client.tsx", import.meta.url), "utf8")
 const dialog = readFileSync(new URL("../dialog.tsx", import.meta.url), "utf8")
-const input = readFileSync(new URL("../input.tsx", import.meta.url), "utf8")
 const searchField = readFileSync(new URL("../search-field.tsx", import.meta.url), "utf8")
+const clearableInput = readFileSync(new URL("../input/use-clearable-input.ts", import.meta.url), "utf8")
 const spinner = readFileSync(new URL("../spinner.tsx", import.meta.url), "utf8")
 const floatingNavigation = readFileSync(new URL("../floating-navigation.tsx", import.meta.url), "utf8")
 
-test("CloseButton owns one quiet IconX presentation and no placement", () => {
+test("CloseButton owns one quiet close IconAction presentation and no placement", () => {
   assert.match(implementation, /<IconButtonRoot/)
   assert.match(implementation, /data-slot="close-button"/)
   assert.match(implementation, /size="sm"/)
   assert.match(implementation, /variant="ghost"/)
-  assert.match(implementation, /<IconX aria-hidden="true"/)
+  assert.match(implementation, /<IconAction intent="close"/)
+  assert.doesNotMatch(implementation, /IconX|motionIntent/)
   assert.match(implementation, /text-muted-foreground/)
   assert.doesNotMatch(implementation, /loading=/)
   assert.doesNotMatch(implementation, /variant="destructive"/)
@@ -31,8 +32,9 @@ test("Dialog.Close composes CloseButton without duplicating icon or behavior", (
 })
 
 test("IconX lookalikes retain their distinct clear and status semantics", () => {
-  assert.match(input, /aria-label="Azzera ricerca"[\s\S]*<IconX/)
-  assert.match(searchField, /clearLabel[\s\S]*<IconX/)
+  assert.match(searchField, /clearLabel[\s\S]*<IconAction intent="clear"/)
+  assert.match(clearableInput, /setNativeInputValue\(input, ""\)[\s\S]*onClear\?\.\(\)/)
+  assert.doesNotMatch(searchField, /CloseButton|<IconX/)
   assert.match(spinner, /status === "error"[\s\S]*<IconX/)
   assert.match(floatingNavigation, /aria-label="Chiudi navigazione"[\s\S]*<IconChevronLeft/)
 })

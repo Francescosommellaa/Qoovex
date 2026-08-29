@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AdaptiveSidebar } from "@qoovex/ui/components/sidebar";
 import { CatalogSearchModal } from "@/components/catalog-search-modal";
@@ -49,9 +50,11 @@ export function SirioSidebar() {
         }}
         groups={catalogNavigationGroups.map((group) => ({
           label: group.label,
-          items: [...group.items],
+          items: group.items.map((item) => ({ ...item, render: <Link href={item.href} /> })),
         }))}
         pathname={pathname}
+        resizable
+        scrollEdges
         variant="inset"
         collapsible="icon"
       />

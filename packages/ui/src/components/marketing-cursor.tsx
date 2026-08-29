@@ -161,6 +161,22 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
     let animationFrame = 0;
     let enabled = false;
     let lastFrame = performance.now();
+    let visualTarget: HTMLElement | null = null;
+
+    const resetMagneticVisual = () => {
+      visualTarget?.style.removeProperty("--action-magnetic-x");
+      visualTarget?.style.removeProperty("--action-magnetic-y");
+      visualTarget = null;
+    };
+
+    const updateMagneticVisual = () => {
+      if (visualTarget !== magneticPoint.target) resetMagneticVisual();
+      visualTarget = magneticPoint.target;
+      // The cursor is attracted inward; the opt-in Action's visual layers follow
+      // the pointer outward. Native root, focus outline and hitbox never move.
+      visualTarget?.style.setProperty("--action-magnetic-x", `${pointer.x - magneticPoint.x}px`);
+      visualTarget?.style.setProperty("--action-magnetic-y", `${pointer.y - magneticPoint.y}px`);
+    };
 
     const routeIsActive = () =>
       configuredPathnames === null || configuredPathnames.includes(window.location.pathname);
@@ -211,6 +227,7 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
     const render = (time: number) => {
       if (magneticPointIsDirty) {
         magneticPoint = resolveMagneticPoint(pointer, magneticTargets);
+        updateMagneticVisual();
         magneticPointIsDirty = false;
         updateIntent(
           magneticPoint.target ?? document.elementFromPoint(pointer.x, pointer.y),
@@ -247,6 +264,7 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
     };
 
     const stop = () => {
+      resetMagneticVisual();
       enabled = false;
       window.cancelAnimationFrame(animationFrame);
       cursor.dataset.enabled = "false";
@@ -281,6 +299,7 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
       if (!enabled) start();
       if (!enabled) return;
       if (event.pointerType !== "mouse") {
+        resetMagneticVisual();
         cursor.dataset.visible = "false";
         root.dataset.cursorNative = "auto";
         return;
@@ -311,6 +330,10 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
     };
 
     const hide = () => {
+      resetMagneticVisual();
+      pointer.x = -80;
+      pointer.y = -80;
+      magneticPointIsDirty = true;
       cursor.dataset.visible = "false";
       cursor.dataset.pressed = "false";
       cursor.dataset.magnetic = "false";
@@ -333,7 +356,7 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
     window.addEventListener("pointerup", handlePointerUp, { passive: true });
     window.addEventListener("pointercancel", handlePointerUp, { passive: true });
     window.addEventListener("pointerout", handlePointerOut, { passive: true });
-    window.addEventListener("scroll", markMagneticPointDirty, { passive: true });
+    window.addEventListener("scroll", markMagneticPointDirty, { passive: true, capture: true });
     window.addEventListener("resize", markMagneticPointDirty, { passive: true });
     window.addEventListener("pageshow", start);
     window.addEventListener("popstate", start);
@@ -351,7 +374,7 @@ export function MarketingCursor({ pathnames }: { pathnames?: readonly string[] }
       window.removeEventListener("pointerup", handlePointerUp);
       window.removeEventListener("pointercancel", handlePointerUp);
       window.removeEventListener("pointerout", handlePointerOut);
-      window.removeEventListener("scroll", markMagneticPointDirty);
+      window.removeEventListener("scroll", markMagneticPointDirty, true);
       window.removeEventListener("resize", markMagneticPointDirty);
       window.removeEventListener("pageshow", start);
       window.removeEventListener("popstate", start);

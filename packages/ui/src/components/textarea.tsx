@@ -3,29 +3,17 @@
 import * as React from "react"
 import { cn } from "#lib/utils"
 
-function GripIcon(props: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      width="8"
-      height="8"
-      viewBox="0 0 8 8"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      {...props}
-    >
-      <path d="M6 2L2 6M6 5L5 6" />
-    </svg>
-  )
-}
-
 function Textarea({
   className,
   autoResize = true,
   resizable = false,
   minRows,
   maxRows,
+  rows,
+  style,
+  ref,
+  onInput,
+  onScroll,
   ...props
 }: React.ComponentProps<"textarea"> & {
   autoResize?: boolean
@@ -33,38 +21,86 @@ function Textarea({
   minRows?: number
   maxRows?: number
 }) {
-  const style: React.CSSProperties = {
-    ...props.style,
-    ...(minRows ? { minHeight: `${minRows * 1.5 + 1}rem` } : {}),
-    ...(maxRows ? { maxHeight: `${maxRows * 1.5 + 1}rem` } : {}),
-  }
+  const inputRef = React.useRef<HTMLTextAreaElement>(null)
+  const frameRef = React.useRef<HTMLDivElement>(null)
+  React.useImperativeHandle(ref, () => inputRef.current!, [])
 
-  // Quando autoResize è attivo, il ridimensionamento manuale con la maniglia del browser è superfluo.
-  // Quando resizable è true, la maniglia nativa viene personalizzata per seguire lo stile minimalista del design system.
-  const isResizable = resizable && !autoResize
+  // Observe only overflow presentation. Native/React still own value, selection,
+  // focus, scrolling and resizing; typing does not create another value state.
+  const syncOverflow = React.useCallback(() => {
+    const input = inputRef.current
+    const frame = frameRef.current
+    if (!input || !frame) return
+    const computed = getComputedStyle(input)
+    const inlineBorder = Number.parseFloat(computed.borderLeftWidth) + Number.parseFloat(computed.borderRightWidth)
+    const scrollbar = Math.max(0, input.offsetWidth - input.clientWidth - inlineBorder)
+    frame.style.setProperty("--qv-textarea-scrollbar", `${scrollbar}px`)
+    frame.toggleAttribute("data-overflow-start", input.scrollTop > 1)
+    frame.toggleAttribute("data-overflow-end", input.scrollHeight - input.clientHeight - input.scrollTop > 1)
+  }, [])
+
+  React.useLayoutEffect(syncOverflow)
+  React.useEffect(() => {
+    const input = inputRef.current
+    if (!input) return
+    const observer = new ResizeObserver(syncOverflow)
+    observer.observe(input)
+    let resetFrame = 0
+    const afterReset = () => {
+      cancelAnimationFrame(resetFrame)
+      resetFrame = requestAnimationFrame(syncOverflow)
+    }
+    const form = input.form
+    form?.addEventListener("reset", afterReset)
+    return () => {
+      observer.disconnect()
+      cancelAnimationFrame(resetFrame)
+      form?.removeEventListener("reset", afterReset)
+    }
+  }, [props.form, syncOverflow])
+
+  const minimumRows = Math.max(1, minRows ?? rows ?? 3)
+  const maximumRows = maxRows === undefined ? undefined : Math.max(minimumRows, maxRows)
+  const resizeMode = autoResize ? "auto" : resizable ? "vertical" : "none"
+  const textareaStyle = {
+    "--qv-textarea-min-block-size": `calc(${minimumRows}lh + 1.125rem)`,
+    ...(maximumRows === undefined
+      ? {}
+      : { "--qv-textarea-max-block-size": `calc(${maximumRows}lh + 1.125rem)` }),
+    ...style,
+  } as React.CSSProperties
 
   return (
-    <div className="relative w-full">
+    <div ref={frameRef} className="qv-textarea-frame" data-slot="textarea-frame">
       <textarea
+        ref={inputRef}
         data-slot="textarea"
         data-focus-target="composite"
-        style={style}
+        data-resize={resizeMode}
+        rows={rows}
+        style={textareaStyle}
         className={cn(
-          "flex w-full min-w-0 rounded-lg border border-input bg-transparent px-3 py-2 text-base sm:text-sm transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/30 qv-readonly:cursor-text qv-readonly:bg-muted/30 qv-readonly:text-foreground qv-readonly:opacity-100 disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/30 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-          autoResize ? "field-sizing-content min-h-20 resize-none" : "",
-          isResizable ? "min-h-24 resize-y [&::-webkit-resizer]:bg-transparent" : "resize-none",
+          "qv-textarea w-full min-w-0 rounded-lg border px-3 py-2 text-base leading-6 text-foreground outline-none sm:text-sm placeholder:text-muted-foreground",
+          resizeMode === "auto" && "field-sizing-content resize-none overflow-y-auto",
+          resizeMode === "vertical" && "resize-y overflow-y-auto",
+          resizeMode === "none" && "resize-none overflow-y-auto",
           className
         )}
         {...props}
+        onInput={(event) => {
+          syncOverflow()
+          onInput?.(event)
+        }}
+        onScroll={(event) => {
+          syncOverflow()
+          onScroll?.(event)
+        }}
       />
-      {isResizable ? (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute right-1.5 bottom-1.5 flex items-center justify-center text-muted-foreground/50"
-        >
-          <GripIcon className="size-2.5" />
-        </div>
-      ) : null}
+      <span aria-hidden="true" className="qv-textarea-overflow" data-slot="textarea-overflow">
+        {(["start", "end"] as const).map((edge) => (
+          <span key={edge} data-textarea-edge={edge} />
+        ))}
+      </span>
     </div>
   )
 }
@@ -83,34 +119,6 @@ function TextareaGroup({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function TextareaCounter({
-  current = 0,
-  max,
-  mode = "character",
-  className,
-}: {
-  current: number
-  max: number
-  mode?: "character" | "word"
-  className?: string
-}) {
-  const isOverLimit = current > max
-  const label = mode === "word" ? `${current} / ${max} parole` : `${current} / ${max}`
-
-  return (
-    <span
-      data-slot="textarea-counter"
-      className={cn(
-        "font-accent text-[0.6875rem] font-semibold tracking-wider select-none",
-        isOverLimit ? "text-destructive font-bold" : "text-muted-foreground",
-        className
-      )}
-    >
-      {label}
-    </span>
-  )
-}
-
 function TextareaToolbar({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -124,4 +132,4 @@ function TextareaToolbar({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-export { Textarea, TextareaGroup, TextareaCounter, TextareaToolbar }
+export { Textarea, TextareaGroup, TextareaToolbar }

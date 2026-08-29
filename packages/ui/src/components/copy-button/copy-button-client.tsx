@@ -1,12 +1,10 @@
 "use client"
 
-import { IconAlertCircle, IconCheck, IconCopy } from "@tabler/icons-react"
-import { motion, useReducedMotion } from "motion/react"
 import * as React from "react"
 
+import { IconAction } from "../icon-action"
 import type { IconButtonProps } from "../icon-button"
 import { IconButtonRoot } from "../icon-button/icon-button-client"
-import { readIconButtonMotion } from "../icon-button/icon-button-motion"
 
 const COPY_FEEDBACK_HOLD_MS = 1000
 
@@ -37,15 +35,12 @@ type CopyButtonBaseProps = Omit<
 export type CopyButtonProps = CopyButtonBaseProps & AccessibleName
 
 function CopyButton({ disabled, value, ...props }: CopyButtonProps) {
-  const systemReducedMotion = Boolean(useReducedMotion())
-  const [reducedMotion, setReducedMotion] = React.useState(false)
   const [copyState, setCopyState] = React.useState<CopyButtonState>("idle")
   const mountedRef = React.useRef(true)
   const copyingRef = React.useRef(false)
   const requestIdRef = React.useRef(0)
   const resetTimerRef = React.useRef<number | undefined>(undefined)
 
-  React.useEffect(() => setReducedMotion(systemReducedMotion), [systemReducedMotion])
   React.useEffect(() => {
     mountedRef.current = true
     return () => {
@@ -55,9 +50,7 @@ function CopyButton({ disabled, value, ...props }: CopyButtonProps) {
     }
   }, [])
 
-  const actionMotion = React.useMemo(() => readIconButtonMotion(reducedMotion), [reducedMotion])
   const isCopying = copyState === "copying"
-  const visualState = copyState === "success" ? "success" : copyState === "error" ? "error" : "copy"
   const statusMessage = copyState === "success"
     ? "Copiato negli appunti"
     : copyState === "error"
@@ -93,19 +86,6 @@ function CopyButton({ disabled, value, ...props }: CopyButtonProps) {
     }, COPY_FEEDBACK_HOLD_MS)
   }, [disabled, value])
 
-  const iconTarget = (state: "copy" | "success" | "error") => {
-    const visible = visualState === state
-    return {
-      opacity: visible ? (isCopying && state === "copy" ? 0.62 : 1) : 0,
-      scale: reducedMotion ? 1 : visible ? 1 : state === "success" ? 0.72 : 0.82,
-      transition: reducedMotion
-        ? actionMotion.state
-        : visible && state === "success"
-          ? actionMotion.settle
-          : actionMotion.state,
-    }
-  }
-
   return (
     <>
       <IconButtonRoot
@@ -120,35 +100,7 @@ function CopyButton({ disabled, value, ...props }: CopyButtonProps) {
         type="button"
         variant="ghost"
       >
-        <span
-          className="relative inline-grid size-[var(--icon)] place-items-center"
-          data-slot="copy-button-icon-stage"
-        >
-          <motion.span
-            animate={iconTarget("copy")}
-            className="absolute inset-0 inline-grid place-items-center"
-            data-slot="copy-button-icon-copy"
-            initial={false}
-          >
-            <IconCopy aria-hidden="true" />
-          </motion.span>
-          <motion.span
-            animate={iconTarget("success")}
-            className="absolute inset-0 inline-grid place-items-center"
-            data-slot="copy-button-icon-success"
-            initial={false}
-          >
-            <IconCheck aria-hidden="true" />
-          </motion.span>
-          <motion.span
-            animate={iconTarget("error")}
-            className="absolute inset-0 inline-grid place-items-center text-destructive"
-            data-slot="copy-button-icon-error"
-            initial={false}
-          >
-            <IconAlertCircle aria-hidden="true" />
-          </motion.span>
-        </span>
+        <IconAction intent="copy" state={copyState} />
       </IconButtonRoot>
       <span aria-atomic="true" aria-live="polite" className="sr-only" data-slot="copy-button-status" role="status">
         {statusMessage}

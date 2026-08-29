@@ -76,7 +76,7 @@ components:
     height: "2.5rem"
     padding: "0.5rem 0.875rem"
   input-default:
-    backgroundColor: "transparent"
+    backgroundColor: "{colors.calce}"
     textColor: "{colors.inchiostro}"
     typography: "{typography.body}"
     rounded: "{rounded.lg}"
@@ -296,6 +296,8 @@ Ogni componente interattivo valuta elementi animati, lifecycle completo, rapid i
 
 ### Buttons
 
+- **Icon composition:** testo prima e glyph dopo, salvo eccezioni semantiche come Indietro (contratto in `docs/05_UI_BRAND_AND_SURFACES.md`). Gap default `0.5rem` ereditato dal label, senza comprimere icona e testo. `forward/back` spingono il layer surface sull'asse orizzontale con ampiezza proporzionata al Button testuale; niente push verticale. Il loader e Spinner `hexagon`, non un SVG locale. La CTA magnetica opt-in segue il pointer soltanto con i layer visuali, mantenendo root e focus stabili.
+
 - **Shape:** il radius Qoovex canonico `--radius: 0.625rem` produce curvature da `0.5rem`, `0.625rem` e `0.75rem` per compact, default e large. Le size testuali `xs/sm/default/lg` misurano `2/2.25/2.5/3rem`, con aria verticale intenzionale e senza diventare pill.
 - **Opaque surfaces:** default usa `primary`, secondary `secondary`, outline `background + border`, destructive `destructive`; sono tutti stati finali opachi. Ghost e l'unica assenza intenzionale di surface a riposo. Le tint alpha non definiscono rest, hover o pressed.
 - **Interaction:** Base UI mantiene il vero `<button>` e l’activation nativa; Motion coordina surface, content e async senza trasformare hit area o box di layout. Hover espande dal centro sui quattro lati (`1.01 × 1.024`); il contatto usa uno squash anisotropo piu quieto (`1.012 × 0.962`) senza displacement. Release, cancel e inversione retargettano con la spring locale calibrata `410/28/0.76`, che conserva velocity e un solo overshoot sub-percettivo. Focus usa l’outline condiviso immediato.
@@ -308,7 +310,7 @@ Ogni componente interattivo valuta elementi animati, lifecycle completo, rapid i
 - **Semantics:** `IconButton` e la primitive canonica per azioni icon-only stateless e richiede un nome accessibile tramite `aria-label` o `aria-labelledby`. Tooltip resta una composizione opzionale e non sostituisce il nome accessibile. Toggle, close/dismiss e copy appartengono ai componenti specializzati.
 - **Geometry:** le size pubbliche minime sono `xs` (24 px), `sm` (28 px) e `default` (32 px). Il root possiede focus e hit area; con primary coarse/no-hover diventa un target reale da 44 px, mentre surface e glyph conservano la size visuale. I target adiacenti occupano celle reali e non usano pseudo-hitbox sovrapposte.
 - **Material:** varianti, surface opache, action radius e focus sono quelli di Button. IconButton non eredita padding, wrapping o selector icon+label di Button e non e un alias di `Button size="icon"`.
-- **Motion:** la surface centrata usa una massa piu corta (`440/29/0.64`), hover elastico contenuto e press anisotropo quieto; il glyph resta otticamente stabile su un layer separato. Il semantic intent e esplicito e minimo: directional e upload/download usano micro-translation coerente, disclosure ruota dallo stato `aria-expanded`, close usa una risposta dedicata discreta, mentre neutral resta intenzionalmente statico. Copy e Toggle possiedono lifecycle specializzati. Release, cancel e rapid reversal riusano il lifecycle Action condiviso. Ghost introduce la surface tramite Motion; disabled usa tone, surface/border inattivi e assenza di motion senza dipendere dalla sola opacity; reduced motion conserva feedback non spaziale.
+- **Motion:** la surface centrata usa una massa piu corta (`440/29/0.64`), hover elastico contenuto e press anisotropo quieto; il glyph resta in uno slot separato. Gli intent direzionali `forward/back/up/down` deformano e traslano la surface reale nello stesso asse, come una pressione interna, senza secondo bordo e senza muovere root, hitbox o sibling. Download mantiene ferma la base e avvicina soltanto la freccia. Menu usa `IconMenu` a due linee, con lieve apertura centrata in hover, e passa a `IconX` secondo lo stato open; clear, close e la X open condividono una microresponse; increment/decrement usano una micro-scale centrata senza traslazione, mantenendo il centro del glyph coincidente con la surface durante hover, press e release; disclosure ruota dallo stato `aria-expanded`; neutral resta intenzionalmente statico. Il loader icon-only usa Spinner hexagon con sagoma fissa. Copy e Toggle possiedono lifecycle specializzati. Release, cancel e rapid reversal riusano il lifecycle Action condiviso. Ghost introduce la surface tramite Motion; disabled usa tone, surface/border inattivi e assenza di motion senza dipendere dalla sola opacity; reduced motion conserva feedback non spaziale.
 - **Loading:** icon e loader condividono centro, root e hit area; `aria-busy`, blocco activation e `focusableWhenDisabled` seguono Button, mentre lo spinner e decorativo.
 - **Migration:** le size `icon*` di Button restano una migration surface temporanea per consumer specializzati ancora in attesa del proprio task (clear/search, password visibility e toolbar legacy); il copy esplicito usa gia `CopyButton` e nessun nuovo consumer puo adottare le size legacy.
 
@@ -352,9 +354,11 @@ Ogni componente interattivo valuta elementi animati, lifecycle completo, rapid i
 
 ### Inputs / Fields
 
-- **Style:** altezza `2.25rem`, raggio default `0.625rem`, bordo input, background trasparente e testo almeno `1rem` su mobile.
-- **Focus:** bordo semantico opzionale più outline condiviso opaco da due pixel, senza ring sovrapposti.
-- **Error / Disabled:** bordo e ring Segnale Rosso per invalid; fondo attenuato, cursore e opacità per disabled.
+- **Boundary:** `Input` è esclusivamente il primitive di text entry nativo/Base UI. Prefix, suffix, clear, reveal password, country, currency, stepper, OTP e composite focus appartengono ai controlli specializzati.
+- **Style:** una sola size base da `2.25rem`, raggio default `0.625rem`, bordo da `1px`, padding `0.75rem`, surface `background` opaca e testo almeno `1rem` su mobile. Width esterna, max-width e spacing appartengono a Field/layout.
+- **Interaction:** i field usano la durata `feedback` (160ms) e `ease-standard` per border, surface, outline-color e halo. Il focus rinforza il bordo con outline da 1px e halo molto tenue da 3px; entrata e uscita retargettano senza ritardo o trasformazioni. Forced colors conserva outline `Highlight` da 2px; reduced motion mantiene gli stati senza transizione percettibile. Value, caret e placeholder non vengono animati.
+- **Availability:** readonly usa surface `muted`, testo pienamente leggibile, focus e selezione nativi; disabled usa surface `secondary`, testo muted e cursor non disponibile senza opacity globale. Invalid conserva bordo destructive e focus additivo della stessa famiglia cromatica.
+- **Native behavior:** props HTML, required, autocomplete e input type restano nativi. Label, description ed error message appartengono a Field. Le decorazioni number/search temporaneamente soppresse per i consumer specializzati legacy migrano nei rispettivi task dedicati.
 
 ### Navigation
 

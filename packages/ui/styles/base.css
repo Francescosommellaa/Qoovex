@@ -122,7 +122,7 @@
  * shadows remain; only Tailwind ring channels are neutralized while focus is visible.
  */
 :is(
-  :focus-visible,
+  :focus-visible:not(.qv-otp-slot),
   [data-focus-owner="composite"]:has([data-focus-target="composite"]:focus-visible)
 ) {
   --tw-ring-shadow: 0 0 #0000;
@@ -144,6 +144,553 @@
   user-select: none;
 }
 
+/*
+ * Field controls are stable text-entry surfaces, not Action controls. Their
+ * boxes never transform. Border contrast makes focus immediate while a quiet,
+ * animated halo refines acquisition and release without borrowing Action motion.
+ */
+:where(.qv-input, .qv-textarea, .qv-textarea-frame),
+.qv-input-group {
+  --qv-field-surface: var(--background);
+}
+
+:where(.qv-input, .qv-textarea),
+.qv-input-group {
+  border-color: var(--input);
+  color: var(--foreground);
+  background-color: var(--qv-field-surface);
+  caret-color: var(--foreground);
+  outline: 1px solid transparent;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0 transparent;
+  transition:
+    border-color var(--motion-duration-feedback) var(--ease-standard),
+    background-color var(--motion-duration-feedback) var(--ease-standard),
+    color var(--motion-duration-feedback) var(--ease-standard),
+    outline-color var(--motion-duration-feedback) var(--ease-standard),
+    box-shadow var(--motion-duration-feedback) var(--ease-standard);
+}
+
+:where(.qv-input, .qv-textarea)::placeholder {
+  color: color-mix(in oklch, var(--muted-foreground) 85%, var(--background));
+  opacity: 1;
+}
+
+/* Password strength is opt-in creation guidance, not validation. The stable
+ * track makes progress readable without changing the input geometry. */
+.qv-password-strength {
+  --qv-password-strength-color: var(--muted-foreground);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 0;
+  align-items: center;
+  column-gap: 0;
+  margin-top: 0.5rem;
+  color: var(--muted-foreground);
+  transition:
+    column-gap var(--motion-duration-feedback) var(--ease-standard),
+    grid-template-columns var(--motion-duration-feedback) var(--ease-standard);
+}
+
+.qv-password-strength:not([data-level="0"]) {
+  grid-template-columns: minmax(0, 1fr) 3.5rem;
+  column-gap: 0.625rem;
+}
+
+.qv-password-strength[data-level="1"] {
+  --qv-password-strength-color: var(--destructive);
+}
+
+.qv-password-strength[data-level="2"] {
+  --qv-password-strength-color: var(--ring);
+}
+
+.qv-password-strength[data-level="3"] {
+  --qv-password-strength-color: var(--success);
+}
+
+.qv-password-strength-track {
+  display: block;
+  height: 0.1875rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: color-mix(in oklch, var(--muted-foreground) 18%, var(--background));
+}
+
+.qv-password-strength-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-color: var(--qv-password-strength-color);
+  transform: scaleX(calc(var(--qv-password-strength) / 3));
+  transform-origin: left center;
+  transition:
+    transform var(--motion-duration-feedback) var(--ease-standard),
+    background-color var(--motion-duration-feedback) var(--ease-standard);
+}
+
+.qv-password-strength-label {
+  height: 0.75rem;
+  width: 3.5rem;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--qv-password-strength-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  opacity: 0;
+  text-align: right;
+  white-space: nowrap;
+  transform: translateY(2px);
+  transition:
+    color var(--motion-duration-feedback) var(--ease-standard),
+    opacity var(--motion-duration-feedback) var(--ease-standard),
+    transform var(--motion-duration-feedback) var(--ease-standard);
+}
+
+.qv-password-strength:not([data-level="0"]) .qv-password-strength-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qv-password-strength,
+  .qv-password-strength-fill,
+  .qv-password-strength-label {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .qv-password-strength-track {
+    background-color: GrayText;
+  }
+
+  .qv-password-strength-fill {
+    background-color: Highlight;
+  }
+
+  .qv-password-strength-label {
+    color: Highlight;
+  }
+}
+
+/* OTPField owns one value while each position keeps a crisp, separate cell.
+ * Geometry is Vercel-like and restrained; color, focus and state motion remain
+ * Qoovex Field language, with no physical Action motion. */
+.qv-otp-field {
+  --qv-otp-slot-size: 2.5rem;
+  --qv-otp-slot-gap: 0.375rem;
+  display: grid;
+  grid-template-columns: repeat(var(--qv-otp-length), minmax(0, 1fr));
+  gap: var(--qv-otp-slot-gap);
+  width: min(
+    100%,
+    calc(
+      var(--qv-otp-length) * var(--qv-otp-slot-size) +
+      (var(--qv-otp-length) - 1) * var(--qv-otp-slot-gap)
+    )
+  );
+  max-width: 100%;
+  color: var(--foreground);
+}
+
+.qv-otp-slot {
+  width: 100%;
+  height: 3rem;
+  min-width: 0;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-md);
+  background-color: var(--background);
+  color: inherit;
+  caret-color: var(--foreground);
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  text-align: center;
+  outline: 0;
+  box-shadow: 0 0 0 0 transparent;
+  transition:
+    border-color var(--motion-duration-feedback) var(--ease-standard),
+    background-color var(--motion-duration-feedback) var(--ease-standard),
+    color var(--motion-duration-feedback) var(--ease-standard),
+    outline-color var(--motion-duration-feedback) var(--ease-standard),
+    box-shadow var(--motion-duration-feedback) var(--ease-standard);
+}
+
+.qv-otp-field:not([data-disabled]):not([data-readonly]):not([aria-readonly="true"]) .qv-otp-slot[data-filled] {
+  border-color: color-mix(in oklch, var(--foreground) 26%, var(--input));
+  background-color: color-mix(in oklch, var(--accent) 24%, var(--background));
+  color: var(--foreground);
+}
+
+.qv-otp-field[data-focused]:not([aria-invalid="true"]):not([data-invalid]) .qv-otp-slot {
+  border-color: color-mix(in oklch, var(--foreground) 22%, var(--input));
+}
+
+.qv-otp-slot:focus-visible {
+  position: relative;
+  z-index: 1;
+  border-color: color-mix(in oklch, var(--foreground) 48%, var(--input));
+  background-color: var(--background);
+  outline: 0;
+  outline-offset: 0;
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 6%, transparent);
+}
+
+.qv-otp-field:is([aria-invalid="true"], [data-invalid]) .qv-otp-slot {
+  border-color: var(--destructive);
+}
+
+.qv-otp-field[data-focused]:is([aria-invalid="true"], [data-invalid]) .qv-otp-slot:focus-visible {
+  border-color: var(--destructive);
+  background-color: var(--background);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--destructive) 9%, transparent);
+}
+
+.qv-otp-field:is([data-readonly], [aria-readonly="true"]) .qv-otp-slot {
+  background-color: var(--muted);
+  border-color: var(--border);
+}
+
+.qv-otp-field[data-disabled] {
+  color: var(--muted-foreground);
+  cursor: not-allowed;
+}
+
+.qv-otp-field[data-disabled] .qv-otp-slot {
+  border-color: var(--border);
+  background-color: var(--secondary);
+  cursor: not-allowed;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .qv-otp-field:not([data-disabled]):not([data-readonly]):not([aria-readonly="true"]):not([aria-invalid="true"]):not([data-invalid]):not([data-focused]) .qv-otp-slot:hover {
+    border-color: color-mix(in oklch, var(--foreground) 28%, var(--input));
+    background-color: color-mix(in oklch, var(--background) 96%, var(--foreground));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qv-otp-field,
+  .qv-otp-slot {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .qv-otp-field {
+    color: FieldText;
+  }
+
+  .qv-otp-slot {
+    border-color: CanvasText;
+    background-color: Field;
+  }
+
+  .qv-otp-slot:focus-visible {
+    background-color: Field;
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+
+  .qv-otp-field:is([aria-invalid="true"], [data-invalid]) .qv-otp-slot {
+    border-color: Mark;
+    border-style: double;
+  }
+
+  .qv-otp-field[data-disabled],
+  .qv-otp-field[data-disabled] .qv-otp-slot {
+    border-color: GrayText;
+    color: GrayText;
+  }
+}
+
+:is(.qv-input[data-slot="input"], .qv-textarea[data-slot="textarea"]):focus-visible:not(:where([data-focus-owner="composite"] *)),
+.qv-input-group[data-slot="input-group"]:has(> .qv-input:focus-visible) {
+  outline-width: 1px;
+  outline-offset: 0;
+}
+
+.qv-textarea {
+  min-block-size: var(--qv-textarea-min-block-size);
+  max-block-size: var(--qv-textarea-max-block-size, none);
+  overflow-wrap: anywhere;
+}
+
+/* The private frame only positions the content fade; the textarea retains its
+ * native border, focus, value, selection and resize. Never clip the frame. */
+.qv-textarea-frame {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  width: 100%;
+}
+
+.qv-textarea-overflow {
+  --qv-textarea-inner-radius: calc(var(--radius) - 1px);
+  position: absolute;
+  inset: 1px;
+  inset-inline-end: calc(1px + var(--qv-textarea-scrollbar, 0px));
+  border-radius: var(--qv-textarea-inner-radius);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.qv-textarea-overflow > span {
+  position: absolute;
+  inset-inline: 0;
+  height: 1.5rem;
+  /* Match the native surface exactly: only text dissolves, never the field.
+   * No backdrop filter can sample/smear the border or the surrounding page. */
+  background-color: var(--qv-field-surface);
+  opacity: 0;
+  transition:
+    opacity var(--motion-duration-feedback) var(--ease-standard),
+    background-color var(--motion-duration-feedback) var(--ease-standard);
+}
+
+.qv-textarea-overflow [data-textarea-edge="start"] {
+  mask-image: linear-gradient(to bottom, black, rgb(0 0 0 / 84%) 25%, rgb(0 0 0 / 35%) 60%, transparent);
+  top: 0;
+}
+
+.qv-textarea-overflow [data-textarea-edge="end"] {
+  mask-image: linear-gradient(to top, black, rgb(0 0 0 / 84%) 25%, rgb(0 0 0 / 35%) 60%, transparent);
+  bottom: 0;
+}
+
+.qv-textarea-frame[data-overflow-start] [data-textarea-edge="start"],
+.qv-textarea-frame[data-overflow-end] [data-textarea-edge="end"] {
+  opacity: 1;
+}
+
+/* Editing softens the cue, never removes it. The native caret/selection remain
+ * visible even at the edge; scroll-to-caret and input are entirely native. */
+.qv-textarea-frame[data-overflow-start] > .qv-textarea:focus:not([readonly]) + .qv-textarea-overflow [data-textarea-edge="start"],
+.qv-textarea-frame[data-overflow-end] > .qv-textarea:focus:not([readonly]) + .qv-textarea-overflow [data-textarea-edge="end"] {
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qv-textarea-overflow > span {
+    transition: none;
+  }
+}
+
+/* Style the actual browser resize hit area, never a decorative overlay.
+ * Engines without this pseudo-element retain their native functional handle. */
+.qv-textarea[data-resize="vertical"]::-webkit-resizer {
+  background: radial-gradient(ellipse 4px 1px at center, var(--muted-foreground) 95%, transparent);
+  border: 0;
+  cursor: ns-resize;
+}
+
+:where(.qv-input, .qv-textarea):focus-visible:not([aria-invalid="true"]):not(:user-invalid),
+.qv-input-group[data-slot="input-group"]:has(> .qv-input:focus-visible:not([aria-invalid="true"]):not(:user-invalid)) {
+  border-color: color-mix(in oklch, var(--foreground) 48%, var(--input));
+  outline-color: color-mix(in oklch, var(--ring) 18%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 6%, transparent);
+}
+
+:where(.qv-input, .qv-textarea):is([readonly], [data-readonly], [aria-readonly="true"]),
+.qv-input-group:has(> .qv-input:is([readonly], [data-readonly], [aria-readonly="true"])),
+:where(.qv-textarea-frame:has(> .qv-textarea:is([readonly], [data-readonly], [aria-readonly="true"]))) {
+  --qv-field-surface: var(--muted);
+}
+
+:where(.qv-input, .qv-textarea):is([readonly], [data-readonly], [aria-readonly="true"]),
+.qv-input-group:has(> .qv-input:is([readonly], [data-readonly], [aria-readonly="true"])) {
+  border-color: var(--border);
+  color: var(--foreground);
+  cursor: text;
+}
+
+:where(.qv-input, .qv-textarea):disabled,
+.qv-input-group:has(> .qv-input:disabled),
+:where(.qv-textarea-frame:has(> .qv-textarea:disabled)) {
+  --qv-field-surface: var(--secondary);
+}
+
+:where(.qv-input, .qv-textarea):disabled,
+.qv-input-group:has(> .qv-input:disabled) {
+  border-color: var(--border);
+  color: var(--muted-foreground);
+  cursor: not-allowed;
+}
+
+:where(.qv-input, .qv-textarea):is([aria-invalid="true"], :user-invalid),
+.qv-input-group:has(> .qv-input:is([aria-invalid="true"], :user-invalid)) {
+  border-color: var(--destructive);
+}
+
+:is(.qv-input[data-slot="input"], .qv-textarea[data-slot="textarea"]):focus-visible:not(:where([data-focus-owner="composite"] *)):is([aria-invalid="true"], :user-invalid),
+.qv-input-group[data-slot="input-group"]:has(> .qv-input:focus-visible:is([aria-invalid="true"], :user-invalid)) {
+  outline-color: color-mix(in oklch, var(--destructive) 38%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--destructive) 9%, transparent);
+}
+
+:where(.qv-input, .qv-textarea):is(:autofill, :-webkit-autofill) {
+  color: var(--foreground);
+  background-color: var(--background);
+  -webkit-text-fill-color: var(--foreground);
+  caret-color: var(--foreground);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :where(.qv-input, .qv-textarea):not(:disabled):not([readonly]):not([aria-readonly="true"]):not([aria-invalid="true"]):not(:user-invalid):not(:focus-visible):hover,
+  .qv-input-group:hover:has(> .qv-input:not(:disabled):not([readonly]):not([aria-readonly="true"]):not([aria-invalid="true"]):not(:user-invalid):not(:focus-visible)),
+  :where(.qv-textarea-frame:has(> .qv-textarea:not(:disabled):not([readonly]):not([aria-readonly="true"]):not([aria-invalid="true"]):not(:user-invalid):not(:focus-visible):hover)) {
+    --qv-field-surface: color-mix(in oklch, var(--background) 96%, var(--foreground));
+  }
+
+  :where(.qv-input, .qv-textarea):not(:disabled):not([readonly]):not([aria-readonly="true"]):not([aria-invalid="true"]):not(:user-invalid):not(:focus-visible):hover,
+  .qv-input-group:hover:has(> .qv-input:not(:disabled):not([readonly]):not([aria-readonly="true"]):not([aria-invalid="true"]):not(:user-invalid):not(:focus-visible)) {
+    border-color: color-mix(in oklch, var(--foreground) 28%, var(--input));
+  }
+}
+
+/* The group owns the one opaque surface and boundary. Only its direct native
+ * Input delegates presentation; interactive legacy children retain their focus.
+ * Transparent here means revealing that owned surface, not a translucent field. */
+.qv-input-group > .qv-input[data-slot="input"] {
+  flex: 1 1 0%;
+  width: 0;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: inherit;
+  background-color: transparent;
+  color: inherit;
+  box-shadow: none;
+  transition: none;
+}
+
+.qv-input-addon {
+  position: relative;
+  flex: 0 1 auto;
+  max-inline-size: 35%;
+  align-self: stretch;
+  cursor: inherit;
+}
+
+/* DOM order is canonical; position remains an optional compatibility hint. */
+.qv-input-addon::after {
+  content: "";
+  position: absolute;
+  inset-block: 0.375rem;
+  border-inline-end: 1px solid var(--input);
+  inset-inline-end: 0;
+}
+
+.qv-input-group > .qv-input ~ .qv-input-addon::after {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+}
+
+/* Selectable addons reserve a stable slot. 32px trigger + 16px clearance;
+ * touch adds the same clearance around the canonical 44px target. */
+.qv-input-group:has(> .qv-selectable-addon) {
+  height: 3rem;
+}
+
+.qv-input-addon.qv-selectable-addon {
+  flex: 0 1 7rem;
+  max-inline-size: 55%;
+  padding: 0.375rem;
+}
+
+[data-phone-input] > .qv-selectable-addon { flex-basis: 5rem; }
+
+.qv-selectable-addon > span {
+  display: contents;
+}
+
+.qv-addon-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  width: 100%;
+  min-width: 0;
+  height: 2rem;
+  padding-inline: 0.375rem;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: inherit;
+  color: var(--foreground);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-feedback) var(--ease-standard), color var(--motion-duration-feedback) var(--ease-standard);
+}
+
+.qv-addon-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 0.375rem;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.qv-addon-trigger:disabled {
+  cursor: inherit;
+  color: var(--muted-foreground);
+}
+
+.qv-addon-value > [data-slot="select-value"] { justify-content: center; gap: 0.375rem; }
+
+@media (hover: hover) and (pointer: fine) {
+  .qv-addon-trigger:not(:disabled):hover,
+  .qv-addon-trigger:not(:disabled)[data-popup-open] {
+    background: var(--muted);
+  }
+}
+
+@media (hover: none), (pointer: coarse), (any-pointer: coarse) {
+  .qv-input-group:has(> .qv-selectable-addon) { height: 3.75rem; }
+  .qv-addon-trigger { height: var(--touch-target-min); }
+  .qv-addon-options [data-slot="select-item"] { min-height: var(--touch-target-min); }
+}
+
+.qv-addon-options {
+  max-height: min(18rem, var(--available-height));
+}
+
+/* Base UI owns selection. A persistent inset cue stays distinct from the
+ * transient sliding hover layer, without a check slot or width changes. */
+[data-slot="select-item"][data-selected] {
+  background-color: var(--muted);
+  color: var(--foreground);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+[data-slot="select-item"][data-selected]:is(:hover, [data-highlighted]) {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+@media (forced-colors: active) {
+  [data-slot="select-item"][data-selected] {
+    background-color: Highlight;
+    color: HighlightText;
+    outline: 1px solid Highlight;
+    outline-offset: -1px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qv-addon-trigger { transition: none; }
+}
+
+@media (forced-colors: active) {
+  .qv-addon-trigger:disabled { color: GrayText; }
+  .qv-input-addon::after { border-color: CanvasText; }
+}
+
 ::selection {
   background: var(--selection-background);
   color: var(--selection-foreground);
@@ -162,7 +709,38 @@
   border-radius: var(--icon-button-radius);
 }
 
+/* Numeric composition owns its internal grid only. The real input spans the
+ * grid and keeps all Field states; the action cells never reflow or overlap.
+ * 44px desktop height leaves 8px around a 28px Action (including its hover).
+ * Coarse targets are 44px inside 56px cells, with 6px boundary clearance. */
+.qv-number-group {
+  --qv-number-cell: 2.75rem;
+  display: grid;
+  grid-template-columns: var(--qv-number-cell) minmax(0, 1fr) var(--qv-number-cell);
+  align-items: center;
+  isolation: isolate;
+}
+
+.qv-number-value {
+  grid-area: 1 / 1 / 2 / 4;
+  height: var(--qv-number-cell);
+  padding-inline: calc(var(--qv-number-cell) + 0.25rem);
+}
+
+.qv-number-decrement,
+.qv-number-increment {
+  grid-row: 1;
+  justify-self: center;
+  z-index: 1;
+}
+
+.qv-number-decrement { grid-column: 1; }
+.qv-number-increment { grid-column: 3; }
+
 @media (hover: none), (pointer: coarse), (any-pointer: coarse) {
+  .qv-number-group {
+    --qv-number-cell: 3.5rem;
+  }
   .qv-touch-target:not(.qv-touch-target-inline) {
     min-width: var(--touch-target-min);
     min-height: var(--touch-target-min);
@@ -256,43 +834,110 @@
   }
 }
 
-/* ─── Ultra-thin Sidebar Scrollbar ─────────────────────────────── */
-[data-slot="sidebar-content"] {
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-  transition: scrollbar-color 200ms ease;
+/* The scroll viewport owns the edge cue; it never covers the header/footer. */
+[data-slot="sidebar-scroll-frame"] {
+  --sidebar-scroll-edge: 0;
+  border-radius: inherit;
+  isolation: isolate;
 }
 
-[data-slot="sidebar-content"]:hover,
-[data-slot="sidebar-content"]:focus-within {
-  scrollbar-color: var(--scrollbar-thumb) transparent;
+[data-slot="sidebar-scroll-frame"] > [data-slot="sidebar-content"] {
+  /* Keep row/indicator stacking below the scroll-edge treatment. */
+  isolation: isolate;
+  scroll-padding-block: 2rem;
+  overscroll-behavior: contain;
 }
 
-[data-slot="sidebar-content"]::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+[data-slot="sidebar-scroll-edge"] {
+  position: absolute;
+  z-index: 1;
+  inset: auto 0 0;
+  height: 3rem;
+  pointer-events: none;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+  opacity: var(--sidebar-scroll-edge);
+  backdrop-filter: blur(6px);
+  /* One smooth opacity ramp, shared by the blur and a uniform surface tint.
+   * Two overlapping gradients attenuate each other and create a weak band. */
+  mask-image: linear-gradient(to bottom, transparent, rgb(0 0 0 / 16%) 25%, rgb(0 0 0 / 50%) 50%, rgb(0 0 0 / 84%) 75%, black);
+  background-color: color-mix(in srgb, var(--sidebar) 80%, transparent);
 }
 
-[data-slot="sidebar-content"]::-webkit-scrollbar-track {
-  background: transparent;
+.dark [data-slot="sidebar-scroll-edge"] {
+  /* Blurring light glyphs over a dark surface spreads luminance like a glow.
+   * Dissolve their existing pixels instead: identical ramp, no light diffusion. */
+  backdrop-filter: none;
+  background-color: var(--sidebar);
 }
 
-[data-slot="sidebar-content"]::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background-color: transparent;
-  transition: background-color 200ms ease;
+@media (prefers-reduced-transparency: reduce) {
+  [data-slot="sidebar-scroll-edge"] {
+    backdrop-filter: none;
+  }
 }
 
-[data-slot="sidebar-content"]:hover::-webkit-scrollbar-thumb,
-[data-slot="sidebar-content"]:focus-within::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb);
+/* Direct manipulation follows the pointer, never a trailing width tween. */
+[data-slot="sidebar"]:has([data-slot="sidebar-resize-handle"][data-resizing="true"]) > :is([data-slot="sidebar-gap"], [data-slot="sidebar-container"]) {
+  transition: none;
 }
 
-[data-slot="sidebar-content"]::-webkit-scrollbar-thumb:hover {
-  background-color: var(--scrollbar-thumb-hover);
+[data-slot="sidebar-resize-handle"]::after {
+  transition: background-color var(--motion-duration-feedback) var(--ease-standard);
 }
 
-@media (hover: hover) and (pointer: fine) {
+/* The full-height hit area is not the visual focus geometry: the grip is. */
+[data-slot="sidebar-resize-handle"][role="separator"]:focus-visible {
+  outline: none;
+  outline-offset: 0;
+}
+
+[data-slot="sidebar-resize-handle"]:focus-visible::after {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+[data-slot="sidebar-resize-handle"][data-resizing="true"]::after {
+  background-color: var(--sidebar-ring);
+}
+
+/* The resize owner temporarily replaces Sirio's custom cursor with the OS cue. */
+html[data-marketing-cursor="active"] [data-slot="sidebar-resize-handle"][data-cursor-native],
+html[data-marketing-cursor="active"]:has([data-slot="sidebar-resize-handle"][data-resizing="true"]) body,
+html[data-marketing-cursor="active"]:has([data-slot="sidebar-resize-handle"][data-resizing="true"]) body * {
+  cursor: col-resize !important;
+}
+
+html:has([data-slot="sidebar-resize-handle"][data-resizing="true"]) .marketing-cursor {
+  visibility: hidden;
+}
+
+@media (pointer: coarse) {
+  [data-slot="sidebar-resize-handle"] {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="sidebar"] > :is([data-slot="sidebar-gap"], [data-slot="sidebar-container"]),
+  [data-slot="sidebar-resize-handle"]::after {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  [data-slot="sidebar-scroll-edge"] {
+    display: none;
+  }
+  [data-slot="sidebar-resize-handle"]:is(:hover, :focus-visible)::after {
+    background-color: Highlight;
+  }
+}
+
+/* One native scrollbar language for pages, sidebar, menus and fields.
+ * The sidebar's fine thumb retains a wider draggable lane; only color changes
+ * with interaction. Touch and forced colors keep platform-owned scrollbars. */
+@media (hover: hover) and (pointer: fine) and (forced-colors: none) {
   * {
     scrollbar-color: transparent transparent;
     scrollbar-width: thin;
@@ -310,6 +955,17 @@
     scrollbar-color: var(--scrollbar-thumb) transparent;
   }
 
+  @supports selector(::-webkit-scrollbar) {
+    /* Standard non-auto properties override authored WebKit geometry. Keep
+     * interaction selectors at the same specificity as the fallback above. */
+    *,
+    :is(*:not(html):not(body):hover, *:not(html):not(body):focus-within, [data-scrollbar-active="true"]),
+    html:is([data-scrollbar-active="true"], [data-scrollbar-edge="true"]) {
+      scrollbar-width: auto;
+      scrollbar-color: auto;
+    }
+  }
+
   *::-webkit-scrollbar {
     width: var(--scrollbar-size);
     height: var(--scrollbar-size);
@@ -321,12 +977,18 @@
   }
 
   *::-webkit-scrollbar-thumb {
-    min-width: var(--scrollbar-size);
-    min-height: var(--scrollbar-size);
+    min-width: calc(var(--scrollbar-size) * 3);
+    min-height: calc(var(--scrollbar-size) * 3);
     border: 2px solid transparent;
     border-radius: 999px;
     background-color: transparent;
     background-clip: padding-box;
+  }
+
+  *::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   :is(
@@ -344,6 +1006,19 @@
 
   *::-webkit-scrollbar-thumb:active {
     background-color: var(--scrollbar-thumb-active);
+  }
+}
+
+/* Geometry belongs to each scroll surface, not to a second scrollbar skin. */
+@media (hover: hover) and (pointer: fine) and (forced-colors: none) {
+  [data-slot="sidebar-content"] { scrollbar-gutter: stable; }
+
+  @supports selector(::-webkit-scrollbar) {
+    [data-slot="sidebar-scroll-edge"] { right: var(--scrollbar-size); }
+
+    .qv-textarea::-webkit-scrollbar-track {
+      margin-block: var(--radius);
+    }
   }
 }
 
@@ -402,6 +1077,16 @@
   }
 }
 
+@keyframes qv-spinner-hexagon-progress {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+.qv-spinner-hexagon-segment {
+  animation: qv-spinner-hexagon-progress var(--spinner-duration, 1s) linear infinite;
+}
+
 ::view-transition-new(root) {
   animation: reveal 0.4s ease-in-out forwards;
 }
@@ -444,6 +1129,7 @@
     .animate-pulse,
     .animate-float,
     .animate-float-delayed,
+    .qv-spinner-hexagon-segment,
     [data-slot="otp-input"][data-status="error"]
   ) {
     animation: none !important;
@@ -460,10 +1146,53 @@
   ) {
     transition: none !important;
   }
+
+  :where(.qv-input, .qv-textarea), .qv-input-group {
+    transition-duration: 1ms !important;
+  }
 }
 
 
 @media (forced-colors: active) {
+  .qv-textarea-overflow {
+    display: none;
+  }
+  .qv-textarea[data-resize="vertical"]::-webkit-resizer {
+    background: revert;
+    border: revert;
+    border-radius: 0;
+  }
+
+  :where(.qv-input, .qv-textarea), .qv-input-group {
+    border-color: CanvasText;
+    color: FieldText;
+    background-color: Field;
+    box-shadow: none;
+  }
+
+  :is(.qv-input[data-slot="input"], .qv-textarea[data-slot="textarea"]):focus-visible:not(:where([data-focus-owner="composite"] *)),
+  .qv-input-group[data-slot="input-group"]:has(> .qv-input:focus-visible) {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  :where(.qv-input, .qv-textarea):is([readonly], [data-readonly], [aria-readonly="true"]),
+  .qv-input-group:has(> .qv-input:is([readonly], [data-readonly], [aria-readonly="true"])) {
+    border-style: dashed;
+  }
+
+  :where(.qv-input, .qv-textarea):disabled,
+  .qv-input-group:has(> .qv-input:disabled) {
+    border-color: GrayText;
+    color: GrayText;
+  }
+
+  :where(.qv-input, .qv-textarea):is([aria-invalid="true"], :user-invalid),
+  .qv-input-group:has(> .qv-input:is([aria-invalid="true"], :user-invalid)) {
+    border-color: Mark;
+    border-style: double;
+  }
+
   :where(
     .qv-surface-contained,
     .qv-surface-raised,

@@ -6,8 +6,6 @@ import { PageHeader } from "@/components/page-header";
 import { Specimen, SpecimenGrid } from "@/components/specimen";
 import { Checkbox } from "@qoovex/ui/components/checkbox";
 import { Switch } from "@qoovex/ui/components/switch";
-import { PasswordInput } from "@qoovex/ui/components/password-input";
-import { OtpInput } from "@qoovex/ui/components/otp-input";
 import { RadioGroup, Radio, RadioCard } from "@qoovex/ui/components/radio-group";
 import { Slider } from "@qoovex/ui/components/slider";
 import { Toggle, ToggleGroup } from "@qoovex/ui/components/toggle";
@@ -25,26 +23,14 @@ import {
 } from "@tabler/icons-react";
 
 export default function ControlsCatalogPage() {
-  const [otpStatus, setOtpStatus] = React.useState<
-    "default" | "success" | "error"
-  >("default");
-  const [otpValue, setOtpValue] = React.useState("");
   const [radioVal, setRadioVal] = React.useState("option-1");
-
-  const handleComplete = (code: string) => {
-    if (code === "123456") {
-      setOtpStatus("success");
-    } else {
-      setOtpStatus("error");
-    }
-  };
 
   return (
     <div className="mx-auto w-full max-w-6xl">
       <PageHeader
-        title="Controlli & Input Speciali"
-        description="Checkbox, Switch, Radio, Toggle, Slider, PasswordInput e OtpInput con varianti di dimensione, colore e stati interattivi."
-        importPath="import { Checkbox, Switch, RadioGroup, Toggle, Slider, OtpInput } from '@qoovex/ui/components/...'"
+        title="Controlli"
+        description="Checkbox, Switch, Radio, Toggle e Slider con varianti, stati e interazioni reali. I controlli di inserimento hanno pagine dedicate."
+        importPath="import { Checkbox, Switch, RadioGroup, Toggle, Slider } from '@qoovex/ui/components/...'"
       />
 
       <div className="flex flex-col gap-12">
@@ -403,79 +389,6 @@ export default function ControlsCatalogPage() {
           </SpecimenGrid>
         </section>
 
-        {/* ── OTP Input ───────────────────────────────────────────────── */}
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight">
-            OTP Input
-          </h2>
-          <SpecimenGrid cols={2}>
-            <Specimen title="Verifica Codice (123456 = Ok, altro = Errore)">
-              <div className="flex min-w-0 w-full flex-col items-center gap-3 py-2">
-                <div
-                  className="w-full overflow-x-auto rounded-md px-1 pb-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  role="region"
-                  aria-label="Codice di verifica a sei cifre"
-                  tabIndex={0}
-                >
-                  <div className="mx-auto w-max">
-                    <OtpInput
-                      length={6}
-                      status={otpStatus}
-                      value={otpValue}
-                      onValueChange={(val) => {
-                        setOtpValue(val);
-                        if (otpStatus !== "default") setOtpStatus("default");
-                      }}
-                      onComplete={handleComplete}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-                  <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => { setOtpValue("123456"); setOtpStatus("success"); }}>
-                    Prova Ok
-                  </Button>
-                  <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={() => { setOtpValue("999999"); setOtpStatus("error"); }}>
-                    Prova Errore
-                  </Button>
-                  <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={() => { setOtpValue(""); setOtpStatus("default"); }}>
-                    Reset
-                  </Button>
-                </div>
-              </div>
-            </Specimen>
-
-            <Specimen title="Dimensioni & PIN Mascherato">
-              <div className="flex min-w-0 w-full flex-col gap-5 py-1">
-                <div>
-                  <span className="mb-1.5 block font-mono text-xs text-muted-foreground">size="sm"</span>
-                  <div className="w-full overflow-x-auto pb-2"><div className="w-max"><OtpInput length={6} size="sm" /></div></div>
-                </div>
-                <div>
-                  <span className="mb-1.5 block font-mono text-xs text-muted-foreground">size="lg"</span>
-                  <div className="w-full overflow-x-auto pb-2"><div className="w-max"><OtpInput length={6} size="lg" /></div></div>
-                </div>
-                <div>
-                  <span className="mb-1.5 block font-mono text-xs text-muted-foreground">PIN mascherato (4 cifre)</span>
-                  <OtpInput length={4} mask groupSeparator={false} />
-                </div>
-              </div>
-            </Specimen>
-          </SpecimenGrid>
-        </section>
-
-        {/* ── Password Input ──────────────────────────────────────────── */}
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight">
-            Password Input
-          </h2>
-          <SpecimenGrid cols={1}>
-            <Specimen title="Password con toggle visibilità">
-              <div className="max-w-sm">
-                <PasswordInput placeholder="Inserisci password sicura" className="w-full" />
-              </div>
-            </Specimen>
-          </SpecimenGrid>
-        </section>
       </div>
     </div>
   );

@@ -1,11 +1,12 @@
 "use client"
 
-import { IconArrowRight, IconPlus } from "@tabler/icons-react"
+import { IconPlus } from "@tabler/icons-react"
 import { useState } from "react"
 
 import { PageHeader } from "@/components/page-header"
-import { Specimen, SpecimenGrid, SpecimenSection } from "@/components/specimen"
+import { Specimen, SpecimenSection } from "@/components/specimen"
 import { Button } from "@qoovex/ui/components/button"
+import { IconAction } from "@qoovex/ui/components/icon-action"
 
 const variants = [
   { action: "Crea cantiere", label: "Default", variant: "default" },
@@ -42,40 +43,41 @@ export default function ButtonPage() {
           region="variants"
           title="Core variants"
         >
-          <Specimen stateId="default" title="Variant interattive" visualId="button-default">
-            <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="divide-y divide-border border-y border-border">
+            <div className="divide-y divide-border" data-specimen-state="default" data-visual-specimen="button-default">
               {variants.map(({ action, label, variant }) => (
-                <div className="flex flex-col items-center gap-2" data-button-variant-row={variant} key={variant}>
+                <div className="grid gap-3 py-5 sm:grid-cols-[10rem_1fr] sm:items-center" data-button-variant-row={variant} key={variant}>
+                  <span className="text-sm text-muted-foreground">{label}</span>
                   <Button
+                    className="justify-self-start"
                     data-button-proof={variant === "default" ? "rapid" : undefined}
                     onClick={() => setActivationCount((count) => count + 1)}
                     type="button"
                     variant={variant}
                   >
-                    {variant === "default" ? <IconPlus aria-hidden="true" data-icon="inline-start" /> : null}
                     {action}
+                    {variant === "default" ? <IconAction data-icon="inline-end" icon={IconPlus} intent="neutral" /> : null}
                   </Button>
-                  <span className="text-xs text-muted-foreground">{label}</span>
                 </div>
               ))}
             </div>
-            <span className="text-xs text-muted-foreground">
-              Attivazioni: <output data-button-activation-count>{activationCount}</output>
-            </span>
-          </Specimen>
-          <SpecimenGrid cols={2}>
-            <Specimen stateId="disabled" title="Disabled" visualId="button-disabled">
-              <Button disabled type="button">Operazione non disponibile</Button>
-            </Specimen>
-            <Specimen title="Size pubbliche">
-              <div className="flex flex-wrap items-center justify-center gap-2">
+            <div className="grid gap-3 py-5 sm:grid-cols-[10rem_1fr] sm:items-center" data-specimen-state="disabled" data-visual-specimen="button-disabled">
+              <span className="text-sm text-muted-foreground">Disabled</span>
+              <Button className="justify-self-start" disabled type="button">Operazione non disponibile</Button>
+            </div>
+            <div className="grid gap-3 py-5 sm:grid-cols-[10rem_1fr] sm:items-center">
+              <span className="text-sm text-muted-foreground">Dimensioni</span>
+              <div className="flex flex-wrap items-center gap-3">
                 <Button size="xs" type="button">Compatto XS</Button>
                 <Button size="sm" type="button">Compatto SM</Button>
                 <Button type="button">Misura standard</Button>
                 <Button size="lg" type="button">Azione ampia</Button>
               </div>
-            </Specimen>
-          </SpecimenGrid>
+            </div>
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground" aria-live="polite">
+            Attivazioni: <output data-button-activation-count>{activationCount}</output>
+          </p>
         </SpecimenSection>
 
         <SpecimenSection
@@ -127,20 +129,26 @@ export default function ButtonPage() {
         </SpecimenSection>
 
         <SpecimenSection
-          description="La freccia anticipa la direzione con la stessa spring della Action surface; press, cancel ed exit retargettano dalla posizione corrente."
+          description="La freccia spinge delicatamente la superficie. Indietro precede il testo; avanti lo segue."
           region="motion-lifecycle"
           title="Directional icon"
         >
-          <Specimen title="Continua">
-            <Button iconMotion="directional-right" type="button" variant="outline">
+          <Specimen title="Indietro e avanti">
+            <div className="flex flex-wrap items-center justify-center gap-6">
+              <Button type="button" variant="outline">
+                <IconAction data-icon="inline-start" intent="back" />
+                Indietro
+              </Button>
+              <Button type="button" variant="outline">
               Continua
-              <IconArrowRight aria-hidden="true" data-icon="inline-end" />
-            </Button>
+              <IconAction data-icon="inline-end" intent="forward" />
+              </Button>
+            </div>
           </Specimen>
         </SpecimenSection>
 
         <SpecimenSection
-          description="Il magnetismo è un enhancement ambientale esplicito: confronta il primary normale con la CTA opt-in."
+          description="Avvicina il mouse ai lati della CTA: superficie e contenuto seguono leggermente il puntatore. Il target resta fermo; touch e reduced motion non usano magnetismo."
           region="motion-lifecycle"
           title="Magnetic CTA"
         >
@@ -149,7 +157,7 @@ export default function ButtonPage() {
               <Button type="button">Primary normale</Button>
               <Button data-cursor-magnetic="true" data-magnetic-cta-proof type="button">
                 CTA magnetica
-                <IconPlus aria-hidden="true" data-icon="inline-end" />
+                <IconAction data-icon="inline-end" icon={IconPlus} intent="neutral" />
               </Button>
             </div>
           </Specimen>

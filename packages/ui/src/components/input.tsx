@@ -2,21 +2,14 @@
 
 import * as React from "react"
 import { Input as InputPrimitive } from "@base-ui/react/input"
+import { inputControlClassName } from "./input/input-styles"
 import {
-  IconEye,
-  IconEyeOff,
-  IconSearch,
-  IconX,
-  IconPlus,
-  IconMinus,
-  IconChevronDown,
   IconCalendar,
   IconClock,
   IconChevronLeft,
   IconChevronRight,
 } from "@tabler/icons-react"
 
-import { Button } from "#components/button"
 import { IconButton } from "#components/icon-button"
 import {
   DropdownMenu,
@@ -36,9 +29,11 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       data-slot="input"
       data-focus-target="composite"
       className={cn(
-        "qv-touch-target-field h-9 w-full min-w-0 rounded-lg border border-input bg-transparent px-3 py-1.5 text-base sm:text-sm transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/30 qv-readonly:cursor-text qv-readonly:bg-muted/30 qv-readonly:text-foreground qv-readonly:opacity-100 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/30 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-        // Eliminazione freccette native spinner e X di cancellazione browser per evitare sovrapposizioni
-        "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none",
+        inputControlClassName,
+        "file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground",
+        // Temporary compatibility: native numeric consumers still overlay their
+        // own controls. NumberInput owns their eventual migration.
+        "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
         className
       )}
       {...props}
@@ -52,7 +47,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="input-group"
       data-focus-owner="composite"
       className={cn(
-        "relative flex w-full items-center rounded-lg border border-input bg-transparent text-sm transition-colors focus-within:border-ring dark:bg-input/30",
+        "qv-input-group qv-touch-target-field relative flex h-9 w-full min-w-0 items-center rounded-lg border text-base sm:text-sm",
         className
       )}
       {...props}
@@ -62,7 +57,8 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
 
 function InputAddon({
   className,
-  position = "left",
+  position,
+  children,
   ...props
 }: React.ComponentProps<"div"> & { position?: "left" | "right" }) {
   return (
@@ -70,13 +66,13 @@ function InputAddon({
       data-slot="input-addon"
       data-position={position}
       className={cn(
-        "flex h-9 items-center px-3 text-xs font-medium text-muted-foreground select-none shrink-0",
-        position === "left" && "border-r border-input/60 rounded-l-lg bg-muted/30",
-        position === "right" && "border-l border-input/60 rounded-r-lg bg-muted/30",
+        "qv-input-addon flex min-w-0 items-center px-3 text-muted-foreground",
         className
       )}
       {...props}
-    />
+    >
+      <span className="min-w-0 truncate">{children}</span>
+    </div>
   )
 }
 
@@ -98,310 +94,6 @@ function InputIcon({
       )}
       {...props}
     />
-  )
-}
-
-function PasswordInput({
-  className,
-  ...props
-}: Omit<React.ComponentProps<"input">, "type">) {
-  const [showPassword, setShowPassword] = React.useState(false)
-
-  return (
-    <div className="relative w-full">
-      <Input
-        type={showPassword ? "text" : "password"}
-        className={cn("pr-10", className)}
-        {...props}
-      />
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-xs"
-        className="absolute top-1/2 right-2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-        onClick={() => setShowPassword(!showPassword)}
-        aria-label={showPassword ? "Nascondi password" : "Mostra password"}
-        aria-pressed={showPassword}
-      >
-        {showPassword ? <IconEyeOff aria-hidden="true" /> : <IconEye aria-hidden="true" />}
-      </Button>
-    </div>
-  )
-}
-
-function SearchInput({
-  className,
-  value,
-  onChange,
-  onClear,
-  ...props
-}: Omit<React.ComponentProps<"input">, "type"> & { onClear?: () => void }) {
-  const isControlled = value !== undefined
-  const hasValue = isControlled ? Boolean(value) : false
-
-  return (
-    <div className="relative w-full">
-      <InputIcon position="left">
-        <IconSearch />
-      </InputIcon>
-      <Input
-        type="search"
-        value={value}
-        onChange={onChange}
-        className={cn("pl-9 pr-9", className)}
-        {...props}
-      />
-      {hasValue && onClear ? (
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-xs"
-          className="absolute top-1/2 right-2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-          onClick={onClear}
-          aria-label="Azzera ricerca"
-        >
-          <IconX aria-hidden="true" />
-        </Button>
-      ) : null}
-    </div>
-  )
-}
-
-const DEFAULT_COUNTRIES = [
-  { code: "IT", name: "Italia", dialCode: "+39", flag: "🇮🇹" },
-  { code: "FR", name: "Francia", dialCode: "+33", flag: "🇫🇷" },
-  { code: "DE", name: "Germania", dialCode: "+49", flag: "🇩🇪" },
-  { code: "ES", name: "Spagna", dialCode: "+34", flag: "🇪🇸" },
-  { code: "GB", name: "Regno Unito", dialCode: "+44", flag: "🇬🇧" },
-  { code: "US", name: "Stati Uniti", dialCode: "+1", flag: "🇺🇸" },
-  { code: "CH", name: "Svizzera", dialCode: "+41", flag: "🇨🇭" },
-  { code: "AT", name: "Austria", dialCode: "+43", flag: "🇦🇹" },
-  { code: "BE", name: "Belgio", dialCode: "+32", flag: "🇧🇪" },
-  { code: "NL", name: "Paesi Bassi", dialCode: "+31", flag: "🇳🇱" },
-  { code: "PT", name: "Portogallo", dialCode: "+351", flag: "🇵🇹" },
-  { code: "RO", name: "Romania", dialCode: "+40", flag: "🇷🇴" },
-  { code: "GR", name: "Grecia", dialCode: "+30", flag: "🇬🇷" },
-]
-
-function PhoneInput({
-  className,
-  value,
-  onChange,
-  defaultCountry = "IT",
-  ...props
-}: Omit<React.ComponentProps<"input">, "type"> & {
-  defaultCountry?: string
-}) {
-  const [selectedCountry, setSelectedCountry] = React.useState(
-    DEFAULT_COUNTRIES.find((c) => c.code === defaultCountry) || DEFAULT_COUNTRIES[0]
-  )
-  const [search, setSearch] = React.useState("")
-
-  const filteredCountries = DEFAULT_COUNTRIES.filter(
-    (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.dialCode.includes(search) ||
-      c.code.toLowerCase().includes(search.toLowerCase())
-  )
-
-  return (
-    <InputGroup className={className}>
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <button
-              type="button"
-              className="flex h-9 items-center gap-1.5 px-3 text-xs font-medium text-foreground select-none shrink-0 border-r border-input/60 rounded-l-lg bg-muted/30 hover:bg-muted/60 transition-colors outline-none"
-            />
-          }
-        >
-          <span>{selectedCountry.flag}</span>
-          <span className="font-accent">{selectedCountry.dialCode}</span>
-          <IconChevronDown aria-hidden="true" className="size-3.5 text-muted-foreground" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-64 p-2">
-          <DropdownMenuGroup>
-            <DropdownMenuLabel>Prefisso Paese</DropdownMenuLabel>
-            <div className="relative mb-2 px-1">
-              <IconSearch aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Cerca paese o prefisso..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="h-8 w-full rounded-lg border border-input bg-transparent pl-8 pr-2 text-xs outline-none focus:border-ring focus:ring-1 focus:ring-ring/30"
-                onClick={(e) => e.stopPropagation()}
-                onKeyDown={(e) => e.stopPropagation()}
-              />
-            </div>
-            <DropdownMenuSeparator />
-            <div className="max-h-48 overflow-y-auto space-y-0.5 scrollbar-none">
-              {filteredCountries.length > 0 ? (
-                filteredCountries.map((c) => (
-                  <DropdownMenuItem
-                    key={c.code}
-                    className={cn(
-                      "flex items-center justify-between",
-                      c.code === selectedCountry.code && "bg-accent/60 font-semibold"
-                    )}
-                    onClick={() => setSelectedCountry(c)}
-                  >
-                    <span className="flex items-center gap-2">
-                      <span>{c.flag}</span>
-                      <span>{c.name}</span>
-                    </span>
-                    <span className="font-accent text-muted-foreground">{c.dialCode}</span>
-                  </DropdownMenuItem>
-                ))
-              ) : (
-                <p className="p-2 text-center text-xs text-muted-foreground">Nessun paese trovato</p>
-              )}
-            </div>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <Input
-        type="tel"
-        value={value}
-        onChange={onChange}
-        className="rounded-l-none font-accent border-0 focus-visible:ring-0"
-        placeholder="334 567 8901"
-        {...props}
-      />
-    </InputGroup>
-  )
-}
-
-const DEFAULT_CURRENCIES = [
-  { code: "EUR", symbol: "€", name: "Euro" },
-  { code: "USD", symbol: "$", name: "US Dollar" },
-  { code: "GBP", symbol: "£", name: "British Pound" },
-  { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
-  { code: "JPY", symbol: "¥", name: "Japanese Yen" },
-]
-
-function CurrencyInput({
-  className,
-  value,
-  onChange,
-  defaultCurrency = "EUR",
-  ...props
-}: Omit<React.ComponentProps<"input">, "type"> & {
-  defaultCurrency?: string
-}) {
-  const [selectedCurrency, setSelectedCurrency] = React.useState(
-    DEFAULT_CURRENCIES.find((c) => c.code === defaultCurrency) || DEFAULT_CURRENCIES[0]
-  )
-
-  return (
-    <InputGroup className={className}>
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <button
-              type="button"
-              className="flex h-9 items-center gap-1.5 px-3 text-xs font-medium text-foreground select-none shrink-0 border-r border-input/60 rounded-l-lg bg-muted/30 hover:bg-muted/60 transition-colors outline-none"
-            />
-          }
-        >
-          <span className="font-accent font-bold text-primary">{selectedCurrency.symbol}</span>
-          <span className="font-accent text-muted-foreground">{selectedCurrency.code}</span>
-          <IconChevronDown aria-hidden="true" className="size-3.5 text-muted-foreground" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-48 p-1.5">
-          <DropdownMenuGroup>
-            <DropdownMenuLabel>Seleziona Valuta</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {DEFAULT_CURRENCIES.map((c) => (
-              <DropdownMenuItem
-                key={c.code}
-                className={cn(
-                  "flex items-center justify-between",
-                  c.code === selectedCurrency.code && "bg-accent/60 font-semibold"
-                )}
-                onClick={() => setSelectedCurrency(c)}
-              >
-                <span className="font-accent font-bold">{c.symbol}</span>
-                <span className="text-muted-foreground">{c.name}</span>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <Input
-        type="text"
-        value={value}
-        onChange={onChange}
-        className="rounded-l-none font-accent border-0 focus-visible:ring-0"
-        placeholder="12500,00"
-        {...props}
-      />
-    </InputGroup>
-  )
-}
-
-function NumberInput({
-  className,
-  value = 0,
-  min,
-  max,
-  step = 1,
-  onChangeValue,
-  ...props
-}: Omit<React.ComponentProps<"input">, "type" | "onChange" | "value" | "min" | "max" | "step"> & {
-  value?: number
-  min?: number
-  max?: number
-  step?: number
-  onChangeValue?: (val: number) => void
-}) {
-  const handleIncrement = () => {
-    const next = Number(value ?? 0) + Number(step)
-    if (max !== undefined && next > Number(max)) return
-    onChangeValue?.(next)
-  }
-
-  const handleDecrement = () => {
-    const next = Number(value ?? 0) - Number(step)
-    if (min !== undefined && next < Number(min)) return
-    onChangeValue?.(next)
-  }
-
-  return (
-    <div className="relative flex w-full items-center">
-      <IconButton
-        type="button"
-        variant="outline"
-        size="xs"
-        className="absolute left-1.5 z-10"
-        onClick={handleDecrement}
-        aria-label="Riduci valore"
-      >
-        <IconMinus aria-hidden="true" className="size-3" />
-      </IconButton>
-      <Input
-        type="number"
-        value={value}
-        min={min}
-        max={max}
-        step={step}
-        onChange={(e) => onChangeValue?.(Number(e.target.value))}
-        className={cn("px-9 text-center font-accent", className)}
-        {...props}
-      />
-      <IconButton
-        type="button"
-        variant="outline"
-        size="xs"
-        className="absolute right-1.5 z-10"
-        onClick={handleIncrement}
-        aria-label="Aumenta valore"
-      >
-        <IconPlus aria-hidden="true" className="size-3" />
-      </IconButton>
-    </div>
   )
 }
 
@@ -616,7 +308,7 @@ function TimePickerInput({
           <DropdownMenuLabel>Seleziona Orario</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <div className="flex gap-1 pt-1">
-            <div className="flex-1 max-h-40 overflow-y-auto scrollbar-none space-y-0.5">
+            <div className="flex-1 max-h-40 overflow-y-auto space-y-0.5">
               <p className="px-2 py-1 text-[0.625rem] font-semibold text-muted-foreground uppercase font-accent">Ora</p>
               {hours.map((h) => (
                 <DropdownMenuItem
@@ -632,7 +324,7 @@ function TimePickerInput({
               ))}
             </div>
             <div className="w-px bg-border/50" />
-            <div className="flex-1 max-h-40 overflow-y-auto scrollbar-none space-y-0.5">
+            <div className="flex-1 max-h-40 overflow-y-auto space-y-0.5">
               <p className="px-2 py-1 text-[0.625rem] font-semibold text-muted-foreground uppercase font-accent">Min</p>
               {minutes.map((m) => (
                 <DropdownMenuItem
@@ -659,11 +351,6 @@ export {
   InputGroup,
   InputAddon,
   InputIcon,
-  PasswordInput,
-  SearchInput,
-  PhoneInput,
-  CurrencyInput,
-  NumberInput,
   OTPInput,
   DatePickerInput,
   TimePickerInput,
