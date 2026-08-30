@@ -19,7 +19,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@qoovex/ui/components/dialog"
-import { Field, FieldDescription, FieldLabel } from "@qoovex/ui/components/field"
+import { Field, FieldDescription } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { SearchField, SearchResults } from "@qoovex/ui/components/search-field"
 import {
   SlidingIndicatorContainer,
@@ -133,7 +134,7 @@ export default function SearchFieldCatalogPage() {
           <SpecimenGrid cols={2}>
             <Specimen title="Vuota">
               <Field className="w-full">
-                <FieldLabel htmlFor="search-empty">Cerca nel catalogo</FieldLabel>
+                <Label htmlFor="search-empty">Cerca nel catalogo</Label>
                 <SearchField
                   data-search-proof="empty"
                   id="search-empty"
@@ -146,7 +147,7 @@ export default function SearchFieldCatalogPage() {
             <Specimen title="Typing, risultati e clear">
               <div className="grid w-full gap-3">
                 <Field>
-                  <FieldLabel htmlFor="search-controlled">Trova una risorsa</FieldLabel>
+                  <Label htmlFor="search-controlled">Trova una risorsa</Label>
                   <SearchField
                     data-search-proof="controlled"
                     id="search-controlled"
@@ -183,7 +184,7 @@ export default function SearchFieldCatalogPage() {
 
             <Specimen title="Sola lettura, senza clear">
               <Field className="w-full">
-                <FieldLabel htmlFor="search-readonly">Filtro applicato</FieldLabel>
+                <Label htmlFor="search-readonly">Filtro applicato</Label>
                 <SearchField
                   data-search-proof="readonly"
                   defaultValue="Documenti approvati"
@@ -196,7 +197,7 @@ export default function SearchFieldCatalogPage() {
 
             <Specimen title="Disabilitata, senza clear">
               <Field className="w-full" data-disabled>
-                <FieldLabel htmlFor="search-disabled">Ricerca non disponibile</FieldLabel>
+                <Label htmlFor="search-disabled">Ricerca non disponibile</Label>
                 <SearchField
                   data-search-proof="disabled"
                   defaultValue="Archivio remoto"
@@ -209,7 +210,7 @@ export default function SearchFieldCatalogPage() {
 
             <Specimen title="Clear disattivato intenzionalmente">
               <Field className="w-full">
-                <FieldLabel htmlFor="search-not-clearable">Filtro persistente</FieldLabel>
+                <Label htmlFor="search-not-clearable">Filtro persistente</Label>
                 <SearchField
                   clearable={false}
                   data-search-proof="not-clearable"

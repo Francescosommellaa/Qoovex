@@ -73,6 +73,8 @@ test("Phone and Currency have canonical entrypoints and share a private behavior
   assert.match(addon, /<SelectPrimitive\.Trigger render=/);
   assert.match(addon, /disabled=\{state.disabled \|\| readOnly\}/);
   assert.match(addon, /<IconAction intent="disclosure"/);
+  assert.doesNotMatch(addon, /InputAddon/);
+  assert.match(addon, /data-slot="selectable-addon"/);
   assert.doesNotMatch(addon, /useState|onKeyDown|onPointerDown|onClick|motion\/react/);
 });
 
@@ -80,12 +82,14 @@ test("InputGroup and InputAddon remain explicit static composition without a sec
   assert.match(groupImplementation, /qv-input-group qv-touch-target-field/);
   assert.match(groupImplementation, /data-focus-owner="composite"/);
   assert.match(groupImplementation, /qv-input-addon/);
-  assert.match(groupImplementation, /min-w-0 truncate/);
+  assert.match(groupImplementation, /shrink-0/);
+  assert.doesNotMatch(groupImplementation, /truncate|text-ellipsis/);
   assert.doesNotMatch(groupImplementation, /useState|useEffect|cloneElement|onClick|tabIndex|bg-transparent|bg-input\/|bg-muted\//);
   assert.match(base, /\.qv-input-group > \.qv-input\[data-slot="input"\]\s*\{[^}]*border: 0;[^}]*background-color: transparent;[^}]*box-shadow: none/);
   assert.match(base, /\.qv-input-group:has\(> \.qv-input:disabled\)/);
   assert.match(base, /\.qv-input-group\[data-slot="input-group"\]:has\(> \.qv-input:focus-visible/);
-  assert.match(base, /max-inline-size: 35%/);
+  assert.doesNotMatch(base, /max-inline-size: 35%/);
+  assert.match(base, /\.qv-input-addon\s*\{\s*flex: 0 0 auto/);
 });
 
 test("Input preserves one native public API and one intrinsic size", () => {

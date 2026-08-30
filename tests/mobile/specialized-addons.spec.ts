@@ -165,7 +165,9 @@ test("Selectable addons fit 320px with touch targets, long option labels, themes
       expect(bounds!.x - outer!.x).toBeGreaterThanOrEqual(6);
       expect(bounds!.y - outer!.y).toBeGreaterThanOrEqual(6);
       const option = page.getByRole("option", { name: label === "Valuta" ? "USD · Dollaro statunitense" : "Regno Unito · +44", exact: true });
-      expect((await option.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+      // Popup entrance can still be at scale(.95) on its first visible frame.
+      // Assert the settled touch target without sampling that transient frame.
+      await expect.poll(async () => (await option.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
       const popup = await page.getByRole("listbox").boundingBox();
       expect(popup!.x).toBeGreaterThanOrEqual(0);
       expect(popup!.x + popup!.width).toBeLessThanOrEqual(320);

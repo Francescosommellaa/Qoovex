@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Button } from "@qoovex/ui/components/button";
-import { Field, FieldDescription, FieldError, FieldLabel, FieldTitle } from "@qoovex/ui/components/field";
+import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
+import { Field, FieldDescription, FieldTitle } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
 import { captureRefreshFocus, updateWithFocusGuard } from "@shared/lib/focus-management";
 
@@ -86,7 +88,7 @@ export function NotificationPreferencesForm({ organizations }: { organizations: 
       <PreferenceSelect disabled={pending} id="notification-channel" label="Canale" name="channel" onValueChange={(value) => { setChannel((value ?? CHANNEL_OPTIONS[0].value) as typeof channel); clearFeedback(); }} options={CHANNEL_OPTIONS} value={channel} />
       <PreferenceSelect description="Scegli quando ricevere questo tipo di notifica; con Disattivata non riceverai aggiornamenti su questo canale." disabled={pending} id="notification-frequency" label="Frequenza" name="frequency" onValueChange={(value) => { setFrequency((value ?? FREQUENCY_OPTIONS[0].value) as typeof frequency); clearFeedback(); }} options={FREQUENCY_OPTIONS} value={frequency} />
       <Button disabled={pending || !organizationId} type="submit">{pending ? "Salvataggio…" : "Salva preferenza"}</Button>
-      {error ? <FieldError>{error}</FieldError> : null}
+      {error ? <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert> : null}
       {status ? <p className="text-sm text-emerald-700 dark:text-emerald-300" role="status">{status}</p> : null}
     </form>
   );
@@ -105,7 +107,7 @@ function PreferenceSelect({ description, disabled, id, label, name, onValueChang
   const descriptionId = description ? `${id}-description` : undefined;
   return (
     <Field>
-      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+      <Label htmlFor={id}>{label}</Label>
       <Select disabled={disabled} items={options} name={name} onValueChange={onValueChange} value={value}>
         <SelectTrigger aria-describedby={descriptionId} className="h-9 w-full" data-field-name={name} disabled={disabled} id={id}><SelectValue /></SelectTrigger>
         <SelectContent align="start"><SelectGroup>{options.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectGroup></SelectContent>

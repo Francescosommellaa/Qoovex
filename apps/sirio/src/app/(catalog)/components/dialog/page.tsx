@@ -16,7 +16,8 @@ import {
 } from "@qoovex/ui/components/dialog";
 import { Button } from "@qoovex/ui/components/button";
 import { Input } from "@qoovex/ui/components/input";
-import { Field, FieldLabel, FieldDescription } from "@qoovex/ui/components/field";
+import { Field, FieldDescription } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import {
   Select,
   SelectTrigger,
@@ -73,12 +74,12 @@ export default function DialogCatalogPage() {
 
                   <div className="space-y-4 py-2">
                     <Field>
-                      <FieldLabel htmlFor="site-name">Nome Cantiere / Codice</FieldLabel>
+                      <Label htmlFor="site-name">Nome Cantiere / Codice</Label>
                       <Input id="site-name" placeholder="es. Ristrutturazione Via Roma 42" />
                     </Field>
 
                     <Field>
-                      <FieldLabel htmlFor="site-type">Tipologia Lavorazione</FieldLabel>
+                      <Label htmlFor="site-type">Tipologia Lavorazione</Label>
                       <Select defaultValue="ELECTRIC">
                         <SelectTrigger id="site-type" className="w-full">
                           <SelectValue placeholder="Seleziona tipo" />
@@ -92,7 +93,7 @@ export default function DialogCatalogPage() {
                     </Field>
 
                     <Field>
-                      <FieldLabel htmlFor="site-amount">Importo Stimato Iniziale (€)</FieldLabel>
+                      <Label htmlFor="site-amount">Importo Stimato Iniziale (€)</Label>
                       <Input id="site-amount" placeholder="45000,00" className="font-accent" />
                       <FieldDescription>Valore indicativo inserito dalle parti senza custodia di denaro.</FieldDescription>
                     </Field>

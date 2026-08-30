@@ -4,7 +4,8 @@ import { useState } from "react";
 import { PageHeader } from "@/components/page-header";
 import { Specimen, SpecimenGrid } from "@/components/specimen";
 import { Button } from "@qoovex/ui/components/button";
-import { Field, FieldLabel, FieldDescription, FieldError } from "@qoovex/ui/components/field";
+import { Field, FieldDescription, FieldError } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { Input } from "@qoovex/ui/components/input";
 import { CompositeInput, InputAddon } from "@qoovex/ui/components/composite-input";
 import { PhoneInput } from "@qoovex/ui/components/phone-input";
@@ -44,7 +45,7 @@ export default function CompositeInputPage() {
         <Specimen title="Telefono" visualId="sirio-prefix-phone">
           <form className="w-full">
             <Field data-invalid={availability["aria-invalid"]}>
-              <FieldLabel htmlFor="prefix-phone">Numero di telefono</FieldLabel>
+              <Label htmlFor="prefix-phone">Numero di telefono</Label>
               <PhoneInput {...availability} id="prefix-phone" name="phone" countryName="country" autoComplete="tel-national" onValidationChange={setPhoneError}
                 placeholder="Numero nazionale" aria-describedby={`prefix-phone-help${phoneError || availability["aria-invalid"] ? " prefix-phone-error" : ""}`} />
               <FieldDescription id="prefix-phone-help">Cambia paese e digita. Prefisso e numero restano valori separati.</FieldDescription>
@@ -55,7 +56,7 @@ export default function CompositeInputPage() {
         <Specimen title="Valuta" visualId="sirio-prefix-currency">
           <form className="w-full space-y-4">
             <Field data-invalid={availability["aria-invalid"]}>
-              <FieldLabel htmlFor="prefix-currency">Importo</FieldLabel>
+              <Label htmlFor="prefix-currency">Importo</Label>
               <CurrencyInput {...availability} id="prefix-currency" name="amount" currencyName="currency" locale="it-IT" defaultCurrency="EUR"
                 value={amount} onChange={(event) => setAmount(event.target.value)} onValidationChange={setCurrencyError} placeholder="0,00" aria-describedby={`prefix-currency-help${currencyError || availability["aria-invalid"] ? " prefix-currency-error" : ""}`} />
               <FieldDescription id="prefix-currency-help">Scrivi 1250,5: uscendo diventa 1.250,50. Cambiare valuta non converte l’importo.</FieldDescription>
@@ -68,7 +69,7 @@ export default function CompositeInputPage() {
       <Specimen title="Valuta unica · importo precompilato" visualId="sirio-currency-fixed">
         <form className="w-full max-w-sm">
           <Field>
-            <FieldLabel htmlFor="fixed-currency">Costo previsto</FieldLabel>
+            <Label htmlFor="fixed-currency">Costo previsto</Label>
             <CurrencyInput {...availability} id="fixed-currency" name="fixedAmount" currencyName="fixedCurrency"
               currencies={[{ code: "EUR", symbol: "€", name: "Euro" }]} defaultCurrency="EUR" defaultValue="1250,5"
               min={0} max={1000000} placeholder="0,00" onValidationChange={setFixedError}
@@ -85,7 +86,7 @@ export default function CompositeInputPage() {
           setPreview(domain ? `https://${domain}` : "");
         }}>
           <Field data-invalid={availability["aria-invalid"]}>
-            <FieldLabel htmlFor="addon-domain">Dominio o percorso</FieldLabel>
+            <Label htmlFor="addon-domain" required>Dominio o percorso</Label>
             <UrlInput {...availability} id="addon-domain" name="domain" onValidationChange={setUrlError}
               aria-describedby={`addon-domain-help${urlError || availability["aria-invalid"] ? " addon-domain-error" : ""}`} placeholder="esempio.test" required onChange={() => setPreview("")} />
             <FieldDescription id="addon-domain-help">Protocollo HTTPS. Il campo contiene solo dominio e percorso; questa demo aggiunge il protocollo all’anteprima.</FieldDescription>
@@ -97,12 +98,23 @@ export default function CompositeInputPage() {
       </Specimen>
       <Specimen title="Suffisso statico" visualId="sirio-input-addons-suffix">
         <Field className="w-full max-w-sm">
-          <FieldLabel htmlFor="addon-share">Percentuale</FieldLabel>
+          <Label htmlFor="addon-share">Percentuale</Label>
           <CompositeInput data-addon-proof="suffix">
             <Input {...availability} id="addon-share" inputMode="decimal" placeholder="25" aria-describedby="addon-share-help" />
             <InputAddon aria-hidden="true">%</InputAddon>
           </CompositeInput>
           <FieldDescription id="addon-share-help">Valore espresso in percentuale. Il simbolo è statico e non viene aggiunto al valore.</FieldDescription>
+        </Field>
+      </Specimen>
+      <Specimen title="Prefisso e suffisso · stima percentuale">
+        <Field className="w-full max-w-sm">
+          <Label htmlFor="addon-estimate">Avanzamento stimato</Label>
+          <CompositeInput data-addon-proof="both">
+            <InputAddon aria-hidden="true">≈</InputAddon>
+            <Input {...availability} id="addon-estimate" inputMode="decimal" placeholder="25" aria-describedby="addon-estimate-help" />
+            <InputAddon aria-hidden="true">%</InputAddon>
+          </CompositeInput>
+          <FieldDescription id="addon-estimate-help">Percentuale approssimativa. I simboli non fanno parte del valore inserito.</FieldDescription>
         </Field>
       </Specimen>
     </div>

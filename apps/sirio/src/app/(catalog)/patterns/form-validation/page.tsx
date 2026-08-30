@@ -102,7 +102,7 @@ export default function FormValidationPatternPage() {
           <div className="mt-3 space-y-3 leading-7 text-muted-foreground">
             <p>
               Componi <Link href="/components/field" className="font-medium text-foreground underline underline-offset-4">Field</Link>,
-              <code className="mx-1 font-accent text-sm text-foreground">FieldLabel</code>,
+              <code className="mx-1 font-accent text-sm text-foreground">Label</code>,
               <code className="mx-1 font-accent text-sm text-foreground">FieldDescription</code> e
               <code className="mx-1 font-accent text-sm text-foreground">FieldError</code> con input,
               <Link href="/components/textarea" className="ml-1 font-medium text-foreground underline underline-offset-4">textarea</Link>,

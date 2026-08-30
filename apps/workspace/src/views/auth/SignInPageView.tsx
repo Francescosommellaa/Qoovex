@@ -7,7 +7,8 @@ import { useState, type FormEvent } from "react";
 import { IconAlertCircle, IconArrowRight, IconCircleCheck, IconCode } from "@tabler/icons-react";
 import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
 import { Button } from "@qoovex/ui/components/button";
-import { Field, FieldGroup, FieldLabel, FieldSeparator } from "@qoovex/ui/components/field";
+import { Field, FieldGroup, FieldSeparator } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { Input } from "@qoovex/ui/components/input";
 import { PasswordInput } from "@qoovex/ui/components/password-input";
 import { Spinner } from "@qoovex/ui/components/spinner";
@@ -92,12 +93,12 @@ export function SignInPageView({
         <form aria-busy={loading} className={styles.form} onSubmit={onSubmit}>
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="identifier">Email o username</FieldLabel>
+              <Label htmlFor="identifier" required>Email o username</Label>
               <Input autoComplete="username" className="h-11 px-3" id="identifier" name="identifier" required type="text" />
             </Field>
             <Field>
               <div className="flex items-center justify-between gap-3">
-                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Label htmlFor="password" required>Password</Label>
                 <Link className="text-xs text-muted-foreground hover:text-foreground" data-link="quiet" href={`/reset-password?callbackUrl=${encodeURIComponent(callbackUrl)}`}>Password dimenticata?</Link>
               </div>
               <PasswordInput

@@ -5,7 +5,8 @@ import { useState, type FormEvent } from "react";
 import { IconAlertCircle, IconArrowRight } from "@tabler/icons-react";
 import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
 import { Button } from "@qoovex/ui/components/button";
-import { Field, FieldDescription, FieldLabel } from "@qoovex/ui/components/field";
+import { Field, FieldDescription } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { Input } from "@qoovex/ui/components/input";
 import { Spinner } from "@qoovex/ui/components/spinner";
 import styles from "./AuthPages.module.css";
@@ -41,9 +42,9 @@ export function OrganizationSetupForm() {
   return (
     <form aria-busy={loading} className={styles.form} onSubmit={onSubmit}>
       <Field>
-        <FieldLabel htmlFor="organization-name">Nome azienda</FieldLabel>
-        <Input autoComplete="organization" className="h-11 px-3" id="organization-name" name="name" required type="text" />
-        <FieldDescription>Usa la denominazione con cui il team riconosce l’Azienda nel lavoro quotidiano.</FieldDescription>
+        <Label htmlFor="organization-name" required>Nome azienda</Label>
+        <Input aria-describedby="organization-name-description" autoComplete="organization" className="h-11 px-3" id="organization-name" name="name" required type="text" />
+        <FieldDescription id="organization-name-description">Usa la denominazione con cui il team riconosce l’Azienda nel lavoro quotidiano.</FieldDescription>
       </Field>
       {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
       <Button className="h-11 w-full" disabled={loading} type="submit">

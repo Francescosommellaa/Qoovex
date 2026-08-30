@@ -10,8 +10,8 @@ import {
   FieldDescription,
   FieldError,
   FieldGroup,
-  FieldLabel,
-} from "@qoovex/ui/components/field";
+} from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { Input } from "@qoovex/ui/components/input";
 import {
   Select,
@@ -124,12 +124,12 @@ export function FormValidationSpecimen() {
 
         <FieldGroup className="mt-6">
           <Field>
-            <FieldLabel htmlFor="specimen-contact">Referente</FieldLabel>
+            <Label htmlFor="specimen-contact">Referente</Label>
             <Input id="specimen-contact" name="contact" placeholder="Es. Giulia Bianchi" autoComplete="name" />
           </Field>
 
           <Field>
-            <FieldLabel htmlFor="specimen-note">Nota condivisa</FieldLabel>
+            <Label htmlFor="specimen-note">Nota condivisa</Label>
             <Textarea
               id="specimen-note"
               name="note"
@@ -142,7 +142,7 @@ export function FormValidationSpecimen() {
           </Field>
 
           <Field data-invalid="true">
-            <FieldLabel htmlFor="specimen-email">Email del cliente</FieldLabel>
+            <Label htmlFor="specimen-email">Email del cliente</Label>
             <Input
               id="specimen-email"
               name="email"
@@ -174,7 +174,7 @@ export function FormValidationSpecimen() {
         >
           <FieldGroup>
             <Field data-invalid={fieldErrors.title ? "true" : undefined}>
-              <FieldLabel htmlFor="request-title">Titolo della richiesta</FieldLabel>
+              <Label htmlFor="request-title">Titolo della richiesta</Label>
               <Input
                 id="request-title"
                 name="title"
@@ -193,7 +193,7 @@ export function FormValidationSpecimen() {
             </Field>
 
             <Field data-invalid={fieldErrors.details ? "true" : undefined}>
-              <FieldLabel htmlFor="request-details">Dettagli</FieldLabel>
+              <Label htmlFor="request-details">Dettagli</Label>
               <Textarea
                 id="request-details"
                 name="details"
@@ -215,7 +215,7 @@ export function FormValidationSpecimen() {
             </Field>
 
             <Field data-invalid={fieldErrors.type ? "true" : undefined}>
-              <FieldLabel htmlFor="request-type">Tipo di richiesta</FieldLabel>
+              <Label htmlFor="request-type" required>Tipo di richiesta</Label>
               <Select
                 items={requestTypes}
                 name="type"
@@ -257,11 +257,11 @@ export function FormValidationSpecimen() {
                 aria-describedby="request-blocks-closure-description"
                 disabled={pending}
               />
-              <div className="min-w-0">
-                <FieldLabel id="request-blocks-closure-label" htmlFor="request-blocks-closure">
+              <div className="flex min-w-0 flex-col gap-1">
+                <Label id="request-blocks-closure-label" htmlFor="request-blocks-closure">
                   Impedisce la chiusura del lavoro
-                </FieldLabel>
-                <FieldDescription id="request-blocks-closure-description" className="mt-1">
+                </Label>
+                <FieldDescription id="request-blocks-closure-description">
                   Se selezionata, la chiusura resta sospesa finché la richiesta è aperta.
                 </FieldDescription>
               </div>

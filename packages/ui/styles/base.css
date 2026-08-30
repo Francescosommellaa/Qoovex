@@ -32,6 +32,19 @@
   font-synthesis-weight: none;
 }
 
+.qv-label[data-slot="label"] {
+  cursor: default;
+}
+
+:is(
+  [data-slot="field"]:has(:disabled),
+  [data-slot="field"]:has([aria-disabled="true"])
+) .qv-label[data-slot="label"],
+.qv-label[data-slot="label"][data-disabled="true"] {
+  color: var(--muted-foreground);
+  cursor: not-allowed;
+}
+
 /*
  * Icon sizing is semantic and intentionally does not wrap Tabler. These
  * classes own only the SVG box; alignment, color and accessible naming stay
@@ -569,16 +582,22 @@
   transition: none;
 }
 
-.qv-input-addon {
+.qv-input-group {
+  container: input-group / inline-size;
+}
+
+:is(.qv-input-addon, .qv-selectable-addon) {
   position: relative;
-  flex: 0 1 auto;
-  max-inline-size: 35%;
   align-self: stretch;
   cursor: inherit;
 }
 
+.qv-input-addon {
+  flex: 0 0 auto;
+}
+
 /* DOM order is canonical; position remains an optional compatibility hint. */
-.qv-input-addon::after {
+:is(.qv-input-addon, .qv-selectable-addon)::after {
   content: "";
   position: absolute;
   inset-block: 0.375rem;
@@ -586,7 +605,7 @@
   inset-inline-end: 0;
 }
 
-.qv-input-group > .qv-input ~ .qv-input-addon::after {
+.qv-input-group > .qv-input ~ :is(.qv-input-addon, .qv-selectable-addon)::after {
   inset-inline-start: 0;
   inset-inline-end: auto;
 }
@@ -597,17 +616,13 @@
   height: 3rem;
 }
 
-.qv-input-addon.qv-selectable-addon {
+.qv-selectable-addon {
   flex: 0 1 7rem;
   max-inline-size: 55%;
   padding: 0.375rem;
 }
 
 [data-phone-input] > .qv-selectable-addon { flex-basis: 5rem; }
-
-.qv-selectable-addon > span {
-  display: contents;
-}
 
 .qv-addon-trigger {
   display: flex;
@@ -642,6 +657,31 @@
 }
 
 .qv-addon-value > [data-slot="select-value"] { justify-content: center; gap: 0.375rem; }
+
+/* Local available space owns density, including 200% text scaling.
+ * Keep the content intact; only internal spacing yields before the value. */
+@container input-group (max-width: 12rem) {
+  .qv-input-group > .qv-input[data-slot="input"],
+  .qv-input-group > .qv-input-addon {
+    padding-inline: 0.375rem;
+  }
+
+  .qv-input-group > .qv-selectable-addon {
+    flex: 0 0 auto;
+    max-inline-size: none;
+  }
+
+  .qv-addon-trigger {
+    width: auto;
+    padding-inline: 0;
+    gap: 0.1875rem;
+  }
+
+  .qv-addon-value,
+  .qv-addon-value > [data-slot="select-value"] {
+    gap: 0.1875rem;
+  }
+}
 
 @media (hover: hover) and (pointer: fine) {
   .qv-addon-trigger:not(:disabled):hover,
@@ -688,7 +728,7 @@
 
 @media (forced-colors: active) {
   .qv-addon-trigger:disabled { color: GrayText; }
-  .qv-input-addon::after { border-color: CanvasText; }
+  :is(.qv-input-addon, .qv-selectable-addon)::after { border-color: CanvasText; }
 }
 
 ::selection {

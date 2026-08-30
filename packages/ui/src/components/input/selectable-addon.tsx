@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { Select as SelectPrimitive } from "@base-ui/react/select"
-import { InputAddon } from "../composite-input"
 import { Select, SelectContent, SelectItem, SelectValue } from "../select"
 import { IconAction } from "../icon-action"
 
@@ -31,7 +30,7 @@ export function SelectableAddon({ options, label, descriptionId, value, defaultV
     </button>
   )
   return (
-    <InputAddon className="qv-selectable-addon">
+    <div data-slot="selectable-addon" className="qv-selectable-addon flex items-center">
       <Select value={value} defaultValue={defaultValue} disabled={disabled} readOnly={readOnly}
         name={name} form={form} items={options}
         onValueChange={(next) => { if (next !== null) onValueChange?.(next) }}>
@@ -46,6 +45,6 @@ export function SelectableAddon({ options, label, descriptionId, value, defaultV
           </SelectItem>)}
         </SelectContent>
       </Select>
-    </InputAddon>
+    </div>
   )
 }

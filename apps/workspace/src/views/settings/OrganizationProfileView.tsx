@@ -4,10 +4,12 @@ import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "r
 import { useRouter } from "next/navigation";
 import { IconBuilding, IconCheck, IconPlus, IconUser } from "@tabler/icons-react";
 import { Badge } from "@qoovex/ui/components/badge";
+import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
 import { Button } from "@qoovex/ui/components/button";
 import { Checkbox } from "@qoovex/ui/components/checkbox";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@qoovex/ui/components/field";
+import { Field, FieldDescription, FieldGroup } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { Input } from "@qoovex/ui/components/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@qoovex/ui/components/select";
 import { Textarea } from "@qoovex/ui/components/textarea";
@@ -165,32 +167,32 @@ export function OrganizationProfileView({ data, canUpdate }: { data: ProfileData
             <form aria-busy={profilePending} className="grid gap-5" onSubmit={saveProfile}>
               <FieldGroup className="grid gap-4 sm:grid-cols-2">
                 <Field>
-                  <FieldLabel htmlFor="profile-legal-name">Ragione sociale</FieldLabel>
+                  <Label htmlFor="profile-legal-name" required>Ragione sociale</Label>
                   <Input autoComplete="organization" disabled={!canUpdate || profilePending} id="profile-legal-name" maxLength={160} minLength={2} name="legalName" onChange={updateProfileField("legalName")} required value={profileValues.legalName} />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="profile-tax-code">Codice fiscale</FieldLabel>
+                  <Label htmlFor="profile-tax-code">Codice fiscale</Label>
                   <Input disabled={!canUpdate || profilePending} id="profile-tax-code" maxLength={32} name="taxCode" onChange={updateProfileField("taxCode")} value={profileValues.taxCode} />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="profile-vat">Partita IVA</FieldLabel>
+                  <Label htmlFor="profile-vat">Partita IVA</Label>
                   <Input disabled={!canUpdate || profilePending} id="profile-vat" maxLength={32} name="vatNumber" onChange={updateProfileField("vatNumber")} value={profileValues.vatNumber} />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="profile-office">Sede legale</FieldLabel>
+                  <Label htmlFor="profile-office">Sede legale</Label>
                   <Input autoComplete="street-address" disabled={!canUpdate || profilePending} id="profile-office" maxLength={500} name="registeredOfficeAddress" onChange={updateProfileField("registeredOfficeAddress")} value={profileValues.registeredOfficeAddress} />
                 </Field>
                 <Field className="sm:col-span-2">
-                  <FieldLabel htmlFor="profile-description">Attività</FieldLabel>
+                  <Label htmlFor="profile-description">Attività</Label>
                   <Textarea disabled={!canUpdate || profilePending} id="profile-description" maxLength={4000} name="operatingDescription" onChange={updateProfileField("operatingDescription")} rows={4} value={profileValues.operatingDescription} />
                 </Field>
                 <Field className="sm:col-span-2">
-                  <FieldLabel htmlFor="profile-specializations">Specializzazioni</FieldLabel>
+                  <Label htmlFor="profile-specializations">Specializzazioni</Label>
                   <Input aria-describedby="profile-specializations-description" disabled={!canUpdate || profilePending} id="profile-specializations" name="specializations" onChange={updateProfileField("specializations")} value={profileValues.specializations} />
                   <FieldDescription id="profile-specializations-description">Separa le specializzazioni con una virgola.</FieldDescription>
                 </Field>
               </FieldGroup>
-              {profileError ? <FieldError>{profileError}</FieldError> : null}
+              {profileError ? <Alert variant="destructive"><AlertDescription>{profileError}</AlertDescription></Alert> : null}
               {profileStatus ? <p className="text-sm text-emerald-700 dark:text-emerald-300" role="status">{profileStatus}</p> : null}
               {canUpdate ? (
                 <div className="flex justify-end">
@@ -224,7 +226,7 @@ export function OrganizationProfileView({ data, canUpdate }: { data: ProfileData
                 ))}
               </ul>
             ) : <div className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">Nessun contatto operativo.</div>}
-            {contactError ? <FieldError>{contactError}</FieldError> : null}
+            {contactError ? <Alert variant="destructive"><AlertDescription>{contactError}</AlertDescription></Alert> : null}
             {contactStatus ? <p className="text-sm text-emerald-700 dark:text-emerald-300" role="status">{contactStatus}</p> : null}
             {canUpdate && !showContactForm ? (
               <Button className="h-11" onClick={() => { setContactError(null); setContactStatus(null); setShowContactForm(true); }} ref={addContactTriggerRef} type="button" variant="outline"><IconPlus aria-hidden="true" />Aggiungi contatto</Button>
@@ -232,34 +234,34 @@ export function OrganizationProfileView({ data, canUpdate }: { data: ProfileData
             {showContactForm ? (
               <form aria-busy={contactPending} className="grid gap-3 rounded-lg border p-3" onSubmit={addContact}>
                 <Field>
-                  <FieldLabel htmlFor="contact-name">Nome</FieldLabel>
+                  <Label htmlFor="contact-name" required>Nome</Label>
                   <Input autoComplete="name" disabled={contactPending} id="contact-name" maxLength={160} minLength={2} name="name" ref={contactNameRef} required />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="contact-kind">Tipo</FieldLabel>
+                  <Label htmlFor="contact-kind">Tipo</Label>
                   <Select defaultValue="OPERATIONS" disabled={contactPending} items={CONTACT_KIND_OPTIONS} name="kind">
                     <SelectTrigger className="h-11 w-full" disabled={contactPending} id="contact-kind"><SelectValue /></SelectTrigger>
                     <SelectContent align="start"><SelectGroup>{CONTACT_KIND_OPTIONS.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}</SelectGroup></SelectContent>
                   </Select>
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="contact-position">Responsabilità</FieldLabel>
+                  <Label htmlFor="contact-position">Responsabilità</Label>
                   <Input disabled={contactPending} id="contact-position" maxLength={160} name="position" />
                 </Field>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <Field>
-                    <FieldLabel htmlFor="contact-email">Email</FieldLabel>
+                    <Label htmlFor="contact-email">Email</Label>
                     <Input autoComplete="email" disabled={contactPending} id="contact-email" maxLength={320} name="email" type="email" />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="contact-phone">Telefono</FieldLabel>
+                    <Label htmlFor="contact-phone">Telefono</Label>
                     <Input autoComplete="tel" disabled={contactPending} id="contact-phone" maxLength={80} name="phone" type="tel" />
                   </Field>
                 </div>
                 <Field>
                   <div className="flex items-center gap-2">
                     <Checkbox aria-describedby="contact-primary-description" disabled={contactPending} id="contact-primary" name="isPrimary" />
-                    <FieldLabel htmlFor="contact-primary">Contatto primario</FieldLabel>
+                    <Label htmlFor="contact-primary">Contatto primario</Label>
                   </div>
                   <FieldDescription id="contact-primary-description">Identifica questo contatto come riferimento principale dell’Azienda.</FieldDescription>
                 </Field>

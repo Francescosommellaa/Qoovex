@@ -209,12 +209,12 @@ export default function CollapsibleCatalogPage() {
                     <CardContent className="border-t border-border/60 p-4 pt-3 space-y-4">
                       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <div className="space-y-1.5">
-                          <Label className="text-xs font-accent">Cerca per Codice o Via</Label>
-                          <Input placeholder="Es. JOB-8942..." className="h-8 text-xs" />
+                          <Label htmlFor="collapsible-search">Cerca per codice o via</Label>
+                          <Input id="collapsible-search" placeholder="Es. JOB-8942..." className="h-8 text-xs" />
                         </div>
 
                         <div className="space-y-1.5">
-                          <Label className="text-xs font-accent">Stato Avanzamento</Label>
+                          <p className="text-xs font-semibold">Stato avanzamento</p>
                           <div className="flex flex-wrap items-center gap-3 pt-1">
                             <div className="flex items-center gap-1.5">
                               <Checkbox id="filter-active" defaultChecked />
@@ -232,7 +232,7 @@ export default function CollapsibleCatalogPage() {
                         </div>
 
                         <div className="space-y-1.5">
-                          <Label className="text-xs font-accent">Ruoli Assegnati</Label>
+                          <p className="text-xs font-semibold">Ruoli assegnati</p>
                           <div className="flex flex-wrap items-center gap-3 pt-1">
                             <div className="flex items-center gap-1.5">
                               <Checkbox id="filter-director" defaultChecked />
