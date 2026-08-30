@@ -88,6 +88,7 @@ test("NumberInput: decimal stepping, limits and keyboard-owned focus", async ({ 
 });
 
 test("NumberInput: controlled null, parent update, state and geometry invariance", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(`${mobileUrls.sirio}/components/number-input`);
   const input = page.locator("#number-controlled");
   // Wait for a real client-owned state change before typing into SSR markup.
@@ -110,6 +111,12 @@ test("NumberInput: controlled null, parent update, state and geometry invariance
   await input.fill("0");
   await expect(minus(input)).toBeDisabled();
   expect(await geometry(input)).toEqual(before);
+  const enabledLabel = page.locator('label[for="number-zero"]');
+  const labelColor = await enabledLabel.evaluate((el) => getComputedStyle(el).color);
+  for (const id of ["number-controlled", "number-decimal", "number-readonly"]) {
+    await expect(page.locator(`label[for="${id}"]`)).toHaveCSS("color", labelColor);
+    await expect(page.locator(`label[for="${id}"]`)).toHaveCSS("cursor", "default");
+  }
 
   const readonly = page.locator("#number-readonly");
   await readonly.click();
@@ -123,6 +130,8 @@ test("NumberInput: controlled null, parent update, state and geometry invariance
   await expect(disabled).toBeDisabled();
   await expect(plus(disabled)).toBeDisabled();
   await expect(minus(disabled)).toBeDisabled();
+  await expect(page.locator('label[for="number-disabled"]')).not.toHaveCSS("color", labelColor);
+  await expect(page.locator('label[for="number-disabled"]')).toHaveCSS("cursor", "not-allowed");
 
   const invalid = page.locator("#number-invalid");
   const invalidBefore = await geometry(invalid);

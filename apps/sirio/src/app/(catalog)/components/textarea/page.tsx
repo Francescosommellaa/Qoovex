@@ -169,7 +169,7 @@ export default function TextareaPage() {
               <FieldDescription id="textarea-disabled-help">Il contenuto resta leggibile, ma non è modificabile.</FieldDescription>
             </Field>
             <Field className="lg:col-span-2" data-invalid={descriptionMissing || undefined}>
-              <Label htmlFor="textarea-invalid">Descrizione</Label>
+              <Label htmlFor="textarea-invalid" required>Descrizione</Label>
               <Textarea
                 id="textarea-invalid"
                 aria-describedby={descriptionMissing ? "textarea-invalid-help textarea-invalid-error" : "textarea-invalid-help"}

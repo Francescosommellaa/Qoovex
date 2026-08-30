@@ -19,3 +19,8 @@ Workspace surfaces.
 The root scripts described by this folder's runner are the supported entry
 points. Pure policy modules use `node:test` so their behavior remains fast and
 independent from a browser or database.
+
+Local scope includes committed, staged, unstaged and untracked files. If dev
+servers already occupy ports 3000–3002, set `QOOVEX_VISUAL_PORT_BASE=3300` for
+an isolated run on 3300–3302; never stop unrelated servers or reuse their builds.
+CI retains its default ports and platform-specific baseline policy.

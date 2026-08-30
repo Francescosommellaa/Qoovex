@@ -1,6 +1,8 @@
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import test from "node:test"
+import { fileURLToPath } from "node:url"
+import { auditLabelRequiredDirectory, labelRequiredIssues } from "../../scripts/label-required-contract.mjs"
 
 const label = readFileSync(new URL("./label.tsx", import.meta.url), "utf8")
 const field = readFileSync(new URL("./field.tsx", import.meta.url), "utf8")
@@ -35,11 +37,32 @@ test("required presentation is explicit, never inferred from nearby controls", (
   assert.match(label, /required\?: boolean/)
   assert.match(label, /required \? \([\s\S]*: optional \? \(/)
   assert.doesNotMatch(base, /:has\(:required\)|:has\(\[aria-required=/)
-  assert.match(base, /\[data-slot="field"\]:has\(:disabled\)/)
+  assert.doesNotMatch(base, /\[data-slot="field"\]:has\(:disabled\)/)
   assert.match(base, /color: var\(--muted-foreground\)/)
   const labelCss = base.slice(base.indexOf('.qv-label[data-slot="label"]'), base.indexOf(".qv-icon-compact"))
   assert.doesNotMatch(labelCss, /opacity:/)
   assert.doesNotMatch(field, /data-\[invalid=true\]:text-destructive/)
+})
+
+test("required contract catches lost markers, visual-only required and contradictory optional", () => {
+  const source = (labelProps, controlProps) => `import { Label as FieldName } from "@qoovex/ui/components/label";
+    const field = <><FieldName htmlFor={id} ${labelProps}>Nome</FieldName><Input id={id} ${controlProps}/></>`
+  for (const [labelProps, controlProps] of [["", "required"], ["required", ""], ["required optional", "required"], ["required={needed}", "required={other}"]]) {
+    assert.equal(labelRequiredIssues(source(labelProps, controlProps)).length, 1)
+  }
+  for (const [labelProps, controlProps] of [["", ""], ["required", "required"], ["required={needed} optional={!needed}", "required={needed}"], ["required={needed}", "required={needed || undefined}"], ["required", 'aria-required="true"']]) {
+    assert.deepEqual(labelRequiredIssues(source(labelProps, controlProps)), [])
+  }
+  assert.deepEqual(labelRequiredIssues(`import { Label } from "@qoovex/ui/components/label";
+    function A() { return <><Label htmlFor={id} required>A</Label><Input id={id} required/></> }
+    function B() { return <><Label htmlFor={id}>B</Label><Input id={id}/></> }`), [])
+})
+
+test("all explicit app Label/control associations share the required contract", () => {
+  const issues = ["sirio", "workspace", "web"].flatMap((app) =>
+    auditLabelRequiredDirectory(fileURLToPath(new URL(`../../../../apps/${app}/src`, import.meta.url))),
+  )
+  assert.deepEqual(issues, [])
 })
 
 test("Sirio proves native association, required semantics, optional metadata and reuse", () => {

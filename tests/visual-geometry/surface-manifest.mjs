@@ -108,7 +108,8 @@ export const VISUAL_SURFACES = Object.freeze([
     geometry: [exactOverflow("sirio-icon-button-variants"), exactScalar("default icon button", '[data-slot="icon-button"][aria-label="Aggiungi elemento"]', "width", 32), exactScalar("default icon button", '[data-slot="icon-button"][aria-label="Aggiungi elemento"]', "height", 32), exactScalar("default icon button", '[data-slot="icon-button"][aria-label="Aggiungi elemento"]', "borderRadius", 10)],
   }),
   surface("sirio-icon-button-targets", "sirio", "/components/icon-button", "sirio-icon-button-targets", {
-    geometry: [exactOverflow("sirio-icon-button-targets"), exactScalar("keyboard icon button", '[data-slot="icon-button"][aria-label="Aggiungi con tastiera"]', "width", 32), exactScalar("keyboard icon button", '[data-slot="icon-button"][aria-label="Aggiungi con tastiera"]', "height", 32), exactScalar("keyboard icon button", '[data-slot="icon-button"][aria-label="Aggiungi con tastiera"]', "borderRadius", 10)],
+    // The lifecycle specimen now uses ToggleButton icon-sm (IconButton sm: 28px / 8px).
+    geometry: [exactOverflow("sirio-icon-button-targets"), exactScalar("focus toggle button", '[data-icon-button-proof="focus"]', "width", 28), exactScalar("focus toggle button", '[data-icon-button-proof="focus"]', "height", 28), exactScalar("focus toggle button", '[data-icon-button-proof="focus"]', "borderRadius", 8)],
   }),
   surface("sirio-toggle-button-icon-only", "sirio", "/components/icon-button", "sirio-toggle-button-icon-only", {
     geometry: [

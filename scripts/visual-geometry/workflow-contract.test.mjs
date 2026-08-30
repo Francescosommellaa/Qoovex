@@ -8,6 +8,11 @@ async function readWorkflow() {
   return readFile(workflowUrl, "utf8");
 }
 
+test("normal local visual runs cannot create unreviewed missing baselines", async () => {
+  const config = await readFile(new URL("../../playwright.visual-geometry.config.ts", import.meta.url), "utf8");
+  assert.match(config, /updateSnapshots:\s*"none"/);
+});
+
 test("visual geometry CI is a read-only required-check candidate", async () => {
   const workflow = await readWorkflow();
 

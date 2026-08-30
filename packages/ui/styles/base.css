@@ -36,10 +36,13 @@
   cursor: default;
 }
 
+/* Only the field's control/root owns availability. Disabled auxiliary actions
+ * (number limits, readonly steppers, clear buttons) never disable its label. */
 :is(
-  [data-slot="field"]:has(:disabled),
-  [data-slot="field"]:has([aria-disabled="true"])
-) .qv-label[data-slot="label"],
+  [data-slot="field"][data-disabled]:not([data-disabled="false"]),
+  [data-slot="field"]:has(> :is(input, textarea, select, [role="checkbox"], [role="radio"], [role="switch"], [role="combobox"], [role="slider"], [role="spinbutton"]):is(:disabled, [aria-disabled="true"])),
+  [data-slot="field"]:has(> [data-slot]:not([data-slot="field"]) :is(input:not([type="hidden"]), textarea, select):disabled)
+) > .qv-label[data-slot="label"],
 .qv-label[data-slot="label"][data-disabled="true"] {
   color: var(--muted-foreground);
   cursor: not-allowed;

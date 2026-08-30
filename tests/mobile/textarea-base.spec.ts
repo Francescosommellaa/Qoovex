@@ -412,6 +412,12 @@ test("Textarea usage examples retain native limits, editable validation and read
   await expect(page.getByRole("textbox", { name: "Disabilitata", exact: true })).toBeDisabled();
   const invalid = page.getByRole("textbox", { name: "Descrizione", exact: true });
   await expect(invalid).toHaveAttribute("required", "");
+  const invalidLabel = page.locator('label[for="textarea-invalid"]');
+  await expect(invalidLabel.locator('[data-slot="label-required"]')).toHaveText("*");
+  await expect(invalidLabel.locator('[data-slot="label-required"]')).toHaveAttribute("aria-hidden", "true");
+  await expect(invalid).toHaveAccessibleName("Descrizione");
+  await invalidLabel.click();
+  await expect(invalid).toBeFocused();
   await expect(invalid).toHaveAttribute("aria-invalid", "true");
   await invalid.fill("Intervento descritto.");
   await expect(invalid).not.toHaveAttribute("aria-invalid");

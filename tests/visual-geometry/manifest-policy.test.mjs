@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -12,6 +13,20 @@ import {
 } from "./surface-manifest.mjs";
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+
+test("icon lifecycle geometry follows the live focus proof instead of retired copy", () => {
+  const page = readFileSync(path.join(repositoryRoot, "apps/sirio/src/app/(catalog)/components/icon-button/page.tsx"), "utf8");
+  const surface = VISUAL_SURFACES.find(({ id }) => id === "sirio-icon-button-targets");
+  const rules = surface.geometry.filter(({ type }) => type === "scalar");
+  assert.equal(rules.length, 3);
+  const focusProof = page.split("</ToggleButton>").find((fragment) => fragment.includes('data-icon-button-proof="focus"'));
+  assert.match(focusProof, /<ToggleButton\b[\s\S]*data-icon-button-proof="focus"[\s\S]*size="icon-sm"/);
+  assert.deepEqual(rules.map(({ metric, expected }) => [metric, expected]), [["width", 28], ["height", 28], ["borderRadius", 8]]);
+  for (const rule of rules) {
+    assert.equal(rule.selector, '[data-icon-button-proof="focus"]');
+    assert(page.includes(rule.selector.slice(1, -1)), "geometry target must exist in the Sirio proof");
+  }
+});
 
 test("duplicate surface IDs fail", () => {
   const duplicate = [

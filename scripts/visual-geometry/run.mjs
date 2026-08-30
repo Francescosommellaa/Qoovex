@@ -80,18 +80,19 @@ function runProcess(command, args, options = {}) {
   return result;
 }
 
-function changedFilesFromGit() {
+export function changedFilesFromGit(cwd = process.cwd()) {
   const base = process.env.QOOVEX_VISUAL_BASE_SHA?.trim() || "origin/master";
-  const result = spawnSync("git", ["diff", "--name-only", `${base}...HEAD`], {
-    cwd: process.cwd(),
-    shell: false,
-    encoding: "utf8",
-  });
-
-  if (result.status !== 0) {
-    return ["scripts/visual-geometry/run.mjs"];
+  const files = new Set();
+  for (const args of [
+    ["diff", "--name-only", `${base}...HEAD`],
+    ["diff", "--name-only", "HEAD"],
+    ["ls-files", "--others", "--exclude-standard"],
+  ]) {
+    const result = spawnSync("git", args, { cwd, shell: false, encoding: "utf8" });
+    if (result.status !== 0) return ["scripts/visual-geometry/run.mjs"];
+    for (const file of parseChangedFiles(result.stdout)) files.add(file);
   }
-  return parseChangedFiles(result.stdout);
+  return [...files];
 }
 
 function resolveChangedFiles() {

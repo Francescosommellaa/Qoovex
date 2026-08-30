@@ -149,7 +149,7 @@ export function JobSiteSearch({
       </DialogHeader>
       <form className="flex flex-col gap-3 sm:flex-row sm:items-end" onSubmit={submit}>
         <Field className="min-w-0 flex-1">
-          <Label htmlFor={queryId}>Cosa stai cercando?</Label>
+          <Label htmlFor={queryId} required>Cosa stai cercando?</Label>
           <SearchField aria-describedby={queryDescriptionId} autoComplete="off" id={queryId} minLength={2} name="query" placeholder="Per esempio: acconto o sopralluogo" required />
           <FieldDescription id={queryDescriptionId}>Inserisci almeno 2 caratteri.</FieldDescription>
         </Field>
