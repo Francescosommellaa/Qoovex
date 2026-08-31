@@ -7,7 +7,8 @@ import { IconAlertCircle, IconArrowLeft, IconArrowRight, IconRefresh } from "@ta
 import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
 import { Badge } from "@qoovex/ui/components/badge";
 import { Button } from "@qoovex/ui/components/button";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@qoovex/ui/components/field";
+import { Field, FieldDescription, FieldGroup } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { Input } from "@qoovex/ui/components/input";
 import { OtpInput } from "@qoovex/ui/components/otp-input";
 import { PasswordInput } from "@qoovex/ui/components/password-input";
@@ -127,9 +128,9 @@ export function ResetPasswordPageView({ callbackUrl }: { callbackUrl: string }) 
         <AuthStage>
           <form aria-busy={loading} className={styles.form} onSubmit={submitRequest}>
             <Field>
-              <FieldLabel htmlFor="reset-email">Email</FieldLabel>
-              <Input autoComplete="email" autoFocus className="h-11 px-3" id="reset-email" name="email" required type="email" />
-              <FieldDescription>Invieremo le istruzioni solo se l’indirizzo è associato a un account con password.</FieldDescription>
+              <Label htmlFor="reset-email" required>Email</Label>
+              <Input aria-describedby="reset-email-description" autoComplete="email" autoFocus className="h-11 px-3" id="reset-email" name="email" required type="email" />
+              <FieldDescription id="reset-email-description">Invieremo le istruzioni solo se l’indirizzo è associato a un account con password.</FieldDescription>
             </Field>
             {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
             <Button className="h-11 w-full" disabled={loading} type="submit">
@@ -144,12 +145,13 @@ export function ResetPasswordPageView({ callbackUrl }: { callbackUrl: string }) 
           <form aria-busy={loading} className={styles.form} onSubmit={submitReset}>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="reset-code">Codice email</FieldLabel>
+                <Label htmlFor="reset-code" required>Codice email</Label>
                 <OtpInput autoFocus id="reset-code" inputMode="numeric" name="code" required />
               </Field>
               <Field>
-                <FieldLabel htmlFor="new-password">Nuova password</FieldLabel>
+                <Label htmlFor="new-password" required>Nuova password</Label>
                 <PasswordInput
+                  aria-describedby="new-password-description"
                   autoComplete="new-password"
                   id="new-password"
                   inputClassName="h-11 px-3"
@@ -163,10 +165,10 @@ export function ResetPasswordPageView({ callbackUrl }: { callbackUrl: string }) 
                   strength={estimatePasswordStrength(password)}
                   value={password}
                 />
-                <FieldDescription>Almeno 12 caratteri. Evita password comuni o già usate altrove.</FieldDescription>
+                <FieldDescription id="new-password-description">Almeno 12 caratteri. Evita password comuni o già usate altrove.</FieldDescription>
               </Field>
               <Field>
-                <FieldLabel htmlFor="new-password-confirmation">Conferma nuova password</FieldLabel>
+                <Label htmlFor="new-password-confirmation" required>Conferma nuova password</Label>
                 <PasswordInput
                   autoComplete="new-password"
                   id="new-password-confirmation"

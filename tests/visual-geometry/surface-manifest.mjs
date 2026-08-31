@@ -108,7 +108,8 @@ export const VISUAL_SURFACES = Object.freeze([
     geometry: [exactOverflow("sirio-icon-button-variants"), exactScalar("default icon button", '[data-slot="icon-button"][aria-label="Aggiungi elemento"]', "width", 32), exactScalar("default icon button", '[data-slot="icon-button"][aria-label="Aggiungi elemento"]', "height", 32), exactScalar("default icon button", '[data-slot="icon-button"][aria-label="Aggiungi elemento"]', "borderRadius", 10)],
   }),
   surface("sirio-icon-button-targets", "sirio", "/components/icon-button", "sirio-icon-button-targets", {
-    geometry: [exactOverflow("sirio-icon-button-targets"), exactScalar("keyboard icon button", '[data-slot="icon-button"][aria-label="Aggiungi con tastiera"]', "width", 32), exactScalar("keyboard icon button", '[data-slot="icon-button"][aria-label="Aggiungi con tastiera"]', "height", 32), exactScalar("keyboard icon button", '[data-slot="icon-button"][aria-label="Aggiungi con tastiera"]', "borderRadius", 10)],
+    // The lifecycle specimen now uses ToggleButton icon-sm (IconButton sm: 28px / 8px).
+    geometry: [exactOverflow("sirio-icon-button-targets"), exactScalar("focus toggle button", '[data-icon-button-proof="focus"]', "width", 28), exactScalar("focus toggle button", '[data-icon-button-proof="focus"]', "height", 28), exactScalar("focus toggle button", '[data-icon-button-proof="focus"]', "borderRadius", 8)],
   }),
   surface("sirio-toggle-button-icon-only", "sirio", "/components/icon-button", "sirio-toggle-button-icon-only", {
     geometry: [
@@ -145,10 +146,10 @@ export const VISUAL_SURFACES = Object.freeze([
     geometry: [exactOverflow("controls-error"), exactScalar("invalid input", '[data-slot="input"]', "height", 36), exactScalar("invalid input", '[data-slot="input"]', "paddingLeft", 12), exactPair("enabled button", '[data-slot="button"]:not(:disabled)', "disabled button", '[data-slot="button"]:disabled', "height")],
   }),
   surface("sirio-field-default", "sirio", "/components/field", "field-default", {
-    geometry: [exactOverflow("field-default"), exactScalar("input", '[data-slot="input"]', "height", 36), exactScalar("input", '[data-slot="input"]', "paddingLeft", 12), exactScalar("input", '[data-slot="input"]', "borderRadius", 10), exactPair("field label", '[data-slot="field-label"]', "field input", '[data-slot="input"]', "left")],
+    geometry: [exactOverflow("field-default"), exactScalar("input", '[data-slot="input"]', "height", 36), exactScalar("input", '[data-slot="input"]', "paddingLeft", 12), exactScalar("input", '[data-slot="input"]', "borderRadius", 10), exactPair("field label", '[data-slot="label"]', "field input", '[data-slot="input"]', "left")],
   }),
   surface("sirio-field-error", "sirio", "/components/field", "field-error", {
-    geometry: [exactOverflow("field-error"), exactScalar("invalid input", '[data-slot="input"]', "height", 36), exactScalar("invalid input", '[data-slot="input"]', "paddingLeft", 12), exactScalar("invalid input", '[data-slot="input"]', "borderRadius", 10), exactPair("field label", '[data-slot="field-label"]', "field input", '[data-slot="input"]', "left")],
+    geometry: [exactOverflow("field-error"), exactScalar("invalid input", '[data-slot="input"]', "height", 36), exactScalar("invalid input", '[data-slot="input"]', "paddingLeft", 12), exactScalar("invalid input", '[data-slot="input"]', "borderRadius", 10), exactPair("field label", '[data-slot="label"]', "field input", '[data-slot="input"]', "left")],
   }),
   surface("sirio-select-open", "sirio", "/components/select", "select-open", {
     setupId: "select-open",

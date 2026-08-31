@@ -6,7 +6,8 @@ import { PageHeader } from "@/components/page-header";
 import { Specimen, SpecimenGrid, SpecimenSection } from "@/components/specimen";
 import { Button } from "@qoovex/ui/components/button";
 import { CharacterCounter } from "@qoovex/ui/components/character-counter";
-import { Field, FieldDescription, FieldError, FieldLabel } from "@qoovex/ui/components/field";
+import { Field, FieldDescription, FieldError } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { Input } from "@qoovex/ui/components/input";
 import { Textarea } from "@qoovex/ui/components/textarea";
 
@@ -37,7 +38,7 @@ export default function TextareaPage() {
 
       <Specimen title="Crescita automatica" visualId="sirio-textarea-auto">
         <Field className="w-full">
-          <FieldLabel htmlFor="textarea-auto">Nota operativa</FieldLabel>
+          <Label htmlFor="textarea-auto">Nota operativa</Label>
           <Textarea
             id="textarea-auto"
             data-textarea-proof="auto"
@@ -57,7 +58,7 @@ export default function TextareaPage() {
       <SpecimenGrid cols={2}>
         <Specimen title="Altezza fissa" visualId="sirio-textarea-fixed">
           <Field className="w-full">
-            <FieldLabel htmlFor="textarea-fixed">Aggiornamento</FieldLabel>
+            <Label htmlFor="textarea-fixed">Aggiornamento</Label>
             <Textarea
               id="textarea-fixed"
               autoResize={false}
@@ -70,7 +71,7 @@ export default function TextareaPage() {
         </Specimen>
         <Specimen title="Altezza regolabile" visualId="sirio-textarea-manual">
           <Field className="w-full">
-            <FieldLabel htmlFor="textarea-manual">Appunti</FieldLabel>
+            <Label htmlFor="textarea-manual">Appunti</Label>
             <Textarea
               id="textarea-manual"
               autoResize={false}
@@ -88,7 +89,7 @@ export default function TextareaPage() {
         <div className="space-y-4">
           <Specimen title="Commento con limite caratteri" visualId="sirio-textarea-comment">
             <Field className="w-full">
-              <FieldLabel htmlFor="textarea-comment">Commento</FieldLabel>
+              <Label htmlFor="textarea-comment">Commento</Label>
               <Textarea
                 id="textarea-comment"
                 aria-describedby="textarea-comment-help textarea-comment-count"
@@ -99,15 +100,15 @@ export default function TextareaPage() {
                 placeholder="Aggiungi un aggiornamento breve…"
                 value={comment}
               />
-              <div className="flex min-w-0 items-start justify-between gap-4">
-                <FieldDescription className="min-w-0" id="textarea-comment-help">Massimo 200 caratteri, anche quando incolli un testo.</FieldDescription>
-                <CharacterCounter current={comment.length} id="textarea-comment-count" max={200} />
+              <div className="flex min-w-0 flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <FieldDescription id="textarea-comment-help">Massimo 200 caratteri, anche quando incolli un testo.</FieldDescription>
+                <CharacterCounter current={comment.length} id="textarea-comment-count" max={200} className="self-end" />
               </div>
             </Field>
           </Specimen>
           <Specimen title="Input breve con limite">
             <Field className="w-full">
-              <FieldLabel htmlFor="input-counter">Titolo breve</FieldLabel>
+              <Label htmlFor="input-counter">Titolo breve</Label>
               <Input
                 aria-describedby="input-counter-help input-counter-count"
                 id="input-counter"
@@ -116,9 +117,9 @@ export default function TextareaPage() {
                 placeholder="Titolo dell’aggiornamento…"
                 value={shortNote}
               />
-              <div className="flex min-w-0 items-start justify-between gap-4">
-                <FieldDescription className="min-w-0" id="input-counter-help">Sintetico e riconoscibile nell’elenco.</FieldDescription>
-                <CharacterCounter current={shortNote.length} id="input-counter-count" max={40} />
+              <div className="flex min-w-0 flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <FieldDescription id="input-counter-help">Sintetico e riconoscibile nell’elenco.</FieldDescription>
+                <CharacterCounter current={shortNote.length} id="input-counter-count" max={40} className="self-end" />
               </div>
             </Field>
           </Specimen>
@@ -139,7 +140,7 @@ export default function TextareaPage() {
           </Specimen>
             <Specimen title="Nota compatta" visualId="sirio-textarea-note">
               <Field className="w-full">
-                <FieldLabel htmlFor="textarea-note">Nota interna (opzionale)</FieldLabel>
+                <Label htmlFor="textarea-note" optional>Nota interna</Label>
                 <Textarea
                   id="textarea-note"
                   data-textarea-proof="note"
@@ -157,7 +158,7 @@ export default function TextareaPage() {
         <Specimen visualId="sirio-textarea-states">
           <div className="grid w-full gap-6 lg:grid-cols-2">
             <Field className="lg:col-span-2">
-              <FieldLabel htmlFor="textarea-disabled">Disabilitata</FieldLabel>
+              <Label htmlFor="textarea-disabled">Disabilitata</Label>
               <Textarea
                 id="textarea-disabled"
                 aria-describedby="textarea-disabled-help"
@@ -168,10 +169,10 @@ export default function TextareaPage() {
               <FieldDescription id="textarea-disabled-help">Il contenuto resta leggibile, ma non è modificabile.</FieldDescription>
             </Field>
             <Field className="lg:col-span-2" data-invalid={descriptionMissing || undefined}>
-              <FieldLabel htmlFor="textarea-invalid">Descrizione obbligatoria</FieldLabel>
+              <Label htmlFor="textarea-invalid" required>Descrizione</Label>
               <Textarea
                 id="textarea-invalid"
-                aria-describedby="textarea-invalid-help"
+                aria-describedby={descriptionMissing ? "textarea-invalid-help textarea-invalid-error" : "textarea-invalid-help"}
                 aria-invalid={descriptionMissing || undefined}
                 data-textarea-proof="invalid"
                 maxRows={5}
@@ -180,11 +181,8 @@ export default function TextareaPage() {
                 required
                 value={description}
               />
-              {descriptionMissing ? (
-                <FieldError id="textarea-invalid-help">Aggiungi una descrizione per continuare.</FieldError>
-              ) : (
-                <FieldDescription id="textarea-invalid-help">Descrizione inserita.</FieldDescription>
-              )}
+              <FieldDescription id="textarea-invalid-help">Indica il lavoro da svolgere e il risultato atteso.</FieldDescription>
+              {descriptionMissing ? <FieldError id="textarea-invalid-error">Aggiungi una descrizione per continuare.</FieldError> : null}
             </Field>
           </div>
         </Specimen>

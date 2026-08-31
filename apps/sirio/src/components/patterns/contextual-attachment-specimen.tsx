@@ -12,7 +12,8 @@ import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert
 import { Badge } from "@qoovex/ui/components/badge";
 import { Button } from "@qoovex/ui/components/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@qoovex/ui/components/card";
-import { Field, FieldDescription, FieldError, FieldLabel } from "@qoovex/ui/components/field";
+import { Field, FieldDescription, FieldError } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { Input } from "@qoovex/ui/components/input";
 import {
   Select,
@@ -108,11 +109,11 @@ function AttachmentSelectionSpecimen() {
       </div>
 
       <Field data-invalid={error ? "true" : undefined}>
-        <FieldLabel htmlFor={fileId}>File</FieldLabel>
+        <Label htmlFor={fileId} required>File</Label>
         <Input
           ref={inputRef}
           accept=".pdf,.jpg,.jpeg,.png,.webp"
-          aria-describedby={`${descriptionId} ${selectionId}${error ? ` ${errorId}` : ""}`}
+          aria-describedby={`${descriptionId}${error ? ` ${errorId}` : ""}`}
           aria-invalid={error ? true : undefined}
           id={fileId}
           name="file"
@@ -125,14 +126,14 @@ function AttachmentSelectionSpecimen() {
           type="file"
         />
         <FieldDescription id={descriptionId}>PDF e immagini JPG, PNG o WebP, fino a 4 MB.</FieldDescription>
-        <FieldDescription aria-live="polite" id={selectionId}>
+        <p aria-live="polite" className="min-w-0 text-sm leading-5 text-muted-foreground [overflow-wrap:anywhere]" id={selectionId}>
           {selectedFile ? `File selezionato: ${selectedFile.name}. ${humanFileType(selectedFile)}.` : "Nessun file selezionato."}
-        </FieldDescription>
+        </p>
         {error ? <FieldError id={errorId}>{error}</FieldError> : null}
       </Field>
 
       <Field>
-        <FieldLabel htmlFor={visibilityId}>Visibilità</FieldLabel>
+        <Label htmlFor={visibilityId}>Visibilità</Label>
         <Select
           items={visibilityOptions}
           name="visibility"
@@ -271,9 +272,9 @@ export function ContextualAttachmentSpecimens() {
               <span className="text-sm text-muted-foreground">La condivisione deriva dal flusso Cliente.</span>
             </div>
             <Field>
-              <FieldLabel htmlFor="client-attachment-file">File</FieldLabel>
-              <Input disabled id="client-attachment-file" type="file" />
-              <FieldDescription>PDF e immagini JPG, PNG o WebP, fino a 4 MB.</FieldDescription>
+              <Label htmlFor="client-attachment-file">File</Label>
+              <Input aria-describedby="client-attachment-file-description" disabled id="client-attachment-file" type="file" />
+              <FieldDescription id="client-attachment-file-description">PDF e immagini JPG, PNG o WebP, fino a 4 MB.</FieldDescription>
             </Field>
             <Button disabled>Carica ricevuta</Button>
           </CardContent>

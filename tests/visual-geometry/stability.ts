@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
+import { visualPorts } from "../../scripts/visual-geometry/ports.mjs";
 
 export interface VisualSurface {
   id: string;
@@ -34,10 +35,11 @@ export interface GeometryRule {
   tolerance: number;
 }
 
+const ports = visualPorts();
 const APP_ORIGINS = Object.freeze({
-  sirio: "http://127.0.0.1:3002",
-  web: "http://127.0.0.1:3000",
-  workspace: "http://127.0.0.1:3001",
+  sirio: `http://127.0.0.1:${ports.sirio}`,
+  web: `http://127.0.0.1:${ports.web}`,
+  workspace: `http://127.0.0.1:${ports.workspace}`,
 });
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "::1", "localhost"]);
 

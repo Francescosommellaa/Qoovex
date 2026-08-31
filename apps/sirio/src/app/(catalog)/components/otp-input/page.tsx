@@ -9,8 +9,8 @@ import {
   Field,
   FieldDescription,
   FieldError,
-  FieldLabel,
 } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { OtpInput } from "@qoovex/ui/components/otp-input"
 
 export default function OtpInputPage() {
@@ -38,7 +38,7 @@ export default function OtpInputPage() {
         <Specimen title="Codice a sei cifre" visualId="sirio-otp-input-core">
           <div className="mx-auto flex w-full max-w-md min-w-0 flex-col items-start gap-4 py-2">
             <Field className="w-full">
-              <FieldLabel htmlFor="otp-core">Codice di verifica</FieldLabel>
+              <Label htmlFor="otp-core">Codice di verifica</Label>
               <OtpInput
                 aria-describedby="otp-core-help otp-core-status"
                 data-otp-proof="core"
@@ -78,13 +78,13 @@ export default function OtpInputPage() {
         <SpecimenGrid cols={2}>
           <Specimen title="Quattro cifre">
             <Field className="w-fit max-w-full">
-              <FieldLabel htmlFor="otp-four">Codice breve</FieldLabel>
+              <Label htmlFor="otp-four">Codice breve</Label>
               <OtpInput id="otp-four" length={4} />
             </Field>
           </Specimen>
           <Specimen title="Sei cifre">
             <Field className="w-fit max-w-full">
-              <FieldLabel htmlFor="otp-six">Codice standard</FieldLabel>
+              <Label htmlFor="otp-six">Codice standard</Label>
               <OtpInput id="otp-six" length={6} />
             </Field>
           </Specimen>
@@ -99,7 +99,7 @@ export default function OtpInputPage() {
         <SpecimenGrid cols={2}>
           <Specimen title="Codice non valido" visualId="sirio-otp-input-invalid">
             <Field className="w-fit max-w-full" data-invalid>
-              <FieldLabel htmlFor="otp-invalid">Codice email</FieldLabel>
+              <Label htmlFor="otp-invalid">Codice email</Label>
               <OtpInput
                 aria-describedby="otp-invalid-error"
                 aria-invalid="true"
@@ -112,7 +112,7 @@ export default function OtpInputPage() {
           </Specimen>
           <Specimen title="Disabilitato" visualId="sirio-otp-input-disabled">
             <Field className="w-fit max-w-full" data-disabled>
-              <FieldLabel htmlFor="otp-disabled">Codice temporaneamente bloccato</FieldLabel>
+              <Label htmlFor="otp-disabled">Codice temporaneamente bloccato</Label>
               <OtpInput defaultValue="4281" disabled id="otp-disabled" length={6} />
               <FieldDescription>Il valore resta leggibile, ma il gruppo non accetta interazioni.</FieldDescription>
             </Field>

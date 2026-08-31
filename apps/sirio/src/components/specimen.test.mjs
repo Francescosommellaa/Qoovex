@@ -199,12 +199,14 @@ test("OTP Input has a dedicated component view and Controls no longer owns its p
   assert.doesNotMatch(otpInputPageSource, /status=|mask|groupSeparator|Codice verificato|Codice errato|Motion Playground/);
 });
 
-test("Input documents the primitive while Field owns composition and Password avoids a duplicate interaction field", () => {
+test("Input documents the primitive while Label names Field controls and Password avoids a duplicate interaction field", () => {
   const input = readFileSync(new URL("../app/(catalog)/components/input/page.tsx", import.meta.url), "utf8");
   const field = readFileSync(new URL("../app/(catalog)/components/field/page.tsx", import.meta.url), "utf8");
   const password = readFileSync(new URL("../app/(catalog)/components/password-input/page.tsx", import.meta.url), "utf8");
   assert.doesNotMatch(input, /<Field|components\/field/);
-  assert.match(field, /<FieldLabel/);
+  assert.match(field, /<Label htmlFor=/);
+  assert.match(field, /@qoovex\/ui\/components\/label/);
+  assert.doesNotMatch(field, /FieldLabel|\(opzionale\)|\(obbligatorio\)/);
   assert.match(field, /<FieldDescription/);
   assert.match(field, /<FieldError/);
   assert.match(password, /data-password-proof="interaction"/);

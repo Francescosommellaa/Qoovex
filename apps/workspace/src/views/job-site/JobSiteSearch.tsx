@@ -5,7 +5,8 @@ import { IconChevronRight, IconSearch } from "@tabler/icons-react";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { Button } from "@qoovex/ui/components/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@qoovex/ui/components/dialog";
-import { Field, FieldDescription, FieldLabel } from "@qoovex/ui/components/field";
+import { Field, FieldDescription } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { SearchField, SearchResults } from "@qoovex/ui/components/search-field";
 import { presentSearchResultDetail, presentSearchResultType } from "@shared/lib/product-state-presentation";
 
@@ -148,7 +149,7 @@ export function JobSiteSearch({
       </DialogHeader>
       <form className="flex flex-col gap-3 sm:flex-row sm:items-end" onSubmit={submit}>
         <Field className="min-w-0 flex-1">
-          <FieldLabel htmlFor={queryId}>Cosa stai cercando?</FieldLabel>
+          <Label htmlFor={queryId} required>Cosa stai cercando?</Label>
           <SearchField aria-describedby={queryDescriptionId} autoComplete="off" id={queryId} minLength={2} name="query" placeholder="Per esempio: acconto o sopralluogo" required />
           <FieldDescription id={queryDescriptionId}>Inserisci almeno 2 caratteri.</FieldDescription>
         </Field>

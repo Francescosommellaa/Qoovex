@@ -9,6 +9,9 @@ import {
   CreateJobSiteForm,
   DisputeForm,
   InviteClientForm,
+  InputField,
+  TextareaField,
+  SelectField,
   LegalHoldForm,
   LinkPropertyForm,
   ParticipantForm,
@@ -84,6 +87,26 @@ function fieldControlAttributes(html: string, name: string) {
 }
 
 describe("accessibilità dei form operativi del cantiere", () => {
+  it("deriva marker e semantica required dallo stesso contratto, anche se optional è richiesto", () => {
+    for (const required of [false, true]) {
+      const props = { id: "requirement", label: "Riferimento", name: "reference", required, optional: true };
+      for (const element of [
+        <InputField {...props} />,
+        <TextareaField {...props} />,
+        <SelectField {...props} options={[{ label: "Uno", value: "one" }]} />,
+      ]) {
+        const html = renderToStaticMarkup(element);
+        const label = html.match(/<label\b[^>]*>[\s\S]*?<\/label>/)?.[0] ?? "";
+        expect(label.includes('data-slot="label-required"')).toBe(required);
+        expect(label.includes('data-slot="label-optional"')).toBe(!required);
+        expect(label).toContain('aria-hidden="true"');
+        expect(label.includes("*")).toBe(required);
+        const control = fieldControlAttributes(html, "reference");
+        expect(/\brequired=""|aria-required="true"/.test(control)).toBe(required);
+      }
+    }
+  });
+
   it("mostra l'unica Azienda come contesto e usa il selettore solo quando serve davvero", () => {
     const singleOrganizationHtml = renderToStaticMarkup(<NotificationPreferencesForm organizations={[{ id: "organization-1", name: "Edilizia Rossi" }]} />);
     const multipleOrganizationsHtml = renderToStaticMarkup(<NotificationPreferencesForm organizations={[{ id: "organization-1", name: "Edilizia Rossi" }, { id: "organization-2", name: "Edilizia Bianchi" }]} />);
@@ -161,7 +184,8 @@ describe("accessibilità dei form operativi del cantiere", () => {
       errorIds.push(...describedIds.filter((id) => id.endsWith("-error")));
       for (const id of describedIds) expect(html, `${name} deve puntare a contenuto esistente`).toContain(`id="${id}"`);
     }
-    expect(html.match(/role="alert"/g)).toHaveLength(5);
+    expect(html.match(/data-slot="field-error"/g)).toHaveLength(5);
+    expect(html).not.toContain('role="alert"');
     expect(new Set(errorIds).size).toBe(5);
   });
 

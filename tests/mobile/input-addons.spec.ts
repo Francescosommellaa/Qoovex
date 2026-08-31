@@ -120,7 +120,7 @@ test("prefix and suffix keep space for long values at 320px with real touch, the
   for (const theme of ["Chiaro", "Scuro"]) {
     await page.getByRole("button", { name: /Cambia tema/ }).click();
     await page.getByRole("menuitem", { name: theme, exact: true }).click();
-    for (const proof of ["url", "suffix"]) {
+    for (const proof of ["url", "suffix", "both"]) {
       const group = page.locator(proof === "url" ? "[data-url-input]" : `[data-addon-proof="${proof}"]`);
       const input = group.locator("input");
       const addon = group.locator('[data-slot="input-addon"]');
@@ -132,16 +132,33 @@ test("prefix and suffix keep space for long values at 320px with real touch, the
       await input.fill("LongUnbrokenValue".repeat(30));
       await input.press("End");
       expect(await input.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
-      // Stress the documented truncation policy without inventing a domain demo.
-      const original = await addon.innerText();
-      await addon.locator("span").evaluate((element) => { element.textContent = "UnPrefissoOSuffissoMoltoLungoSenzaSpazi".repeat(4); });
-      expect((await addon.boundingBox())!.width).toBeLessThanOrEqual((await group.boundingBox())!.width * 0.35);
-      expect((await input.boundingBox())!.width).toBeGreaterThan((await group.boundingBox())!.width * 0.5);
-      await expect(addon.locator("span")).toHaveCSS("text-overflow", "ellipsis");
+      for (const region of await addon.all()) {
+        await expect(region).toHaveCSS("flex-shrink", "0");
+        await expect(region.locator("span")).toHaveCSS("text-overflow", "clip");
+        expect(await region.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+        const separator = await region.evaluate((el) => {
+          const style = getComputedStyle(el, "::after");
+          return { width: style.borderInlineEndWidth, start: style.top, end: style.bottom };
+        });
+        expect(separator).toEqual({ width: "1px", start: "6px", end: "6px" });
+      }
+      expect((await input.boundingBox())!.width).toBeGreaterThan(0);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-      await addon.locator("span").evaluate((element, text) => { element.textContent = text; }, original);
     }
   }
+  await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
+  for (const selector of ["[data-url-input]", '[data-addon-proof="suffix"]', '[data-addon-proof="both"]', "[data-phone-input]", "[data-currency-input]"]) {
+    for (const group of await page.locator(selector).all()) {
+      expect(await group.evaluate((el) => el.scrollWidth <= el.clientWidth), selector).toBe(true);
+      await expect(group.locator('input[data-slot="input"]')).toHaveCSS("border-width", "0px");
+      expect((await group.locator('input[data-slot="input"]').boundingBox())!.width).toBeGreaterThan(0);
+    }
+  }
+  for (const value of await page.locator(".qv-addon-value").all()) {
+    expect(await value.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.evaluate(() => { document.documentElement.style.fontSize = ""; });
   await page.emulateMedia({ forcedColors: "active" });
   await page.locator("[data-url-input] input").fill("esempio.test");
   await page.getByRole("combobox", { name: "Stato dei campi" }).click();

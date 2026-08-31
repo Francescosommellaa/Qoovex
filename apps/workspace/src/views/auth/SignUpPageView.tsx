@@ -8,7 +8,8 @@ import { IconAlertCircle, IconArrowLeft, IconArrowRight, IconCircleCheck, IconRe
 import { Alert, AlertDescription } from "@qoovex/ui/components/alert";
 import { Badge } from "@qoovex/ui/components/badge";
 import { Button } from "@qoovex/ui/components/button";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@qoovex/ui/components/field";
+import { Field, FieldDescription, FieldGroup } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { Input } from "@qoovex/ui/components/input";
 import { OtpInput } from "@qoovex/ui/components/otp-input";
 import { PasswordInput } from "@qoovex/ui/components/password-input";
@@ -171,9 +172,9 @@ export function SignUpPageView({
         <AuthStage>
           <form aria-busy={loading} className={styles.form} onSubmit={submitEmail}>
             <Field>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
-              <Input autoComplete="email" autoFocus className="h-11 px-3" id="email" name="email" required type="email" />
-              <FieldDescription>Usa l’indirizzo sul quale vuoi ricevere il codice di verifica.</FieldDescription>
+              <Label htmlFor="email" required>Email</Label>
+              <Input aria-describedby="email-description" autoComplete="email" autoFocus className="h-11 px-3" id="email" name="email" required type="email" />
+              <FieldDescription id="email-description">Usa l’indirizzo sul quale vuoi ricevere il codice di verifica.</FieldDescription>
             </Field>
             {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
             <Button className="h-11 w-full" disabled={loading} type="submit">
@@ -189,9 +190,9 @@ export function SignUpPageView({
           {message ? <Alert role="status" variant="info"><AlertDescription>{message}</AlertDescription></Alert> : null}
           <form aria-busy={loading} className={styles.form} onSubmit={submitCode}>
             <Field>
-              <FieldLabel htmlFor="code">Codice email</FieldLabel>
-              <OtpInput autoFocus id="code" inputMode="numeric" name="code" required />
-              <FieldDescription>Incolla o digita le sei cifre ricevute. Il codice ha durata limitata.</FieldDescription>
+              <Label htmlFor="code" required>Codice email</Label>
+              <OtpInput aria-describedby="code-description" autoFocus id="code" inputMode="numeric" name="code" required />
+              <FieldDescription id="code-description">Incolla o digita le sei cifre ricevute. Il codice ha durata limitata.</FieldDescription>
             </Field>
             {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}
             <div className={styles.formActions}>
@@ -211,8 +212,9 @@ export function SignUpPageView({
           <form aria-busy={loading} className={styles.form} onSubmit={submitDetails}>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="username">Username</FieldLabel>
+                <Label htmlFor="username" required>Username</Label>
                 <Input
+                  aria-describedby="username-description"
                   autoComplete="username"
                   autoFocus
                   className="h-11 px-3"
@@ -225,11 +227,12 @@ export function SignUpPageView({
                   spellCheck={false}
                   type="text"
                 />
-                <FieldDescription>3–32 caratteri: lettere minuscole, numeri e underscore.</FieldDescription>
+                <FieldDescription id="username-description">3–32 caratteri: lettere minuscole, numeri e underscore.</FieldDescription>
               </Field>
               <Field>
-                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Label htmlFor="password" required>Password</Label>
                 <PasswordInput
+                  aria-describedby="password-description"
                   autoComplete="new-password"
                   id="password"
                   inputClassName="h-11 px-3"
@@ -243,7 +246,7 @@ export function SignUpPageView({
                   strength={estimatePasswordStrength(password)}
                   value={password}
                 />
-                <FieldDescription>Almeno 12 caratteri. Evita password comuni o già usate altrove.</FieldDescription>
+                <FieldDescription id="password-description">Almeno 12 caratteri. Evita password comuni o già usate altrove.</FieldDescription>
               </Field>
             </FieldGroup>
             {error ? <Alert variant="destructive"><IconAlertCircle /><AlertDescription>{error}</AlertDescription></Alert> : null}

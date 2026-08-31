@@ -4,7 +4,8 @@ import * as React from "react"
 
 import { PageHeader } from "@/components/page-header"
 import { Specimen, SpecimenGrid } from "@/components/specimen"
-import { Field, FieldDescription, FieldError, FieldLabel } from "@qoovex/ui/components/field"
+import { Field, FieldDescription, FieldError } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { PasswordInput, type PasswordStrength } from "@qoovex/ui/components/password-input"
 
 const demoPassword = "Qoovex-demo-2026"
@@ -35,7 +36,7 @@ export default function PasswordInputPage() {
           <SpecimenGrid cols={2}>
             <Specimen title="Nuova password">
               <Field className="w-full">
-                <FieldLabel htmlFor="password-empty">Nuova password</FieldLabel>
+                <Label htmlFor="password-empty">Nuova password</Label>
                 <PasswordInput
                   autoComplete="new-password"
                   data-password-proof="empty"
@@ -51,7 +52,7 @@ export default function PasswordInputPage() {
 
             <Specimen title="Compilata e controllata">
               <Field className="w-full">
-                <FieldLabel htmlFor="password-populated">Password corrente</FieldLabel>
+                <Label htmlFor="password-populated">Password corrente</Label>
                 <PasswordInput
                   autoComplete="current-password"
                   data-password-proof="populated"
@@ -73,7 +74,7 @@ export default function PasswordInputPage() {
                 Digita e usa l’occhio per continuare dall’identico caret. Con Tab raggiungi il comando; Enter e Space alternano la visibilità mantenendo il focus sull’azione.
               </p>
               <Field>
-                <FieldLabel htmlFor="password-interaction">Password demo</FieldLabel>
+                <Label htmlFor="password-interaction">Password demo</Label>
                 <PasswordInput
                   autoComplete="new-password"
                   data-password-proof="interaction"
@@ -90,7 +91,7 @@ export default function PasswordInputPage() {
           <SpecimenGrid cols={2}>
             <Specimen title="Errore collegato">
               <Field className="w-full" data-invalid>
-                <FieldLabel htmlFor="password-invalid">Conferma password</FieldLabel>
+                <Label htmlFor="password-invalid">Conferma password</Label>
                 <PasswordInput
                   aria-describedby="password-invalid-error"
                   aria-invalid="true"
@@ -104,7 +105,7 @@ export default function PasswordInputPage() {
 
             <Specimen title="Disabilitata e sempre nascosta">
               <Field className="w-full" data-disabled>
-                <FieldLabel htmlFor="password-disabled">Password gestita esternamente</FieldLabel>
+                <Label htmlFor="password-disabled">Password gestita esternamente</Label>
                 <PasswordInput
                   data-password-proof="disabled"
                   defaultValue={demoPassword}
@@ -117,7 +118,7 @@ export default function PasswordInputPage() {
 
             <Specimen title="Sola lettura, reveal disponibile">
               <Field className="w-full">
-                <FieldLabel htmlFor="password-readonly">Password demo archiviata</FieldLabel>
+                <Label htmlFor="password-readonly">Password demo archiviata</Label>
                 <PasswordInput
                   data-password-proof="readonly"
                   defaultValue={demoPassword}
@@ -130,7 +131,7 @@ export default function PasswordInputPage() {
 
             <Specimen title="Valore lungo">
               <Field className="w-full">
-                <FieldLabel htmlFor="password-long">Password demo lunga</FieldLabel>
+                <Label htmlFor="password-long">Password demo lunga</Label>
                 <PasswordInput
                   data-password-proof="long"
                   defaultValue="Qoovex-demo-2026-stringa-lunga-per-selection"

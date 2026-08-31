@@ -1,20 +1,33 @@
-"use client"
-
 import * as React from "react"
 
 import { cn } from "#lib/utils"
 
-function Label({ className, ...props }: React.ComponentProps<"label">) {
+type LabelProps = React.ComponentProps<"label"> & {
+  /** Presentation only: pass the same required value as the associated control. */
+  required?: boolean
+  optional?: boolean
+}
+
+function Label({ children, className, required = false, optional = false, ...props }: LabelProps) {
   return (
     <label
       data-slot="label"
       className={cn(
-        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+        "qv-label inline-block min-w-0 max-w-full text-sm leading-5 font-medium text-foreground select-none",
         className
       )}
       {...props}
-    />
+    >
+      <span data-slot="label-text" className="min-w-0 [overflow-wrap:anywhere]">
+        {children}
+        {required ? (
+          <span aria-hidden="true" data-slot="label-required" className="whitespace-nowrap font-normal text-muted-foreground">{"\u00a0*"}</span>
+        ) : optional ? (
+          <>{" "}<span aria-hidden="true" data-slot="label-optional" className="inline-block whitespace-nowrap text-xs leading-4 font-normal text-muted-foreground">Facoltativo</span></>
+        ) : null}
+      </span>
+    </label>
   )
 }
 
-export { Label }
+export { Label, type LabelProps }

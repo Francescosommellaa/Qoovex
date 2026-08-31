@@ -4,7 +4,8 @@ import { useRef, useState, type FormEvent } from "react";
 import { IconAlertCircle, IconCircleCheck, IconInfoCircle } from "@tabler/icons-react";
 import { Alert, AlertDescription, AlertTitle } from "@qoovex/ui/components/alert";
 import { Button } from "@qoovex/ui/components/button";
-import { Field, FieldDescription, FieldError, FieldLabel } from "@qoovex/ui/components/field";
+import { Field, FieldDescription, FieldError } from "@qoovex/ui/components/field"
+import { Label } from "@qoovex/ui/components/label"
 import { Input } from "@qoovex/ui/components/input";
 import {
   formatEuroFromMinorUnits,
@@ -82,7 +83,7 @@ export function MoneySpecimen() {
 
         <form className="mt-5 space-y-4" noValidate onSubmit={handleSubmit}>
           <Field data-invalid={error ? "true" : undefined}>
-            <FieldLabel htmlFor="money-input">Importo</FieldLabel>
+            <Label htmlFor="money-input">Importo</Label>
             <Input
               ref={inputRef}
               id="money-input"
@@ -118,7 +119,7 @@ export function MoneySpecimen() {
 
         <div className="mt-6 border-t pt-5">
           <Field data-invalid="true">
-            <FieldLabel htmlFor="money-invalid-example">Esempio di importo non valido</FieldLabel>
+            <Label htmlFor="money-invalid-example">Esempio di importo non valido</Label>
             <Input
               id="money-invalid-example"
               name="invalidAmountExample"

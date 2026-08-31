@@ -66,12 +66,12 @@ function InputAddon({
       data-slot="input-addon"
       data-position={position}
       className={cn(
-        "qv-input-addon flex min-w-0 items-center px-3 text-muted-foreground",
+        "qv-input-addon flex shrink-0 items-center px-3 text-muted-foreground",
         className
       )}
       {...props}
     >
-      <span className="min-w-0 truncate">{children}</span>
+      <span>{children}</span>
     </div>
   )
 }
