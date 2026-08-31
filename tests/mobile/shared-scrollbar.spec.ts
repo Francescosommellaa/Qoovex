@@ -75,8 +75,13 @@ test("Select typeahead and Menu/submenu keep intrinsic sizing and real keyboard 
 
   await page.goto(`${mobileUrls.sirio}/components/dropdown-menu`);
   const trigger = page.getByRole("button", { name: "Esporta Report", exact: true });
+  // SSR visibility precedes Base UI's trigger registration. Exercise the ready
+  // control once, rather than racing initialization or retrying a lost click.
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
   await trigger.click();
+  await expect(trigger).toHaveAttribute("aria-expanded", "true");
   const menu = page.locator('[data-slot="dropdown-menu-content"]');
+  await expect(menu).toBeVisible();
   expect((await menu.boundingBox())!.width).toBeLessThan(224);
   await page.getByRole("menuitem", { name: "Scarica File", exact: true }).focus();
   await page.keyboard.press("ArrowRight");
